@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Log4j2
 @Controller
-@RequestMapping("/member")
+@RequestMapping("/logOut")
 @RequiredArgsConstructor
-public class MemberController {
+public class LogoutController {
 }
