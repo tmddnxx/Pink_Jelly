@@ -9,6 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/main")
 @RequiredArgsConstructor
-public class MainController {
+public class MainBoardController {
 
 }
