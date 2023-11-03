@@ -14,7 +14,7 @@ public class MainBoardController {
     @GetMapping("")
     public String main() {
         System.out.println("main GET...");
-        return "list";
+        return "/main/list";
     }
 
 }
