@@ -15,6 +15,9 @@ public class CatsMeController {
     @GetMapping("/board/write")
     public void write(){
 
+    }
+    @GetMapping("/board/modify")
+    public void modify(){
 
     }
 
