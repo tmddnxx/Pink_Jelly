@@ -21,4 +21,6 @@ public class MemberVO { // 회원정보
     private String catSex; // 고양이 성별
     private String variety; // 고양이 품종
     private String profileImg; // 프로필이미지 (고양이사진)
+    private int gmingCnt; // 그루밍 수
+    private int gmerCnt; // 그루머 수
 }

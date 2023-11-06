@@ -3,5 +3,10 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.pink_jelly.mapper.ProfileMapper">
-
+    <update id="groomingCnt">
+        update member set gmingCnt = #{gmingCnt} where mno = #{mno};
+    </update>
+    <update id="groomerCnt">
+        update member set gmerCnt = #{gmerCnt} where mno = #{mno};
+    </update>
 </mapper>

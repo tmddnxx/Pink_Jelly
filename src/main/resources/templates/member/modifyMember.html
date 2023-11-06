@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>회원 수정 뷰</title>
+</head>
+<body>
+<form action="/member/modify" method="post">
+<!--    mno value 값 설정-->
+    <input type="hidden" name="mno" value="1">
+    <div class="input-group">
+        <label for="memberId">아이디</label>
+        <input id="memberId" type="text" name="memberId" readonly>
+    </div>
+
+    <div class="input-group">
+        <label for="email">이메일</label>
+        <input id="email" name="email" type="text">
+        <select>
+            <option selected>직접입력</option>
+            <option>naver.com</option>
+            <option>daum.net</option>
+            <option>gamil.com</option>
+        </select>
+    </div>
+    <div class="input-group">
+        <label for="memberName">이름</label>
+        <input id="memberName" type="text" name="memberName">
+    </div>
+    <div class="input-group">
+        <label for="phone">전화번호</label>
+        <input id="phone" type="text" name="phone">
+    </div>
+    <div class="input-group">
+        <label for="nickName">닉네임</label>
+        <input id="nickName" type="text" name="nickName">
+    </div>
+    <button type="submit"> 수정 완료 </button>
+</form>
+</body>
+</html>
