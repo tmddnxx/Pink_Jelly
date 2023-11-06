@@ -39,6 +39,9 @@ dependencies {
     implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:3.1.0'
 
     implementation 'org.modelmapper:modelmapper:3.1.0'
+
+    //thumbnail
+    implementation group: 'net.coobird', name: 'thumbnailator', version: '0.4.19'
 }
 
 tasks.named('test') {
