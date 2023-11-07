@@ -33,6 +33,11 @@ public class MainBoardController {
         System.out.println("main write GET...");
         return "/main/write";
     }
+
+    @GetMapping("/view")
+    public void view() {
+        log.info("/main/view GET...");
+    }
     //게시판 등록
     @PostMapping("write")
     public String addPost(MainBoardDTO mainBoardDTO, HttpServletRequest request){
