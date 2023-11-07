@@ -14,4 +14,6 @@ public interface MemberService {
     void modifyPasswd(MemberDTO memberDTO); // 비밀번호변경
 
     void modifyMyCat(MemberDTO memberDTO); // 고양이 정보 수정
+
+    MemberDTO getMember(Long mno); // 회원정보 가져오기
 }

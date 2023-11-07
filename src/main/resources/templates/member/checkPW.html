@@ -1,13 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>수정 전 비밀번호 확인</title>
 </head>
 <body>
+<div class="menu">
+    <a th:href="@{/member/checkPW(mno=${memberDTO.mno})}">비밀번호 확인</a>
+    <a th:href="@{/member/memberInfo(mno=${memberDTO.mno})}">회원정보확인</a>
+    <a th:href="@{/member/modifyMember(mno=${memberDTO.mno})}">회원정보수정</a>
+    <a th:href="@{/member/modifyPasswd(mno=${memberDTO.mno})}">비밀번호 변경</a>
+    <a th:href="@{/member/modifyMyCat(mno=${memberDTO.mno})}">고양이 정보 수정</a>
+</div>
     <h1> 비밀번호를 입력해 주세요 </h1>
-    <input type="text" name="passwd">
-    <a href="/member/modify"> 확인 </a>
-
+    <input type="hidden" name="mno" th:value="${memberDTO.mno}">
+    <input type="password" name="passwd">
+    <a href="/member/memberInfo"> 확인 </a>
 </body>
 </html>

@@ -1,41 +1,52 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>회원 수정 뷰</title>
 </head>
 <body>
-<form action="/member/modify" method="post">
-<!--    mno value 값 설정-->
-    <input type="hidden" name="mno" value="1">
+<div class="menu">
+    <a th:href="@{/member/checkPW(mno=${memberDTO.mno})}">비밀번호 확인</a>
+    <a th:href="@{/member/memberInfo(mno=${memberDTO.mno})}">회원정보확인</a>
+    <a th:href="@{/member/modifyMember(mno=${memberDTO.mno})}">회원정보수정</a>
+    <a th:href="@{/member/modifyPasswd(mno=${memberDTO.mno})}">비밀번호 변경</a>
+    <a th:href="@{/member/modifyMyCat(mno=${memberDTO.mno})}">고양이 정보 수정</a>
+</div>
+<h1> 회원 정보 수정 </h1>
+<form action="/member/modifyMember" method="post">
+<!--   value 값 설정-->
+    <input type="hidden" name="mno" th:value="${memberDTO.mno}">
     <div class="input-group">
         <label for="memberId">아이디</label>
-        <input id="memberId" type="text" name="memberId" readonly>
+        <input id="memberId" type="text" name="memberId" th:value="${memberDTO.memberId}">
     </div>
 
     <div class="input-group">
         <label for="email">이메일</label>
-        <input id="email" name="email" type="text">
-        <select>
+        <input id="email" name="emailId" type="text">
+        @
+        <select name="emailSelect">
             <option selected>직접입력</option>
-            <option>naver.com</option>
-            <option>daum.net</option>
-            <option>gamil.com</option>
+            <option value="@naver.com">naver.com</option>
+            <option value="@daum.net">daum.net</option>
+            <option value="@gmail.com">gamil.com</option>
         </select>
     </div>
     <div class="input-group">
         <label for="memberName">이름</label>
-        <input id="memberName" type="text" name="memberName">
+        <input id="memberName" type="text" name="memberName" th:value="${memberDTO.memberName}">
     </div>
     <div class="input-group">
         <label for="phone">전화번호</label>
-        <input id="phone" type="text" name="phone">
+        <input id="phone" type="text" name="phone" th:value="${memberDTO.phone}">
     </div>
     <div class="input-group">
         <label for="nickName">닉네임</label>
-        <input id="nickName" type="text" name="nickName">
+        <input id="nickName" type="text" name="nickName" th:value="${memberDTO.nickName}">
     </div>
     <button type="submit"> 수정 완료 </button>
+    <a href="/member/memberInfo">뒤로가기</a>
 </form>
 </body>
 </html>

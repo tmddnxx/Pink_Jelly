@@ -16,4 +16,8 @@ public interface MemberMapper {
 
     void updateMyCat(MemberVO memberVO); // 고양이 정보 수정
 
+    MemberVO getMember(Long mno); // 회원정보 들고오기
+
+
+
 }

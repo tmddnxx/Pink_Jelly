@@ -5,6 +5,7 @@ import com.example.pink_jelly.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,10 +26,26 @@ public class MemberController {
     }
 
     @PostMapping("/register")
-    public String registerMember(MemberDTO memberDTO){
+    public String registerMember(MemberDTO memberDTO, HttpServletRequest request){ // 회원가입 처리
+        String emailId = request.getParameter("emailId");
+        String selectEmail = request.getParameter("emailSelect");
+
+        String ageText = request.getParameter("catAge1");
+        String ageRadio = request.getParameter("catAge2");
+
+        log.info(memberDTO);
+        String catAge = ageText + ageRadio;
+        String email = emailId + selectEmail;
+
+        memberDTO.setCatAge(catAge);
+        memberDTO.setEmail(email);
         memberService.registerMember(memberDTO);
 
-        return "/member/welcome.html";
+        return "/member/welcome";
+    }
+    @GetMapping("/welcome")
+    public void welcome(){
+        // 회원가입 완료 뷰
     }
 
     @GetMapping("/checkPW")
@@ -36,19 +53,79 @@ public class MemberController {
         // 회원 수정 전 비밀번호 확인
     }
 
+    @GetMapping("/memberInfo")
+    public void memberInfo(Model model, Long mno){
+        // 회원정보 뷰
 
-    @GetMapping("/modifyMember")
-    public void modifyMember(){
-        // 회원 수정 뷰
-
+        mno = 14L;
+      model.addAttribute("memberDTO", memberService.getMember(mno));
     }
 
-    @PostMapping("/modify")
-    public String modifyMember(MemberDTO memberDTO){
 
+    @GetMapping("/modifyMember")
+    public void modifyMember(MemberDTO memberDTO, Model model){
+        // 회원 수정 뷰
+
+        memberDTO = memberService.getMember(memberDTO.getMno());
+
+        String email = memberDTO.getEmail();
+        String[] emailParts = email.split("@");
+        memberDTO.setEmail(emailParts[0]);
+        model.addAttribute("memberDTO", memberDTO);
+    }
+
+    @PostMapping("/modifyMember")
+    public String modifyMember(MemberDTO memberDTO, HttpServletRequest request){ // 회원 수정 처리
+        String emailId = request.getParameter("emailId");
+        String selectEmail = request.getParameter("emailSelect");
+
+        String email = emailId + selectEmail;
+
+        memberDTO.setEmail(email);
         memberService.modifyMember(memberDTO);
 
-        return "/profile/profile";
+        return "/member/memberInfo";
+    }
+
+    @GetMapping("/modifyPasswd")
+    public void modifyPasswd(MemberDTO memberDTO, Model model){
+        // 비밀번호 수정 뷰
+        memberDTO = memberService.getMember(memberDTO.getMno());
+
+        model.addAttribute("memberDTO", memberDTO);
+    }
+    @PostMapping("/modifyPasswd")
+    public String modifyPasswd(MemberDTO memberDTO){ // 비밀번호 수정 처리
+
+        memberService.modifyPasswd(memberDTO);
+
+        return "/member/memberInfo";
+    }
+
+    @GetMapping("/modifyMyCat")
+    public void modifyMyCat(MemberDTO memberDTO, Model model){
+        // 고양이 정보 수정
+        memberDTO = memberService.getMember(memberDTO.getMno());
+
+        model.addAttribute("memberDTO", memberDTO);
+    }
+
+    @PostMapping("/modifyMyCat")
+    public String modifyMyCat(MemberDTO memberDTO){ // 고양이 정보수정 처리
+        memberService.modifyMyCat(memberDTO);
+
+        return "/member/memberInfo";
+    }
+
+    @GetMapping("/exit")
+    public void exit(){
+        // 회원탈퇴 뷰
+    }
+
+    @PostMapping("/exit")
+    public String exit(Long mno){
+        memberService.removeMember(mno);
+        return "/member/exit";
     }
 }
 

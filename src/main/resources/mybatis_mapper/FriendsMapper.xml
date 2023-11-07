@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.pink_jelly.mapper.FriendsMapper">
+    <select id="friendsList" resultType="com.example.pink_jelly.domain.FriendsVO">
+        select * from friends where mno = #{mno};
+    </select>
+    <insert id="insertFriend" parameterType="com.example.pink_jelly.domain.FriendsVO">
+        insert into friends (memberId, friendId, friendName, mno) values (#{memberId}, #{friendId}, #{friendName}, #{mno});
+    </insert>
+    <delete id="deleteFriend" parameterType="java.lang.Long">
+        delete FROM friends where fno = #{fno};
+    </delete>
+</mapper>

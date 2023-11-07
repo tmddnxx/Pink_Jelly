@@ -50,5 +50,14 @@ public class MemberServiceImpl implements MemberService{
         memberMapper.updateMyCat(memberVO);
     }
 
+    @Override
+    public MemberDTO getMember(Long mno) { // 멤버 정보 가져오기
+        MemberVO memberVO = memberMapper.getMember(mno);
+
+        MemberDTO memberDTO = modelMapper.map(memberVO, MemberDTO.class);
+
+        return memberDTO;
+    }
+
 
 }

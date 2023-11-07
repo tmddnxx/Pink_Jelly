@@ -23,7 +23,7 @@ public class MemberMapperTest {
                 .memberName("TestName3")
                 .phone("01012341234")
                 .nickName("TestNick")
-                .isCat(true)
+                .hasCat(true)
                 .catAge("6")
                 .catSex("남아")
                 .variety("코리안숏헤어3")
@@ -60,7 +60,7 @@ public class MemberMapperTest {
     @Test
     public void updateMyCatTest() {
         MemberVO memberVO = MemberVO.builder()
-                .isCat(true)
+                .hasCat(true)
                 .catAge("10")
                 .catSex("여아")
                 .variety("노르웨이숲")
@@ -68,5 +68,10 @@ public class MemberMapperTest {
                 .mno(1L)
                 .build();
         memberMapper.updateMyCat(memberVO);
+    }
+
+    @Test
+    public void getMemberTest(){
+        log.info(memberMapper.getMember(10L));
     }
 }

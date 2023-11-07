@@ -23,7 +23,7 @@ public class MemberServiceTest {
                 .memberName("TestName2")
                 .phone("01012341234")
                 .nickName("TestNick2")
-                .isCat(true)
+                .hasCat(true)
                 .catAge("3")
                 .catSex("여아")
                 .variety("샴")

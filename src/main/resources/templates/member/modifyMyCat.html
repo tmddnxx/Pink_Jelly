@@ -1,10 +1,52 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
 <body>
-
+<div class="menu">
+    <a th:href="@{/member/checkPW(mno=${memberDTO.mno})}">비밀번호 확인</a>
+    <a th:href="@{/member/memberInfo(mno=${memberDTO.mno})}">회원정보확인</a>
+    <a th:href="@{/member/modifyMember(mno=${memberDTO.mno})}">회원정보수정</a>
+    <a th:href="@{/member/modifyPasswd(mno=${memberDTO.mno})}">비밀번호 변경</a>
+    <a th:href="@{/member/modifyMyCat(mno=${memberDTO.mno})}">고양이 정보 수정</a>
+</div>
+<h1> 고양이 정보 수정</h1>
+<form action="/member/modifyMyCat" method="post">
+    <div class="input-group">
+        <label for="hasCat">고양이 보유 여부</label>
+        <input id="hasCat" type="radio" name="hasCat" value="true" th:checked="${memberDTO.hasCat}">예
+        <input type="radio" name="hasCat" value="false" th:checked="${!memberDTO.hasCat}">아니오
+    </div>
+    <div class="input-group">
+        <label for="catAge">나이</label>
+        <input id="catAge" type="text" name="catAge" th:value="${memberDTO.catAge}">
+        <input type="radio" name="catAge2" value="개월">개월
+        <input type="radio" name="catAge2" value="년">년
+    </div>
+    <div class="input-group">
+        <label id="catSex">성별</label>
+        <input type="radio" name="catSex" value="남아" th:checked="${memberDTO.catSex.equals('남아')}">남아
+        <input type="radio" name="catSex" value="여아" th:checked="${memberDTO.catSex.equals('여아')}">여아
+    </div>
+    <div class="input-group">
+        <label for="variety">품종</label>
+        <select id="variety" name="variety" th:value="${memberDTO.variety}">
+            <option selected>----</option>
+            <option> 코리안 숏 헤어 </option>
+            <option> 노르웨이 숲 </option>
+            <option> 페르시안 </option>
+            <option> 샴 </option>
+        </select>
+    </div>
+    <div class="input-group">
+        <label for="profileImg">이미지</label>
+        <input formenctype="multipart/form-data" id="profileImg">
+    </div>
+    <button type="submit" class="btn-secondary">수정 완료</button>
+    <a href="/member/memberInfo"> 뒤로 가기 </a>
+</form>
 </body>
 </html>

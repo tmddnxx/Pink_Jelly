@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>회원정보</title>
+</head>
+<body>
+<div class="menu">
+    <a th:href="@{/member/checkPW(mno=${memberDTO.mno})}">비밀번호 확인</a>
+    <a th:href="@{/member/memberInfo(mno=${memberDTO.mno})}">회원정보확인</a>
+    <a th:href="@{/member/modifyMember(mno=${memberDTO.mno})}">회원정보수정</a>
+    <a th:href="@{/member/modifyPasswd(mno=${memberDTO.mno})}">비밀번호 변경</a>
+    <a th:href="@{/member/modifyMyCat(mno=${memberDTO.mno})}">고양이 정보 수정</a>
+</div>
+    <h1> 회원 정보 </h1>
+<form action="/member/exit" method="post">
+    <input type="hidden" name="mno" th:value="${memberDTO.mno}">
+    <div class="input-group">
+        <label for="memberId">아이디</label>
+        <input id="memberId" type="text" name="memberId" th:value="${memberDTO.memberId}" readonly>
+    </div>
+    <div class="input-group">
+        <label for="passwd">비밀번호</label>
+        <input id="passwd" type="password" name="passwd" th:value="${memberDTO.passwd}" readonly>
+    </div>
+    <div class="input-group">
+        <label for="email">이메일</label>
+        <input id="email" name="email" type="text" th:value="${memberDTO.email}" readonly>
+    </div>
+    <div class="input-group">
+        <label for="memberName">이름</label>
+        <input id="memberName" type="text" name="memberName" th:value="${memberDTO.memberName}" readonly>
+    </div>
+    <div class="input-group">
+        <label for="phone">전화번호</label>
+        <input id="phone" type="text" name="phone" th:value="${memberDTO.phone}" readonly>
+    </div>
+    <div class="input-group">
+        <label for="nickName">닉네임</label>
+        <input id="nickName" type="text" name="nickName" th:value="${memberDTO.nickName}" readonly>
+    </div>
+    <div class="input-group">
+        <label for="hasCat">고양이 보유 여부</label>
+        <input id="hasCat" type="radio" name="hasCat" value="true" th:checked="${memberDTO.hasCat}" onclick="return false;">예
+        <input type="radio" name="hasCat" value="false" th:checked="${!memberDTO.hasCat}" onclick="return false;">아니오
+    </div>
+    <div class="input-group">
+        <label for="catAge">나이</label>
+        <input id="catAge" type="text" name="catAge" th:value="${memberDTO.catAge}" readonly>
+    </div>
+    <div class="input-group">
+        <label id="catSex">성별</label>
+        <input type="radio" name="catSex" value="남아" th:checked="${memberDTO.catSex == '남아'}" onclick="return false;">남아
+        <input type="radio" name="catSex" value="여아" th:checked="${memberDTO.catSex == '여아'}" onclick="return false;">여아
+    </div>
+    <div class="input-group">
+        <label for="variety">품종</label>
+        <input id="variety" name="variety" th:value="${memberDTO.variety}" readonly>
+    </div>
+    <div class="input-group">
+        <label for="profileImg">이미지</label>
+        <img src="">
+        <input formenctype="multipart/form-data" id="profileImg" th:value="${memberDTO.profileImg}" readonly>
+    </div>
+    <a th:href="@{/member/modifyMember(mno=${memberDTO.mno})}">회원수정</a>
+    <button type="submit">회원탈퇴</button>
+</form>
+</body>
+</html>

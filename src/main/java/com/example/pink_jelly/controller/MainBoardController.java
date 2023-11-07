@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 @RequiredArgsConstructor
 public class MainBoardController {
     private final MainBoardService mainBoardService;
-    @GetMapping("/")
+    @GetMapping("")
     public String main(){
         System.out.println("main GET ...");
         return "/main/list";

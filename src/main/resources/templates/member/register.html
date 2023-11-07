@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>회원가입</title>
@@ -12,18 +13,18 @@
         </div>
         <div class="input-group">
             <label for="passwd">비밀번호</label>
-            <input id="passwd" type="text" name="passwd">
+            <input id="passwd" type="password" name="passwd">
         </div>
         <div class="input-group">
             <label for="email">이메일</label>
-            <input id="email" name="email" type="text">
-<!--            <input id="email" type="text" name="email1">@<input type="text" name="email2">-->
-        <select>
-            <option selected>직접입력</option>
-            <option>naver.com</option>
-            <option>daum.net</option>
-            <option>gamil.com</option>
-        </select>
+            <input id="email" name="emailId" type="text">
+            @
+            <select name="emailSelect">
+                <option selected>직접입력</option>
+                <option value="@naver.com">naver.com</option>
+                <option value="@daum.net">daum.net</option>
+                <option value="@gmail.com">gamil.com</option>
+            </select>
         </div>
         <div class="input-group">
             <label for="memberName">이름</label>
@@ -31,16 +32,16 @@
         </div>
         <div class="input-group">
             <label for="phone">전화번호</label>
-            <input id="phone" type="text" name="phone">
+            <input id="phone" type="text" name="phone" placeholder=" - 입력해주세요">
         </div>
         <div class="input-group">
             <label for="nickName">닉네임</label>
             <input id="nickName" type="text" name="nickName">
         </div>
         <div class="input-group">
-            <label for="isCat">고양이 보유 여부</label>
-            <input id="isCat" type="radio" name="isCat" value="예">예
-            <input id="isCat2" type="radio" name="isCat" value="아니오">아니오
+            <label for="hasCat">고양이 보유 여부</label>
+            <input id="hasCat" type="radio" name="hasCat" value="true">예
+            <input type="radio" name="hasCat" value="false">아니오
         </div>
         <div class="input-group">
             <label for="catAge">나이</label>
