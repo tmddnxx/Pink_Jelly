@@ -7,10 +7,16 @@
         INSERT INTO mainBoard (memberId, nickName, profileImg, title, content, mainImg, addDate, myCat, variety)
         VALUES (#{memberId}, #{nickName}, #{profileImg}, #{title}, #{content}, #{mainImg}, now(), #{myCat}, #{variety})
     </insert>
+    <select id="selectAll" resultType="com.example.pink_jelly.domain.MainBoardVO">
+        SELECT * FROM mainBoard order by mbNo DESC
+    </select>
     <select id="getCount" resultType="int">
         SELECT COUNT(mbNo) FROM mainBoard
     </select>
     <select id="selectList" resultType="com.example.pink_jelly.domain.MainBoardVO">
         SELECT * FROM mainBoard ORDER BY mbNo desc LIMIT #{skip}, #{size}
+    </select>
+    <select id="getOne" resultType="com.example.pink_jelly.domain.MainBoardVO">
+        SELECT * FROM mainBoard WHERE mbNo=#{mbNo}
     </select>
 </mapper>

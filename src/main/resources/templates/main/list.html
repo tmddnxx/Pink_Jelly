@@ -5,36 +5,41 @@
 <head>
     <meta charset="UTF-8">
     <title>메인 페이지</title>
+    <link rel="stylesheet" th:href="@{/css/mainBoard.css}">
 </head>
 <body>
     <div layout:fragment="content">
         <div class="row mb-4">
             <div class="col-sm-6">
-                <h2 class="posts-entry-title">메인 게시판</h2>
+                <h2 class="posts-entry-title">Pink Jelly</h2>
             </div>
             <div class="col-sm-6 text-sm-end"><a href="category.html" class="read-more">View All</a></div>
         </div>
 
         <div class="row">
-            <div class="col-lg-4 mb-4">
+            <div class="col-lg-4 mb-4" th:each="mainBoard:${mainBoardList.dtoList}">
                 <div class="post-entry-alt">
-                    <a href="single.html" class="img-link"><img src="../../static/images/img_7_horizontal.jpg" alt="Image" class="img-fluid"></a>
+                    <a href="/main/view" class="img-link"><img src="images/basic1.jpg" alt="Image" class="img-fluid"></a>
                     <div class="excerpt">
 
 
-                        <h2><a href="single.html">Startup vs corporate: What job suits you best?</a></h2>
+                        <h2><a href="/main/view">[[${mainBoard.title}]]</a></h2>
+                        <p>[[${mainBoard.content}]]</p>
                         <div class="post-meta align-items-center text-left clearfix">
-                            <figure class="author-figure mb-0 me-3 float-start"><img src="../../static/images/person_1.jpg" alt="Image" class="img-fluid"></figure>
-                            <span class="d-inline-block mt-1">By <a href="#">David Anderson</a></span>
-                            <span>&nbsp;-&nbsp; July 19, 2019</span>
+                            <figure class="author-figure mb-0 me-3 float-start"><img src="images/person_1.jpg" alt="Image" class="img-fluid"></figure>
+                            <a href="#"><span class="d-inline-block mt-1 boardNickName">[[${mainBoard.nickName}]]</span><span class="boardMemberId">([[${mainBoard.memberId}]])</span> </a>
+                            <span>[[${#temporals.format(mainBoard.addDate, 'yyyy-MM-dd HH:MM')}]]</span><br>
+                            <p class="likeHitCnt"><span>Like</span><span>hit</span><span>commentCnt</span><br></p>
+                            <p class="likeHitCnt"><span>[[${mainBoard.like}]] /</span><span>[[${mainBoard.hit}]] /</span><span>[[${mainBoard.commentCnt}]]</span></p>
                         </div>
-
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quo sunt tempora dolor laudantium sed optio, explicabo ad deleniti impedit facilis fugit recusandae! Illo, aliquid, dicta beatae quia porro id est.</p>
                         <p><a href="#" class="read-more">Continue Reading</a></p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <script th:inline="javascript">
+
+    </script>
 </body>
 </html>

@@ -32,7 +32,7 @@ public class MainBoardServiceImpl implements MainBoardService{
     public PageResponseDTO<MainBoardDTO> getList(PageRequestDTO pageRequestDTO) {
         List<MainBoardVO> mainBoardVOList = mainBoardMapper.selectList(pageRequestDTO);
         List<MainBoardDTO> mainBoardDTOList = new ArrayList<>();
-        mainBoardVOList.forEach(mainBoardVO -> mainBoardDTOList.add(modelMapper.map(mainBoardVOList, MainBoardDTO.class)));
+        mainBoardVOList.forEach(mainBoardVO -> mainBoardDTOList.add(modelMapper.map(mainBoardVO, MainBoardDTO.class)));
         int total = mainBoardMapper.getCount(pageRequestDTO);
 
         PageResponseDTO<MainBoardDTO> pageResponseDTO = PageResponseDTO.<MainBoardDTO>withAll()
@@ -41,5 +41,13 @@ public class MainBoardServiceImpl implements MainBoardService{
                 .pageRequestDTO(pageRequestDTO)
                 .build();
         return pageResponseDTO;
+    }
+
+    @Override
+    public MainBoardDTO getBoard(Long mbNo) {
+        MainBoardVO mainBoardVO = mainBoardMapper.getOne(mbNo);
+        MainBoardDTO mainBoardDTO = modelMapper.map(mainBoardVO, MainBoardDTO.class);
+
+        return mainBoardDTO;
     }
 }
