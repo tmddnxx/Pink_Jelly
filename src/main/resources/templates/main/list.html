@@ -19,16 +19,16 @@
         <div class="row">
             <div class="col-lg-4 mb-4" th:each="mainBoard:${mainBoardList.dtoList}">
                 <div class="post-entry-alt">
-                    <a href="/main/view" class="img-link"><img src="images/basic1.jpg" alt="Image" class="img-fluid"></a>
+                    <a th:href="|@{/main/view(mbNo=${mainBoard.mbNo})}|" class="img-link"><img src="images/basic1.jpg" alt="Image" class="img-fluid"></a>
                     <div class="excerpt">
 
 
-                        <h2><a href="/main/view">[[${mainBoard.title}]]</a></h2>
+                        <h2><a th:href="|@{/main/view(mbNo=${mainBoard.mbNo})}|">[[${mainBoard.title}]]</a></h2>
                         <p>[[${mainBoard.content}]]</p>
                         <div class="post-meta align-items-center text-left clearfix">
                             <figure class="author-figure mb-0 me-3 float-start"><img src="images/person_1.jpg" alt="Image" class="img-fluid"></figure>
-                            <a href="#"><span class="d-inline-block mt-1 boardNickName">[[${mainBoard.nickName}]]</span><span class="boardMemberId">([[${mainBoard.memberId}]])</span> </a>
-                            <span>[[${#temporals.format(mainBoard.addDate, 'yyyy-MM-dd HH:MM')}]]</span><br>
+                            <a th:href="|@{/main/view(mbNo=${mainBoard.mbNo})}|"><span class="d-inline-block mt-1 boardNickName">[[${mainBoard.nickName}]]</span><span class="boardMemberId">([[${mainBoard.memberId}]])</span> </a>
+                            <span>[[${#temporals.format(mainBoard.addDate, 'yyyy-MM-dd HH:mm')}]]</span><br>
                             <p class="likeHitCnt"><span>Like</span><span>hit</span><span>commentCnt</span><br></p>
                             <p class="likeHitCnt"><span>[[${mainBoard.like}]] /</span><span>[[${mainBoard.hit}]] /</span><span>[[${mainBoard.commentCnt}]]</span></p>
                         </div>

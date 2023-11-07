@@ -26,21 +26,23 @@ public class MainBoardController {
         PageResponseDTO<MainBoardDTO> mainBoardList = mainBoardService.getList(pageRequestDTO);
         model.addAttribute("mainBoardList", mainBoardList);
         mainBoardList.getDtoList().forEach(log::info);
-        return "main/list";
+        return "/main/list";
     }
-    @GetMapping("write")
-    public String write() {
+    @GetMapping("/write")
+    public void write() {
         System.out.println("main write GET...");
-        return "/main/write";
     }
 
     @GetMapping("/view")
-    public void view() {
+    public void view(Long mbNo, Model model) {
         log.info("/main/view GET...");
+        log.info(mbNo);
+        MainBoardDTO mainBoardDTO = mainBoardService.getBoard(mbNo);
+        model.addAttribute("mainBoard", mainBoardDTO);
     }
     //게시판 등록
-    @PostMapping("write")
-    public String addPost(MainBoardDTO mainBoardDTO, HttpServletRequest request){
+    @PostMapping("/write")
+    public String write(MainBoardDTO mainBoardDTO, HttpServletRequest request){
         log.info("/main/write... postMapping");
         mainBoardService.register(mainBoardDTO);
         return "redirect:/main";
