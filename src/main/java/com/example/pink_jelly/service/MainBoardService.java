@@ -11,7 +11,11 @@ public interface MainBoardService {
 
     PageResponseDTO<MainBoardDTO> getList(PageRequestDTO pageRequestDTO);
 
-    MainBoardDTO getBoard(Long mbNo);
+    MainBoardDTO getBoard(Long mbNo, String mode);
 
+    void upHit(Long mbNo);
 
+    void removeOne(Long mbNo);
+
+    void modifyBoard(MainBoardDTO mainBoardDTO);
 }

@@ -19,4 +19,13 @@
     <select id="getOne" resultType="com.example.pink_jelly.domain.MainBoardVO">
         SELECT * FROM mainBoard WHERE mbNo=#{mbNo}
     </select>
+    <update id="updateHit">
+        UPDATE mainBoard SET hit=hit+1 WHERE mbNo=#{mbNo}
+    </update>
+    <update id="updateBoard">
+        UPDATE mainBoard SET title=#{title}, content=#{content}, mainImg=#{mainImg}, myCat=#{myCat}, variety=#{variety} WHERE mbNo=#{mbNo}
+    </update>
+    <delete id="deleteOne">
+        DELETE FROM mainBoard WHERE mbNo=#{mbNo}
+    </delete>
 </mapper>

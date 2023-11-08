@@ -11,14 +11,15 @@
 <body>
 <div layout:fragment="banner">
     <!-- 배너 start -->
-    <div class="site-cover site-cover-sm same-height overlay single-page" style="background-image: url('/images/banner1.jpg');">
+    <div class="site-cover site-cover-sm same-height overlay single-page" style="background-image: url('/images/mainBoard/banner1.jpg');">
         <div class="container">
             <div class="row same-height justify-content-center">
                 <div class="col-md-6">
                     <div class="post-entry text-center">
                         <h1 class="mb-4">Loving Cats</h1>
                         <div class="post-meta align-items-center text-center">
-                            <figure class="author-figure mb-0 me-3 d-inline-block"><img src="/images/basic1.jpg" alt="Image" class="img-fluid"></figure>
+                            <figure class="author-figure mb-0 me-3 d-inline-block"><img src="/images/person_3.jpg.jpg" alt="Image" class="img-fluid"></figure>
+                            <button
                             <a th:href="|@{/main/view(mbNo=${mainBoard.mbNo})}|">
                                 <span class="d-inline-block mt-1 boardNickName">[[${mainBoard.nickName}]]</span>
                                 <span class="boardMemberId">([[${mainBoard.memberId}]])</span>
@@ -38,7 +39,7 @@
     <div class="post-content-body">
         <div class="row my-4 mainBoard-Img">
             <div class="col-md-12 mb-4">
-                <img src="/images/basic1.jpg" alt="Image placeholder" class="img-fluid rounded">
+                <img src="/images/mainBoard/basic1.jpg" alt="Image placeholder" class="img-fluid rounded">
             </div>
         </div>
     </div>
@@ -51,8 +52,11 @@
             <div class="pt-5">
                 <p>Categories:  <a href="#">Food</a>, <a href="#">Travel</a>  Tags: <a href="#">#manila</a>, <a href="#">#asia</a></p>
             </div>
+            <a th:href="|@{/main}|" class="btn btn-primary">목록</a>
+            <a th:href="|@{/main/modify(mbNo=${mainBoard.mbNo})}|" class="btn btn-success">수정</a>
+            <a th:href="|@{/main/remove(mbNo=${mainBoard.mbNo})}|" class="btn btn-danger">삭제</a>
 
-            <!-- comment-wrap start -->
+                <!-- comment-wrap start -->
             <div class="pt-5 comment-wrap">
                 <h3 class="mb-5 heading">6 Comments</h3>
                 <ul class="comment-list">

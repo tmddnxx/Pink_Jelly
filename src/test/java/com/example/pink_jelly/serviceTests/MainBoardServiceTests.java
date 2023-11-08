@@ -40,10 +40,33 @@ public class MainBoardServiceTests {
         PageResponseDTO<MainBoardDTO> pageResponseDTO = mainBoardService.getList(pageRequestDTO);
         pageResponseDTO.getDtoList().forEach(log::info);
     }
-
+    //완
     @Test
     public void getBoardTest() {
-        MainBoardDTO mainBoardDTO = mainBoardService.getBoard(3L);
+        MainBoardDTO mainBoardDTO = mainBoardService.getBoard(3L,"read");
         log.info(mainBoardDTO);
+    }
+    //완
+    @Test
+    public void upHitTest() {
+        mainBoardService.upHit(4L);
+    }
+    //완
+    @Test
+    public void removeOneTest() {
+        mainBoardService.removeOne(18L);
+    }
+
+    @Test
+    public void modifyBoardTest() {
+        MainBoardDTO mainBoardDTO = MainBoardDTO.builder()
+                .mbNo(6L)
+                .title("수정됨")
+                .content("수정 컨텐트")
+                .myCat("on")
+                .mainImg("이미지")
+                .variety("고얌미")
+                .build();
+        mainBoardService.modifyBoard(mainBoardDTO);
     }
 }

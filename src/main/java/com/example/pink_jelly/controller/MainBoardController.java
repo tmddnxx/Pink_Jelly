@@ -28,16 +28,24 @@ public class MainBoardController {
         mainBoardList.getDtoList().forEach(log::info);
         return "/main/list";
     }
+    //글쓰기 페이지 이동
     @GetMapping("/write")
     public void write() {
         System.out.println("main write GET...");
     }
 
-    @GetMapping("/view")
-    public void view(Long mbNo, Model model) {
+    @GetMapping({"/view", "/modify"})
+    public void view(Long mbNo, Model model, HttpServletRequest request) {
         log.info("/main/view GET...");
         log.info(mbNo);
-        MainBoardDTO mainBoardDTO = mainBoardService.getBoard(mbNo);
+        MainBoardDTO mainBoardDTO = null;
+        String requestedUrl = request.getRequestURI();
+        if(requestedUrl.equals("/main/view")) {
+            mainBoardDTO = mainBoardService.getBoard(mbNo, "view");
+        }
+        else{
+            mainBoardDTO = mainBoardService.getBoard(mbNo, "modify");
+        }
         model.addAttribute("mainBoard", mainBoardDTO);
     }
     //게시판 등록
@@ -46,5 +54,19 @@ public class MainBoardController {
         log.info("/main/write... postMapping");
         mainBoardService.register(mainBoardDTO);
         return "redirect:/main";
+    }
+    //게시판 삭제
+    @GetMapping("/remove")
+    public String remove(Long mbNo){
+        mainBoardService.removeOne(mbNo);
+        return "redirect:/main";
+    }
+
+    @PostMapping("/modify")
+    public String modify(MainBoardDTO mainBoardDTO, Model model){
+        log.info("Post modify");
+        log.info(mainBoardDTO);
+        mainBoardService.modifyBoard(mainBoardDTO);
+        return "redirect:/main/view?mbNo=" + mainBoardDTO.getMbNo();
     }
 }

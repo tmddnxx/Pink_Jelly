@@ -56,4 +56,27 @@ public class MainBoardMapperTests {
         MainBoardVO mainBoardVO = mainBoardMapper.getOne(3L);
         log.info(mainBoardVO);
     }
+    //완
+    @Test
+    public void updateHitTest() {
+        mainBoardMapper.updateHit(4L);
+    }
+    //완
+    @Test
+    public void deleteOneTest(){
+        mainBoardMapper.deleteOne(19L);
+    }
+    //완
+    @Test
+    public void updateBoardTest() {
+        MainBoardVO mainBoardVO = MainBoardVO.builder()
+                .mbNo(5L)
+                .title("수정됨")
+                .content("수정 컨텐트")
+                .myCat("on")
+                .mainImg("이미지")
+                .variety("고얌미")
+                .build();
+        mainBoardMapper.updateBoard(mainBoardVO);
+    }
 }

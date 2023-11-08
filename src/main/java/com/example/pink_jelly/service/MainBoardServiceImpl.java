@@ -44,10 +44,32 @@ public class MainBoardServiceImpl implements MainBoardService{
     }
 
     @Override
-    public MainBoardDTO getBoard(Long mbNo) {
-        MainBoardVO mainBoardVO = mainBoardMapper.getOne(mbNo);
-        MainBoardDTO mainBoardDTO = modelMapper.map(mainBoardVO, MainBoardDTO.class);
+    public MainBoardDTO getBoard(Long mbNo, String mode) {
+        MainBoardVO mainBoardVO = null;
+        if(mode.equals("view")) {
+            mainBoardVO = mainBoardMapper.getOne(mbNo);
+            mainBoardMapper.updateHit(mbNo);
+        }else {
+            mainBoardVO = mainBoardMapper.getOne(mbNo);
+        }
+         MainBoardDTO mainBoardDTO = modelMapper.map(mainBoardVO, MainBoardDTO.class);
 
         return mainBoardDTO;
     }
+
+    @Override
+    public void upHit(Long mbNo){
+        mainBoardMapper.updateHit(mbNo);
+    }
+    @Override
+    public void removeOne(Long mbNo) {
+        mainBoardMapper.deleteOne(mbNo);
+    }
+
+    @Override
+    public void modifyBoard(MainBoardDTO mainBoardDTO) {
+        MainBoardVO mainBoardVO = modelMapper.map(mainBoardDTO, MainBoardVO.class);
+        mainBoardMapper.updateBoard(mainBoardVO);
+    }
+
 }
