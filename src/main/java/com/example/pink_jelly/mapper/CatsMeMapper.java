@@ -1,10 +1,20 @@
 package com.example.pink_jelly.mapper;
 
+import com.example.pink_jelly.domain.CatsMeBoardVO;
+import com.example.pink_jelly.domain.MainBoardVO;
+import com.example.pink_jelly.dto.PageRequestDTO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 
 @Mapper // mybatis 사용할 때는 선언해줘야함
 public interface CatsMeMapper {
-
+    void insert(CatsMeBoardVO catsMeBoardVO); //게시물 등록
+    List<CatsMeBoardVO> selectAll(PageRequestDTO pageRequestDTO); //전체 목록
+    int getCount(PageRequestDTO pageRequestDTO); //총 게시물 수 = total
+    List<CatsMeBoardVO> selectList(PageRequestDTO pageRequestDTO); //리스트 출력
+    CatsMeBoardVO getOne(Long cmbNo); //게시판 불러오기
+    void updateHit(Long cmbNo); //조회수 증가
+    void deleteOne(Long cmbNo); // 삭제
+    void updateBoard(CatsMeBoardVO catsMeBoardVO); //수정
 }
