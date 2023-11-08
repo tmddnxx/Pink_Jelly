@@ -28,4 +28,27 @@
     <delete id="deleteOne">
         DELETE FROM mainBoard WHERE mbNo=#{mbNo}
     </delete>
+
+    <select id="isMainBoardLike" resultType="boolean">
+        select count(*) from mainLike where mno = #{mno} and mbNo = #{mbNo};
+    </select>
+    
+    <insert id="insertMainBoardLike">
+        insert into mainLike (mno, mbNo) values (#{mno}, #{mbNo});
+    </insert>
+    
+    <delete id="removeMainBoardLike">
+        delete from mainLike where mno = #{mno} and mbNo = #{mbNo};
+    </delete>
+
+    <update id="likeCntUpdate">
+        <choose>
+            <when test="flag">
+                update `mainBoard` set `like` = `like` + 1 where mbNo = #{mbNo};
+            </when>
+            <when test="!flag">
+                update `mainBoard` set `like` = `like` - 1 where mbNo = #{mbNo};
+            </when>
+        </choose>
+    </update>
 </mapper>

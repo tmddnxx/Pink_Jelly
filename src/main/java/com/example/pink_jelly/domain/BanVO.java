@@ -14,4 +14,5 @@ public class BanVO {
     private String banName; // 차단 닉네임
     private String hidden; // 숨김 아이디
     private Long mno; // 회원 고유번호
+
 }

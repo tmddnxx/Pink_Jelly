@@ -35,6 +35,17 @@
 
 
 <div layout:fragment="content">
+<!--좋아요 정보 -->
+    <form name="frmLike" method="post">
+        <input type="hidden" name="like" th:value="${mainBoard.flag}">
+        <input type="hidden" name="mbNo" th:value="${mainBoard.mbNo}">
+        <input type="hidden" name="mno" th:value="${11}">
+        <div class="movielike">
+            <p class="heart on">온</p>
+            <p class="heart off">오프</p>
+        </div>
+    </form>
+
     <div class="post-content-body">
         <div class="row my-4 mainBoard-Img">
             <div class="col-md-12 mb-4">
@@ -182,6 +193,56 @@
         </div>
     </div>
 </div>
+<script layout:fragment="script">
+<!-- 좋아요 버튼 -->
+    const xhr = new XMLHttpRequest(); // ajax 작업을 위한 객체 생성
+    const likeBtn = document.querySelector('.movielike');
+    const likeCheck = document.querySelector('input[name=like]');
+    const frmLike = document.querySelector('form[name=frmLike]');
 
+    console.log("first : " + likeCheck.value);
+
+    if(likeCheck.value === "true" || likeCheck.value === true){
+        likeBtn.innerHTML = '<p class="heart on">온</p>';
+    }
+    else{
+        likeBtn.innerHTML = '<p class="heart off">오프</p>'
+    }
+
+    likeBtn.addEventListener('click', function (){
+        const mbNo = frmLike.mbNo.value;
+        const mno = frmLike.mno.value;
+
+        if (mno !== "") {
+            const url = likeCheck.value === 'true' ? `/mainLike/remove?mbNo=${mbNo}&mno=${mno}` : `/mainLike/add?mbNo=${mbNo}&mno=${mno}`;
+
+            xhr.open('POST', url);
+            xhr.send();
+
+            xhr.onreadystatechange = () => {
+                if (xhr.readyState !== XMLHttpRequest.DONE)
+                    return;
+
+                console.log(xhr.response);
+
+                if (xhr.status === 200) {
+                    const json = JSON.parse(xhr.response);
+                    if (json.result === true) {
+                        // 성공적으로 처리된 경우 추가적인 동작 수행
+                    } else {
+                        alert('등록에 실패했습니다.');
+                    }
+                } else {
+                    console.error(xhr.status, xhr.statusText);
+                }
+            };
+
+            likeCheck.value = likeCheck.value === "true" ? "false" : "true";
+            likeBtn.innerHTML = likeCheck.value === "true" ? '<p class="heart on">온</p>' : '<p class="heart off">오프</p>';
+        } else {
+            alert("로그인 후 이용 가능합니다.");
+        }
+    })
+</script>
 </body>
 </html>

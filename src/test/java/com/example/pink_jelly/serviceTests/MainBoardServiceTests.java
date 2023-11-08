@@ -43,7 +43,7 @@ public class MainBoardServiceTests {
     //완
     @Test
     public void getBoardTest() {
-        MainBoardDTO mainBoardDTO = mainBoardService.getBoard(3L,"read");
+        MainBoardDTO mainBoardDTO = mainBoardService.getBoard(1L,"read");
         log.info(mainBoardDTO);
     }
     //완

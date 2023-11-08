@@ -18,4 +18,9 @@ public interface MainBoardService {
     void removeOne(Long mbNo);
 
     void modifyBoard(MainBoardDTO mainBoardDTO);
+
+    boolean addBoardLike(Long mno, Long mbNo); // 좋아요 등록
+    boolean removeBoardLike(Long mno, Long mbNo); // 좋아요 제거
+
+    boolean isBoardLike(Long mno, Long mbNo);
 }

@@ -45,15 +45,17 @@ public class MainBoardServiceImpl implements MainBoardService{
 
     @Override
     public MainBoardDTO getBoard(Long mbNo, String mode) {
-        MainBoardVO mainBoardVO = null;
+        MainBoardVO mainBoardVO = new MainBoardVO();
+        boolean flag = false;
         if(mode.equals("view")) {
             mainBoardVO = mainBoardMapper.getOne(mbNo);
             mainBoardMapper.updateHit(mbNo);
+            flag = mainBoardMapper.isMainBoardLike(11L, mbNo);
         }else {
             mainBoardVO = mainBoardMapper.getOne(mbNo);
         }
          MainBoardDTO mainBoardDTO = modelMapper.map(mainBoardVO, MainBoardDTO.class);
-
+         mainBoardDTO.setFlag(flag);
         return mainBoardDTO;
     }
 
@@ -70,6 +72,27 @@ public class MainBoardServiceImpl implements MainBoardService{
     public void modifyBoard(MainBoardDTO mainBoardDTO) {
         MainBoardVO mainBoardVO = modelMapper.map(mainBoardDTO, MainBoardVO.class);
         mainBoardMapper.updateBoard(mainBoardVO);
+    }
+
+    @Override
+    public boolean addBoardLike(Long mno, Long mbNo) { // 좋아요 달기
+        mainBoardMapper.likeCntUpdate(mbNo, true);
+
+        return mainBoardMapper.insertMainBoardLike(mno, mbNo);
+    }
+
+    @Override
+    public boolean removeBoardLike(Long mno, Long mbNo) { // 좋아요 제거
+        mainBoardMapper.likeCntUpdate(mbNo, false);
+
+        return mainBoardMapper.removeMainBoardLike(mno, mbNo);
+    }
+
+    @Override
+    public boolean isBoardLike(Long mno, Long mbNo) { // 좋아요 여부
+
+
+        return mainBoardMapper.isMainBoardLike(mno, mbNo);
     }
 
 }

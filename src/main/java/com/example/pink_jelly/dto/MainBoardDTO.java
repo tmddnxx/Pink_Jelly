@@ -26,4 +26,6 @@ public class MainBoardDTO { // 메인 게시판 DTO
     private Long commentCnt; // 게시물 댓글수
     private Long like; // 게시물 좋아요수
     private Long hit; // 게시물 조회수
+
+    private boolean flag; // 좋아요 눌럿냐 안눌럿냐
 }
