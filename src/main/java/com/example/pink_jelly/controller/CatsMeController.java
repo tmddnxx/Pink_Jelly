@@ -1,9 +1,6 @@
 package com.example.pink_jelly.controller;
 
-import com.example.pink_jelly.dto.CatsMeBoardDTO;
-import com.example.pink_jelly.dto.MainBoardDTO;
-import com.example.pink_jelly.dto.PageRequestDTO;
-import com.example.pink_jelly.dto.PageResponseDTO;
+import com.example.pink_jelly.dto.*;
 import com.example.pink_jelly.service.CatsMeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -64,5 +61,50 @@ public class CatsMeController {
     public String remove(Long cmbNo){
         catsMeService.removeOne(cmbNo);
         return "redirect:/catsMe";
+    }
+
+
+    //review
+    @GetMapping("/review/list")
+    public void CatsMeReview(Model model, PageRequestDTO pageRequestDTO){
+        log.info("/catsMe/review/list Get");
+        PageResponseDTO<CatsReviewBoardDTO> catsMeReviewBoardList = catsMeService.getReviewBoardList(pageRequestDTO);
+        model.addAttribute("catsMeReviewBoardList", catsMeReviewBoardList);
+    }
+    @GetMapping("/review/write")
+    public void writeReview() {
+        System.out.println("catsMeReviewBoard write GET...");
+    }
+
+    @PostMapping("/review/write")
+    public String writeReview(CatsReviewBoardDTO catsReviewBoardDTO){
+        log.info("/catsMe/review/write... postMapping");
+        catsMeService.registerReviewBoard(catsReviewBoardDTO);
+        return "redirect:/catsMe/review/list";
+    }
+    @GetMapping({"/review/view", "/review/modify"})
+    public void viewReview(Long crbNo, Model model, HttpServletRequest request){
+        log.info("/catsMe/review/view");
+        CatsReviewBoardDTO catsReviewBoardDTO = null;
+        String requestedUrl = request.getRequestURI();
+        if(requestedUrl.equals("/catsMe/review/view")){
+            catsReviewBoardDTO = catsMeService.getReviewBoard(crbNo, "view");
+        }else {
+            catsReviewBoardDTO = catsMeService.getReviewBoard(crbNo, "modify");
+        }
+        model.addAttribute("catsReviewBoard", catsReviewBoardDTO);
+
+    }
+    @PostMapping("/review/modify")
+    public String modifyReview(CatsReviewBoardDTO catsReviewBoardDTO, Model model){
+        log.info("/review/modify post");
+        log.info(catsReviewBoardDTO.getCrbNo());
+        catsMeService.modifyReviewBoard(catsReviewBoardDTO);
+        return "redirect:/catsMe/review/view?crbNo=" + catsReviewBoardDTO.getCrbNo();
+    }
+    @GetMapping("/review/remove")
+    public String removeReview(Long crbNo){
+        catsMeService.removeReviewBoardOne(crbNo);
+        return "redirect:/catsMe/review/list";
     }
 }

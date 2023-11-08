@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{layout/basic.html}">
+<head>
+    <meta charset="UTF-8">
+    <title>메인 페이지</title>
+    <link rel="stylesheet" th:href="@{/css/mainBoard.css}">
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="row mb-4">
+        <div class="col-sm-6">
+            <h2 class="posts-entry-title">CatsMe Review</h2>
+        </div>
+        <div class="col-sm-6 text-sm-end"><a href="category.html" class="read-more">View All</a></div>
+        <a th:href="|@{/catsMe}|" class="btn btn-primary">입양소</a>
+        <a th:href="|@{/catsMe/review/list}|" class="btn btn-primary">입양후기</a>
+        <a th:href="|@{/catsMe/review/write}|" class="btn btn-primary">글쓰기</a>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-4 mb-4" th:each="catsMeReviewBoard:${catsMeReviewBoardList.dtoList}">
+            <div class="post-entry-alt">
+                <a th:href="|@{/catsMe/review/view(crbNo=${catsMeReviewBoard.crbNo})}|" class="img-link"><img src="/images/mainBoard/basic5.jpg" alt="Image" class="img-fluid"></a>
+                <div class="excerpt">
+
+
+                    <h2><a th:href="|@{/catsMe/review/view(crbNo=${catsMeReviewBoard.crbNo})}|">[[${catsMeReviewBoard.title}]]</a></h2>
+                    <p>[[${catsMeReviewBoard.content}]]</p>
+                    <div class="post-meta align-items-center text-left clearfix">
+                        <figure class="author-figure mb-0 me-3 float-start"><img src="/images/person_3.jpg" alt="Image" class="img-fluid"></figure>
+                        <a th:href="|@{/catsMe/review/view(crbNo=${catsMeReviewBoard.crbNo})}|"><span class="d-inline-block mt-1 boardNickName">[[${catsMeReviewBoard.nickName}]]</span><span class="boardMemberId">([[${catsMeReviewBoard.memberId}]])</span> </a>
+                        <span>[[${#temporals.format(catsMeReviewBoard.addDate, 'yyyy-MM-dd HH:mm')}]]</span><br>
+                        <p class="likeHitCnt"><span>조회수</span><span>좋아요</span><span>댓글수</span><br></p>
+                        <p class="likeHitCnt"><span>[[${catsMeReviewBoard.hit}]]</span><span>[[${catsMeReviewBoard.like}]]</span><span>[[${catsMeReviewBoard.commentCnt}]]</span></p>
+                    </div>
+                    <p><a href="#" class="read-more">Continue Reading</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script th:inline="javascript">
+
+</script>
+</body>
+</html>

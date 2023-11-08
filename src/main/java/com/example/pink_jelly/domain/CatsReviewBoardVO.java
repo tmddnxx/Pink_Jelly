@@ -16,7 +16,7 @@ public class CatsReviewBoardVO {
     private String profileImg; // 프로필 사진
     private String title; // 제목
     private String content; // 내용
-    private String cmbImg; // 입양소 사진
+    private String crbImg; // 입양후기 사진
     private LocalDateTime addDate; // 등록 날짜
     private int commentCnt; // 댓글 수
     private int like; // 꾹꾹이 수 (좋아요 수)

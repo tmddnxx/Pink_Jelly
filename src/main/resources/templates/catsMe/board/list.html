@@ -11,9 +11,11 @@
 <div layout:fragment="content">
     <div class="row mb-4">
         <div class="col-sm-6">
-            <h2 class="posts-entry-title">Pink Jelly</h2>
+            <h2 class="posts-entry-title">CatsMe 입양소</h2>
         </div>
         <div class="col-sm-6 text-sm-end"><a href="category.html" class="read-more">View All</a></div>
+        <a th:href="|@{/catsMe}|" class="btn btn-primary">입양소</a>
+        <a th:href="|@{/catsMe/review/list}|" class="btn btn-primary">입양후기</a>
         <a th:href="|@{/catsMe/board/write}|" class="btn btn-primary">글쓰기</a>
     </div>
 

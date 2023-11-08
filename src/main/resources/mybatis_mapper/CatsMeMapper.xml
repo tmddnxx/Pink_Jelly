@@ -28,4 +28,30 @@
     <delete id="deleteOne">
         DELETE FROM catsMeBoard WHERE cmbNo=#{cmbNo}
     </delete>
+
+    <insert id="insertReviewBoard">
+        INSERT INTO catsReviewBoard (memberId, nickName, profileImg, title, content, crbImg, addDate)
+        VALUES (#{memberId}, #{nickName}, #{profileImg}, #{title}, #{content}, #{crbImg}, now())
+    </insert>
+    <select id="selectReviewBoardAll" resultType="com.example.pink_jelly.domain.CatsReviewBoardVO">
+        SELECT * FROM catsReviewBoard ORDER BY crbNo DESC
+    </select>
+    <select id="getReviewBoardCount" resultType="int">
+        SELECT COUNT(crbNo) FROM catsReviewBoard
+    </select>
+    <select id="selectReviewBoardList" resultType="com.example.pink_jelly.domain.CatsReviewBoardVO">
+        SELECT * FROM CatsReviewBoard ORDER BY crbNo DESC LIMIT #{skip}, #{size}
+    </select>
+    <select id="getReviewBoardOne" resultType="com.example.pink_jelly.domain.CatsReviewBoardVO">
+        SELECT * FROM catsReviewBoard WHERE crbNo=#{crbNo}
+    </select>
+    <update id="updateReviewBoardHit">
+        UPDATE catsReviewBoard SET hit=hit+1 WHERE crbNo=#{crbNo}
+    </update>
+    <update id="updateReviewBoard">
+        UPDATE catsReviewBoard SET title=#{title}, content=#{content}, crbImg=#{crbImg} WHERE crbNo=#{crbNo}
+    </update>
+    <delete id="deleteReviewBoardOne">
+        DELETE FROM catsReviewBoard WHERE crbNo=#{crbNo}
+    </delete>
 </mapper>
