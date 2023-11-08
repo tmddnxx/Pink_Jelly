@@ -59,5 +59,14 @@ public class MemberServiceImpl implements MemberService{
         return memberDTO;
     }
 
+    @Override
+    public MemberDTO login(String memberId, String passwd) { // 로그인처리
+        MemberVO memberVO = memberMapper.login(memberId, passwd);
+
+        MemberDTO memberDTO = modelMapper.map(memberVO, MemberDTO.class);
+
+        return memberDTO;
+    }
+
 
 }

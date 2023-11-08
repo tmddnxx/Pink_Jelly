@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Log4j2
@@ -24,7 +25,11 @@ public class ProfileController {
 
 
     @GetMapping("")
-    public String profile(){
+    public String profile(Model model, HttpSession session){
+        MemberDTO memberDTO = (MemberDTO) session.getAttribute("logInfo");
+
+
+        model.addAttribute("memberDTO", memberDTO);
 
         return "profile/profile";
     }

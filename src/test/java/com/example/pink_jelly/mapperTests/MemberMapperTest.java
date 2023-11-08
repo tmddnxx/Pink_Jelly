@@ -1,4 +1,4 @@
-package com.example.pink_jelly;
+package com.example.pink_jelly.mapperTests;
 
 import com.example.pink_jelly.domain.MemberVO;
 import com.example.pink_jelly.mapper.MemberMapper;
@@ -73,5 +73,10 @@ public class MemberMapperTest {
     @Test
     public void getMemberTest(){
         log.info(memberMapper.getMember(10L));
+    }
+
+    @Test
+    public void loginTest(){
+       log.info(memberMapper.login("test3", "3333"));
     }
 }

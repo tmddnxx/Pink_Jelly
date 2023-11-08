@@ -1,4 +1,4 @@
-package com.example.pink_jelly;
+package com.example.pink_jelly.serviceTests;
 
 import com.example.pink_jelly.domain.MemberVO;
 import com.example.pink_jelly.dto.MemberDTO;
@@ -47,5 +47,10 @@ public class MemberServiceTest {
                 .mno(1L)
                 .build();
         memberService.modifyMember(memberDTO);
+    }
+
+    @Test
+    public void login(){
+        log.info(memberService.login("test3", "3333"));
     }
 }

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 @Log4j2
 @Controller
@@ -52,13 +53,21 @@ public class MemberController {
     public void checkPW(){
         // 회원 수정 전 비밀번호 확인
     }
+    @PostMapping("/checkPW")
+    public String checkPWPost(String passwd, HttpSession session){
+        MemberDTO memberDTO = (MemberDTO) session.getAttribute("logInfo");
+        if (memberDTO.getPasswd().equals(passwd)){
+            return "/member/memberInfo";
+        }
+        return "/member/checkPW";
+    }
 
     @GetMapping("/memberInfo")
-    public void memberInfo(Model model, Long mno){
+    public void memberInfo(Model model, HttpSession session){
         // 회원정보 뷰
-
-        mno = 14L;
-      model.addAttribute("memberDTO", memberService.getMember(mno));
+//        MemberDTO memberDTO = (MemberDTO) session.getAttribute("logInfo");
+//        memberDTO.
+//      model.addAttribute("memberDTO", memberService.getMember(mno));
     }
 
 

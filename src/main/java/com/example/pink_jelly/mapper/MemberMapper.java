@@ -18,6 +18,8 @@ public interface MemberMapper {
 
     MemberVO getMember(Long mno); // 회원정보 들고오기
 
+    MemberVO login(String memberId, String passwd); // 로그인 처리
+
 
 
 }
