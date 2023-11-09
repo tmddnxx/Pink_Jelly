@@ -54,4 +54,27 @@
     <delete id="deleteReviewBoardOne">
         DELETE FROM catsReviewBoard WHERE crbNo=#{crbNo}
     </delete>
+
+    <select id="isReviewBoardLike" resultType="boolean">
+        select count(*) from reviewLike where mno = #{mno} and crbNo = #{crbNo};
+    </select>
+
+    <insert id="insertReviewBoardLike">
+        insert into reviewLike (mno, crbNo) values (#{mno}, #{crbNo});
+    </insert>
+
+    <delete id="removeReviewBoardLike">
+        delete from reviewLike where mno = #{mno} and crbNo = #{crbNo};
+    </delete>
+
+    <update id="likeCntUpdate">
+        <choose>
+            <when test="flag">
+                update `catsReviewBoard` set `like` = `like` + 1 where crbNo = #{crbNo};
+            </when>
+            <when test="!flag">
+                update `catsReviewBoard` set `like` = `like` - 1 where crbNo = #{crbNo};
+            </when>
+        </choose>
+    </update>
 </mapper>

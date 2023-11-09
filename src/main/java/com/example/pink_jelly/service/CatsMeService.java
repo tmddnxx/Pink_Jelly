@@ -22,4 +22,9 @@ public interface CatsMeService {
     void modifyReviewBoard(CatsReviewBoardDTO catsReviewBoardDTO);
 
     void removeReviewBoardOne(Long crbNo);
+
+    boolean addReviewBoardLike(Long mno, Long crbNo); // 좋아요 등록
+    boolean removeReviewBoardLike(Long mno, Long crbNo); // 좋아요 제거
+
+    boolean isReviewBoardLike(Long mno, Long crbNo); // 좋아요 확인
 }

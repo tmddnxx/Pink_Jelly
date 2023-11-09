@@ -23,4 +23,6 @@ public class CatsReviewBoardDTO {
     private int commentCnt; // 댓글 수
     private int like; // 꾹꾹이 수 (좋아요 수)
     private int hit; // 조회수
+
+    private boolean flag; // 좋아요 눌럿냐 안눌럿냐
 }

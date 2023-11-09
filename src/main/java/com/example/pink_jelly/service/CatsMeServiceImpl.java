@@ -96,13 +96,17 @@ public class CatsMeServiceImpl implements CatsMeService{
     @Override
     public CatsReviewBoardDTO getReviewBoard(Long crbNo, String mode) {
         CatsReviewBoardVO catsReviewBoardVO = null;
+        boolean flag = false;
+        Long mno = null; // 로그인 mno로 교체 예정
         if(mode.equals("view")){
             catsReviewBoardVO = catsMeMapper.getReviewBoardOne(crbNo);
             catsMeMapper.updateReviewBoardHit(crbNo);
+            flag = catsMeMapper.isReviewBoardLike(mno, crbNo);
         } else{
             catsReviewBoardVO = catsMeMapper.getReviewBoardOne(crbNo);
         }
         CatsReviewBoardDTO catsReviewBoardDTO = modelMapper.map(catsReviewBoardVO, CatsReviewBoardDTO.class);
+        catsReviewBoardDTO.setFlag(flag);
         return catsReviewBoardDTO;
     }
 
@@ -120,5 +124,26 @@ public class CatsMeServiceImpl implements CatsMeService{
     @Override
     public void removeReviewBoardOne(Long crbNo) {
         catsMeMapper.deleteReviewBoardOne(crbNo);
+    }
+
+    // 리뷰 게시판 좋아요 달기
+    @Override
+    public boolean addReviewBoardLike(Long mno, Long crbNo) { // 좋아요 추가
+        catsMeMapper.likeCntUpdate(crbNo, true);
+
+        return catsMeMapper.insertReviewBoardLike(mno, crbNo);
+    }
+
+    @Override
+    public boolean removeReviewBoardLike(Long mno, Long crbNo) { // 좋아요 제거
+        catsMeMapper.likeCntUpdate(crbNo, false);
+
+        return catsMeMapper.removeReviewBoardLike(mno, crbNo);
+    }
+
+    @Override
+    public boolean isReviewBoardLike(Long mno, Long crbNo) { // 좋아요 여부
+
+        return catsMeMapper.isReviewBoardLike(mno, crbNo);
     }
 }

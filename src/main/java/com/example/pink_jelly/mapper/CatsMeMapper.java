@@ -19,6 +19,7 @@ public interface CatsMeMapper {
     void deleteOne(Long cmbNo); // 삭제
     void updateBoard(CatsMeBoardVO catsMeBoardVO); //수정
 
+    // 리뷰 게시판
     void insertReviewBoard(CatsReviewBoardVO catsReviewBoardVO); //게시물 등록
     List<CatsReviewBoardVO> selectReviewBoardAll(PageRequestDTO pageRequestDTO); //전체 목록
     int getReviewBoardCount(PageRequestDTO pageRequestDTO); //총 게시물 수 = total
@@ -27,4 +28,11 @@ public interface CatsMeMapper {
     void updateReviewBoardHit(Long crbNo); //조회수 증가
     void deleteReviewBoardOne(Long crbNo); // 삭제
     void updateReviewBoard(CatsReviewBoardVO catsReviewBoardVO); //수정
+
+    boolean isReviewBoardLike(Long mno, Long crbNo); // 유저가 특정 게시물에 좋아요를 달았는지 여부
+
+    boolean insertReviewBoardLike(Long mno, Long crbNo); // 좋아요 추가
+
+    boolean removeReviewBoardLike(Long mno, Long crbNo); // 좋아요 제거
+    void likeCntUpdate(Long crbNo, boolean flag); // 좋아요 수 업데이트
 }

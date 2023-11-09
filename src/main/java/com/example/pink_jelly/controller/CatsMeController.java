@@ -42,6 +42,7 @@ public class CatsMeController {
         log.info("/catsMe/view");
         CatsMeBoardDTO catsMeBoardDTO = null;
         String requestedUrl = request.getRequestURI();
+
         if(requestedUrl.equals("/catsMe/board/view")){
             catsMeBoardDTO = catsMeService.getBoard(cmbNo, "view");
         }else {
@@ -87,8 +88,13 @@ public class CatsMeController {
         log.info("/catsMe/review/view");
         CatsReviewBoardDTO catsReviewBoardDTO = null;
         String requestedUrl = request.getRequestURI();
+
+        // 로그인 mno 가져오기
+        Long mno = null;
+
         if(requestedUrl.equals("/catsMe/review/view")){
             catsReviewBoardDTO = catsMeService.getReviewBoard(crbNo, "view");
+            catsReviewBoardDTO.setFlag(catsMeService.isReviewBoardLike(mno, crbNo));
         }else {
             catsReviewBoardDTO = catsMeService.getReviewBoard(crbNo, "modify");
         }

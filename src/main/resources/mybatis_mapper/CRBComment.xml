@@ -3,5 +3,19 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.pink_jelly.mapper.CRBCommentMapper">
+    <insert id="insert" parameterType="com.example.pink_jelly.domain.CatsCommentVO">
+        insert into catscomment (crbNo, memberId, nickName, comment, addDate) values (#{crbNo}, #{memberId}, #{nickName}, #{comment}, now());
+    </insert>
 
+    <delete id="delete">
+        delete from catscomment where comNo = #{comNo};
+    </delete>
+
+    <select id="selectList" resultType="com.example.pink_jelly.domain.CatsCommentVO">
+        select * from catscomment where crbNo = #{crbNo} order by comNo asc limit #{skip}, #{size};
+    </select>
+
+    <select id="getCount" resultType="int">
+        select count(*) from catscomment where crbNo = #{crbNo};
+    </select>
 </mapper>
