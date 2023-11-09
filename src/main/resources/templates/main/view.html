@@ -39,8 +39,8 @@
     <form name="frmLike" method="post">
         <input type="hidden" name="like" th:value="${mainBoard.flag}">
         <input type="hidden" name="mbNo" th:value="${mainBoard.mbNo}">
-        <input type="hidden" name="mno" th:value="${11}">
-        <div class="movielike">
+        <input type="hidden" name="mno" th:value="${14}">
+        <div class="likeBtn">
             <p class="heart on">온</p>
             <p class="heart off">오프</p>
         </div>
@@ -196,7 +196,7 @@
 <script layout:fragment="script">
 <!-- 좋아요 버튼 -->
     const xhr = new XMLHttpRequest(); // ajax 작업을 위한 객체 생성
-    const likeBtn = document.querySelector('.movielike');
+    const likeBtn = document.querySelector('.likeBtn');
     const likeCheck = document.querySelector('input[name=like]');
     const frmLike = document.querySelector('form[name=frmLike]');
 
