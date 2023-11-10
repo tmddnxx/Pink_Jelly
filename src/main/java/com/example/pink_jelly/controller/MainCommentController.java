@@ -30,9 +30,8 @@ public class MainCommentController {
         if(bindingResult.hasErrors()) {
             throw new BindException((bindingResult));
         }
-        mainCommentService.register(mainCommentDTO);
         Map<String, Long> resultMap = new HashMap<>();
-        Long rno = 1L;
+        Long rno = mainCommentService.register(mainCommentDTO);;
         resultMap.put("rno", rno);
 
         return resultMap;
@@ -41,8 +40,19 @@ public class MainCommentController {
     @GetMapping(value = "/list/{mbNo}")
     public PageResponseDTO<MainCommentDTO> getList(@PathVariable("mbNo") Long mbNo, PageRequestDTO pageRequestDTO) {
         // @PathVariable 경로에 있는 값 사용
+//        log.info(pageRequestDTO.getSkip());
         PageResponseDTO<MainCommentDTO> mainComment = mainCommentService.getListMainComment(mbNo, pageRequestDTO);
 
         return mainComment;
     }
+
+    @ApiOperation(value = "Delete Reply", notes = "DELETE 방식으로 특정 댓글 삭제")
+    @DeleteMapping("/{comNo}")
+    public Map<String, Long> remove(@PathVariable("comNo") Long comNo) {
+        mainCommentService.remove(comNo);
+        Map<String, Long> resultMap = new HashMap<>();
+        resultMap.put("comNo", comNo);
+        return resultMap;
+    }
+
 }

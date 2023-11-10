@@ -6,7 +6,7 @@ import com.example.pink_jelly.dto.PageRequestDTO;
 import com.example.pink_jelly.dto.PageResponseDTO;
 
 public interface MainCommentService {
-    void register(MainCommentDTO mainCommentDTO);
+    Long register(MainCommentDTO mainCommentDTO);
 
     void remove(Long comNo);
 

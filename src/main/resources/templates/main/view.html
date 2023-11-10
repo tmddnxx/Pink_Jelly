@@ -242,7 +242,7 @@
     //댓글 출력
 
 const mbNo = [[${mainBoard.mbNo}]]
-function printReplies(page, size, goLast) {
+function printComments(page, size, goLast) {
     getList({mbNo, page, size, goLast})
         .then(data => {
             console.log(data);
@@ -251,8 +251,8 @@ function printReplies(page, size, goLast) {
         })
         .catch(e => console.error());
 }
-printReplies(1, 10); // 무조건 호출
-printReplies(1, 10, true);
+printComments(1, 10); // 무조건 호출
+printComments(1, 10, true);
 
 const commentList = document.querySelector('.comment-body'); // 댓글 목록 DOM
 const commentPaging = document.querySelector('.commentPaging'); // 페이지 목록 DOM
@@ -263,13 +263,26 @@ function printList(dtoList) { // 댓글 목록 출력
         for (const dto of dtoList) {
             str += `<h3>${dto.memberId}</h3>
                     <div class="meta">${dto.addDate[0]}-${dto.addDate[1]}-${dto.addDate[2]} ${dto.addDate[3]}:${dto.addDate[4]}</div>
-                    <p>${dto.comment}</p>
+                    <p data-comNo="${dto.comNo}">${dto.comment}</p>
                     <p><a href="#" class="reply rounded">Reply</a></p>
+                    <button type="button" class="btn btn-danger removeCommentBtn">Remove</button>
                     `;
         }
     }
-
     commentList.innerHTML = str;
+
+    const removeCommentBtn = document.querySelector('.removeCommentBtn');
+    removeCommentBtn.addEventListener('click', function (e) {
+        const comNo = e.target.parentElement.querySelector('p[data-comNo]').getAttribute('data-comNo');
+        if (!comNo) {
+            return;
+        }
+        removeComment(comNo).then(result => {
+            page = 1; // 이 부분이 없다면 원래 페이지로
+            size = 10;
+            printComments(page, size);
+        }).catch(e => console.log(e));
+    })
 }
 
 //댓글 등록
@@ -284,7 +297,7 @@ commentBtn.addEventListener('click', function (e) {
     console.log(commentObj);
     addComment(commentObj).then(result => {
         comment.value='';
-        printReplies(1, 10, true); // 댓글 목록 갱신
+        printComments(1, 10, true); // 댓글 목록 갱신
     }).catch(e => {
         alert("Exception...");
     });

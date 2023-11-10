@@ -20,9 +20,10 @@ public class MainCommentServiceImpl implements MainCommentService{
     private final MainCommentMapper mainCommentMapper;
     private final ModelMapper modelMapper;
     @Override
-    public void register(MainCommentDTO mainCommentDTO) {
+    public Long register(MainCommentDTO mainCommentDTO) {
         MainCommentVO mainCommentVO = modelMapper.map(mainCommentDTO, MainCommentVO.class);
         mainCommentMapper.insert(mainCommentVO);
+        return mainCommentVO.getComNo();
     }
 
     @Override
