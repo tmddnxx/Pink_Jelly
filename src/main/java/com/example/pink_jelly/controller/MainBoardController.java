@@ -42,10 +42,10 @@ public class MainBoardController {
         MainBoardDTO mainBoardDTO = null;
         String requestedUrl = request.getRequestURI();
         // 로그인 한 놈 들고와
-        Long mno = null;
+//        Long mno = null;
         if (requestedUrl.equals("/main/view")) {
             mainBoardDTO = mainBoardService.getBoard(mbNo, "view");
-            mainBoardDTO.setFlag(mainBoardService.isBoardLike(mno, mbNo));
+//            mainBoardDTO.setFlag(mainBoardService.isBoardLike(mno, mbNo));
         } else {
             mainBoardDTO = mainBoardService.getBoard(mbNo, "modify");
         }
