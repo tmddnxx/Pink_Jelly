@@ -25,7 +25,7 @@ public class CRBCommentController {
     private final CRBCommentService crbCommentService;
 
     @ApiOperation(value = "Replies POST", notes = "POST 방식으로 댓글 등록")
-    @PostMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE) // 특정 crbNo 게시물에 댓글 추가
+    @PostMapping(value = "/", consumes = MediaType.APPLICATION_JSON_VALUE) // 특정 crbNo 게시물에 댓글 추가
     public Map<String, String> register(@Valid @RequestBody CatsCommentDTO catsCommentDTO, BindingResult bindingResult) throws BindException {
         log.info(catsCommentDTO);
 

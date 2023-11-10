@@ -1,14 +1,13 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
       layout:decorate="~{layout/basic.html}">
 <head>
     <meta charset="UTF-8">
     <title>CatsMe</title>
     <link rel="stylesheet" th:href="@{/css/mainBoard.css}">
-
 </head>
-<body>
 <div layout:fragment="banner">
     <!-- 배너 start -->
     <div class="site-cover site-cover-sm same-height overlay single-page" style="background-image: url('/images/mainBoard/banner1.jpg');">
@@ -33,12 +32,11 @@
     <!-- /배너 end -->
 </div>
 
-
-<div layout:fragment="content" th:with="dto=${catsReviewBoard}">
+<div layout:fragment="content" th:with="crbDTO=${catsReviewBoard}">
     <!--좋아요 정보 -->
     <form name="frmLike" method="post">
-        <input type="hidden" name="like" th:value="${dto.flag}">
-        <input type="hidden" name="crbNo" th:value="${dto.crbNo}">
+        <input type="hidden" name="like" th:value="${crbDTO.flag}">
+        <input type="hidden" name="crbNo" th:value="${crbDTO.crbNo}">
         <input type="hidden" name="mno" th:value="${15}">
         <div class="likeBtn">
             <p class="heart on">온</p>
@@ -62,8 +60,8 @@
                 <p>Categories:  <a href="#">Food</a>, <a href="#">Travel</a>  Tags: <a href="#">#manila</a>, <a href="#">#asia</a></p>
             </div>
             <a th:href="|@{/catsMe/review/list}|" class="btn btn-primary">목록</a>
-            <a th:href="|@{/catsMe/review/modify(crbNo=${dto.crbNo})}|" class="btn btn-success">수정</a>
-            <a th:href="|@{/catsMe/review/remove(crbNo=${dto.crbNo})}|" class="btn btn-danger">삭제</a>
+            <a th:href="|@{/catsMe/review/modify(crbNo=${crbDTO.crbNo})}|" class="btn btn-success">수정</a>
+            <a th:href="|@{/catsMe/review/remove(crbNo=${crbDTO.crbNo})}|" class="btn btn-danger">삭제</a>
 
             <!-- comment-wrap start -->
             <div class="pt-5 comment-wrap">
@@ -86,20 +84,20 @@
                 </div>
                 <div class="comment-form-wrap pt-5">
                     <h3 class="mb-5">댓글 작성</h3>
-                    <form action="#" class="p-5 bg-light">
-                        <input type="hidden" name="memberId" value="memberId">
-                        <input type="hidden" name="nickName" value="nickName">
+                    <form action="/crbComment" class="p-5 bg-light" method="post" name="commentForm">
+                        <input type="hidden" name="crbNo" class="crbNo" th:value="${crbDTO.crbNo}">
+                        <input type="hidden" name="memberId" class="memberId" th:value="${lsw1123}">
+                        <input type="hidden" name="nickName" class="nickName" th:value="${lsdff23}">
                         <div class="form-group">
                             <label for="message">Message</label>
-                            <textarea name="comment" id="message" cols="30" rows="10" class="form-control"></textarea>
+                            <textarea name="comment" id="message" cols="30" rows="10" class="form-control commentText"></textarea>
                         </div>
                         <div class="form-group">
-                            <button type="submit" value="Post Comment" class="btn btn-primary">댓글 등록</button>
+                            <button type="button" value="Post Comment" class="btn btn-primary addCommentBtn">댓글 등록</button>
                         </div>
                     </form>
                 </div>
             </div>
-
         </div>
         <!-- END main-content -->
 
@@ -150,125 +148,57 @@
     </div>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </div>
+
 <script layout:fragment="script" th:inline="javascript">
-    /* 댓글 작업 시작 */
-    // 목록 가져오기
-    const crbNo = [[${dto.crbNo}]];
 
-    async function getList({crbNo, page, size, goLast}){
-        const result = await axios.get(`/crbComment/list/${crbNo}?page=${page}`, {params: {page, size}})
-        if(goLast){
-            const total = result.data.total
-            const lastPage = parseInt(Math.ceil(total/size))
+   const likeBtn = document.querySelector('.likeBtn');
+   const likeCheck = document.querySelector('input[name=like]');
+   const frmLike = document.querySelector('form[name=frmLike]');
 
-            return getList({crbNo:crbNo, page:lastPage, size:size, goLast:false})
-        }
+   console.log("first : " + likeCheck.value);
 
-        return result.data
-    }
+   if (likeCheck.value === "true" || likeCheck.value === true) {
+       likeBtn.innerHTML = '<p class="heart on">온</p>';
+       console.log(likeCheck.value);
+   } else {
+       likeBtn.innerHTML = '<p class="heart off">오프</p>';
+       console.log(likeCheck.value);
+   }
 
-    function printReplies(page, size, goLast){
-        getList({crbNo, page, size, goLast}).then(
-            data => {
-                console.log(data);
-                printList(data.dtoList); // 목록 처리
-                printPages(data); // 페이징 처리
-            }
-        ).catch(e =>{
-            console.error()
-        });
-    }
-    printReplies(1, 10, false);
+   likeBtn.addEventListener('click', async function () {
+       const crbNo = frmLike.crbNo.value;
+       const mno = frmLike.mno.value;
 
-    const commentList = document.querySelector('.commentList');
-    const commentPaging = document.querySelector('.commentPaging');
+       if (mno !== "") {
+           const url = likeCheck.value === 'true' ? `/reviewLike/remove?crbNo=${crbNo}&mno=${mno}` : `/reviewLike/add?crbNo=${crbNo}&mno=${mno}`;
 
-    function  printPages(data){ // 페이지 목록 출력
-        // pagination
-        let pageStr = '';
-        if(data.prev){
-            pageStr += `<li class="page-item">
-              <a class="page-link" data-page="${data.start - 1}">Prev</a></li>`;
-        }
-        for(let i = data.start; i<= data.end; i++){
-            pageStr += `<li class="page-item ${i === data.page ? "active" : ""}">
-                    <a class="page-link" data-page="${i}">${i}</a></li>`;
-        }
-        if(data.next) {
-            pageStr += `<li class="page-item"><a class="page-link" data-page="${data.end +1}">Next</a></li>`;
-        }
-        console.log(pageStr);
-        commentPaging.innerHTML = pageStr;
-    }
+           try {
+               const response = await axios.post(url);
+               console.log(response.data);
 
-    function printList(dtoList){ // 댓글 목록 출력
-        let str = '';
-        if(dtoList && dtoList.length > 0){
-            for(const dto of dtoList){
+               if (response.status === 200) {
+                   const json = response.data;
+                   if (json.result === true) {
+                       // 성공적으로 처리된 경우 추가적인 동작 수행
+                   } else {
+                       alert('등록에 실패했습니다.');
+                   }
+               } else {
+                   console.error(response.status, response.statusText);
+               }
+           } catch (error) {
+               console.error('에러:', error);
+           }
 
-                str += `<li class="list-group-item d-flex replyItem">
-                    <span class="col-2">${dto.comNo}</span>
-                    <span class="col-6" data-comNo="${dto.comNo}">${dto.comment}</span>
-                    <span class="col-2">${dto.nickName}</span>
-                    <span class="col-2">${dto.addDate}</span>
-                </li>`;
-            }
-        }
-        commentList.innerHTML = str;
-    }
-    <!-- 좋아요 버튼 -->
-    const xhr = new XMLHttpRequest(); // ajax 작업을 위한 객체 생성
-    const likeBtn = document.querySelector('.likeBtn');
-    const likeCheck = document.querySelector('input[name=like]');
-    const frmLike = document.querySelector('form[name=frmLike]');
+           likeCheck.value = likeCheck.value === "true" ? "false" : "true";
+           likeBtn.innerHTML = likeCheck.value === "true" ? '<p class="heart on">온</p>' : '<p class="heart off">오프</p>';
+       } else {
+           alert("로그인 후 이용 가능합니다.");
+       }
+   });
+   // 좋아요 끝 -----------
 
-    console.log("first : " + likeCheck.value);
-
-    if(likeCheck.value === "true" || likeCheck.value === true){
-        likeBtn.innerHTML = '<p class="heart on">온</p>';
-    }
-    else{
-        likeBtn.innerHTML = '<p class="heart off">오프</p>'
-    }
-
-    likeBtn.addEventListener('click', function (){
-        const crbNo = frmLike.crbNo.value;
-        const mno = frmLike.mno.value;
-
-        if (mno !== "") {
-            const url = likeCheck.value === 'true' ? `/reviewLike/remove?crbNo=${crbNo}&mno=${mno}` : `/reviewLike/add?crbNo=${crbNo}&mno=${mno}`;
-
-            xhr.open('POST', url);
-            xhr.send();
-
-            xhr.onreadystatechange = () => {
-                if (xhr.readyState !== XMLHttpRequest.DONE)
-                    return;
-
-                console.log(xhr.response);
-
-                if (xhr.status === 200) {
-                    const json = JSON.parse(xhr.response);
-                    if (json.result === true) {
-                        // 성공적으로 처리된 경우 추가적인 동작 수행
-                    } else {
-                        alert('등록에 실패했습니다.');
-                    }
-                } else {
-                    console.error(xhr.status, xhr.statusText);
-                }
-            };
-
-            likeCheck.value = likeCheck.value === "true" ? "false" : "true";
-            likeBtn.innerHTML = likeCheck.value === "true" ? '<p class="heart on">온</p>' : '<p class="heart off">오프</p>';
-        } else {
-            alert("로그인 후 이용 가능합니다.");
-        }
-    })
-
-//    좋아요 끝 -----------
 
 
 </script>
-</body>
 </html>

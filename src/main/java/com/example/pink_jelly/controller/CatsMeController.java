@@ -4,13 +4,18 @@ import com.example.pink_jelly.dto.*;
 import com.example.pink_jelly.service.CatsMeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 @Log4j2
@@ -26,9 +31,11 @@ public class CatsMeController {
         model.addAttribute("catsMeBoardList", catsMeBoardList);
         return "/catsMe/board/list";
     }
+
     @GetMapping("/board/write")
     public void write() {
         System.out.println("catsMeBoard write GET...");
+
     }
 
     @PostMapping("/board/write")
@@ -66,12 +73,6 @@ public class CatsMeController {
 
 
     //review
-    @GetMapping("/review/list")
-    public void CatsMeReview(Model model, PageRequestDTO pageRequestDTO){
-        log.info("/catsMe/review/list Get");
-        PageResponseDTO<CatsReviewBoardDTO> catsMeReviewBoardList = catsMeService.getReviewBoardList(pageRequestDTO);
-        model.addAttribute("catsMeReviewBoardList", catsMeReviewBoardList);
-    }
     @GetMapping("/review/write")
     public void writeReview() {
         System.out.println("catsMeReviewBoard write GET...");
@@ -94,7 +95,7 @@ public class CatsMeController {
 
         if(requestedUrl.equals("/catsMe/review/view")){
             catsReviewBoardDTO = catsMeService.getReviewBoard(crbNo, "view");
-            catsReviewBoardDTO.setFlag(catsMeService.isReviewBoardLike(mno, crbNo));
+            catsReviewBoardDTO.setFlag(catsMeService.isReviewBoardLike(15L, crbNo));
         }else {
             catsReviewBoardDTO = catsMeService.getReviewBoard(crbNo, "modify");
         }

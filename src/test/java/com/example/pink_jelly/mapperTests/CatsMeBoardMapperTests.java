@@ -28,6 +28,7 @@ public class CatsMeBoardMapperTests {
                 .content("내용 블라블라블라 블라 블라")
                 .cmbImg("on")
                 .status("입양전")
+                .hit(1)
                 .build();
         catsMeMapper.insert(catsMeBoardVO);
     }
