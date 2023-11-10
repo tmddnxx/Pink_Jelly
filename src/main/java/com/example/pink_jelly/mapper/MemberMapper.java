@@ -20,6 +20,8 @@ public interface MemberMapper {
 
     MemberVO login(String memberId, String passwd); // 로그인 처리
 
+    MemberVO findById(String memberId);
+
 
 
 }

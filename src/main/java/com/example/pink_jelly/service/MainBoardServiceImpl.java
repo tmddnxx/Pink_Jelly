@@ -45,18 +45,18 @@ public class MainBoardServiceImpl implements MainBoardService{
 
     @Override
     public MainBoardDTO getBoard(Long mbNo, String mode) {
-        MainBoardVO mainBoardVO = new MainBoardVO();
+        MainBoardVO mainBoardVO;
         boolean flag = false;
-        Long mno = null; // 로그인 mno 수정 예정
+//        Long mno = null; // 로그인 mno 수정 예정
         if(mode.equals("view")) {
             mainBoardVO = mainBoardMapper.getOne(mbNo);
             mainBoardMapper.updateHit(mbNo);
-            flag = mainBoardMapper.isMainBoardLike(mno, mbNo);
+//            flag = mainBoardMapper.isMainBoardLike(mno, mbNo);
         }else {
             mainBoardVO = mainBoardMapper.getOne(mbNo);
         }
-         MainBoardDTO mainBoardDTO = modelMapper.map(mainBoardVO, MainBoardDTO.class);
-         mainBoardDTO.setFlag(flag);
+        MainBoardDTO mainBoardDTO = modelMapper.map(mainBoardVO, MainBoardDTO.class);
+//        mainBoardDTO.setFlag(flag);
         return mainBoardDTO;
     }
 

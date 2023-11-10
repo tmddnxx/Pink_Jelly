@@ -1,6 +1,5 @@
 package com.example.pink_jelly.controller;
 
-import com.example.pink_jelly.dto.FriendsDTO;
 import com.example.pink_jelly.dto.MemberDTO;
 import com.example.pink_jelly.service.MainBoardService;
 import com.example.pink_jelly.service.MemberService;
@@ -12,7 +11,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpSession;
-import java.util.List;
 
 @Log4j2
 @Controller
@@ -25,11 +23,7 @@ public class ProfileController {
 
 
     @GetMapping("")
-    public String profile(Model model, HttpSession session){
-        MemberDTO memberDTO = (MemberDTO) session.getAttribute("logInfo");
-
-
-        model.addAttribute("memberDTO", memberDTO);
+    public String profile(){
 
         return "profile/profile";
     }

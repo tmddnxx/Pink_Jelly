@@ -21,13 +21,13 @@ public class MemberController {
 
     private final MemberService memberService;
 
-    @GetMapping("/register")
-    public void register(){
+    @GetMapping("/signup")
+    public void signup(){
         // 회원가입 뷰
     }
 
-    @PostMapping("/register")
-    public String registerMember(MemberDTO memberDTO, HttpServletRequest request){ // 회원가입 처리
+    @PostMapping("/signup")
+    public String signup(MemberDTO memberDTO, HttpServletRequest request){ // 회원가입 처리
         String emailId = request.getParameter("emailId");
         String selectEmail = request.getParameter("emailSelect");
 
@@ -40,9 +40,10 @@ public class MemberController {
 
         memberDTO.setCatAge(catAge);
         memberDTO.setEmail(email);
+
         memberService.registerMember(memberDTO);
 
-        return "/member/welcome";
+        return "redirect:/member/welcome";
     }
     @GetMapping("/welcome")
     public void welcome(){
@@ -63,11 +64,8 @@ public class MemberController {
     }
 
     @GetMapping("/memberInfo")
-    public void memberInfo(Model model, HttpSession session){
-        // 회원정보 뷰
-//        MemberDTO memberDTO = (MemberDTO) session.getAttribute("logInfo");
-//        memberDTO.
-//      model.addAttribute("memberDTO", memberService.getMember(mno));
+    public void memberInfo(){
+
     }
 
 

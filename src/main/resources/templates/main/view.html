@@ -39,7 +39,7 @@
     <form name="frmLike" method="post">
         <input type="hidden" name="like" th:value="${mainBoard.flag}">
         <input type="hidden" name="mbNo" th:value="${mainBoard.mbNo}">
-        <input type="hidden" name="mno" th:value="${14}">
+        <input type="hidden" name="mno" th:value="${11}">
         <div class="likeBtn">
             <p class="heart on">온</p>
             <p class="heart off">오프</p>
@@ -75,75 +75,68 @@
                         <div class="vcard">
                             <img src="/images/person_1.jpg" alt="Image placeholder">
                         </div>
+                        <!-- 댓글 리스트 출력 -->
                         <div class="comment-body">
-                            <h3>Jean Doe</h3>
-                            <div class="meta">January 9, 2018 at 2:21pm</div>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur quidem laborum necessitatibus, ipsam impedit vitae autem, eum officia, fugiat saepe enim sapiente iste iure! Quam voluptas earum impedit necessitatibus, nihil?</p>
-                            <p><a href="#" class="reply rounded">Reply</a></p>
+
+<!--                            <h3>Jean Doe</h3>-->
+<!--                            <div class="meta">January 9, 2018 at 2:21pm</div>-->
+<!--                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur quidem laborum necessitatibus, ipsam impedit vitae autem, eum officia, fugiat saepe enim sapiente iste iure! Quam voluptas earum impedit necessitatibus, nihil?</p>-->
+<!--                            <p><a href="#" class="reply rounded">Reply</a></p>-->
                         </div>
                     </li>
                     <!-- /댓글 end -->
 
-                    <!-- 댓글 start -->
-                    <li class="comment">
-                        <div class="vcard">
-                            <img src="images/person_2.jpg" alt="Image placeholder">
-                        </div>
-                        <div class="comment-body">
-                            <h3>Jean Doe</h3>
-                            <div class="meta">January 9, 2018 at 2:21pm</div>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur quidem laborum necessitatibus, ipsam impedit vitae autem, eum officia, fugiat saepe enim sapiente iste iure! Quam voluptas earum impedit necessitatibus, nihil?</p>
-                            <p><a href="#" class="reply rounded">Reply</a></p>
-                        </div>
 
-                        <!-- 대댓글 start -->
-                        <ul class="children">
-                            <li class="comment">
-                                <div class="vcard">
-                                    <img src="images/person_3.jpg" alt="Image placeholder">
-                                </div>
-                                <div class="comment-body">
-                                    <h3>Jean Doe</h3>
-                                    <div class="meta">January 9, 2018 at 2:21pm</div>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur quidem laborum necessitatibus, ipsam impedit vitae autem, eum officia, fugiat saepe enim sapiente iste iure! Quam voluptas earum impedit necessitatibus, nihil?</p>
-                                    <p><a href="#" class="reply rounded">Reply</a></p>
-                                </div>
-                            </li>
-                        </ul>
+<!--                        &lt;!&ndash; 대댓글 start &ndash;&gt;-->
+<!--                        <ul class="children">-->
+<!--                            <li class="comment">-->
+<!--                                <div class="vcard">-->
+<!--                                    <img src="images/person_3.jpg" alt="Image placeholder">-->
+<!--                                </div>-->
+<!--                                <div class="comment-body">-->
+<!--                                    <h3>Jean Doe</h3>-->
+<!--                                    <div class="meta">January 9, 2018 at 2:21pm</div>-->
+<!--                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur quidem laborum necessitatibus, ipsam impedit vitae autem, eum officia, fugiat saepe enim sapiente iste iure! Quam voluptas earum impedit necessitatibus, nihil?</p>-->
+<!--                                    <p><a href="#" class="reply rounded">Reply</a></p>-->
+<!--                                </div>-->
+<!--                            </li>-->
+<!--                        </ul>-->
                         <!-- /대댓글 end -->
                     </li>
                     <!-- /댓글 end -->
                 </ul>
                 <!-- END comment-list -->
-
+                <!-- 댓글 쓰기 창 -->
                 <div class="comment-form-wrap pt-5">
-                    <h3 class="mb-5">Leave a comment</h3>
-                    <form action="#" class="p-5 bg-light">
+                    <h3 class="mb-5">댓글 쓰기</h3>
+                    <form action="/mainComment/register" class="p-5 bg-light" method="post">
+                        <input type="hidden" name="mbNo" th:value="${mainBoard.mbNo}">
+                        <!-- 나중에 memberId, nickName 받아서 넣기 -->
                         <div class="form-group">
-                            <label for="name">Name *</label>
-                            <input type="text" class="form-control" id="name">
+                            <label for="memberId">memberId</label>
+                            <input type="text" class="form-control" id="memberId" value="멤버죵">
                         </div>
                         <div class="form-group">
-                            <label for="email">Email *</label>
-                            <input type="email" class="form-control" id="email">
+                            <label for="nickName">nickName</label>
+                            <input type="text" class="form-control" id="nickName" value="닉넹">
                         </div>
                         <div class="form-group">
-                            <label for="website">Website</label>
-                            <input type="url" class="form-control" id="website">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="message">Message</label>
-                            <textarea name="" id="message" cols="30" rows="10" class="form-control"></textarea>
+                            <label for="mainComment">Comment</label>
+                            <input type="text" class="form-control" id="mainComment">
                         </div>
                         <div class="form-group">
-                            <input type="submit" value="Post Comment" class="btn btn-primary">
+                            <button type="button" class="btn btn-primary commentBtn">Post Comment</button>
                         </div>
-
                     </form>
                 </div>
             </div>
+            <div class="row mt-3">
+                <div class="col">
+                    <ul class="pagination replyPaging">
 
+                    </ul>
+                </div>
+            </div>
         </div>
         <!-- END main-content -->
 
@@ -192,8 +185,10 @@
             <!-- END sidebar-box -->
         </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="/js/mainBoard/mainBoard.js"></script>
 </div>
-<script layout:fragment="script">
+<script layout:fragment="script" th:inline="javascript">
 <!-- 좋아요 버튼 -->
     const xhr = new XMLHttpRequest(); // ajax 작업을 위한 객체 생성
     const likeBtn = document.querySelector('.likeBtn');
@@ -243,6 +238,70 @@
             alert("로그인 후 이용 가능합니다.");
         }
     })
+
+    //댓글 출력
+
+const mbNo = [[${mainBoard.mbNo}]]
+function printComments(page, size, goLast) {
+    getList({mbNo, page, size, goLast})
+        .then(data => {
+            console.log(data);
+            printList(data.dtoList); // 목록처리
+            printPages(data); // 페이지 처리
+        })
+        .catch(e => console.error());
+}
+printComments(1, 10); // 무조건 호출
+printComments(1, 10, true);
+
+const commentList = document.querySelector('.comment-body'); // 댓글 목록 DOM
+const commentPaging = document.querySelector('.commentPaging'); // 페이지 목록 DOM
+
+function printList(dtoList) { // 댓글 목록 출력
+    let str = '';
+    if (dtoList && dtoList.length > 0) {
+        for (const dto of dtoList) {
+            str += `<h3>${dto.memberId}</h3>
+                    <div class="meta">${dto.addDate[0]}-${dto.addDate[1]}-${dto.addDate[2]} ${dto.addDate[3]}:${dto.addDate[4]}</div>
+                    <p data-comNo="${dto.comNo}">${dto.comment}</p>
+                    <p><a href="#" class="reply rounded">Reply</a></p>
+                    <button type="button" class="btn btn-danger removeCommentBtn">Remove</button>
+                    `;
+        }
+    }
+    commentList.innerHTML = str;
+
+    const removeCommentBtn = document.querySelector('.removeCommentBtn');
+    removeCommentBtn.addEventListener('click', function (e) {
+        const comNo = e.target.parentElement.querySelector('p[data-comNo]').getAttribute('data-comNo');
+        if (!comNo) {
+            return;
+        }
+        removeComment(comNo).then(result => {
+            page = 1; // 이 부분이 없다면 원래 페이지로
+            size = 10;
+            printComments(page, size);
+        }).catch(e => console.log(e));
+    })
+}
+
+//댓글 등록
+const commentBtn = document.querySelector('.commentBtn');
+const commentId = document.getElementById("memberId");
+const commentnickName = document.getElementById("nickName");
+const comment = document.getElementById("mainComment");
+
+commentBtn.addEventListener('click', function (e) {
+    // console.log("왔다");
+    const commentObj = {mbNo: mbNo, memberId: commentId.value, nickName: commentnickName.value, comment: comment.value};
+    console.log(commentObj);
+    addComment(commentObj).then(result => {
+        comment.value='';
+        printComments(1, 10, true); // 댓글 목록 갱신
+    }).catch(e => {
+        alert("Exception...");
+    });
+});
 </script>
 </body>
 </html>
