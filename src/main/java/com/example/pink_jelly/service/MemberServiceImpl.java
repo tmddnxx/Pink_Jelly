@@ -6,18 +6,23 @@ import com.example.pink_jelly.mapper.MemberMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+@Log4j2
 @Service
 @RequiredArgsConstructor
-@Log4j2
-public class MemberServiceImpl implements MemberService{
-
-    private final ModelMapper modelMapper;
+public class MemberServiceImpl implements MemberService {
     private final MemberMapper memberMapper;
+    private final ModelMapper modelMapper;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
     public void registerMember(MemberDTO memberDTO) { // 회원가입
+        // 비밀번호 암호화
+        String encPasswd = bCryptPasswordEncoder.encode(memberDTO.getPasswd());
+        memberDTO.setPasswd(encPasswd);
+
         MemberVO memberVO = modelMapper.map(memberDTO, MemberVO.class);
 
         memberMapper.insertMember(memberVO);
@@ -68,5 +73,8 @@ public class MemberServiceImpl implements MemberService{
         return memberDTO;
     }
 
-
+    @Override
+    public MemberDTO findById(String memberId) {
+        return modelMapper.map(memberMapper.findById(memberId), MemberDTO.class);
+    }
 }

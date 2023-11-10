@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:th="http://www.thymeleaf.org"
-      layout:decorate="~{layout/basic.html}">
+      layout:decorate="~{layout/basic.html}"
+      xmlns:sec="http://www.springframework.org/schema/security">
 <head>
     <meta charset="UTF-8">
     <script src="https://kit.fontawesome.com/e83b9315c8.js" crossorigin="anonymous"></script>
@@ -90,8 +91,8 @@
                 <div class="top-info">
                     <img src="/images/defalut.png" class="profileImg" width="200px" height="200px">
                     <div class="inner-top-info">
-                        <p> 아이디 </p>
-                        <p> 품종 </p>
+                        <p> 아이디 <span th:text="${#authentication.principal.username}"></span></p>
+                        <p> 품종 <span sec:authentication = "principal.memberId"></span> </p>
                         <p> 나이 </p>
                         <p> 성별 </p>
                     </div>

@@ -1,6 +1,5 @@
 package com.example.pink_jelly.service;
 
-import com.example.pink_jelly.domain.MemberVO;
 import com.example.pink_jelly.dto.MemberDTO;
 
 public interface MemberService {
@@ -18,4 +17,6 @@ public interface MemberService {
     MemberDTO getMember(Long mno); // 회원정보 가져오기
 
     MemberDTO login(String memberId, String passwd); // 로그인 처리
+
+    MemberDTO findById(String memberId);
 }
