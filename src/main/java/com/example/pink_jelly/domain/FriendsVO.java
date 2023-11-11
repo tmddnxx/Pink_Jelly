@@ -13,4 +13,5 @@ public class FriendsVO {
     private String friendId; // 친구 아이디
     private String friendName; // 친구 닉네임
     private Long mno; // 회원 고유번호
+
 }

@@ -4,6 +4,7 @@ import com.example.pink_jelly.domain.MainCommentVO;
 import com.example.pink_jelly.dto.MainCommentDTO;
 import com.example.pink_jelly.dto.PageRequestDTO;
 import com.example.pink_jelly.dto.PageResponseDTO;
+import com.example.pink_jelly.mapper.MainBoardMapper;
 import com.example.pink_jelly.mapper.MainCommentMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -18,17 +19,26 @@ import java.util.List;
 @Log4j2
 public class MainCommentServiceImpl implements MainCommentService{
     private final MainCommentMapper mainCommentMapper;
+    private final MainBoardMapper mainBoardMapper;
+
     private final ModelMapper modelMapper;
     @Override
     public Long register(MainCommentDTO mainCommentDTO) {
         MainCommentVO mainCommentVO = modelMapper.map(mainCommentDTO, MainCommentVO.class);
-        mainCommentMapper.insert(mainCommentVO);
+        int success = mainCommentMapper.insert(mainCommentVO);
+        if(success == 1) {
+            mainBoardMapper.upCommentCnt(mainCommentDTO.getMbNo());
+        }
         return mainCommentVO.getComNo();
     }
 
     @Override
-    public void remove(Long comNo) {
-        mainCommentMapper.deleteOne(comNo);
+    public void remove(Long comNo, Long mbNo) {
+        int success = mainCommentMapper.deleteOne(comNo);
+        log.info("comNo : " + comNo + "mbNo : " + mbNo);
+        if( success == 1) {
+            mainBoardMapper.downCommentCnt(mbNo);
+        }
     }
 
     @Override
@@ -43,5 +53,15 @@ public class MainCommentServiceImpl implements MainCommentService{
                 .dtoList(mainCommentDTOList)
                 .total(mainCommentMapper.getCount(mbNo))
                 .build();
+    }
+
+    @Override
+    public void addCommentCnt(Long mbNo) {
+
+    }
+
+    @Override
+    public void removeCommentCnt(Long mbNo) {
+
     }
 }

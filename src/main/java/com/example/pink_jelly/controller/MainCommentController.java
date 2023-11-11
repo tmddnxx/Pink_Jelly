@@ -3,6 +3,7 @@ package com.example.pink_jelly.controller;
 import com.example.pink_jelly.dto.MainCommentDTO;
 import com.example.pink_jelly.dto.PageRequestDTO;
 import com.example.pink_jelly.dto.PageResponseDTO;
+import com.example.pink_jelly.service.MainBoardService;
 import com.example.pink_jelly.service.MainCommentService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,8 @@ import java.util.Map;
 public class MainCommentController {
     private final MainCommentService mainCommentService;
 
+    private final MainBoardService mainBoardService;
+
     @ApiOperation(value = "Comments POST", notes = "POST 방식으로 댓글 등록")
     @PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_VALUE)
     public Map<String, Long> register(@Valid @RequestBody MainCommentDTO mainCommentDTO, BindingResult bindingResult) throws BindException {
@@ -32,6 +35,7 @@ public class MainCommentController {
         }
         Map<String, Long> resultMap = new HashMap<>();
         Long rno = mainCommentService.register(mainCommentDTO);;
+
         resultMap.put("rno", rno);
 
         return resultMap;
@@ -47,9 +51,9 @@ public class MainCommentController {
     }
 
     @ApiOperation(value = "Delete Reply", notes = "DELETE 방식으로 특정 댓글 삭제")
-    @DeleteMapping("/{comNo}")
-    public Map<String, Long> remove(@PathVariable("comNo") Long comNo) {
-        mainCommentService.remove(comNo);
+    @DeleteMapping(value = "/{comNo}/{mbNo}")
+    public Map<String, Long> remove(@PathVariable("comNo") Long comNo, @PathVariable("mbNo") Long mbNo) {
+        mainCommentService.remove(comNo, mbNo);
         Map<String, Long> resultMap = new HashMap<>();
         resultMap.put("comNo", comNo);
         return resultMap;

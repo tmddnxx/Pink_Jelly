@@ -34,5 +34,7 @@ public interface MainBoardMapper {
 
     void likeCntUpdate(Long mbNo, boolean flag); // 좋아요 수 업데이트
 
+    void upCommentCnt (Long mbNo); //댓글수 증가
 
+    void downCommentCnt (Long mbNo); //댓글 수 감소
 }

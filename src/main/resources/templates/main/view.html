@@ -2,6 +2,7 @@
 <html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:th="http://www.thymeleaf.org"
       layout:decorate="~{layout/basic.html}">
+<script src="https://kit.fontawesome.com/e83b9315c8.js" crossorigin="anonymous"></script>
 <head>
     <meta charset="UTF-8">
     <title>메인 뷰페이지</title>
@@ -63,8 +64,8 @@
                 <p>Categories:  <a href="#">Food</a>, <a href="#">Travel</a>  Tags: <a href="#">#manila</a>, <a href="#">#asia</a></p>
             </div>
             <a th:href="|@{/main}|" class="btn btn-primary">목록</a>
-            <a th:href="|@{/main/modify(mbNo=${mainBoard.mbNo})}|" class="btn btn-success">수정</a>
-            <a th:href="|@{/main/remove(mbNo=${mainBoard.mbNo})}|" class="btn btn-danger">삭제</a>
+            <a th:href="|@{/main/modify(mbNo=${mainBoard.mbNo})}|" th:if="${#authentication.principal.mno} == ${mainBoard.mno}" class="btn btn-success">수정</a>
+            <a th:href="|@{/main/remove(mbNo=${mainBoard.mbNo})}|" th:if="${#authentication.principal.mno} == ${mainBoard.mno}" class="btn btn-danger">삭제</a>
 
                 <!-- comment-wrap start -->
             <div class="pt-5 comment-wrap">
@@ -111,14 +112,15 @@
                     <h3 class="mb-5">댓글 쓰기</h3>
                     <form action="/mainComment/register" class="p-5 bg-light" method="post">
                         <input type="hidden" name="mbNo" th:value="${mainBoard.mbNo}">
+                        <input type="hidden" name="mno" id="mno" th:value="${#authentication.principal.mno}">
                         <!-- 나중에 memberId, nickName 받아서 넣기 -->
                         <div class="form-group">
                             <label for="memberId">memberId</label>
-                            <input type="text" class="form-control" id="memberId" value="멤버죵">
+                            <input type="text" class="form-control" id="memberId" th:value="${#authentication.principal.memberId}">
                         </div>
                         <div class="form-group">
                             <label for="nickName">nickName</label>
-                            <input type="text" class="form-control" id="nickName" value="닉넹">
+                            <input type="text" class="form-control" id="nickName" th:value="${#authentication.principal.nickName}">
                         </div>
                         <div class="form-group">
                             <label for="mainComment">Comment</label>
@@ -132,7 +134,7 @@
             </div>
             <div class="row mt-3">
                 <div class="col">
-                    <ul class="pagination replyPaging">
+                    <ul class="pagination commentPaging">
 
                     </ul>
                 </div>
@@ -186,7 +188,7 @@
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script src="/js/mainBoard/mainBoard.js"></script>
+    <script src="/js/mainBoard/mainBoard.js?a"></script>
 </div>
 <script layout:fragment="script" th:inline="javascript">
 <!-- 좋아요 버튼 -->
@@ -239,8 +241,8 @@
         }
     })
 
-    //댓글 출력
-
+    //댓글
+    //출력 메서드
 const mbNo = [[${mainBoard.mbNo}]]
 function printComments(page, size, goLast) {
     getList({mbNo, page, size, goLast})
@@ -256,6 +258,7 @@ printComments(1, 10, true);
 
 const commentList = document.querySelector('.comment-body'); // 댓글 목록 DOM
 const commentPaging = document.querySelector('.commentPaging'); // 페이지 목록 DOM
+const self = [[${#authentication.principal.mno}]];
 
 function printList(dtoList) { // 댓글 목록 출력
     let str = '';
@@ -265,24 +268,46 @@ function printList(dtoList) { // 댓글 목록 출력
                     <div class="meta">${dto.addDate[0]}-${dto.addDate[1]}-${dto.addDate[2]} ${dto.addDate[3]}:${dto.addDate[4]}</div>
                     <p data-comNo="${dto.comNo}">${dto.comment}</p>
                     <p><a href="#" class="reply rounded">Reply</a></p>
-                    <button type="button" class="btn btn-danger removeCommentBtn">Remove</button>
+                    <button type="button" th:if="${self} == ${dto.mno}" class="btn btn-danger removeCommentBtn">Remove</button>
                     `;
         }
     }
     commentList.innerHTML = str;
-
+    //댓글 목록 출력 후 삭제 버튼
     const removeCommentBtn = document.querySelector('.removeCommentBtn');
     removeCommentBtn.addEventListener('click', function (e) {
         const comNo = e.target.parentElement.querySelector('p[data-comNo]').getAttribute('data-comNo');
         if (!comNo) {
             return;
         }
-        removeComment(comNo).then(result => {
+        removeComment(comNo, mbNo).then(result => {
             page = 1; // 이 부분이 없다면 원래 페이지로
             size = 10;
             printComments(page, size);
         }).catch(e => console.log(e));
-    })
+    });
+}
+
+function printPages(data) { // 페이지 목록 출력
+    // pagination
+    let pageStr = '';
+    if (data.prev) {
+        pageStr += `<li class="page-item">
+                        <a class="page-link" data-page="${data.start - 1}">PREV</a>
+                    </li>`;
+    }
+    for (let i = data.start; i <= data.end; i++) {
+        pageStr += `<li class="page-item ${i === data.page ? "active" : ""}">
+                        <a class="page-link" data-page="${i}">${i}</a>
+                    </li>`;
+    }
+    if (data.next) {
+        pageStr += `<li class="page-item">
+                        <a class="page-link" data-page="${data.end + 1}">NEXT</a>
+                    </li>`;
+    }
+    console.log(pageStr);
+    commentPaging.innerHTML = pageStr;
 }
 
 //댓글 등록
@@ -290,17 +315,35 @@ const commentBtn = document.querySelector('.commentBtn');
 const commentId = document.getElementById("memberId");
 const commentnickName = document.getElementById("nickName");
 const comment = document.getElementById("mainComment");
+const mno = document.getElementById("mno");
 
 commentBtn.addEventListener('click', function (e) {
     // console.log("왔다");
-    const commentObj = {mbNo: mbNo, memberId: commentId.value, nickName: commentnickName.value, comment: comment.value};
+    const commentObj = {mbNo: mbNo, memberId: commentId.value, nickName: commentnickName.value, comment: comment.value, mno: mno.value};
     console.log(commentObj);
     addComment(commentObj).then(result => {
         comment.value='';
         printComments(1, 10, true); // 댓글 목록 갱신
     }).catch(e => {
-        alert("Exception...");
+        alert("댓글 등록에 실패했습니다. 다시 시도해주세요");
     });
+});
+let page = 1;
+let size = 10;
+
+commentPaging.addEventListener('click', function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+
+
+    const target = e.target;
+
+    if (!target || target.tagName != 'A') {
+        return;
+    }
+
+    page = target.getAttribute('data-page');
+    printComments(page, size);
 });
 </script>
 </body>

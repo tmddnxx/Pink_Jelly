@@ -95,5 +95,4 @@ public class MainBoardServiceImpl implements MainBoardService{
 
         return mainBoardMapper.isMainBoardLike(mno, mbNo);
     }
-
 }

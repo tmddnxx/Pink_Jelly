@@ -79,4 +79,8 @@ public class MainBoardMapperTests {
                 .build();
         mainBoardMapper.updateBoard(mainBoardVO);
     }
+    @Test
+    public void upCnt() {
+        mainBoardMapper.upCommentCnt(21L);
+    }
 }

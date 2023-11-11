@@ -3,9 +3,9 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.pink_jelly.mapper.MainCommentMapper">
-    <insert id="insert">
-        INSERT INTO mainComment (mbNo, memberId, nickName, comment, parentNo, addDate)
-        VALUES (#{mbNo}, #{memberId}, #{nickName}, #{comment}, #{parentNo}, now())
+    <insert id="insert" parameterType="com.example.pink_jelly.domain.MainCommentVO" useGeneratedKeys="true" keyProperty="mbNo">
+        INSERT INTO mainComment (mbNo, memberId, nickName, comment, parentNo, addDate, mno)
+        VALUES (#{mbNo}, #{memberId}, #{nickName}, #{comment}, #{parentNo}, now(), #{mno})
     </insert>
     <select id="selectAll" resultType="com.example.pink_jelly.domain.MainCommentVO">
             SELECT * FROM mainComment WHERE mbNo=#{mbNo} ORDER BY comNo ASC

@@ -16,8 +16,8 @@ async function getList({mbNo, page, size, goLast}) {
     return result.data;
 }
 //댓글 삭제
-async function removeComment(comNo) {
-    console.log(comNo);
-    const response = await axios.delete(`/mainComment/${comNo}`);
+async function removeComment(comNo, mbNo) {
+    console.log(mbNo);
+    const response = await axios.delete(`/mainComment/${comNo}/${mbNo}`);
     return response.data;
 }

@@ -17,4 +17,5 @@ public class CatsCommentVO {
     private String comment; // 댓글 내용
     private Long parentNo; // 대댓글 고유 번호
     private LocalDateTime addDate; // 등록 날짜
+    private Long mno; //회원 고유넘버
 }
