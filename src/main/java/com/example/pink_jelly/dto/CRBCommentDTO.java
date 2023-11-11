@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CatsCommentDTO {
+public class CRBCommentDTO {
     private Long comNo; // 댓글 고유번호
     private Long crbNo; // 입양후기 고유번호
     private String memberId; // 회원 아이디

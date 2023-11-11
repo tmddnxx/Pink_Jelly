@@ -2,6 +2,8 @@
 <html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:th="http://www.thymeleaf.org"
       layout:decorate="~{layout/basic.html}">
+<script src="https://kit.fontawesome.com/e83b9315c8.js" crossorigin="anonymous"></script>
+
 <head>
     <meta charset="UTF-8">
     <title>catMe Write</title>
@@ -10,16 +12,17 @@
 <div layout:fragment="content">
     <div class="container">
         <form name="catsMeReviewBoardAdd" action="/catsMe/review/write" method="post" class="form">
+            <input type="hidden" name="mno" th:value="${#authentication.principal.mno}" readonly>
             <div class="form-group row">
                 <label class="col-sm-3 col-form-label">memberId</label>
                 <div class="col-sm-3">
-                    <input type="text" name="memberId" class="form-control" placeholder="memberId">
+                    <input type="text" name="memberId" class="form-control" th:value="${#authentication.principal.memberId}" readonly>
                 </div>
             </div>
             <div class="form-group row">
                 <label class="col-sm-3 col-form-label">nickName</label>
                 <div class="col-sm-3">
-                    <input type="text" name="nickName" class="form-control" placeholder="nickName">
+                    <input type="text" name="nickName" class="form-control" th:value="${#authentication.principal.nickName}" readonly>
                 </div>
             </div>
             <div class="form-group row">

@@ -39,6 +39,7 @@ public class MainCommentServiceImpl implements MainCommentService{
         if( success == 1) {
             mainBoardMapper.downCommentCnt(mbNo);
         }
+
     }
 
     @Override
@@ -53,15 +54,5 @@ public class MainCommentServiceImpl implements MainCommentService{
                 .dtoList(mainCommentDTOList)
                 .total(mainCommentMapper.getCount(mbNo))
                 .build();
-    }
-
-    @Override
-    public void addCommentCnt(Long mbNo) {
-
-    }
-
-    @Override
-    public void removeCommentCnt(Long mbNo) {
-
     }
 }

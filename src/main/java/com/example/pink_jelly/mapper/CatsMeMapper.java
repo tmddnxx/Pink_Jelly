@@ -35,4 +35,6 @@ public interface CatsMeMapper {
 
     boolean removeReviewBoardLike(Long mno, Long crbNo); // 좋아요 제거
     void likeCntUpdate(Long crbNo, boolean flag); // 좋아요 수 업데이트
+    void upCommentCnt(Long crbNo); //댓글 수 증가
+    void downCommentCnt(Long mbNo); //댓글 수 감소
 }

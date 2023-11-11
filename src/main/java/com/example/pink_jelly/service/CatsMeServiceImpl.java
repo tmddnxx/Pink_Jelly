@@ -101,7 +101,7 @@ public class CatsMeServiceImpl implements CatsMeService{
         if(mode.equals("view")){
             catsReviewBoardVO = catsMeMapper.getReviewBoardOne(crbNo);
             catsMeMapper.updateReviewBoardHit(crbNo);
-            flag = catsMeMapper.isReviewBoardLike(mno, crbNo);
+//            flag = catsMeMapper.isReviewBoardLike(mno, crbNo);
         } else{
             catsReviewBoardVO = catsMeMapper.getReviewBoardOne(crbNo);
         }

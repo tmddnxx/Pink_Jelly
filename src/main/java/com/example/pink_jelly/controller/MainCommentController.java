@@ -29,7 +29,7 @@ public class MainCommentController {
     @ApiOperation(value = "Comments POST", notes = "POST 방식으로 댓글 등록")
     @PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_VALUE)
     public Map<String, Long> register(@Valid @RequestBody MainCommentDTO mainCommentDTO, BindingResult bindingResult) throws BindException {
-        log.info("왔습니다j--------------");
+//        log.info("왔습니다j--------------");
         if(bindingResult.hasErrors()) {
             throw new BindException((bindingResult));
         }
@@ -45,6 +45,8 @@ public class MainCommentController {
     public PageResponseDTO<MainCommentDTO> getList(@PathVariable("mbNo") Long mbNo, PageRequestDTO pageRequestDTO) {
         // @PathVariable 경로에 있는 값 사용
 //        log.info(pageRequestDTO.getSkip());
+        log.info("/list/crbNo---------------"+ mbNo + pageRequestDTO.getSkip()+ pageRequestDTO.getSize());
+
         PageResponseDTO<MainCommentDTO> mainComment = mainCommentService.getListMainComment(mbNo, pageRequestDTO);
 
         return mainComment;

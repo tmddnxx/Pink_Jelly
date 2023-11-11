@@ -1,7 +1,7 @@
 package com.example.pink_jelly.mapperTests;
 
-import com.example.pink_jelly.domain.CatsCommentVO;
-import com.example.pink_jelly.dto.CatsCommentDTO;
+import com.example.pink_jelly.domain.CRBCommentVO;
+import com.example.pink_jelly.dto.PageRequestDTO;
 import com.example.pink_jelly.mapper.CRBCommentMapper;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
@@ -14,26 +14,33 @@ import java.util.List;
 @Log4j2
 public class CRBCMapperTest {
     @Autowired
-    private CRBCommentMapper commentMapper;
+    private CRBCommentMapper crbCommentMapper;
 
     @Test
     public void insert(){
-        CatsCommentVO catsCommentVO = CatsCommentVO.builder()
-                .crbNo(1L)
-                .memberId("testId")
-                .nickName("testNick")
-                .comment("testComment")
-                .build();
-        commentMapper.insert(catsCommentVO);
+        for(int i = 0; i < 10; i++) {
+            CRBCommentVO crbCommentVO = CRBCommentVO.builder()
+                    .crbNo(1L)
+                    .memberId("13")
+                    .nickName("13")
+                    .comment("32")
+                    .mno(1L)
+                    .build();
+            crbCommentMapper.insert(crbCommentVO);
+        }
     }
 
     @Test
-    public void list(){
-       log.info( commentMapper.selectList(1L, 0, 10));
+    public void selectAll() {
+        List<CRBCommentVO> cr = crbCommentMapper.selectAll(1L, PageRequestDTO.builder()
+                .page(1)
+                .size(3)
+                .build());
+        cr.forEach(log::info);
     }
 
     @Test
     public void delete(){
-        commentMapper.delete(2L);
+        crbCommentMapper.deleteOne(2L);
     }
 }

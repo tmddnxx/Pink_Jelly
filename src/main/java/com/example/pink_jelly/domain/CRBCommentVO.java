@@ -9,9 +9,9 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class CatsCommentVO {
+public class CRBCommentVO {
     private Long comNo; // 댓글 고유번호
-    private Long crbNo; // 입양후기게시판 고유번호
+    private Long crbNo; // 입양후기 고유번호
     private String memberId; // 회원 아이디
     private String nickName; // 닉네임
     private String comment; // 댓글 내용

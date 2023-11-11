@@ -4,8 +4,8 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.pink_jelly.mapper.CatsMeMapper">
     <insert id="insert">
-        INSERT INTO catsMeBoard (memberId, nickName, profileImg, title, content, cmbImg, addDate, status)
-        VALUES (#{memberId}, #{nickName}, #{profileImg}, #{title}, #{content}, #{cmbImg}, now(), #{status})
+        INSERT INTO catsMeBoard (memberId, nickName, profileImg, title, content, cmbImg, addDate, status, mno)
+        VALUES (#{memberId}, #{nickName}, #{profileImg}, #{title}, #{content}, #{cmbImg}, now(), #{status}, #{mno})
     </insert>
     <select id="selectAll" resultType="com.example.pink_jelly.domain.CatsMeBoardVO">
         SELECT * FROM catsMeBoard ORDER BY cmbNo DESC
@@ -30,8 +30,8 @@
     </delete>
 
     <insert id="insertReviewBoard">
-        INSERT INTO catsReviewBoard (memberId, nickName, profileImg, title, content, crbImg, addDate)
-        VALUES (#{memberId}, #{nickName}, #{profileImg}, #{title}, #{content}, #{crbImg}, now())
+        INSERT INTO catsReviewBoard (memberId, nickName, profileImg, title, content, crbImg, addDate, mno)
+        VALUES (#{memberId}, #{nickName}, #{profileImg}, #{title}, #{content}, #{crbImg}, now(), #{mno})
     </insert>
     <select id="selectReviewBoardAll" resultType="com.example.pink_jelly.domain.CatsReviewBoardVO">
         SELECT * FROM catsReviewBoard ORDER BY crbNo DESC
@@ -76,5 +76,11 @@
                 update `catsReviewBoard` set `like` = `like` - 1 where crbNo = #{crbNo};
             </when>
         </choose>
+    </update>
+    <update id="upCommentCnt">
+        UPDATE `catsReviewBoard` SET `commentCnt`=`commentCnt`+1 WHERE crbNo=#{crbNo}
+    </update>
+        <update id="downCommentCnt">
+        UPDATE `catsReviewBoard` SET `commentCnt`=`commentCnt`-1 WHERE crbNo=#{crbNo}
     </update>
 </mapper>

@@ -94,7 +94,7 @@ public class CatsMeController {
 
         if(requestedUrl.equals("/catsMe/review/view")){
             catsReviewBoardDTO = catsMeService.getReviewBoard(crbNo, "view");
-            catsReviewBoardDTO.setFlag(catsMeService.isReviewBoardLike(mno, crbNo));
+//            catsReviewBoardDTO.setFlag(catsMeService.isReviewBoardLike(mno, crbNo));
         }else {
             catsReviewBoardDTO = catsMeService.getReviewBoard(crbNo, "modify");
         }

@@ -12,7 +12,4 @@ public interface MainCommentService {
 
     PageResponseDTO<MainCommentDTO> getListMainComment(Long mbNo, PageRequestDTO pageRequestDTO);
 
-    void addCommentCnt (Long mbNo); //댓글수 추가
-
-    void removeCommentCnt (Long mbNo); //댓글수 감소
 }
