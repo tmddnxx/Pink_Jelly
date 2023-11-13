@@ -238,20 +238,25 @@
 
     const commentList = document.querySelector('.comment-body'); // 댓글 목록 DOM
     const commentPaging = document.querySelector('.commentPaging'); // 페이지 목록 DOM
+    const commentCnt = document.querySelector('.commentCnt'); //댓글 수 DOM
+
     const self = [[${#authentication.principal.mno}]];
 
     function printList(dtoList) { // 댓글 목록 출력
+        console.log("self: "  + self);
         let str = '';
         if (dtoList && dtoList.length > 0) {
             for (const dto of dtoList) {
-                str += `<h3>${dto.memberId}</h3>
+                str += `<h3>${dto.memberId} ${dto.mno}</h3>
                     <div class="meta">${dto.addDate[0]}-${dto.addDate[1]}-${dto.addDate[2]} ${dto.addDate[3]}:${dto.addDate[4]}</div>
                     <p data-comNo="${dto.comNo}">${dto.comment}</p>
                     <p><a href="#" class="reply rounded">Reply</a></p>
-                    <button type="button" th:if="${self} == ${dto.mno}" class="btn btn-danger removeCommentBtn">Remove</button>
+                    <button type="button" th:if="${self} === ${dto.mno}" class="btn btn-danger removeCommentBtn">Remove</button>
                     `;
             }
         }
+        commentCnt.textContent=dtoList.length+" Contents";
+
         commentList.innerHTML = str;
         //댓글 목록 출력 후 삭제 버튼
         const removeCommentBtn = document.querySelector('.removeCommentBtn');
@@ -307,6 +312,7 @@
         }).catch(e => {
             alert("댓글 등록에 실패했습니다. 다시 시도해주세요");
         });
+
     });
     let page = 1;
     let size = 10;

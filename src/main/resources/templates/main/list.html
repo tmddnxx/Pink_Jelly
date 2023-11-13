@@ -20,7 +20,7 @@
         <div class="row">
             <div class="col-lg-4 mb-4" th:each="mainBoard:${mainBoardList.dtoList}">
                 <div class="post-entry-alt">
-                    <a th:href="|@{/main/view(mbNo=${mainBoard.mbNo})}|" class="img-link"><img src="/images/mainBoard/basic1.jpg" alt="Image" class="img-fluid"></a>
+                    <a th:href="|@{/main/view(mbNo=${mainBoard.mbNo})}|" class="img-link"><img th:src="|/view/${mainBoard.mainImg[0]}|" alt="Image" class="img-fluid"></a>
                     <div class="excerpt">
 
 

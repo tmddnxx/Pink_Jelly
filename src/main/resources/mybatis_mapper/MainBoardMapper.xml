@@ -23,7 +23,7 @@
         UPDATE mainBoard SET hit=hit+1 WHERE mbNo=#{mbNo}
     </update>
     <update id="updateBoard">
-        UPDATE mainBoard SET title=#{title}, content=#{content}, mainImg=#{mainImg}, myCat=#{myCat}, variety=#{variety} WHERE mbNo=#{mbNo}
+        UPDATE mainBoard SET title=#{title}, content=#{content}, mainImg=#{mainImg}, myCat=#{myCat}, variety=#{variety}, mainImg=#{mainImg} WHERE mbNo=#{mbNo}
     </update>
     <delete id="deleteOne">
         DELETE FROM mainBoard WHERE mbNo=#{mbNo}

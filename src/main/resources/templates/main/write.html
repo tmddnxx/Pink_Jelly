@@ -32,6 +32,18 @@
                 </div>
             </div>
             <div class="form-group row">
+                <label class="col-sm-3 col-form-label uploadHidden">mainImg</label>
+                <div class="col-sm-3 thumbnail">
+                    <input type="file" name="files" class="form-control" multiple onchange="setThumbnail(event);">
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col">
+                    <div class="container-fluid d-flex uploadResult" style="flex-wrap: wrap;">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
                 <label class="col-sm-3 col-form-label">title</label>
                 <div class="col-sm-8">
                     <input type="text" name="title" class="form-control" placeholder="title">
@@ -39,13 +51,7 @@
             </div>
             <div class="form-group row">
                 <label class="col-sm-3 col-form-label">content</label>
-                <textarea name="content" rows="45" cols="50" maxlength="1000" minlength="10" placeholder="내용을 입력하세요."></textarea>
-            </div>
-            <div class="form-group row">
-                <label class="col-sm-3 col-form-label">mainImg</label>
-                <div class="col-sm-3">
-                    <input type="file" name="mainImg" class="form-control">
-                </div>
+                <textarea name="content" rows="7" cols="50" maxlength="500" placeholder="내용을 입력하세요."></textarea>
             </div>
             <div class="form-group row">
                 <label class="col-sm-3 col-form-label">본인 고양이 이신가요?</label>
@@ -54,9 +60,84 @@
                     <input type="text" name="variety" class="form-control" placeholder="품종">
                 </div>
             </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="button" class="btn btn-primary btn-submit">Submit</button>
         </form>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="/js/mainBoard/mainBoard.js?1"></script>
+
 </div>
+<script layout:fragment="script" th:inline="javascript">
+    function setThumbnail(event){
+        const formObj = new FormData();
+        const fileInput = document.querySelector("input[name='files']");
+        console.log(fileInput.files);
+        const files = fileInput.files;
+        for(let i = 0; i < files.length; i++) {
+            formObj.append("files", files[i]);
+        }
+        uploadToServer(formObj).then(result =>{
+            console.log(result);
+            for(const uploadResult of result) {
+                showUploadFile(uploadResult);
+            }
+        });
+    }
+    //업로드된 이미지 썸네일 출력
+    const uploadResult = document.querySelector('.uploadResult');
+
+    function showUploadFile({uuid, fileName, link}){
+        const str = `<div class="card col-4">
+        <div class="card-header d-flex justify-content-center">
+          ${fileName}
+          <button type="button" class="btn-sm btn btn-danger" onclick="javascript:removeFile('${uuid}', '${fileName}', this)">X</button>
+         </div>
+         <div class="card-body">
+          <img src="/view/${link}" data-src="${uuid+"_"+fileName}">
+         </div>
+        </div><!--card-->`;
+
+        uploadResult.innerHTML += str;
+    }
+
+    //x버튼 파일 삭제
+    function removeFile(uuid, fileName, obj) {
+        console.log(uuid);
+        console.log(fileName);
+        console.log(obj);
+
+        const targetDiv = obj.closest('.card'); //obj에서 가장 가까운 '.card';
+
+        removeFileToServer(uuid, fileName).then(data => {
+            targetDiv.remove();
+        });
+    }
+
+    //게시물 등록 (이미지)
+    const formObj = document.querySelector("form[name='mainAdd']");
+    const target = document.querySelector('.uploadHidden'); //ADD Files 버튼 영역
+
+    document.querySelector('.btn-submit').addEventListener('click',function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        //1.섬네일 영역에서 img 태그의 data-src 속성을 들고 옴.
+        const uploadFiles = uploadResult.querySelectorAll('img');
+        let str = '';
+        for(let i = 0; i < uploadFiles.length; i ++) {
+            const uploadFile = uploadFiles[i];
+            const imgLink = uploadFile.getAttribute('data-src');
+            console.log(imgLink);
+
+            str += `<input type='hidden' name='mainImg' value="${imgLink}">`;
+        }
+
+        //2.ADD Files 버튼 영역에 태그 추가
+        target.innerHTML = str;
+
+        //3.submit() 처리
+        formObj.submit();
+    })
+</script>
 </body>
 </html>

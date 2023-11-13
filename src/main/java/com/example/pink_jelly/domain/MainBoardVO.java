@@ -3,6 +3,7 @@ package com.example.pink_jelly.domain;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Builder

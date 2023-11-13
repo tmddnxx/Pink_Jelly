@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Log4j2
@@ -25,9 +26,10 @@ public class MainBoardMapperTests {
                 .profileImg("test")
                 .title("제목 입니당~~")
                 .content("내용 블라블라블라 블라 블라")
-                .mainImg("test")
+                .mainImg("sadfasfd.jpg")
                 .myCat("on")
                 .variety("브리티쉬 숏")
+                .mno(1L)
                 .build();
         mainBoardMapper.insert(mainBoardVO);
     }
@@ -53,7 +55,7 @@ public class MainBoardMapperTests {
     //완
     @Test
     public void selectOneTest() {
-        MainBoardVO mainBoardVO = mainBoardMapper.getOne(3L);
+        MainBoardVO mainBoardVO = mainBoardMapper.getOne(40L);
         log.info(mainBoardVO);
     }
     //완
@@ -74,7 +76,7 @@ public class MainBoardMapperTests {
                 .title("수정됨")
                 .content("수정 컨텐트")
                 .myCat("on")
-                .mainImg("이미지")
+//                .mainImg("이미지")
                 .variety("고얌미")
                 .build();
         mainBoardMapper.updateBoard(mainBoardVO);

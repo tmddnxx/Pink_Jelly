@@ -41,11 +41,11 @@ public class SecurityConfig {
                 .loginProcessingUrl("/loginProc")
                 .usernameParameter("memberId")
                 .passwordParameter("passwd")
-                .defaultSuccessUrl("/")
+                .defaultSuccessUrl("/main")
                 .failureUrl("/login");
         http.logout()
                 .logoutUrl("/logout")
-                .logoutSuccessUrl("/")
+                .logoutSuccessUrl("/main")
                 .invalidateHttpSession(true)
                 .deleteCookies("JSESSIONID", "remember-me");
         http.authorizeRequests()

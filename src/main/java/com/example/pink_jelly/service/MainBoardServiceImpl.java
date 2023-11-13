@@ -11,6 +11,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -24,7 +25,33 @@ public class MainBoardServiceImpl implements MainBoardService{
     //게시판 등록
     @Override
     public void register(MainBoardDTO mainBoardDTO) {
-        MainBoardVO mainBoardVO = modelMapper.map(mainBoardDTO, MainBoardVO.class);
+        String mainImg = null;
+        if (mainBoardDTO.getMainImg() != null) {
+            List<String> files = mainBoardDTO.getMainImg();
+            StringBuilder mainImgBuilder = new StringBuilder();
+            for (int i = 0; i < files.size(); i++) {
+                String file = files.get(i);
+                mainImgBuilder.append(file);
+
+                // 마지막 파일이 아니면 쉼표로 구분
+                if (i < files.size() - 1) {
+                    mainImgBuilder.append(", ");
+                }
+            }
+            // 최종적으로 mainImg 문자열 생성
+            mainImg = mainImgBuilder.toString();
+        }
+        MainBoardVO mainBoardVO = MainBoardVO.builder()
+                .memberId(mainBoardDTO.getMemberId())
+                .nickName(mainBoardDTO.getNickName())
+                .profileImg(mainBoardDTO.getProfileImg())
+                .title(mainBoardDTO.getTitle())
+                .content(mainBoardDTO.getContent())
+                .mainImg(mainImg)
+                .myCat(mainBoardDTO.getMyCat())
+                .variety(mainBoardDTO.getVariety())
+                .mno(mainBoardDTO.getMno())
+                .build();
         mainBoardMapper.insert(mainBoardVO);
     }
 
@@ -32,7 +59,14 @@ public class MainBoardServiceImpl implements MainBoardService{
     public PageResponseDTO<MainBoardDTO> getList(PageRequestDTO pageRequestDTO) {
         List<MainBoardVO> mainBoardVOList = mainBoardMapper.selectList(pageRequestDTO);
         List<MainBoardDTO> mainBoardDTOList = new ArrayList<>();
-        mainBoardVOList.forEach(mainBoardVO -> mainBoardDTOList.add(modelMapper.map(mainBoardVO, MainBoardDTO.class)));
+
+        mainBoardVOList.forEach(mainBoardVO -> {
+            MainBoardDTO mainBoardDTO = modelMapper.map(mainBoardVO, MainBoardDTO.class);
+            List<String> imgs = List.of(mainBoardVO.getMainImg().split(", "));
+            mainBoardDTO.setMainImg(imgs);
+            mainBoardDTOList.add(mainBoardDTO);
+        });
+
         int total = mainBoardMapper.getCount(pageRequestDTO);
 
         PageResponseDTO<MainBoardDTO> pageResponseDTO = PageResponseDTO.<MainBoardDTO>withAll()
@@ -56,6 +90,8 @@ public class MainBoardServiceImpl implements MainBoardService{
             mainBoardVO = mainBoardMapper.getOne(mbNo);
         }
         MainBoardDTO mainBoardDTO = modelMapper.map(mainBoardVO, MainBoardDTO.class);
+        List<String> imgs = List.of(mainBoardVO.getMainImg().split(", "));
+        mainBoardDTO.setMainImg(imgs);
 //        mainBoardDTO.setFlag(flag);
         return mainBoardDTO;
     }
@@ -71,7 +107,31 @@ public class MainBoardServiceImpl implements MainBoardService{
 
     @Override
     public void modifyBoard(MainBoardDTO mainBoardDTO) {
-        MainBoardVO mainBoardVO = modelMapper.map(mainBoardDTO, MainBoardVO.class);
+        String mainImg = null;
+        if (mainBoardDTO.getMainImg() != null) {
+            List<String> files = mainBoardDTO.getMainImg();
+            StringBuilder mainImgBuilder = new StringBuilder();
+            for (int i = 0; i < files.size(); i++) {
+                String file = files.get(i);
+                mainImgBuilder.append(file);
+
+                // 마지막 파일이 아니면 쉼표로 구분
+                if (i < files.size() - 1) {
+                    mainImgBuilder.append(", ");
+                }
+            }
+            // 최종적으로 mainImg 문자열 생성
+            mainImg = mainImgBuilder.toString();
+        }
+        MainBoardVO mainBoardVO = MainBoardVO.builder()
+                .title(mainBoardDTO.getTitle())
+                .content(mainBoardDTO.getContent())
+                .mainImg(mainImg)
+                .myCat(mainBoardDTO.getMyCat())
+                .variety(mainBoardDTO.getVariety())
+                .mbNo(mainBoardDTO.getMbNo())
+                .build();
+        log.info("mainBoard MainImg : " + mainBoardVO.getMainImg());
         mainBoardMapper.updateBoard(mainBoardVO);
     }
 

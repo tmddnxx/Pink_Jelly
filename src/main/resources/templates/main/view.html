@@ -35,12 +35,12 @@
 </div>
 
 
-<div layout:fragment="content">
+<div layout:fragment="content" >
 <!--좋아요 정보 -->
     <form name="frmLike" method="post">
         <input type="hidden" name="like" th:value="${mainBoard.flag}">
         <input type="hidden" name="mbNo" th:value="${mainBoard.mbNo}">
-        <input type="hidden" name="mno" th:value="${#authentication.principal.mno}">
+<!--        <input type="hidden" name="mno" th:value="${#authentication.principal.mno}">-->
         <div class="likeBtn">
             <p class="heart on">온</p>
             <p class="heart off">오프</p>
@@ -50,7 +50,9 @@
     <div class="post-content-body">
         <div class="row my-4 mainBoard-Img">
             <div class="col-md-12 mb-4">
-                <img src="/images/mainBoard/basic1.jpg" alt="Image placeholder" class="img-fluid rounded">
+                <img class="img-fluid round"
+                     th:each="mainImg : ${mainBoard.mainImg}"
+                     th:src="|/view/${mainImg}|" alt="Image placeholder">
             </div>
         </div>
     </div>
@@ -69,7 +71,7 @@
 
                 <!-- comment-wrap start -->
             <div class="pt-5 comment-wrap">
-                <h3 class="mb-5 heading">[[${mainBoard.commentCnt}]] Comments</h3>
+                <h3 class="mb-5 heading commentCnt">[[${mainBoard.commentCnt}]] Comments</h3>
                 <ul class="comment-list">
                     <!-- 댓글 start -->
                     <li class="comment">
@@ -189,7 +191,7 @@
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script src="/js/mainBoard/mainBoard.js?a"></script>
+    <script src="/js/mainBoard/mainBoard.js?aa"></script>
 </div>
 <script layout:fragment="script" th:inline="javascript">
 <!-- 좋아요 버튼 -->
@@ -248,7 +250,6 @@ const mbNo = [[${mainBoard.mbNo}]]
 function printComments(page, size, goLast) {
     getList({mbNo, page, size, goLast})
         .then(data => {
-            console.log(data);
             printList(data.dtoList); // 목록처리
             printPages(data); // 페이지 처리
         })
@@ -259,6 +260,7 @@ printComments(1, 10, true);
 
 const commentList = document.querySelector('.comment-body'); // 댓글 목록 DOM
 const commentPaging = document.querySelector('.commentPaging'); // 페이지 목록 DOM
+const commentCnt = document.querySelector('.commentCnt'); //댓글 수 DOM
 const self = [[${#authentication.principal.mno}]];
 
 function printList(dtoList) { // 댓글 목록 출력
@@ -273,6 +275,8 @@ function printList(dtoList) { // 댓글 목록 출력
                     `;
         }
     }
+    commentCnt.textContent=dtoList.length+" Contents";
+
     commentList.innerHTML = str;
     //댓글 목록 출력 후 삭제 버튼
     const removeCommentBtn = document.querySelector('.removeCommentBtn');
