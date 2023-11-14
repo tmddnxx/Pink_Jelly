@@ -3,6 +3,26 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.pink_jelly.mapper.MainBoardMapper">
+
+    <sql id ="search">
+        <choose>
+            <when test="type != null and keyword != null">
+                <if test="type.equals('title')">
+                    AND `title` like concat('%',#{keyword},'%')
+                </if>
+                <if test="type.equals('content')">
+                    AND `content` like concat('%',#{keyword},'%')
+                </if>
+                <if test="type.equals('memberId')">
+                    AND `memberId` like concat('%',#{keyword},'%')
+                </if>
+                <if test="type.equals('nickName')">
+                    AND `nickName` like concat('%',#{keyword},'%')
+                </if>
+            </when>
+        </choose>
+    </sql>
+
     <insert id="insert">
         INSERT INTO mainBoard (memberId, nickName, profileImg, title, content, mainImg, addDate, myCat, variety, mno)
         VALUES (#{memberId}, #{nickName}, #{profileImg}, #{title}, #{content}, #{mainImg}, now(), #{myCat}, #{variety}, #{mno})
@@ -14,7 +34,15 @@
         SELECT COUNT(mbNo) FROM mainBoard
     </select>
     <select id="selectList" resultType="com.example.pink_jelly.domain.MainBoardVO">
-        SELECT * FROM mainBoard ORDER BY mbNo desc LIMIT #{skip}, #{size}
+        SELECT * FROM mainBoard AS c WHERE c.memberId
+            NOT IN (
+            SELECT memberId FROM ban AS b WHERE b.mno = #{mno}
+            UNION
+            SELECT memberId FROM member AS m WHERE m.mno
+            IN(SELECT mno FROM ban AS b WHERE b.memberId = #{memberId})
+            )
+            <include refid="search"/>
+            ORDER BY mbNo DESC LIMIT #{skip}, #{size};
     </select>
     <select id="getOne" resultType="com.example.pink_jelly.domain.MainBoardVO">
         SELECT * FROM mainBoard WHERE mbNo=#{mbNo}

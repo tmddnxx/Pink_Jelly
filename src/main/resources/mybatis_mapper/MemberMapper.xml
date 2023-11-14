@@ -11,7 +11,7 @@
         delete FROM member where mno = #{mno};
     </delete>
     <update id="updateMember">
-        update member set `email` = #{email}, `memberName` = #{memberName}, `phone` = #{phone}, `nickName` = #{nickName} where mno = #{mno};
+        update member set `email` = #{email}, `memberName` = #{memberName}, `phone` = #{phone}, `nickName` = #{nickName}, `introduce` = #{introduce} where mno = #{mno};
     </update>
     <update id="updatePasswd">
         update member set `passwd` = #{passwd} where mno = #{mno};

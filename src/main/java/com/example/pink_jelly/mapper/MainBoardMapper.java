@@ -12,11 +12,10 @@ public interface MainBoardMapper {
 
     void insert(MainBoardVO mainBoardVO); //게시물 등록
 
-    List<MainBoardVO> selectAll(PageRequestDTO pageRequestDTO); //전체 게시물
 
     int getCount(PageRequestDTO pageRequestDTO); //총 게시물 수 = total
 
-    List<MainBoardVO> selectList(PageRequestDTO pageRequestDTO); //리스트로 출력
+    List<MainBoardVO> selectList(int skip, int size, String type, String keyword, String link, Long mno, String memberId); //리스트로 출력
 
     MainBoardVO getOne(Long mbNo); //게시물 불러오기
 

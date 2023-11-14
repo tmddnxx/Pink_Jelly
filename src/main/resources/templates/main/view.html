@@ -20,7 +20,7 @@
                         <h1 class="mb-4">Loving Cats</h1>
                         <div class="post-meta align-items-center text-center">
                             <figure class="author-figure mb-0 me-3 d-inline-block"><img src="/images/person_3.jpg.jpg" alt="Image" class="img-fluid"></figure>
-                            <a th:href="|@{/main/view(mbNo=${mainBoard.mbNo})}|">
+                            <a th:href="|@{/profile/friendProfile(memberId=${mainBoard.memberId})}|">
                                 <span class="d-inline-block mt-1 boardNickName">[[${mainBoard.nickName}]]</span>
                                 <span class="boardMemberId">([[${mainBoard.memberId}]])</span>
                             </a>
@@ -35,12 +35,12 @@
 </div>
 
 
-<div layout:fragment="content" >
+<div layout:fragment="content">
 <!--좋아요 정보 -->
     <form name="frmLike" method="post">
         <input type="hidden" name="like" th:value="${mainBoard.flag}">
         <input type="hidden" name="mbNo" th:value="${mainBoard.mbNo}">
-<!--        <input type="hidden" name="mno" th:value="${#authentication.principal.mno}">-->
+        <input type="hidden" name="mno" th:value="${#authentication.principal.mno}">
         <div class="likeBtn">
             <p class="heart on">온</p>
             <p class="heart off">오프</p>
@@ -81,31 +81,17 @@
                         <!-- 댓글 리스트 출력 -->
                         <div class="comment-body">
 
-<!--                            <h3>Jean Doe</h3>-->
-<!--                            <div class="meta">January 9, 2018 at 2:21pm</div>-->
-<!--                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur quidem laborum necessitatibus, ipsam impedit vitae autem, eum officia, fugiat saepe enim sapiente iste iure! Quam voluptas earum impedit necessitatibus, nihil?</p>-->
-<!--                            <p><a href="#" class="reply rounded">Reply</a></p>-->
                         </div>
                     </li>
                     <!-- /댓글 end -->
+                        <!--*  대댓글 start -->
+                        <ul class="children">
+                            <li class="comment">
 
-
-<!--                        &lt;!&ndash; 대댓글 start &ndash;&gt;-->
-<!--                        <ul class="children">-->
-<!--                            <li class="comment">-->
-<!--                                <div class="vcard">-->
-<!--                                    <img src="images/person_3.jpg" alt="Image placeholder">-->
-<!--                                </div>-->
-<!--                                <div class="comment-body">-->
-<!--                                    <h3>Jean Doe</h3>-->
-<!--                                    <div class="meta">January 9, 2018 at 2:21pm</div>-->
-<!--                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur quidem laborum necessitatibus, ipsam impedit vitae autem, eum officia, fugiat saepe enim sapiente iste iure! Quam voluptas earum impedit necessitatibus, nihil?</p>-->
-<!--                                    <p><a href="#" class="reply rounded">Reply</a></p>-->
-<!--                                </div>-->
-<!--                            </li>-->
-<!--                        </ul>-->
+                            </li>
+                        </ul>
                         <!-- /대댓글 end -->
-<!--                    </li>-->
+                    </li>
                     <!-- /댓글 end -->
                 </ul>
                 <!-- END comment-list -->
@@ -115,7 +101,7 @@
                     <form action="/mainComment/register" class="p-5 bg-light" method="post">
                         <input type="hidden" name="mbNo" th:value="${mainBoard.mbNo}">
                         <input type="hidden" name="mno" id="mno" th:value="${#authentication.principal.mno}">
-                        <!-- 나중에 memberId, nickName 받아서 넣기 -->
+
                         <div class="form-group">
                             <label for="memberId">memberId</label>
                             <input type="text" class="form-control" id="memberId" th:value="${#authentication.principal.memberId}">
@@ -250,6 +236,7 @@ const mbNo = [[${mainBoard.mbNo}]]
 function printComments(page, size, goLast) {
     getList({mbNo, page, size, goLast})
         .then(data => {
+            console.log(data);
             printList(data.dtoList); // 목록처리
             printPages(data); // 페이지 처리
         })

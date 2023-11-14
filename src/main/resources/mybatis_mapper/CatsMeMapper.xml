@@ -14,7 +14,11 @@
         SELECT COUNT(cmbNo) FROM catsMeBoard
     </select>
     <select id="selectList" resultType="com.example.pink_jelly.domain.CatsMeBoardVO">
-        SELECT * FROM CatsMeBoard ORDER BY cmbNo DESC LIMIT #{skip}, #{size}
+        SELECT * FROM catsmeboard AS c WHERE c.memberId NOT IN (
+            SELECT memberId FROM ban AS b WHERE b.mno = #{mno}
+            UNION
+            SELECT memberId FROM member AS m WHERE m.mno
+            IN(SELECT mno FROM ban AS b WHERE b.memberId = #{memberId})) ORDER BY cmbNo DESC LIMIT #{skip}, #{size};
     </select>
     <select id="getOne" resultType="com.example.pink_jelly.domain.CatsMeBoardVO">
         SELECT * FROM catsMeBoard WHERE cmbNo=#{cmbNo}
@@ -40,7 +44,11 @@
         SELECT COUNT(crbNo) FROM catsReviewBoard
     </select>
     <select id="selectReviewBoardList" resultType="com.example.pink_jelly.domain.CatsReviewBoardVO">
-        SELECT * FROM CatsReviewBoard ORDER BY crbNo DESC LIMIT #{skip}, #{size}
+        SELECT * FROM catsReviewBoard AS c WHERE c.memberId NOT IN (
+            SELECT memberId FROM ban AS b WHERE b.mno = #{mno}
+            UNION
+            SELECT memberId FROM member AS m WHERE m.mno
+            IN(SELECT mno FROM ban AS b WHERE b.memberId = #{memberId})) ORDER BY crbNo DESC LIMIT #{skip}, #{size};
     </select>
     <select id="getReviewBoardOne" resultType="com.example.pink_jelly.domain.CatsReviewBoardVO">
         SELECT * FROM catsReviewBoard WHERE crbNo=#{crbNo}

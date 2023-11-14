@@ -4,6 +4,7 @@ import com.example.pink_jelly.dto.MemberDTO;
 import com.example.pink_jelly.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -55,12 +56,24 @@ public class MemberController {
         // 회원 수정 전 비밀번호 확인
     }
     @PostMapping("/checkPW")
-    public String checkPWPost(String passwd, HttpSession session){
-        MemberDTO memberDTO = (MemberDTO) session.getAttribute("logInfo");
+    public String checkPWPost(String passwd, @AuthenticationPrincipal MemberDTO memberDTO, Model model){
+
         if (memberDTO.getPasswd().equals(passwd)){
+            log.info("일치함 !");
+            log.info(passwd);
+            log.info(memberDTO.getPasswd());
             return "/member/memberInfo";
+        }else {
+            log.info("일치하지 않음 ! ");
+            log.info(passwd);
+            log.info(memberDTO.getPasswd());
+            return "/member/checkPW";
         }
-        return "/member/checkPW";
+//        else {
+//            model.addAttribute("error", "비밀번호가 일치하지 않습니다");
+//            return "/member/checkPW";
+//        }
+
     }
 
     @GetMapping("/memberInfo")

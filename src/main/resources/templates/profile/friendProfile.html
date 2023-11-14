@@ -1,10 +1,360 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{layout/basic.html}"
+      xmlns:sec="http://www.springframework.org/schema/security">
 <head>
     <meta charset="UTF-8">
+    <script src="https://kit.fontawesome.com/e83b9315c8.js" crossorigin="anonymous"></script>
     <title>친구 프로필</title>
 </head>
-<body>
 
+<style layout:fragment="style">
+    *{
+        margin: 0;
+        padding: 0;
+    }
+    .info{
+        background-color: #1a3542;
+        width: 100%;
+        height: 500px;
+    }
+    .board-content {
+        width: 100%;
+        height: 500px;
+        background-color: #0dcaf0;
+    }
+    .inner-top{
+        display: flex;
+        justify-content: space-between;
+    }
+    .top-info {
+        margin-top: 20px;
+        display: flex;
+        gap: 20px;
+    }
+    .profileImg {
+        border-radius: 50%;
+        background-color: white;
+    }
+    i {
+        width: 50px;
+        height: 50px;
+        margin-top: 20px;
+    }
+    .fa-bars:before{
+        content: "\f0c9";
+        font-size: 25pt;
+    }
+    .inner-bottom {
+        display: flex;
+        flex-direction: column;
+    }
+    p {
+        color: white;
+    }
+    .tab {
+        display: flex;
+        padding-top: 20px;
+        gap: 50px;
+    }
+    li {
+        list-style: none;
+    }
+    .boardList{
+        display: flex;
+        justify-content: space-evenly;
+    }
+    .boardImg {
+        width: 200px;
+        height: 200px;
+    }
+    .menu {
+        width: 90px;
+    }
+    .menu-tap {
+        display: none;
+    }
+    .menu-tap ul{
+        padding-left: 0;
+    }
+    .menu-tap a {
+        color: white;
+    }
+    .listBtn{
+        cursor: pointer;
+    }
+</style>
+
+<body>
+<div layout:fragment="content">
+    <th:block th:if="${banned}">
+        <p style="color: black">[[${banned}]]</p>
+        <p style="color: black">비공개 계정입니다</p>
+    </th:block>
+    <th:block th:unless="${banned}">
+        <th:block th:if="${memberDTO.ban}">
+            <form name="frmBan" method="post">
+                <input type="hidden" name="ban" th:value="${memberDTO.ban}">
+                <input type="hidden" name="memberId" th:value="${memberDTO.memberId}">
+                <input type="hidden" name="nickName" th:value="${memberDTO.nickName}">
+                <input type="hidden" name="mno" th:value="${#authentication.principal.mno}">
+                <div class="banBtn_wrap">
+                    <button type="button" class="banBtn">차단 해제</button>
+                </div>
+            </form>
+            <p style="color: black">차단된 계정입니다</p>
+
+            <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        </th:block>
+        <th:block th:unless="${memberDTO.ban}">
+    <!--    친구 여부 , 추가 -->
+        <form name="frmFriend" method="post">
+            <input type="hidden" name="friend" th:value="${memberDTO.flag}">
+            <input type="hidden" name="memberId" th:value="${memberDTO.memberId}">
+            <input type="hidden" name="nickName" th:value="${memberDTO.nickName}">
+            <th:block th:if="${#authentication.principal != 'anonymousUser'}">
+                <input type="hidden" name="mno"  th:value="${#authentication.principal.mno}">
+            </th:block>
+            <div class="friendBtn_wrap">
+                <button type="button" class="friendBtn">그루밍 추가</button>
+            </div>
+        </form>
+    <!--    차단 여부, 추가-->
+        <form name="frmBan" method="post">
+            <input type="hidden" name="ban" th:value="${memberDTO.ban}">
+            <input type="hidden" name="memberId" th:value="${memberDTO.memberId}">
+            <input type="hidden" name="nickName" th:value="${memberDTO.nickName}">
+            <th:block th:if="${#authentication.principal != 'anonymousUser'}">
+                <input type="hidden" name="mno" th:value="${#authentication.principal.mno}">
+            </th:block>
+            <div class="banBtn_wrap">
+                <button type="button" class="banBtn">차단</button>
+            </div>
+        </form>
+        <div class="info">
+            <div class="info-inner">
+                <div class="inner-top">
+                    <div class="top-info">
+                        <img src="/images/defalut.png" class="profileImg" width="200px" height="200px">
+                        <div class="inner-top-info">
+                            <input type="hidden" name="mno" th:value="${memberDTO.mno}">
+                            <p> 아이디 : [[${memberDTO.memberId}]]</p>
+                            <p> 고양이 품종 : [[${memberDTO.variety}]] </p>
+                            <p> 고양이 나이 : [[${memberDTO.catAge}]] </p>
+                            <p> 고양이 성별 : [[${memberDTO.catSex}]] </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="inner-bottom">
+                    <div class="bottom-inner">
+                        <p>소개</p>
+                        <textarea cols="100" rows="10" name="introduce" readonly>[[${memberDTO.introduce}]]</textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--    내 게시물 목록-->
+        <div class="board-content">
+            <ul class="tab">
+                <li class="tab-content">
+                    <p class="mainBtn listBtn">메인 게시물</p>
+                </li>
+                <li class="tab-content">
+                    <p class="catsMeBtn listBtn">입양소 게시물</p>
+                </li>
+                <li class="tab-content">
+                    <p class="reviewBtn listBtn">입양후기 게시물</p>
+                </li>
+            </ul>
+            <!--  목록-->
+            <div class="row mainBoardList">
+                <div class="col-lg-3 mb-4"  th:each="mainBoard:${mainBoardList}">
+                    <div>
+                        <a th:href="|@{/main/view(mbNo=${mainBoard.mbNo})}|" class="img-link">
+                            <img src="/images/mainBoard/basic1.jpg" alt="Image" class="img-fluid" width="200">
+                            <p>[[${mainBoard.title}]]</p>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="row catsMeList">
+                <div class="col-lg-3 mb-4" th:each="catsMeBoard:${catsMeBoardList}">
+                    <div>
+                        <a th:href="|@{/catsMe/board/view(cmbNo=${catsMeBoard.cmbNo})}|" class="img-link">
+                            <img src="/images/mainBoard/basic1.jpg" alt="Image" class="img-fluid" width="200">
+                            <p>[[${catsMeBoard.title}]]</p>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="row reviewList" >
+                <div class="col-lg-3 mb-4" th:each="reviewBoard:${reviewBoardList}">
+                    <div>
+                        <a th:href="|@{/catsMe/review/view(crbNo=${reviewBoard.crbNo})}|" class="img-link">
+                            <img src="/images/mainBoard/basic1.jpg" alt="Image" class="img-fluid" width="200">
+                            <p>[[${reviewBoard.title}]]</p>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 내 게시물 목록 끝-->
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        </th:block>
+    </th:block>
+</div>
+<script layout:fragment="script">
+
+    // 차단 버튼
+    const frmBan = document.querySelector('form[name=frmBan]');
+    const banBtn = document.querySelector('.banBtn');
+    const banCheck = document.querySelector('input[name=ban]');
+    console.log("ban 여부 : " + banCheck.value);
+    if (banCheck.value === "true" || banCheck.value === true) {
+        banBtn.innerText = '차단 해제';
+        console.log(banCheck.value);
+    } else {
+        banBtn.innerText = '차단 ';
+        console.log(banCheck.value);
+    }
+
+    banBtn.addEventListener('click', async function () {
+        const memberId = frmBan.memberId.value;
+        const nickName = frmBan.nickName.value;
+        const mno = frmBan.mno.value;
+        console.log(mno);
+        const banDTO = {
+            memberId: memberId,
+            nickName: nickName
+        };
+
+        if (mno !== "") {
+            let response;
+            try {
+                if(banCheck.value === 'true'){
+                    const url = `/ban/remove?mno=${mno}&memberId=${memberId}`;
+                    response = await axios.post(url);
+                }else {
+                    const url = `/ban/add?mno=${mno}`;
+                    response = await axios.post(url, banDTO);
+                }
+                console.log(response.data);
+
+                if (response.status === 200) {
+                    const json = response.data;
+                    if (json.result === true) {
+                        // 성공적으로 처리된 경우 추가적인 동작 수행
+                    } else {
+                        alert('등록에 실패했습니다.');
+                    }
+                } else {
+                    console.error(response.status, response.statusText);
+                }
+            } catch (error) {
+                console.error('에러:', error);
+            }
+            banCheck.value = banCheck.value === "true" ? "false" : "true";
+            banBtn.innerText = banCheck.value === "true" ? '차단 해제' : '차단';
+        } else {
+            alert("로그인 후 이용 가능합니다.");
+        }
+    })
+
+        if(banCheck.value === false || "false"){
+            // 친구추가 버튼
+            const frmFriend = document.querySelector('form[name=frmFriend]');
+            const friendBtn = document.querySelector('.friendBtn');
+            const friendCheck = document.querySelector('input[name=friend]');
+
+            if (friendCheck.value === "true" || friendCheck.value === true) {
+                friendBtn.innerText = '그루밍 해제';
+                console.log(friendCheck.value);
+            } else {
+                friendBtn.innerText = '그루밍 추가';
+                console.log(friendCheck.value);
+            }
+
+            friendBtn.addEventListener('click', async function () {
+                const memberId = frmFriend.memberId.value;
+                const nickName = frmFriend.nickName.value;
+                const mno = frmFriend.mno.value;
+                console.log(mno);
+                const friendsDTO = {
+                    memberId: memberId,
+                    nickName: nickName
+                };
+
+                if (mno !== "") {
+                    let response;
+                    try {
+                        if(friendCheck.value === 'true'){
+                            const url = `/friends/remove?mno=${mno}&memberId=${memberId}`;
+                            response = await axios.post(url);
+                        }else {
+                            const url = `/friends/add?mno=${mno}`;
+                            response = await axios.post(url, friendsDTO);
+                        }
+                        console.log(response.data);
+
+                        if (response.status === 200) {
+                            const json = response.data;
+                            if (json.result === true) {
+                                // 성공적으로 처리된 경우 추가적인 동작 수행
+                            } else {
+                                alert('등록에 실패했습니다.');
+                            }
+                        } else {
+                            console.error(response.status, response.statusText);
+                        }
+                    } catch (error) {
+                        console.error('에러:', error);
+                    }
+                    friendCheck.value = friendCheck.value === "true" ? "false" : "true";
+                    friendBtn.innerText = friendCheck.value === "true" ? '그루밍 해제' : '그루밍 추가';
+                } else {
+                    alert("로그인 후 이용 가능합니다.");
+                }
+            })
+
+            // 게시물 목록
+            // 게시물 목록 기능
+            const mainBtn = document.querySelector('.mainBtn');
+            const mainList = document.querySelector('.mainBoardList');
+            const catsMeBtn = document.querySelector('.catsMeBtn');
+            const catsMeList = document.querySelector('.catsMeList');
+            const reviewBtn = document.querySelector('.reviewBtn');
+            const reviewList = document.querySelector('.reviewList');
+
+
+            catsMeList.style.display = 'none';
+            reviewList.style.display = 'none';
+
+            mainBtn.addEventListener('click', function (){
+                mainList.style.display = 'flex';
+                mainList.style.display = '-webkit-box';
+                catsMeList.style.display = 'none';
+                reviewList.style.display = 'none';
+            })
+            catsMeBtn.addEventListener('click', function (){
+                mainList.style.display = 'none';
+                catsMeList.style.display = 'flex';
+                catsMeList.style.display = '-webkit-box';
+                reviewList.style.display = 'none';
+            })
+            reviewBtn.addEventListener('click', function (){
+                mainList.style.display = 'none';
+                catsMeList.style.display = 'none';
+                reviewList.style.display = 'flex';
+                reviewList.style.display = '-webkit-box';
+            })
+        }
+
+
+
+
+
+</script>
 </body>
+
 </html>

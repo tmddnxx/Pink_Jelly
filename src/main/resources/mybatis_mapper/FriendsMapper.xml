@@ -3,13 +3,35 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.pink_jelly.mapper.FriendsMapper">
-    <select id="friendsList" resultType="com.example.pink_jelly.domain.FriendsVO">
+    <select id="gmingList" resultType="com.example.pink_jelly.domain.FriendsVO">
         select * from friends where mno = #{mno};
     </select>
-    <insert id="insertFriend" parameterType="com.example.pink_jelly.domain.FriendsVO">
-        insert into friends (memberId, friendId, friendName, mno) values (#{memberId}, #{friendId}, #{friendName}, #{mno});
+    <insert id="insertGming">
+        insert into friends (memberId, nickName, mno) values (#{memberId}, #{nickName}, #{mno});
     </insert>
-    <delete id="deleteFriend" parameterType="java.lang.Long">
-        delete FROM friends where fno = #{fno};
+    <delete id="deleteGming">
+        delete FROM friends where mno = #{mno} and memberId = #{memberId};
     </delete>
+    <select id="isFriend" resultType="boolean">
+        select count(*) from friends where mno = #{mno} and memberId = #{memberId};
+    </select>
+    <update id="gmingCntUpdate">
+        <choose>
+            <when test="flag">
+                update `member` set `gmingCnt` = `gmingCnt` + 1 where mno = #{mno};
+            </when>
+            <when test="!flag">
+                update `member` set `gmingCnt` = `gmingCnt` - 1 where mno = #{mno};
+            </when>
+        </choose>
+    </update>
+
+
+    <select id="gmerList" resultType="com.example.pink_jelly.domain.MemberVO">
+        SELECT member.* FROM member JOIN friends ON member.mno = friends.mno WHERE friends.memberId = #{memberId};
+    </select>
+    <update id="gmerCntUpdate">
+        UPDATE member SET gmerCnt = (SELECT COUNT(*) FROM member JOIN friends ON member.mno = friends.mno
+                                     WHERE friends.memberId = #{memberId}) WHERE memberId = #{memberId};
+    </update>
 </mapper>

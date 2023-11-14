@@ -13,6 +13,7 @@
     *{
         margin: 0;
         padding: 0;
+
     }
     .info{
         background-color: #1a3542;
@@ -21,7 +22,6 @@
     }
     .board-content {
         width: 100%;
-        height: 500px;
         background-color: #0dcaf0;
     }
     .inner-top{
@@ -81,20 +81,79 @@
     .menu-tap a {
         color: white;
     }
+    .listBtn{
+        cursor: pointer;
+    }
 </style>
 
 <body>
 <div layout:fragment="content">
+<!--    그루밍 목록 -->
+    <div class="modal grooming_wrap" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Grooming List ([[${#authentication.principal.gmingCnt}]])</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <ul class="modal-body" th:each="dto: ${gmingDTOList}">
+                    <li>[[${dto.nickName}]]([[${dto.memberId}]])</li>
+                </ul>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--    그루밍 목록 끝-->
+    <!--    그루머 목록 -->
+    <div class="modal groomer_wrap" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Groomer List ([[${#authentication.principal.gmerCnt}]])</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <ul class="modal-body" th:each="dto: ${gmerDTOList}">
+                    <li>[[${dto.nickName}]]([[${dto.memberId}]])</li>
+                </ul>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--    그루머 목록 끝-->
+    <!--    차단 목록 -->
+    <div class="modal ban_wrap" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Ban List</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <ul class="modal-body" th:each="dto: ${banDTOList}">
+                    <li>[[${dto.nickName}]]([[${dto.memberId}]])</li>
+                </ul>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--    그루머 목록 끝-->
+<!--    내 정보-->
     <div class="info">
         <div class="info-inner">
             <div class="inner-top">
                 <div class="top-info">
                     <img src="/images/defalut.png" class="profileImg" width="200px" height="200px">
                     <div class="inner-top-info">
-                        <p> 아이디 <span th:text="${#authentication.principal.username}"></span></p>
-                        <p> 품종 <span sec:authentication = "principal.memberId"></span> </p>
-                        <p> 나이 </p>
-                        <p> 성별 </p>
+                        <input type="hidden" name="mno" th:value="${#authentication.principal.mno}">
+                        <p> 아이디 : <span th:text="${#authentication.principal.memberId}"></span></p>
+                        <p> 고양이 품종 : <span sec:authentication = "principal.variety"></span> </p>
+                        <p> 고양이 나이 : <span sec:authentication = "principal.catAge"></span> </p>
+                        <p> 고양이 성별 : <span sec:authentication = "principal.catSex"></span></p>
                     </div>
                 </div>
                 <!-- 메뉴 버튼-->
@@ -102,68 +161,77 @@
                     <i class="fa-solid fa-bars menuBtn"></i>
                     <div class="menu-tap">
                         <ul>
-                            <li><a href="#">그루밍</a></li>
-                            <li><a href="#">그루머</a></li>
+                            <li><button class="groomingBtn">그루밍</button></li>
+                            <li><button class="groomergBtn">그루머</button></li>
                             <li><a href="#">채팅목록</a></li>
-                            <li><a href="#">차단목록</a></li>
+                            <li><button class="banBtn">차단목록</button></li>
                             <li> <a th:href="@{/member/checkPW}">회원정보 수정</a></li>
                         </ul>
                     </div>
                 </div>
+<!--                메뉴버튼 끝-->
             </div>
+            <a th:href="@{/profile/friendProfile(memberId=lsw6878)}" style="color: white;">17번 친구 프로필</a>
+<!--            소개글-->
             <div class="inner-bottom">
                 <div class="bottom-inner">
                     <p>소개</p>
-                    <textarea cols="100" rows="10">소개글</textarea>
+                    <textarea cols="100" rows="10" name="introduce" th:text="${#authentication.principal.introduce}" readonly></textarea>
                 </div>
             </div>
         </div>
     </div>
+<!--    내 정보 끝-->
+<!--    내 게시물 목록-->
     <div class="board-content">
         <ul class="tab">
             <li class="tab-content">
-                <a href="#">메인</a>
+                <p class="mainBtn listBtn">메인 게시물</p>
             </li>
             <li class="tab-content">
-                <a href="#">입양소</a>
+                <p class="catsMeBtn listBtn">입양소 게시물</p>
             </li>
             <li class="tab-content">
-                <a href="#">입양후기</a>
+                <p class="reviewBtn listBtn">입양후기 게시물</p>
             </li>
         </ul>
-        <!--    목록-->
-        <div style="padding-top: 50px;">
-            <ul class="boardList">
-                <li class="board">
-                    <a href="#">
-                        <img src="/images/defalut.png" class="boardImg">
-                        <p> 제 목 </p>
+        <!--  목록-->
+        <div class="row mainBoardList">
+            <div class="col-lg-3 mb-4"  th:each="mainBoard:${mainBoardList}">
+                <div>
+                    <a th:href="|@{/main/view(mbNo=${mainBoard.mbNo})}|" class="img-link">
+                        <img src="/images/mainBoard/basic1.jpg" alt="Image" class="img-fluid" width="200">
+                        <p>[[${mainBoard.title}]]</p>
                     </a>
-                </li>
-                <li class="board">
-                    <a href="#">
-                        <img src="/images/defalut.png" class="boardImg">
-                        <p> 제 목 </p>
+                </div>
+            </div>
+        </div>
+        <div class="row catsMeList">
+            <div class="col-lg-3 mb-4" th:each="catsMeBoard:${catsMeBoardList}">
+                <div>
+                    <a th:href="|@{/catsMe/board/view(cmbNo=${catsMeBoard.cmbNo})}|" class="img-link">
+                        <img src="/images/mainBoard/basic1.jpg" alt="Image" class="img-fluid" width="200">
+                        <p>[[${catsMeBoard.title}]]</p>
                     </a>
-                </li>
-                <li class="board">
-                    <a href="#">
-                        <img src="/images/defalut.png" class="boardImg">
-                        <p> 제 목 </p>
+                </div>
+            </div>
+        </div>
+        <div class="row reviewList" >
+            <div class="col-lg-3 mb-4" th:each="reviewBoard:${reviewBoardList}">
+                <div>
+                    <a th:href="|@{/catsMe/review/view(crbNo=${reviewBoard.crbNo})}|" class="img-link">
+                        <img src="/images/mainBoard/basic1.jpg" alt="Image" class="img-fluid" width="200">
+                        <p>[[${reviewBoard.title}]]</p>
                     </a>
-                </li>
-                <li class="board">
-                    <a href="#">
-                        <img src="/images/defalut.png" class="boardImg">
-                        <p> 제 목 </p>
-                    </a>
-                </li>
-            </ul>
+                </div>
+            </div>
         </div>
     </div>
+<!-- 내 게시물 목록 끝-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 </div>
 <script layout:fragment="script">
-    document.addEventListener('DOMContentLoaded', function (){
+        // 메뉴 기능
         const menuBtn = document.querySelector('.menuBtn');
         const menuTap = document.querySelector('.menu-tap');
         let isMenuOpen = false;
@@ -176,10 +244,67 @@
                 menuTap.style.display = 'block';
                 isMenuOpen = true;
             }
+        });
 
+        // 그루밍 목록
+        const groomingBtn = document.querySelector('.groomingBtn'); // 그루밍목록버튼
+        const groomingWrap = document.querySelector('.grooming_wrap');
+        const groomingModal = new bootstrap.Modal(groomingWrap);
+
+        groomingBtn.addEventListener('click', function (){
+            groomingModal.show();
         })
-    })
+
+        // 그루머 목록
+        const groomerBtn = document.querySelector('.groomergBtn'); // 그루밍목록버튼
+        const groomerWrap = document.querySelector('.groomer_wrap');
+        const groomerModal = new bootstrap.Modal(groomerWrap);
+
+        groomerBtn.addEventListener('click', function (){
+            groomerModal.show();
+        })
+
+        // 차단기능
+        const banBtn = document.querySelector('.banBtn'); // 차단목록 버튼
+        const banWrap = document.querySelector('.ban_wrap');
+        const banModal = new bootstrap.Modal(banWrap);
+
+        banBtn.addEventListener('click', function (){
+            banModal.show();
+        })
+
+        // 게시물 목록 기능
+        const mainBtn = document.querySelector('.mainBtn');
+        const mainList = document.querySelector('.mainBoardList');
+        const catsMeBtn = document.querySelector('.catsMeBtn');
+        const catsMeList = document.querySelector('.catsMeList');
+        const reviewBtn = document.querySelector('.reviewBtn');
+        const reviewList = document.querySelector('.reviewList');
+
+        catsMeList.style.display = 'none';
+        reviewList.style.display = 'none';
+
+        mainBtn.addEventListener('click', function (){
+            mainList.style.display = 'flex';
+            mainList.style.display = '-webkit-box';
+            catsMeList.style.display = 'none';
+            reviewList.style.display = 'none';
+        })
+        catsMeBtn.addEventListener('click', function (){
+            mainList.style.display = 'none';
+            catsMeList.style.display = 'flex';
+            catsMeList.style.display = '-webkit-box';
+            reviewList.style.display = 'none';
+        })
+        reviewBtn.addEventListener('click', function (){
+            mainList.style.display = 'none';
+            catsMeList.style.display = 'none';
+            reviewList.style.display = 'flex';
+            reviewList.style.display = '-webkit-box';
+        })
+
+
+
 </script>
 </body>
-
 </html>

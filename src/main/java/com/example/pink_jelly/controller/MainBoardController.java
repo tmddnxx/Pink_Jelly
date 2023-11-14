@@ -1,6 +1,7 @@
 package com.example.pink_jelly.controller;
 
 import com.example.pink_jelly.dto.MainBoardDTO;
+import com.example.pink_jelly.dto.MemberDTO;
 import com.example.pink_jelly.dto.PageRequestDTO;
 import com.example.pink_jelly.dto.PageResponseDTO;
 import com.example.pink_jelly.service.MainBoardService;
@@ -9,6 +10,8 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +22,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
+import java.security.Principal;
 
 @Log4j2
 @Controller
@@ -30,11 +34,21 @@ public class MainBoardController {
     private final MainBoardService mainBoardService;
 
     @GetMapping("")
-    public String main(Model model, PageRequestDTO pageRequestDTO) {
+    public String main(Model model, PageRequestDTO pageRequestDTO, Long mno, String memberId, @AuthenticationPrincipal MemberDTO memberDTO) {
         log.info("main GET ...");
-        PageResponseDTO<MainBoardDTO> mainBoardList = mainBoardService.getList(pageRequestDTO);
-        model.addAttribute("mainBoardList", mainBoardList);
-        mainBoardList.getDtoList().forEach(log::info);
+        log.info("메인 멤버디티오 : " + memberDTO);
+        if(memberDTO != null){
+            String loginId = memberDTO.getMemberId();
+            Long loginMno = memberDTO.getMno();
+            PageResponseDTO<MainBoardDTO> mainBoardList = mainBoardService.getList(pageRequestDTO, loginMno, loginId);
+            model.addAttribute("mainBoardList", mainBoardList);
+            mainBoardList.getDtoList().forEach(log::info);
+        } else {
+            PageResponseDTO<MainBoardDTO> mainBoardList = mainBoardService.getList(pageRequestDTO, mno, memberId);
+            model.addAttribute("mainBoardList", mainBoardList);
+            mainBoardList.getDtoList().forEach(log::info);
+        }
+
         return "/main/list";
     }
 
@@ -45,18 +59,19 @@ public class MainBoardController {
     }
 
     @GetMapping({"/view", "/modify"})
-    public void view(Long mbNo, Model model, HttpServletRequest request) {
+    public void view(Long mbNo, Model model, HttpServletRequest request, @AuthenticationPrincipal MemberDTO memberDTO) {
         log.info("/main/view GET...");
         log.info(mbNo);
         MainBoardDTO mainBoardDTO = null;
         String requestedUrl = request.getRequestURI();
         // 로그인 한 놈 들고와
-//        Long mno = null;
+        Long mno = memberDTO.getMno();
+
         if (requestedUrl.equals("/main/view")) {
-            mainBoardDTO = mainBoardService.getBoard(mbNo, "view");
-//            mainBoardDTO.setFlag(mainBoardService.isBoardLike(mno, mbNo));
+            mainBoardDTO = mainBoardService.getBoard(mbNo, "view", mno);
+            mainBoardDTO.setFlag(mainBoardService.isBoardLike(mno, mbNo));
         } else {
-            mainBoardDTO = mainBoardService.getBoard(mbNo, "modify");
+            mainBoardDTO = mainBoardService.getBoard(mbNo, "modify", mno);
         }
         log.info(mainBoardDTO);
         model.addAttribute("mainBoard", mainBoardDTO);

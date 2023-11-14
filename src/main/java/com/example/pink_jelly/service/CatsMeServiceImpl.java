@@ -27,8 +27,8 @@ public class CatsMeServiceImpl implements CatsMeService{
     }
 
     @Override
-    public PageResponseDTO<CatsMeBoardDTO> getList(PageRequestDTO pageRequestDTO) {
-        List<CatsMeBoardVO> catsMeBoardVOList = catsMeMapper.selectList(pageRequestDTO);
+    public PageResponseDTO<CatsMeBoardDTO> getList(PageRequestDTO pageRequestDTO, Long mno, String memberId) {
+        List<CatsMeBoardVO> catsMeBoardVOList = catsMeMapper.selectList(pageRequestDTO.getSkip(), pageRequestDTO.getSize(), mno, memberId);
         List<CatsMeBoardDTO> catsMeBoardDTOList = new ArrayList<>();
         catsMeBoardVOList.forEach(catsMeBoardVO -> catsMeBoardDTOList.add(modelMapper.map(catsMeBoardVO, CatsMeBoardDTO.class)));
         int total = catsMeMapper.getCount(pageRequestDTO);
@@ -79,8 +79,8 @@ public class CatsMeServiceImpl implements CatsMeService{
     }
 
     @Override
-    public PageResponseDTO<CatsReviewBoardDTO> getReviewBoardList(PageRequestDTO pageRequestDTO) {
-        List<CatsReviewBoardVO> catsMeBoardVOList = catsMeMapper.selectReviewBoardList(pageRequestDTO);
+    public PageResponseDTO<CatsReviewBoardDTO> getReviewBoardList(PageRequestDTO pageRequestDTO, Long mno, String memberId) {
+        List<CatsReviewBoardVO> catsMeBoardVOList = catsMeMapper.selectReviewBoardList(pageRequestDTO.getSkip(), pageRequestDTO.getSize(), mno, memberId);
         List<CatsReviewBoardDTO> catsReviewBoardDTOList = new ArrayList<>();
         catsMeBoardVOList.forEach(catsReviewBoardVO -> catsReviewBoardDTOList.add(modelMapper.map(catsReviewBoardVO, CatsReviewBoardDTO.class)));
         int total = catsMeMapper.getCount(pageRequestDTO);
@@ -94,15 +94,13 @@ public class CatsMeServiceImpl implements CatsMeService{
     }
 
     @Override
-    public CatsReviewBoardDTO getReviewBoard(Long crbNo, String mode) {
+    public CatsReviewBoardDTO getReviewBoard(Long crbNo, String mode, Long mno) {
         CatsReviewBoardVO catsReviewBoardVO = null;
         boolean flag = false;
-        Long mno = null; // 로그인 mno로 교체 예정
         if(mode.equals("view")){
             catsReviewBoardVO = catsMeMapper.getReviewBoardOne(crbNo);
             catsMeMapper.updateReviewBoardHit(crbNo);
-            flag = catsMeMapper.isReviewBoardLike(15L, crbNo);
-            log.info("flag 는 ? : "+flag);
+            flag = catsMeMapper.isReviewBoardLike(mno, crbNo);
         } else{
             catsReviewBoardVO = catsMeMapper.getReviewBoardOne(crbNo);
         }

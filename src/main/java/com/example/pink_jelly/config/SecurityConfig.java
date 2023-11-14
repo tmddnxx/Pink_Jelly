@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.AndRequestMatcher;
 
 @Configuration
 @EnableWebSecurity // Spring Security 설정을 시작
@@ -50,9 +51,8 @@ public class SecurityConfig {
                 .deleteCookies("JSESSIONID", "remember-me");
         http.authorizeRequests()
                 .antMatchers("/", "/member/signup", "/member/welcome").permitAll()
-                .antMatchers("/member/**", "/profile").authenticated()
+                .antMatchers("/member/**").authenticated()
                 .anyRequest().permitAll();
-
         return http.build();
     }
 }

@@ -35,6 +35,10 @@ public class MemberDTO implements UserDetails {
     private String profileImg; // 프로필이미지 (고양이사진)
     private int gmingCnt; // 그루밍 수
     private int gmerCnt; // 그루머 수
+    private String introduce; // 소개글
+
+    private boolean flag; // 친구 여부
+    private boolean ban; // 차단 여부
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,10 +26,18 @@ public class CatsMeController {
 
     private final CatsMeService catsMeService;
     @GetMapping("")
-    public String CatsMe(Model model, PageRequestDTO pageRequestDTO){
+    public String CatsMe(Model model, PageRequestDTO pageRequestDTO,Long mno, String memberId ,@AuthenticationPrincipal MemberDTO memberDTO){
         log.info("/catsMe Get");
-        PageResponseDTO<CatsMeBoardDTO> catsMeBoardList = catsMeService.getList(pageRequestDTO);
-        model.addAttribute("catsMeBoardList", catsMeBoardList);
+        if(memberDTO != null){
+            String loginId = memberDTO.getMemberId();
+            Long loginMno = memberDTO.getMno();
+            PageResponseDTO<CatsMeBoardDTO> catsMeBoardList = catsMeService.getList(pageRequestDTO, loginMno, loginId);
+            model.addAttribute("catsMeBoardList", catsMeBoardList);
+        }else{
+            PageResponseDTO<CatsMeBoardDTO> catsMeBoardList = catsMeService.getList(pageRequestDTO, mno, memberId);
+            model.addAttribute("catsMeBoardList", catsMeBoardList);
+        }
+
         return "/catsMe/board/list";
     }
 
@@ -49,7 +58,6 @@ public class CatsMeController {
         log.info("/catsMe/view");
         CatsMeBoardDTO catsMeBoardDTO = null;
         String requestedUrl = request.getRequestURI();
-
         if(requestedUrl.equals("/catsMe/board/view")){
             catsMeBoardDTO = catsMeService.getBoard(cmbNo, "view");
         }else {
@@ -71,14 +79,22 @@ public class CatsMeController {
         return "redirect:/catsMe";
     }
 
-
     //review
+
     @GetMapping("/review/list")
-    public void CatsMeReview(Model model, PageRequestDTO pageRequestDTO){
+    public void CatsMeReview(Model model, PageRequestDTO pageRequestDTO,Long mno, String memberId ,@AuthenticationPrincipal MemberDTO memberDTO){
         log.info("/catsMe/review/list Get");
-        PageResponseDTO<CatsReviewBoardDTO> catsMeReviewBoardList = catsMeService.getReviewBoardList(pageRequestDTO);
-        model.addAttribute("catsMeReviewBoardList", catsMeReviewBoardList);
+        if(memberDTO != null){
+            String loginId = memberDTO.getMemberId();
+            Long loginMno = memberDTO.getMno();
+            PageResponseDTO<CatsReviewBoardDTO> catsMeReviewBoardList = catsMeService.getReviewBoardList(pageRequestDTO, loginMno, loginId);
+            model.addAttribute("catsMeReviewBoardList", catsMeReviewBoardList);
+        }else{
+            PageResponseDTO<CatsReviewBoardDTO> catsMeReviewBoardList = catsMeService.getReviewBoardList(pageRequestDTO, mno, memberId);
+            model.addAttribute("catsMeReviewBoardList", catsMeReviewBoardList);
+        }
     }
+
     @GetMapping("/review/write")
     public void writeReview() {
         System.out.println("catsMeReviewBoard write GET...");
@@ -88,22 +104,21 @@ public class CatsMeController {
     public String writeReview(CatsReviewBoardDTO catsReviewBoardDTO){
         log.info("/catsMe/review/write... postMapping");
         catsMeService.registerReviewBoard(catsReviewBoardDTO);
-        return "redirect:/catsMe/review/list";
+        return "redirect:/catsMeTab/review";
     }
     @GetMapping({"/review/view", "/review/modify"})
-    public void viewReview(Long crbNo, Model model, HttpServletRequest request){
+    public void viewReview(Long crbNo, Model model, HttpServletRequest request, @AuthenticationPrincipal MemberDTO memberDTO){
         log.info("/catsMe/review/view");
         CatsReviewBoardDTO catsReviewBoardDTO = null;
         String requestedUrl = request.getRequestURI();
 
-        // 로그인 mno 가져오기
-        Long mno = null;
+        Long mno = memberDTO.getMno();
 
         if(requestedUrl.equals("/catsMe/review/view")){
-            catsReviewBoardDTO = catsMeService.getReviewBoard(crbNo, "view");
+            catsReviewBoardDTO = catsMeService.getReviewBoard(crbNo, "view", mno);
             catsReviewBoardDTO.setFlag(catsMeService.isReviewBoardLike(mno, crbNo));
         }else {
-            catsReviewBoardDTO = catsMeService.getReviewBoard(crbNo, "modify");
+            catsReviewBoardDTO = catsMeService.getReviewBoard(crbNo, "modify", mno);
         }
         model.addAttribute("catsReviewBoard", catsReviewBoardDTO);
 
@@ -118,6 +133,6 @@ public class CatsMeController {
     @GetMapping("/review/remove")
     public String removeReview(Long crbNo){
         catsMeService.removeReviewBoardOne(crbNo);
-        return "redirect:/catsMe/review/list";
+        return "redirect:/catsMeTab/review";
     }
 }

@@ -2,6 +2,7 @@ package com.example.pink_jelly.service;
 
 import com.example.pink_jelly.domain.MainBoardVO;
 import com.example.pink_jelly.dto.MainBoardDTO;
+import com.example.pink_jelly.dto.MemberDTO;
 import com.example.pink_jelly.dto.PageRequestDTO;
 import com.example.pink_jelly.dto.PageResponseDTO;
 import com.example.pink_jelly.mapper.MainBoardMapper;
@@ -56,8 +57,8 @@ public class MainBoardServiceImpl implements MainBoardService{
     }
 
     @Override
-    public PageResponseDTO<MainBoardDTO> getList(PageRequestDTO pageRequestDTO) {
-        List<MainBoardVO> mainBoardVOList = mainBoardMapper.selectList(pageRequestDTO);
+    public PageResponseDTO<MainBoardDTO> getList(PageRequestDTO pageRequestDTO, Long mno, String memberId) {
+        List<MainBoardVO> mainBoardVOList = mainBoardMapper.selectList(pageRequestDTO.getSkip(), pageRequestDTO.getSize(), pageRequestDTO.getType(), pageRequestDTO.getKeyword(), pageRequestDTO.getLink(), mno, memberId);
         List<MainBoardDTO> mainBoardDTOList = new ArrayList<>();
 
         mainBoardVOList.forEach(mainBoardVO -> {
@@ -78,21 +79,21 @@ public class MainBoardServiceImpl implements MainBoardService{
     }
 
     @Override
-    public MainBoardDTO getBoard(Long mbNo, String mode) {
+    public MainBoardDTO getBoard(Long mbNo, String mode, Long mno) {
         MainBoardVO mainBoardVO;
         boolean flag = false;
-//        Long mno = null; // 로그인 mno 수정 예정
+
         if(mode.equals("view")) {
             mainBoardVO = mainBoardMapper.getOne(mbNo);
             mainBoardMapper.updateHit(mbNo);
-//            flag = mainBoardMapper.isMainBoardLike(mno, mbNo);
+            flag = mainBoardMapper.isMainBoardLike(mno, mbNo);
         }else {
             mainBoardVO = mainBoardMapper.getOne(mbNo);
         }
         MainBoardDTO mainBoardDTO = modelMapper.map(mainBoardVO, MainBoardDTO.class);
         List<String> imgs = List.of(mainBoardVO.getMainImg().split(", "));
         mainBoardDTO.setMainImg(imgs);
-//        mainBoardDTO.setFlag(flag);
+        mainBoardDTO.setFlag(flag);
         return mainBoardDTO;
     }
 

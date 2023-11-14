@@ -13,8 +13,9 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class FriendsDTO {
     private Long fno; // 친구 고유번호
-    private String memberId; // 회원 아이디
-    private String friendId; // 친구 아이디
-    private String friendName; // 친구 닉네임
+    private String memberId; // 친구 아이디
+    private String nickName; // 친구 닉네임
     private Long mno; // 회원 고유번호
+
+
 }

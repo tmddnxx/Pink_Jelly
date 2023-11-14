@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.pink_jelly.mapper.BanMapper">
+    <select id="banList" resultType="com.example.pink_jelly.domain.BanVO">
+        select * from ban where mno = #{mno};
+    </select>
+    <insert id="insertBan">
+        insert into ban (memberId, nickName, mno) values (#{memberId}, #{nickName}, #{mno});
+    </insert>
+    <delete id="deleteBan">
+        delete FROM ban where mno = #{mno} and memberId = #{memberId};
+    </delete>
+    <select id="isBan" resultType="boolean">
+        select count(*) from ban where mno = #{mno} and memberId = #{memberId};
+    </select>
+    <select id="banned" resultType="boolean">
+        SELECT count(memberId) FROM MEMBER WHERE mno = (SELECT mno FROM ban WHERE memberId = #{memberId});
+    </select>
+</mapper>
