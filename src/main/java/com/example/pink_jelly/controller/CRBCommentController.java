@@ -21,40 +21,40 @@ import java.util.Map;
 @RequestMapping("/crbComment")
 @RequiredArgsConstructor
 public class CRBCommentController {
-
     private final CRBCommentService crbCommentService;
-
-    @ApiOperation(value = "Replies POST", notes = "POST 방식으로 댓글 등록")
-    @PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_VALUE) // 특정 crbNo 게시물에 댓글 추가
-    public Map<String, Long> register(@Valid @RequestBody CRBCommentDTO CRBCommentDTO, BindingResult bindingResult) throws BindException {
-//        log.info(CRBCommentDTO);
+    //댓글 등록
+    @ApiOperation(value = "Comments POST", notes = "POST 방식으로 댓글 등록")
+    @PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public Map<String, Long> register(@Valid @RequestBody CRBCommentDTO crbCommentDTO, BindingResult bindingResult) throws BindException {
+//        log.info("왔습니다j--------------");
         if(bindingResult.hasErrors()) {
             throw new BindException((bindingResult));
         }
         Map<String, Long> resultMap = new HashMap<>();
-        Long comNo = crbCommentService.register(CRBCommentDTO);
+        Long rno = crbCommentService.register(crbCommentDTO);;
 
-        resultMap.put("comNo", comNo); // 메시지 추가
+        resultMap.put("rno", rno);
 
         return resultMap;
     }
-
-    @ApiOperation(value = "Replies of Board", notes = "Get 방식으로 특정 게시물의 댓글 목록")
+    @ApiOperation(value = "Replies of Board", notes = "GET 방식으로 특정 게시물의 댓글 목록")
     @GetMapping(value = "/list/{crbNo}")
-    public PageResponseDTO<CRBCommentDTO> getList(@PathVariable("crbNo") Long crbNo, PageRequestDTO pageRequestDTO){ // crbNo로 특정 게시물의 댓글 목록 츨략
+    public PageResponseDTO<CRBCommentDTO> getList(@PathVariable("crbNo") Long crbNo, PageRequestDTO pageRequestDTO) {
+        // @PathVariable 경로에 있는 값 사용
+//        log.info(pageRequestDTO.getSkip());
         log.info("/list/crbNo---------------"+ crbNo + pageRequestDTO.getSkip()+ pageRequestDTO.getSize());
+
         PageResponseDTO<CRBCommentDTO> crbComment = crbCommentService.getListCRBComment(crbNo, pageRequestDTO);
-//        log.info("crbComment----------" + crbComment);
+
         return crbComment;
     }
 
-    @ApiOperation(value = "Delete Reply", notes = "DELETE방식으로 특정 댓글 삭제")
+    @ApiOperation(value = "Delete Reply", notes = "DELETE 방식으로 특정 댓글 삭제")
     @DeleteMapping(value = "/{comNo}/{crbNo}")
-    public Map<String, Long> remove(@PathVariable("comNo") Long comNo, @PathVariable("crbNo") Long crbNo){
+    public Map<String, Long> remove(@PathVariable("comNo") Long comNo, @PathVariable("crbNo") Long crbNo) {
         crbCommentService.remove(comNo, crbNo);
         Map<String, Long> resultMap = new HashMap<>();
         resultMap.put("comNo", comNo);
-
-        return  resultMap;
+        return resultMap;
     }
 }
