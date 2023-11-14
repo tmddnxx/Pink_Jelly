@@ -1,25 +1,35 @@
 package com.example.pink_jelly.controller;
 
 import com.example.pink_jelly.dto.MemberDTO;
+import com.example.pink_jelly.service.MailSenderService;
 import com.example.pink_jelly.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 @Log4j2
 @Controller
 @RequestMapping("/member")
 @RequiredArgsConstructor
 public class MemberController {
-
     private final MemberService memberService;
+    private final MailSenderService mailSenderService;
+    private final PasswordEncoder passwordEncoder;
 
     @GetMapping("/signup")
     public void signup(){
@@ -27,24 +37,75 @@ public class MemberController {
     }
 
     @PostMapping("/signup")
-    public String signup(MemberDTO memberDTO, HttpServletRequest request){ // 회원가입 처리
-        String emailId = request.getParameter("emailId");
-        String selectEmail = request.getParameter("emailSelect");
+    public String signup(MemberDTO memberDTO, BindingResult bindingResult, Model model){
+        // 회원가입 처리
+        String encPasswd = passwordEncoder.encode(memberDTO.getPasswd());
+        memberDTO.setPasswd(encPasswd);
 
-        String ageText = request.getParameter("catAge1");
-        String ageRadio = request.getParameter("catAge2");
-
-        log.info(memberDTO);
-        String catAge = ageText + ageRadio;
-        String email = emailId + selectEmail;
-
-        memberDTO.setCatAge(catAge);
-        memberDTO.setEmail(email);
-
+        /* 검증 */
+//        if(bindingResult.hasErrors()) {
+//            /* 회원가입 실패 시 입력 데이터 값 유지 */
+//            model.addAttribute("memberDTO", memberDTO);
+//
+//            /* 유효성 검사를 통과하지 못 한 필드와 메시지 핸들링 */
+//            Map<String, String> errorMap = new HashMap<>();
+//
+//            for(FieldError error : bindingResult.getFieldErrors()) {
+//                errorMap.put("valid_"+error.getField(), error.getDefaultMessage());
+//                log.info("error message : "+error.getDefaultMessage());
+//            }
+//
+//            /* 회원가입 페이지로 리턴 */
+//            return "/member/signup";
+//        }
         memberService.registerMember(memberDTO);
 
         return "redirect:/member/welcome";
     }
+
+    @PostMapping("/checkMemberId")
+    @ResponseBody
+    public String checkMemberId(@RequestParam("memberId") String memberId) {
+        // 아이디 중복 검사
+        boolean result = memberService.checkIdDuplicate(memberId);
+
+        return result ? "true" : "false";
+    }
+
+    @GetMapping("/sendConfirmMail")
+    @ResponseBody
+    public String sendConfirmMail(String mailTo, HttpSession session) throws Exception {
+        // 이메일 인증코드 전송
+        if (mailSenderService.sendMailByAddMember(mailTo)) {
+            session.setAttribute("confirmKey", mailSenderService.getConfirmKey());
+            return "true";
+        }
+
+        return "false";
+    }
+
+    @PostMapping("/matchConfirmKey")
+    @ResponseBody
+    public String matchConfirmKey(@RequestParam("reqConfirmKey") String reqConfirmKey, HttpSession session) {
+        // 이메일 인증코드 확인
+        log.info("/matchConfirmKey(POST)...");
+        log.info(reqConfirmKey);
+        String confirmKey = (String) session.getAttribute("confirmKey");
+
+        return reqConfirmKey.equals(confirmKey) ? "true" : "false";
+    }
+
+    @GetMapping("/removeConfirmKey")
+    @ResponseBody
+    public String removeConfirmKey(HttpSession session) {
+        // 세션에 저장된 인증코드 삭제
+        session.removeAttribute("confirmKey");
+
+        log.info(session.getAttribute("confirmKey"));
+
+        return "true";
+    }
+
     @GetMapping("/welcome")
     public void welcome(){
         // 회원가입 완료 뷰
@@ -52,87 +113,105 @@ public class MemberController {
 
     @GetMapping("/checkPW")
     public void checkPW(){
-        // 회원 수정 전 비밀번호 확인
+        // 회원 수정 전 비밀번호 확인 페이지 이동
     }
     @PostMapping("/checkPW")
-    public String checkPWPost(String passwd, HttpSession session){
-        MemberDTO memberDTO = (MemberDTO) session.getAttribute("logInfo");
-        if (memberDTO.getPasswd().equals(passwd)){
-            return "/member/memberInfo";
+    public String checkPWPost(String passwd, @AuthenticationPrincipal MemberDTO memberDTO) {
+        log.info("/checkPW(POST)...");
+        log.info("passwd: " + passwd);
+        log.info("encPasswd: " + memberDTO.getPasswd());
+        // 회원 수정 전 비밀번호 확인
+        if (memberDTO != null) {
+            if (passwordEncoder.matches(passwd, memberDTO.getPassword())) { // 로그인한 비밀번호와 입력한 비밀번호가 일치할 때
+                return "redirect:/member/memberInfo"; // 회원정보 수정 페이지로 이동
+            }
         }
+
         return "/member/checkPW";
     }
 
     @GetMapping("/memberInfo")
-    public void memberInfo(){
+    public void memberInfo(@AuthenticationPrincipal MemberDTO memberDTO, Model model){
+        // 회원정보 페이지 이동
+        log.info("/member/memberInfo...");
+        String email = memberDTO.getEmail();
+        String phone = memberDTO.getPhone();
 
+        String[] emails = email.split("@");
+        String[] phones = phone.split("-");
+        log.info("emails: " + emails);
+        log.info("phones: " + phones);
+
+        model.addAttribute("emails", emails);
+        model.addAttribute("phones", phones);
     }
 
 
     @GetMapping("/modifyMember")
-    public void modifyMember(MemberDTO memberDTO, Model model){
-        // 회원 수정 뷰
-
-        memberDTO = memberService.getMember(memberDTO.getMno());
-
+    public void modifyMember(@AuthenticationPrincipal MemberDTO memberDTO, Model model){
+        // 회원정보 수정 페이지 이동
+        log.info("/member/modifyMember...");
         String email = memberDTO.getEmail();
-        String[] emailParts = email.split("@");
-        memberDTO.setEmail(emailParts[0]);
-        model.addAttribute("memberDTO", memberDTO);
+        String phone = memberDTO.getPhone();
+
+        String[] emails = email.split("@");
+        String[] phones = phone.split("-");
+        log.info("emails: " + emails);
+        log.info("phones: " + phones);
+
+        model.addAttribute("emails", emails);
+        model.addAttribute("phones", phones);
     }
 
     @PostMapping("/modifyMember")
-    public String modifyMember(MemberDTO memberDTO, HttpServletRequest request){ // 회원 수정 처리
-        String emailId = request.getParameter("emailId");
-        String selectEmail = request.getParameter("emailSelect");
+    public String modifyMember(MemberDTO memberDTO){
+        // 회원 정보 수정
+        log.info("/member/modifyMember(POST)...");
 
-        String email = emailId + selectEmail;
-
-        memberDTO.setEmail(email);
         memberService.modifyMember(memberDTO);
 
-        return "/member/memberInfo";
+        return "redirect:/member/memberInfo";
     }
 
     @GetMapping("/modifyPasswd")
-    public void modifyPasswd(MemberDTO memberDTO, Model model){
-        // 비밀번호 수정 뷰
-        memberDTO = memberService.getMember(memberDTO.getMno());
-
-        model.addAttribute("memberDTO", memberDTO);
+    public void modifyPasswd(){
+        // 비밀번호 변경 페이지
     }
     @PostMapping("/modifyPasswd")
-    public String modifyPasswd(MemberDTO memberDTO){ // 비밀번호 수정 처리
-
+    public String modifyPasswd(@AuthenticationPrincipal MemberDTO memberDTO, String newPasswd){
+        // 비밀번호 변경
+        String encPasswd = passwordEncoder.encode(newPasswd);
+        memberDTO.setPasswd(encPasswd);
         memberService.modifyPasswd(memberDTO);
 
-        return "/member/memberInfo";
+        return "redirect:/member/memberInfo";
     }
 
     @GetMapping("/modifyMyCat")
-    public void modifyMyCat(MemberDTO memberDTO, Model model){
-        // 고양이 정보 수정
-        memberDTO = memberService.getMember(memberDTO.getMno());
+    public String modifyMyCat(@AuthenticationPrincipal MemberDTO memberDTO){
+        // 고양이 정보수정 페이지 이동
+        if (memberDTO.isHasCat()) { // 고양이 정보가 존재할때
+            return "/member/modifyMyCat";
+        }
 
-        model.addAttribute("memberDTO", memberDTO);
+        return "redirect:/member/memberInfo";
     }
 
     @PostMapping("/modifyMyCat")
-    public String modifyMyCat(MemberDTO memberDTO){ // 고양이 정보수정 처리
+    public String modifyMyCatPost(MemberDTO memberDTO){
+        // 고양이 정보수정
+        log.info(memberDTO);
         memberService.modifyMyCat(memberDTO);
 
-        return "/member/memberInfo";
-    }
-
-    @GetMapping("/exit")
-    public void exit(){
-        // 회원탈퇴 뷰
+        return "redirect:/member/memberInfo";
     }
 
     @PostMapping("/exit")
     public String exit(Long mno){
+        log.info("/member/exit");
+
         memberService.removeMember(mno);
-        return "/member/exit";
+        return "redirect:/logout";
     }
 }
 

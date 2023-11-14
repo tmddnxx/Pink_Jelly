@@ -91,7 +91,7 @@
                 <div class="top-info">
                     <img src="/images/defalut.png" class="profileImg" width="200px" height="200px">
                     <div class="inner-top-info">
-                        <p> 아이디 <span th:text="${#authentication.principal.username}"></span></p>
+                        <p> 아이디 <span sec:authentication = "principal.username"></span></p>
                         <p> 품종 <span sec:authentication = "principal.memberId"></span> </p>
                         <p> 나이 </p>
                         <p> 성별 </p>
@@ -162,7 +162,13 @@
         </div>
     </div>
 </div>
-<script layout:fragment="script">
+<script layout:fragment="script" th:inline="javascript">
+    const auth = [[${#authentication.principal}]];
+
+    // 유효성 검사 관련
+    const errors = [[${errors}]];
+    console.log(errors);
+
     document.addEventListener('DOMContentLoaded', function (){
         const menuBtn = document.querySelector('.menuBtn');
         const menuTap = document.querySelector('.menu-tap');
@@ -178,7 +184,7 @@
             }
 
         })
-    })
+    });
 </script>
 </body>
 

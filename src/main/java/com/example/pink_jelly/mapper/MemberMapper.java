@@ -22,6 +22,8 @@ public interface MemberMapper {
 
     MemberVO findById(String memberId);
 
+    boolean exitsById(String memberId); // 아이디 존재 여부
+
 
 
 }

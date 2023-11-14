@@ -27,6 +27,10 @@
         select * from member where memberId = #{memberId};
     </select>
 
+    <select id="exitsById" resultType="boolean">
+        select count(*) from member where memberId = #{memberId};
+    </select>
+
     <select id="login" resultType="com.example.pink_jelly.domain.MemberVO">
         select * from member where memberId = #{memberId} and passwd = #{passwd};
     </select>
