@@ -18,5 +18,7 @@ public interface MemberService {
 
     MemberDTO login(String memberId, String passwd); // 로그인 처리
 
-    MemberDTO findById(String memberId);
+    MemberDTO findById(String memberId); // 아이디로 회원 정보 조회
+
+    boolean checkIdDuplicate(String memberId); // 아이디 중복 체크
 }
