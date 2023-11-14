@@ -2,12 +2,14 @@
 <html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:th="http://www.thymeleaf.org"
       layout:decorate="~{layout/basic.html}">
+<script src="https://kit.fontawesome.com/e83b9315c8.js" crossorigin="anonymous"></script>
+
 <head>
     <meta charset="UTF-8">
     <title>CatsMe</title>
     <link rel="stylesheet" th:href="@{/css/mainBoard.css}">
-
 </head>
+
 <div layout:fragment="banner">
     <!-- 배너 start -->
     <div class="site-cover site-cover-sm same-height overlay single-page" style="background-image: url('/images/mainBoard/banner1.jpg');">
@@ -65,40 +67,53 @@
 
             <!-- comment-wrap start -->
             <div class="pt-5 comment-wrap">
-                <h3 class="mb-5 heading"> (댓글 수) Comments </h3>
-                <div class="row mt-3">
-                    <div class="col-md-12">
-                        <!--      댓글 목록-->
-                        <ul class="list-group commentList">
-
-                        </ul>
-                    </div>
-                    <!--    댓글 페이징-->
-                    <div class="row mt-3">
-                        <div class="col">
-                            <ul class="pagination commentPaging">
-
-                            </ul>
+                <h3 class="mb-5 heading">[[${catsReviewBoard.commentCnt}]] Comments </h3>
+                <ul class="comment-list">
+                    <!-- 댓글 start -->
+                    <li class="comment">
+                        <div class="vcard">
+                            <img src="/images/person_1.jpg" alt="Image placeholder">
                         </div>
-                    </div>
-                </div>
+                        <!-- 댓글 리스트 출력 -->
+                        <div class="comment-body">
+
+                        </div>
+                    </li>
+                    <!-- /댓글 end -->
+                </ul>
+                <!-- 댓글 쓰기 창 -->
                 <div class="comment-form-wrap pt-5">
-                    <h3 class="mb-5">댓글 작성</h3>
-                    <form action="/crbComment" class="p-5 bg-light" method="post" name="commentForm">
-                        <input type="hidden" name="crbNo" class="crbNo" th:value="${crbDTO.crbNo}">
-                        <input type="hidden" name="memberId" class="memberId" th:value="${lsw1123}">
-                        <input type="hidden" name="nickName" class="nickName" th:value="${lsdff23}">
+                    <h3 class="mb-5">댓글 쓰기</h3>
+                    <form action="/crbComment/register" class="p-5 bg-light" method="post">
+                        <input type="hidden" name="crbNo" th:value="${catsReviewBoard.crbNo}">
+                        <input type="hidden" name="mno" id="mno" th:value="${#authentication.principal.mno}">
+                        <!-- 나중에 memberId, nickName 받아서 넣기 -->
                         <div class="form-group">
-                            <label for="message">Message</label>
-                            <textarea name="comment" id="message" cols="30" rows="10" class="form-control commentText"></textarea>
+                            <label for="memberId">memberId</label>
+                            <input type="text" class="form-control" id="memberId" th:value="${#authentication.principal.memberId}">
                         </div>
                         <div class="form-group">
-                            <button type="button" value="Post Comment" class="btn btn-primary addCommentBtn">댓글 등록</button>
+                            <label for="nickName">nickName</label>
+                            <input type="text" class="form-control" id="nickName" th:value="${#authentication.principal.nickName}">
+                        </div>
+                        <div class="form-group">
+                            <label for="mainComment">Comment</label>
+                            <input type="text" class="form-control" id="mainComment">
+                        </div>
+                        <div class="form-group">
+                            <button type="button" class="btn btn-primary commentBtn">Post Comment</button>
                         </div>
                     </form>
                 </div>
             </div>
+            <!--    댓글 페이징-->
+            <div class="row mt-3">
+                <div class="col">
+                    <ul class="pagination commentPaging">
 
+                    </ul>
+                </div>
+            </div>
         </div>
         <!-- END main-content -->
 
@@ -110,7 +125,7 @@
                     <ul>
                         <li>
                             <a href="">
-                                <img src="images/img_1_sq.jpg" alt="Image placeholder" class="me-4 rounded">
+                                <img src="/images/img_1_sq.jpg" alt="Image placeholder" class="me-4 rounded">
                                 <div class="text">
                                     <h4>There’s a Cool New Way for Men to Wear Socks and Sandals</h4>
                                     <div class="post-meta">
@@ -121,7 +136,7 @@
                         </li>
                         <li>
                             <a href="">
-                                <img src="images/img_2_sq.jpg" alt="Image placeholder" class="me-4 rounded">
+                                <img src="/images/img_2_sq.jpg" alt="Image placeholder" class="me-4 rounded">
                                 <div class="text">
                                     <h4>There’s a Cool New Way for Men to Wear Socks and Sandals</h4>
                                     <div class="post-meta">
@@ -132,7 +147,7 @@
                         </li>
                         <li>
                             <a href="">
-                                <img src="images/img_3_sq.jpg" alt="Image placeholder" class="me-4 rounded">
+                                <img src="/images/img_3_sq.jpg" alt="Image placeholder" class="me-4 rounded">
                                 <div class="text">
                                     <h4>There’s a Cool New Way for Men to Wear Socks and Sandals</h4>
                                     <div class="post-meta">
@@ -148,13 +163,15 @@
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="/js/catsReview/view.js?a"></script>
 </div>
 
 <script layout:fragment="script" th:inline="javascript">
-
-   const likeBtn = document.querySelector('.likeBtn');
-   const likeCheck = document.querySelector('input[name=like]');
-   const frmLike = document.querySelector('form[name=frmLike]');
+    <!-- 좋아요 버튼 -->
+    const xhr = new XMLHttpRequest(); // ajax 작업을 위한 객체 생성
+    const likeBtn = document.querySelector('.likeBtn');
+    const likeCheck = document.querySelector('input[name=like]');
+    const frmLike = document.querySelector('form[name=frmLike]');
 
    console.log("first : " + likeCheck.value);
 
@@ -199,7 +216,116 @@
    });
    // 좋아요 끝 -----------
 
+    //댓글
+    //출력 메서드
+    const crbNo = [[${catsReviewBoard.crbNo}]]
+    function printComments(page, size, goLast) {
+        getList({crbNo, page, size, goLast})
+            .then(data => {
+                console.log(data);
+                printList(data.dtoList); // 목록처리
+                printPages(data); // 페이지 처리
+            })
+            .catch(e => console.error());
+    }
+    printComments(1, 10); // 무조건 호출
+    printComments(1, 10, true);
+
+    const commentList = document.querySelector('.comment-body'); // 댓글 목록 DOM
+    const commentPaging = document.querySelector('.commentPaging'); // 페이지 목록 DOM
+    const commentCnt = document.querySelector('.commentCnt'); //댓글 수 DOM
+
+    const self = [[${#authentication.principal.mno}]];
+
+    function printList(dtoList) { // 댓글 목록 출력
+        console.log("self: "  + self);
+        let str = '';
+        if (dtoList && dtoList.length > 0) {
+            for (const dto of dtoList) {
+                str += `<h3>${dto.memberId} ${dto.mno}</h3>
+                    <div class="meta">${dto.addDate[0]}-${dto.addDate[1]}-${dto.addDate[2]} ${dto.addDate[3]}:${dto.addDate[4]}</div>
+                    <p data-comNo="${dto.comNo}">${dto.comment}</p>
+                    <p><a href="#" class="reply rounded">Reply</a></p>
+                    <button type="button" th:if="${self} === ${dto.mno}" class="btn btn-danger removeCommentBtn">Remove</button>
+                    `;
+            }
+        }
+        commentCnt.textContent=dtoList.length+" Contents";
+
+        commentList.innerHTML = str;
+        //댓글 목록 출력 후 삭제 버튼
+        const removeCommentBtn = document.querySelector('.removeCommentBtn');
+        removeCommentBtn.addEventListener('click', function (e) {
+            const comNo = e.target.parentElement.querySelector('p[data-comNo]').getAttribute('data-comNo');
+            if (!comNo) {
+                return;
+            }
+            removeComment(comNo, crbNo).then(result => {
+                page = 1; // 이 부분이 없다면 원래 페이지로
+                size = 10;
+                printComments(page, size);
+            }).catch(e => console.log(e));
+        });
+    }
+
+    function printPages(data) { // 페이지 목록 출력
+        // pagination
+        let pageStr = '';
+        if (data.prev) {
+            pageStr += `<li class="page-item">
+                        <a class="page-link" data-page="${data.start - 1}">PREV</a>
+                    </li>`;
+        }
+        for (let i = data.start; i <= data.end; i++) {
+            pageStr += `<li class="page-item ${i === data.page ? "active" : ""}">
+                        <a class="page-link" data-page="${i}">${i}</a>
+                    </li>`;
+        }
+        if (data.next) {
+            pageStr += `<li class="page-item">
+                        <a class="page-link" data-page="${data.end + 1}">NEXT</a>
+                    </li>`;
+        }
+        console.log(pageStr);
+        commentPaging.innerHTML = pageStr;
+    }
 
 
+    //댓글 등록
+    const commentBtn = document.querySelector('.commentBtn');
+    const commentId = document.getElementById("memberId");
+    const commentnickName = document.getElementById("nickName");
+    const comment = document.getElementById("mainComment");
+    const mno = document.getElementById("mno");
+
+    commentBtn.addEventListener('click', function (e) {
+        // console.log("왔다");
+        const commentObj = {crbNo: crbNo, memberId: commentId.value, nickName: commentnickName.value, comment: comment.value, mno: mno.value};
+        console.log(commentObj);
+        addComment(commentObj).then(result => {
+            comment.value='';
+            printComments(1, 10, true); // 댓글 목록 갱신
+        }).catch(e => {
+            alert("댓글 등록에 실패했습니다. 다시 시도해주세요");
+        });
+
+    });
+    let page = 1;
+    let size = 10;
+
+    commentPaging.addEventListener('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+
+        const target = e.target;
+
+        if (!target || target.tagName != 'A') {
+            return;
+        }
+
+        page = target.getAttribute('data-page');
+        printComments(page, size);
+    });
 </script>
 </html>

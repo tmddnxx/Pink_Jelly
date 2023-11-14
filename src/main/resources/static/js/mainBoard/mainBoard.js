@@ -1,6 +1,5 @@
 //댓글 등록
 async function addComment(commentObj) {
-    console.log("왔나?");
     const request = await axios.post(`/mainComment/register`, commentObj);
     return request.data;
 }
@@ -16,8 +15,31 @@ async function getList({mbNo, page, size, goLast}) {
     return result.data;
 }
 //댓글 삭제
-async function removeComment(comNo) {
-    console.log(comNo);
-    const response = await axios.delete(`/mainComment/${comNo}`);
+async function removeComment(comNo, mbNo) {
+    console.log(mbNo);
+    const response = await axios.delete(`/mainComment/${comNo}/${mbNo}`);
     return response.data;
+}
+
+//write
+//파일 업로드 이벤트
+async function uploadToServer(formObj) {
+    console.log("upload to server");
+    console.log(formObj);
+
+    const response = await axios({
+        method: 'post',
+        url : '/mainBoardUpload',
+        data: formObj,
+        headers: {
+            'Content-Type' : 'multipart/form-data',
+        },
+    });
+    return response.data;
+}
+// 파일 삭제
+async function removeFileToServer(uuid, fileName) {
+    const response = await axios.delete(`/mainBoardRemove/${uuid}_${fileName}`);
+    return response.data;
+
 }

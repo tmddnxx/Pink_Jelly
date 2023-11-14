@@ -9,6 +9,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 @Log4j2
 @SpringBootTest
 public class MainBoardServiceTests {
@@ -18,15 +22,21 @@ public class MainBoardServiceTests {
     //완
     @Test
     public void registerTest() {
+        String img1 = "123";
+        String img2 = "345";
+        List<String> img = new ArrayList<>();
+        img.add(img1);
+        img.add(img2);
         MainBoardDTO mainBoardDTO = MainBoardDTO.builder()
                 .memberId("test")
                 .nickName("test")
                 .profileImg("test")
                 .title("test")
                 .content("test")
-                .mainImg("test")
+                .mainImg(img)
                 .myCat("true")
                 .variety("캣")
+                .mno(1L)
                 .build();
         mainBoardService.register(mainBoardDTO);
     }
@@ -43,7 +53,7 @@ public class MainBoardServiceTests {
     //완
     @Test
     public void getBoardTest() {
-        MainBoardDTO mainBoardDTO = mainBoardService.getBoard(1L,"read");
+        MainBoardDTO mainBoardDTO = mainBoardService.getBoard(40L,"read");
         log.info(mainBoardDTO);
     }
     //완
@@ -64,7 +74,7 @@ public class MainBoardServiceTests {
                 .title("수정됨")
                 .content("수정 컨텐트")
                 .myCat("on")
-                .mainImg("이미지")
+//                .mainImg("이미지")
                 .variety("고얌미")
                 .build();
         mainBoardService.modifyBoard(mainBoardDTO);

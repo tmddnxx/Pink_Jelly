@@ -73,6 +73,12 @@ public class CatsMeController {
 
 
     //review
+    @GetMapping("/review/list")
+    public void CatsMeReview(Model model, PageRequestDTO pageRequestDTO){
+        log.info("/catsMe/review/list Get");
+        PageResponseDTO<CatsReviewBoardDTO> catsMeReviewBoardList = catsMeService.getReviewBoardList(pageRequestDTO);
+        model.addAttribute("catsMeReviewBoardList", catsMeReviewBoardList);
+    }
     @GetMapping("/review/write")
     public void writeReview() {
         System.out.println("catsMeReviewBoard write GET...");
@@ -95,7 +101,7 @@ public class CatsMeController {
 
         if(requestedUrl.equals("/catsMe/review/view")){
             catsReviewBoardDTO = catsMeService.getReviewBoard(crbNo, "view");
-            catsReviewBoardDTO.setFlag(catsMeService.isReviewBoardLike(15L, crbNo));
+            catsReviewBoardDTO.setFlag(catsMeService.isReviewBoardLike(mno, crbNo));
         }else {
             catsReviewBoardDTO = catsMeService.getReviewBoard(crbNo, "modify");
         }

@@ -1,19 +1,20 @@
 package com.example.pink_jelly.mapper;
 
-import com.example.pink_jelly.domain.CatsCommentVO;
+import com.example.pink_jelly.domain.CRBCommentVO;
 import com.example.pink_jelly.dto.PageRequestDTO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
-@Mapper // mybatis 사용할 때는 선언해줘야함
+@Mapper
 public interface CRBCommentMapper {
-    void insert (CatsCommentVO catsCommentVO);
+    int insert(CRBCommentVO CRBCommentVO); //게시물 등록
+    List<CRBCommentVO> selectAll(@Param("crbNo") Long crbNo, PageRequestDTO pageRequestDTO); //전체 댓글
+    int getCount(Long comNo); //총 댓글 수 = total
+    List<CRBCommentVO> selectList(@Param("crbNo") Long crbNo, @Param("skip") int skip, @Param("size") int size); //리스트 출력
+    int deleteOne(Long comNo);
 
-    void delete(Long comNo);
 
-    List<CatsCommentVO> selectList(Long crbNo, int skip, int size);
-
-    int getCount(Long crbNo, PageRequestDTO pageRequestDTO);
 
 }

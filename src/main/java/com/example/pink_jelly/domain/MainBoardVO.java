@@ -3,6 +3,7 @@ package com.example.pink_jelly.domain;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Builder
@@ -24,4 +25,5 @@ public class MainBoardVO { // 메인 게시판
     private Long commentCnt; // 게시물 댓글수
     private Long like; // 게시물 좋아요수
     private Long hit; // 게시물 조회수
+    private Long mno; //회원 고유넘버
 }

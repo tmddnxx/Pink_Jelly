@@ -3,6 +3,7 @@ package com.example.pink_jelly.controller;
 import com.example.pink_jelly.dto.MainCommentDTO;
 import com.example.pink_jelly.dto.PageRequestDTO;
 import com.example.pink_jelly.dto.PageResponseDTO;
+import com.example.pink_jelly.service.MainBoardService;
 import com.example.pink_jelly.service.MainCommentService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -23,15 +24,18 @@ import java.util.Map;
 public class MainCommentController {
     private final MainCommentService mainCommentService;
 
+    private final MainBoardService mainBoardService;
+
     @ApiOperation(value = "Comments POST", notes = "POST 방식으로 댓글 등록")
     @PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_VALUE)
     public Map<String, Long> register(@Valid @RequestBody MainCommentDTO mainCommentDTO, BindingResult bindingResult) throws BindException {
-        log.info("왔습니다j--------------");
+//        log.info("왔습니다j--------------");
         if(bindingResult.hasErrors()) {
             throw new BindException((bindingResult));
         }
         Map<String, Long> resultMap = new HashMap<>();
         Long rno = mainCommentService.register(mainCommentDTO);;
+
         resultMap.put("rno", rno);
 
         return resultMap;
@@ -41,15 +45,17 @@ public class MainCommentController {
     public PageResponseDTO<MainCommentDTO> getList(@PathVariable("mbNo") Long mbNo, PageRequestDTO pageRequestDTO) {
         // @PathVariable 경로에 있는 값 사용
 //        log.info(pageRequestDTO.getSkip());
+        log.info("/list/crbNo---------------"+ mbNo + pageRequestDTO.getSkip()+ pageRequestDTO.getSize());
+
         PageResponseDTO<MainCommentDTO> mainComment = mainCommentService.getListMainComment(mbNo, pageRequestDTO);
 
         return mainComment;
     }
 
     @ApiOperation(value = "Delete Reply", notes = "DELETE 방식으로 특정 댓글 삭제")
-    @DeleteMapping("/{comNo}")
-    public Map<String, Long> remove(@PathVariable("comNo") Long comNo) {
-        mainCommentService.remove(comNo);
+    @DeleteMapping(value = "/{comNo}/{mbNo}")
+    public Map<String, Long> remove(@PathVariable("comNo") Long comNo, @PathVariable("mbNo") Long mbNo) {
+        mainCommentService.remove(comNo, mbNo);
         Map<String, Long> resultMap = new HashMap<>();
         resultMap.put("comNo", comNo);
         return resultMap;

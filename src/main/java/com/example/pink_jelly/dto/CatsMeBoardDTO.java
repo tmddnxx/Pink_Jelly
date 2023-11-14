@@ -22,4 +22,5 @@ public class CatsMeBoardDTO {
     private LocalDateTime addDate; // 등록 날짜
     private String status; // 입양 여부
     private int hit; // 조회수
+    private Long mno; //회원 고유넘버
 }
