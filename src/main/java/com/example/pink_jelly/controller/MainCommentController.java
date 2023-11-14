@@ -24,8 +24,6 @@ import java.util.Map;
 public class MainCommentController {
     private final MainCommentService mainCommentService;
 
-    private final MainBoardService mainBoardService;
-
     @ApiOperation(value = "Comments POST", notes = "POST 방식으로 댓글 등록")
     @PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_VALUE)
     public Map<String, Long> register(@Valid @RequestBody MainCommentDTO mainCommentDTO, BindingResult bindingResult) throws BindException {
