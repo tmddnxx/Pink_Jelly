@@ -1,13 +1,13 @@
 package com.example.pink_jelly.controller;
 
-import com.example.pink_jelly.dto.MemberDTO;
-import com.example.pink_jelly.service.MainBoardService;
-import com.example.pink_jelly.service.MemberService;
+import com.example.pink_jelly.dto.*;
+import com.example.pink_jelly.service.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 

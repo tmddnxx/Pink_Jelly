@@ -87,8 +87,9 @@ public class MainBoardController {
 
     //게시판 삭제
     @GetMapping("/remove")
-    public String remove(Long mbNo) {
-        MainBoardDTO mainBoardDTO = mainBoardService.getBoard(mbNo, "remove");
+    public String remove(Long mbNo, @AuthenticationPrincipal MemberDTO memberDTO) {
+        Long mno = memberDTO.getMno();
+        MainBoardDTO mainBoardDTO = mainBoardService.getBoard(mbNo, "remove", mno);
         List<String> files = mainBoardDTO.getMainImg();
 
         if(files != null && files.size() > 0) {

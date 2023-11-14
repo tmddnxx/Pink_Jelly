@@ -1,6 +1,6 @@
 package com.example.pink_jelly.controller;
 
-import com.example.pink_jelly.dto.CatsCommentDTO;
+import com.example.pink_jelly.dto.CRBCommentDTO;
 import com.example.pink_jelly.dto.PageRequestDTO;
 import com.example.pink_jelly.dto.PageResponseDTO;
 import com.example.pink_jelly.service.CRBCommentService;
