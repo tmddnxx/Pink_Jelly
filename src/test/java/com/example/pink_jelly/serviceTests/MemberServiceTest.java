@@ -50,6 +50,19 @@ public class MemberServiceTest {
     }
 
     @Test
+    public void modifyMyCatTest() {
+        MemberDTO memberDTO = MemberDTO.builder()
+                .hasCat(true)
+                .catAge("10년")
+                .catSex("여아")
+                .variety("노르웨이숲")
+                .profileImg("updateImg1")
+                .mno(3L)
+                .build();
+        memberService.modifyMyCat(memberDTO);
+    }
+
+    @Test
     public void login(){
         log.info(memberService.login("test3", "3333"));
     }

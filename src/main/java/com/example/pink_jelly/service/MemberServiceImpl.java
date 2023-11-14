@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Log4j2
@@ -16,19 +17,12 @@ import org.springframework.stereotype.Service;
 public class MemberServiceImpl implements MemberService {
     private final MemberMapper memberMapper;
     private final ModelMapper modelMapper;
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
-    private final FriendsMapper friendsMapper;
 
     @Override
     public void registerMember(MemberDTO memberDTO) { // 회원가입
-        // 비밀번호 암호화
-        String encPasswd = bCryptPasswordEncoder.encode(memberDTO.getPasswd());
-        memberDTO.setPasswd(encPasswd);
-
         MemberVO memberVO = modelMapper.map(memberDTO, MemberVO.class);
 
         memberMapper.insertMember(memberVO);
-
     }
 
     @Override
@@ -59,11 +53,9 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public MemberDTO getMember(Long mno) { // 멤버 정보 가져오기
-        boolean flag = false;
         MemberVO memberVO = memberMapper.getMember(mno);
-        flag = friendsMapper.isFriend(mno, memberVO.getMemberId());
+
         MemberDTO memberDTO = modelMapper.map(memberVO, MemberDTO.class);
-        memberDTO.setFlag(flag);
 
         return memberDTO;
     }
@@ -79,13 +71,13 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public MemberDTO findById(String memberId) {
-        boolean flag = false;
-        MemberVO memberVO = memberMapper.findById(memberId);
-        Long mno = memberVO.getMno();
-        flag = friendsMapper.isFriend(mno, memberId);
-        MemberDTO memberDTO = modelMapper.map(memberVO, MemberDTO.class);
-        memberDTO.setFlag(flag);
+        // 아이디로 회원 정보 조회
+        return modelMapper.map(memberMapper.findById(memberId), MemberDTO.class);
+    }
 
-        return memberDTO;
+    @Override
+    public boolean checkIdDuplicate(String memberId) {
+        // 아이디 중복검사
+        return memberMapper.exitsById(memberId);
     }
 }

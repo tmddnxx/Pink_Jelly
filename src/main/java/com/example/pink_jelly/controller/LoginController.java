@@ -10,8 +10,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 @RequiredArgsConstructor
 public class LoginController {
     @GetMapping("/login")
-    public String login(){
-        return "login/login";
+    public String login(String error, String logout){
+        log.info("login get...");
+        log.info("logout: " + logout);
+
+        return "/login/login";
     }
 
 }

@@ -7,46 +7,123 @@
 </head>
 <body>
 <div class="menu">
-    <a th:href="@{/member/checkPW}">비밀번호 확인</a>
-    <a th:href="@{/member/memberInfo}">회원정보확인</a>
     <a th:href="@{/member/modifyMember}">회원정보수정</a>
     <a th:href="@{/member/modifyPasswd}">비밀번호 변경</a>
     <a th:href="@{/member/modifyMyCat}">고양이 정보 수정</a>
 </div>
 <h1> 고양이 정보 수정</h1>
-<form action="/member/modifyMyCat" method="post">
-    <div class="input-group">
-        <label for="hasCat">고양이 보유 여부</label>
-        <input id="hasCat" type="radio" name="hasCat" value="true" th:checked="${memberDTO.hasCat}">예
-        <input type="radio" name="hasCat" value="false" th:checked="${!memberDTO.hasCat}">아니오
+<form id="frmModMyCat" action="/member/modifyMyCat" method="post" th:with="member=${#authentication.principal}">
+    <input type="hidden" name="mno" th:value="${member.mno}">
+
+    <div class="col-12 mb-3">
+        <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" name="hasCat" th:value="${member.hasCat}" role="switch" id="hasCat" checked>
+            <label class="form-check-label" for="hasCat">고양이를 키우고 계신가요?</label>
+        </div>
+
+        <div class="row catInfo">
+            <div class="col-6 mb-3">
+                <input id="catAge" type="number" class="form-control">
+                <input type="hidden" name="catAge" th:value="${member.catAge}">
+            </div>
+            <div class="col-6 mb-3">
+                <div class="form-check-inline">
+                    <input class="form-check-input" type="radio" name="ageRdo" id="month" value="개월">
+                    <label class="form-check-label" for="month">개월</label>
+                </div>
+                <div class="form-check-inline">
+                    <input class="form-check-input" type="radio" name="ageRdo" id="year" value="년">
+                    <label class="form-check-label" for="year">년</label>
+                </div>
+            </div>
+
+            <div class="col-6 mb-3">
+                <input type="text" name="variety" class="form-control" th:value="${member.variety}">
+            </div>
+
+            <div class="col-6 mb-3">
+                <select id="varietySelect" class="form-select" style="height: 54px;">
+                    <option value="-1" selected>직접입력</option>
+                    <option> 코리안 숏 헤어 </option>
+                    <option> 노르웨이 숲 </option>
+                    <option> 페르시안 </option>
+                    <option> 샴 </option>
+                </select>
+            </div>
+
+            <div class="col-6 mb-3">
+                <label for="profileImg" class="form-label">프로필 이미지</label>
+                <input class="form-control" type="file" id="profileImg" style="height: 35px;">
+            </div>
+            <div class="col-6 mb-3">
+                <div>성별</div>
+                <div class="form-check-inline">
+                    <input class="form-check-input" type="radio" name="catSex" id="male" value="남아" th:checked="${member.catSex == '남아'}">
+                    <label class="form-check-label" for="male">남아</label>
+                </div>
+                <div class="form-check-inline">
+                    <input class="form-check-input" type="radio" name="catSex" id="female" value="여아" th:checked="${member.catSex == '여아'}">
+                    <label class="form-check-label" for="female">여아</label>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="input-group">
-        <label for="catAge">나이</label>
-        <input id="catAge" type="text" name="catAge" th:value="${memberDTO.catAge}">
-        <input type="radio" name="catAge2" value="개월">개월
-        <input type="radio" name="catAge2" value="년">년
-    </div>
-    <div class="input-group">
-        <label id="catSex">성별</label>
-        <input type="radio" name="catSex" value="남아" th:checked="${memberDTO.catSex.equals('남아')}">남아
-        <input type="radio" name="catSex" value="여아" th:checked="${memberDTO.catSex.equals('여아')}">여아
-    </div>
-    <div class="input-group">
-        <label for="variety">품종</label>
-        <select id="variety" name="variety" th:value="${memberDTO.variety}">
-            <option selected>----</option>
-            <option> 코리안 숏 헤어 </option>
-            <option> 노르웨이 숲 </option>
-            <option> 페르시안 </option>
-            <option> 샴 </option>
-        </select>
-    </div>
-    <div class="input-group">
-        <label for="profileImg">이미지</label>
-        <input formenctype="multipart/form-data" id="profileImg">
-    </div>
+
     <button type="submit" class="btn-secondary">수정 완료</button>
     <a href="/member/memberInfo"> 뒤로 가기 </a>
 </form>
+
+<script th:inline="javascript">
+    document.addEventListener('DOMContentLoaded', function () {
+        const auth = [[${#authentication.principal}]]; // 로그인된 사용자 정보
+        const authCatAge = auth.catAge; // 로그인된 사용자 고양이 나이
+        const frmModMyCat = document.getElementById('frmModMyCat');
+
+        const catAgeInput = document.getElementById('catAge');
+        const hiddenInput = document.querySelector('input[name=catAge]');
+
+        // 고양이 나이 라디오 버튼
+        document.querySelectorAll('input[name=ageRdo]').forEach(rdo => {
+            // 고양이 나이 숫자, 문자 나눠 담기 ex) 2개월 -> 2, 개월
+            if (authCatAge.includes(rdo.value)) {
+                rdo.checked = true;
+                catAgeInput.value = authCatAge.split(rdo.value, 1);
+                console.log("catAge: " + catAgeInput.value);
+            }
+
+            rdo.addEventListener('change', function () {
+                hiddenInput.value = catAgeInput.value + rdo.value;
+                console.log("hidden: " + hiddenInput.value);
+            });
+        });
+
+        // 고양이 나이 입력 폼
+        catAgeInput.addEventListener('keyup', function() {
+            const checkedAgeRdo = frmModMyCat.querySelector('input[name=ageRdo]:checked');
+            console.log(checkedAgeRdo);
+            hiddenInput.value = catAgeInput.value + checkedAgeRdo.value;
+            console.log("hidden: " + hiddenInput.value);
+        });
+
+        // 품종 셀렉트 박스
+        document.getElementById('varietySelect').addEventListener('change', function (e) {
+            const varietyInput = document.querySelector('input[name=variety]');
+            console.log(e.target.value);
+            console.log(varietyInput);
+
+            if (e.target.value !== "-1") {
+                varietyInput.value = e.target.value;
+                console.log("variety: " + varietyInput.value);
+                varietyInput.readOnly = true;
+            }
+            else {
+                varietyInput.value = '';
+                console.log("variety: " + varietyInput.value);
+                varietyInput.readOnly = false;
+            }
+        });
+    });
+</script>
+
 </body>
 </html>

@@ -1,69 +1,114 @@
 <!DOCTYPE html>
 <html lang="en"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/basic.html}">
 <head>
     <meta charset="UTF-8">
     <title>회원정보</title>
+    <style layout:fragment="style">
+        .hide {display: none;}
+    </style>
 </head>
 <body>
-<div class="menu">
-    <a th:href="@{/member/checkPW}">비밀번호 확인</a>
-    <a th:href="@{/member/memberInfo}">회원정보확인</a>
-    <a th:href="@{/member/modifyMember}">회원정보수정</a>
-    <a th:href="@{/member/modifyPasswd}">비밀번호 변경</a>
-    <a th:href="@{/member/modifyMyCat}">고양이 정보 수정</a>
-</div>
+<div layout:fragment="content">
+
+    <div class="menu">
+        <a th:href="@{/member/memberInfo}">회원정보확인</a>
+        <a th:href="@{/member/modifyMember}">회원정보수정</a>
+        <a th:href="@{/member/modifyPasswd}">비밀번호 변경</a>
+        <a th:href="@{/member/modifyMyCat}">고양이 정보 수정</a>
+    </div>
     <h1> 회원 정보 </h1>
-<form action="/member/exit" method="post">
-    <div class="input-group">
-        <label for="memberId">아이디</label>
-        <input id="memberId" type="text" name="memberId" th:value="${memberDTO.memberId}" readonly>
+
+    <div class="row">
+        <div class="col-lg-8" data-aos="fade-up" data-aos-delay="200">
+            <form action="#" method="get">
+                <div class="row">
+                    <div class="col-10 mb-3">
+                        <input id="memberId" type="text" class="form-control" name="memberId" th:value="${#authentication.principal.memberId}" readonly>
+                    </div>
+
+                    <div class="col-6 mb-3">
+                        <button type="button" class="btn-primary">비밀번호 변경</button>
+                    </div>
+
+                    <!-- 전화번호 -->
+                    <div class="col-4 mb-3">
+                        <input type="text" class="form-control input-phone" th:value="${phones[0]}" readonly>
+                    </div>
+                    <div class="col-4 mb-3">
+                        <input type="text" class="form-control input-phone" th:value="${phones[1]}" readonly>
+                    </div>
+                    <div class="col-4 mb-3">
+                        <input type="text" class="form-control input-phone" th:value="${phones[2]}" readonly>
+                    </div>
+
+                    <div class="col-4 mb-3">
+                        <input id="emailId" type="text" class="form-control" th:value="${emails[0]}" readonly>
+                    </div>
+
+                    <div class="col-4 mb-3">
+                        <input id="domain" type="text" class="form-control" th:value="${emails[1]}" readonly>
+                        <input type="hidden" name="email">
+                    </div>
+
+                    <div class="col-6 mb-3">
+                        <input id="memberName" type="text" name="memberName" class="form-control" th:value="${#authentication.principal.memberName}" readonly/>
+                    </div>
+                    <div class="col-6 mb-3">
+                        <input id="nickName" type="text" name="nickName" class="form-control" th:value="${#authentication.principal.nickName}" readonly/>
+                    </div>
+
+                    <div class="col-12 mb-3">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" name="hasCat" th:value="${#authentication.principal.hasCat}"
+                                   role="switch" id="hasCat" th:checked="${#authentication.principal.hasCat == 'true'}" readonly>
+                            <label class="form-check-label" for="hasCat">고양이를 키우고 계신가요?</label>
+                        </div>
+
+                        <div th:class="|row catInfo ${#authentication.principal.hasCat == 'true' ? '' : 'hide'}|">
+                            <div class="col-6 mb-3">
+                                <input id="catAge" type="text" class="form-control" th:value="${#authentication.principal.catAge}" readonly>
+                            </div>
+
+                            <div class="col-6 mb-3">
+                                <input type="text" name="variety" class="form-control" th:value="${#authentication.principal.variety}" readonly>
+                            </div>
+
+                            <div class="col-6 mb-3">
+                                <label for="profileImg" class="form-label">프로필 이미지</label>
+                                <input class="form-control" type="file" id="profileImg" style="height: 35px;">
+                            </div>
+                            <div class="col-6 mb-3">
+                                <div>성별</div>
+                                <div class="form-check-inline">
+                                    <input class="form-check-input" type="radio" name="catSex" id="male"
+                                           th:checked="${#authentication.principal.catSex == '남아'}">
+                                    <label class="form-check-label" for="male">남아</label>
+                                </div>
+                                <div class="form-check-inline">
+                                    <input class="form-check-input" type="radio" name="catSex" id="female"
+                                           th:checked="${#authentication.principal.catSex == '여아'}">
+                                    <label class="form-check-label" for="female">여아</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <a th:href="@{/member/modifyMember}">
+                            <button type="button" class="btn btn-primary">정보수정</button>
+                        </a>
+                        <a th:href="@{/profile}">
+                            <button type="button" class="btn btn-primary">뒤로가기</button>
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
-    <div class="input-group">
-        <label for="passwd">비밀번호</label>
-        <input id="passwd" type="password" name="passwd" th:value="${memberDTO.passwd}" readonly>
-    </div>
-    <div class="input-group">
-        <label for="email">이메일</label>
-        <input id="email" name="email" type="text" th:value="${memberDTO.email}" readonly>
-    </div>
-    <div class="input-group">
-        <label for="memberName">이름</label>
-        <input id="memberName" type="text" name="memberName" th:value="${memberDTO.memberName}" readonly>
-    </div>
-    <div class="input-group">
-        <label for="phone">전화번호</label>
-        <input id="phone" type="text" name="phone" th:value="${memberDTO.phone}" readonly>
-    </div>
-    <div class="input-group">
-        <label for="nickName">닉네임</label>
-        <input id="nickName" type="text" name="nickName" th:value="${memberDTO.nickName}" readonly>
-    </div>
-    <div class="input-group">
-        <label for="hasCat">고양이 보유 여부</label>
-        <input id="hasCat" type="radio" name="hasCat" value="true" th:checked="${memberDTO.hasCat}" onclick="return false;">예
-        <input type="radio" name="hasCat" value="false" th:checked="${!memberDTO.hasCat}" onclick="return false;">아니오
-    </div>
-    <div class="input-group">
-        <label for="catAge">나이</label>
-        <input id="catAge" type="text" name="catAge" th:value="${memberDTO.catAge}" readonly>
-    </div>
-    <div class="input-group">
-        <label id="catSex">성별</label>
-        <input type="radio" name="catSex" value="남아" th:checked="${memberDTO.catSex == '남아'}" onclick="return false;">남아
-        <input type="radio" name="catSex" value="여아" th:checked="${memberDTO.catSex == '여아'}" onclick="return false;">여아
-    </div>
-    <div class="input-group">
-        <label for="variety">품종</label>
-        <input id="variety" name="variety" th:value="${memberDTO.variety}" readonly>
-    </div>
-    <div class="input-group">
-        <label for="profileImg">이미지</label>
-        <img src="">
-        <input formenctype="multipart/form-data" id="profileImg" th:value="${memberDTO.profileImg}" readonly>
-    </div>
-    <a th:href="@{/member/modifyMember(mno=${memberDTO.mno})}">회원수정</a>
-    <button type="submit">회원탈퇴</button>
-</form>
+</div>
+
 </body>
 </html>

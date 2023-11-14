@@ -61,11 +61,11 @@ public class MemberMapperTest {
     public void updateMyCatTest() {
         MemberVO memberVO = MemberVO.builder()
                 .hasCat(true)
-                .catAge("10")
+                .catAge("10년")
                 .catSex("여아")
                 .variety("노르웨이숲")
                 .profileImg("updateImg1")
-                .mno(1L)
+                .mno(3L)
                 .build();
         memberMapper.updateMyCat(memberVO);
     }
@@ -78,5 +78,11 @@ public class MemberMapperTest {
     @Test
     public void loginTest(){
        log.info(memberMapper.login("test3", "3333"));
+    }
+
+    @Test
+    public void exitsByIdTest() {
+        boolean isMemberId = memberMapper.exitsById("admin");
+        log.info(isMemberId);
     }
 }
