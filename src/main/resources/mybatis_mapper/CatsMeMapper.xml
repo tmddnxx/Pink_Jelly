@@ -4,8 +4,8 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.pink_jelly.mapper.CatsMeMapper">
     <insert id="insert">
-        INSERT INTO catsMeBoard (memberId, nickName, profileImg, title, content, cmbImg, addDate, status, mno)
-        VALUES (#{memberId}, #{nickName}, #{profileImg}, #{title}, #{content}, #{cmbImg}, now(), #{status}, #{mno})
+        INSERT INTO catsMeBoard (memberId, nickName, profileImg, title, content, addDate, status, mno)
+        VALUES (#{memberId}, #{nickName}, #{profileImg}, #{title}, #{content}, now(), #{status}, #{mno})
     </insert>
     <select id="selectAll" resultType="com.example.pink_jelly.domain.CatsMeBoardVO">
         SELECT * FROM catsMeBoard ORDER BY cmbNo DESC
@@ -23,15 +23,15 @@
         UPDATE catsMeBoard SET hit=hit+1 WHERE cmbNo=#{cmbNo}
     </update>
     <update id="updateBoard">
-        UPDATE catsMeBoard SET title=#{title}, content=#{content}, cmbImg=#{cmbImg}, status=#{status} WHERE cmbNo=#{cmbNo}
+        UPDATE catsMeBoard SET title=#{title}, content=#{content}, status=#{status} WHERE cmbNo=#{cmbNo}
     </update>
     <delete id="deleteOne">
         DELETE FROM catsMeBoard WHERE cmbNo=#{cmbNo}
     </delete>
 
     <insert id="insertReviewBoard">
-        INSERT INTO catsReviewBoard (memberId, nickName, profileImg, title, content, crbImg, addDate, mno)
-        VALUES (#{memberId}, #{nickName}, #{profileImg}, #{title}, #{content}, #{crbImg}, now(), #{mno})
+        INSERT INTO catsReviewBoard (memberId, nickName, profileImg, title, content, addDate, mno)
+        VALUES (#{memberId}, #{nickName}, #{profileImg}, #{title}, #{content}, now(), #{mno})
     </insert>
     <select id="selectReviewBoardAll" resultType="com.example.pink_jelly.domain.CatsReviewBoardVO">
         SELECT * FROM catsReviewBoard ORDER BY crbNo DESC
@@ -49,7 +49,7 @@
         UPDATE catsReviewBoard SET hit=hit+1 WHERE crbNo=#{crbNo}
     </update>
     <update id="updateReviewBoard">
-        UPDATE catsReviewBoard SET title=#{title}, content=#{content}, crbImg=#{crbImg} WHERE crbNo=#{crbNo}
+        UPDATE catsReviewBoard SET title=#{title}, content=#{content} WHERE crbNo=#{crbNo}
     </update>
     <delete id="deleteReviewBoardOne">
         DELETE FROM catsReviewBoard WHERE crbNo=#{crbNo}
