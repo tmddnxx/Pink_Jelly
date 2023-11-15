@@ -19,7 +19,7 @@
                     <div class="post-entry text-center">
                         <h1 class="mb-4">CatsMe</h1>
                         <div class="post-meta align-items-center text-center">
-                            <figure class="author-figure mb-0 me-3 d-inline-block"><img src="/images/person_3.jpg.jpg" alt="Image" class="img-fluid"></figure>
+                            <figure class="author-figure mb-0 me-3 d-inline-block"><img src="/images/person_3.jpg" alt="Image" class="img-fluid"></figure>
                             <a th:href="|@{/profile/friendProfile(memberId=${catsReviewBoard.memberId})}|">
                                 <span class="d-inline-block mt-1 boardNickName">[[${catsReviewBoard.nickName}]]</span>
                                 <span class="boardMemberId">([[${catsReviewBoard.memberId}]])</span>
@@ -47,6 +47,7 @@
             <p class="heart off">오프</p>
         </div>
     </form>
+    </th:block>
     <div class="post-content-body">
         <div class="row my-4 mainBoard-Img">
             <div class="col-md-12 mb-4">
@@ -70,7 +71,7 @@
             </th:block>
             <!-- comment-wrap start -->
             <div class="pt-5 comment-wrap">
-                <h3 class="mb-5 heading">[[${catsReviewBoard.commentCnt}]] Comments </h3>
+                <h3 class="mb-5 heading commentCnt">[[${catsReviewBoard.commentCnt}]] Comments </h3>
                 <ul class="comment-list">
                     <!-- 댓글 start -->
                     <li class="comment">
@@ -79,7 +80,6 @@
                         </div>
                         <!-- 댓글 리스트 출력 -->
                         <div class="comment-body">
-
 
                         </div>
                     </li>
@@ -169,58 +169,61 @@
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script src="/js/catsReview/view.js?a"></script>
+    <script src="/js/catsReview/view.js?123"></script>
 </div>
 <script layout:fragment="script" th:inline="javascript">
-    <!-- 좋아요 버튼 -->
-    const xhr = new XMLHttpRequest(); // ajax 작업을 위한 객체 생성
-    const likeBtn = document.querySelector('.likeBtn');
-    const likeCheck = document.querySelector('input[name=like]');
-    const frmLike = document.querySelector('form[name=frmLike]');
+    const auth = [[${#authentication.principal}]];
 
-    console.log("first : " + likeCheck.value);
+    if (auth !== 'anonymousUser') {
+        <!-- 좋아요 버튼 -->
+        const xhr = new XMLHttpRequest(); // ajax 작업을 위한 객체 생성
+        const likeBtn = document.querySelector('.likeBtn');
+        const likeCheck = document.querySelector('input[name=like]');
+        const frmLike = document.querySelector('form[name=frmLike]');
 
-    if(likeCheck.value === "true" || likeCheck.value === true){
-        likeBtn.innerHTML = '<p class="heart on">온</p>';
-    }
-    else{
-        likeBtn.innerHTML = '<p class="heart off">오프</p>'
-    }
+        console.log("first : " + likeCheck.value);
 
-    likeBtn.addEventListener('click', function (){
-        const crbNo = frmLike.crbNo.value;
-        const mno = frmLike.mno.value;
-
-        if (mno !== "") {
-            const url = likeCheck.value === 'true' ? `/reviewLike/remove?crbNo=${crbNo}&mno=${mno}` : `/reviewLike/add?crbNo=${crbNo}&mno=${mno}`;
-
-            xhr.open('POST', url);
-            xhr.send();
-
-            xhr.onreadystatechange = () => {
-                if (xhr.readyState !== XMLHttpRequest.DONE)
-                    return;
-
-                console.log(xhr.response);
-
-                if (xhr.status === 200) {
-                    const json = JSON.parse(xhr.response);
-                    if (json.result === true) {
-                        // 성공적으로 처리된 경우 추가적인 동작 수행
-                    } else {
-                        alert('등록에 실패했습니다.');
-                    }
-                } else {
-                    console.error(xhr.status, xhr.statusText);
-                }
-            };
-
-            likeCheck.value = likeCheck.value === "true" ? "false" : "true";
-            likeBtn.innerHTML = likeCheck.value === "true" ? '<p class="heart on">온</p>' : '<p class="heart off">오프</p>';
+        if (likeCheck.value === "true" || likeCheck.value === true) {
+            likeBtn.innerHTML = '<p class="heart on">온</p>';
         } else {
-            alert("로그인 후 이용 가능합니다.");
+            likeBtn.innerHTML = '<p class="heart off">오프</p>'
         }
-    })
+
+        likeBtn.addEventListener('click', function () {
+            const crbNo = frmLike.crbNo.value;
+            const mno = frmLike.mno.value;
+
+            if (mno !== "") {
+                const url = likeCheck.value === 'true' ? `/reviewLike/remove?crbNo=${crbNo}&mno=${mno}` : `/reviewLike/add?crbNo=${crbNo}&mno=${mno}`;
+
+                xhr.open('POST', url);
+                xhr.send();
+
+                xhr.onreadystatechange = () => {
+                    if (xhr.readyState !== XMLHttpRequest.DONE)
+                        return;
+
+                    console.log(xhr.response);
+
+                    if (xhr.status === 200) {
+                        const json = JSON.parse(xhr.response);
+                        if (json.result === true) {
+                            // 성공적으로 처리된 경우 추가적인 동작 수행
+                        } else {
+                            alert('등록에 실패했습니다.');
+                        }
+                    } else {
+                        console.error(xhr.status, xhr.statusText);
+                    }
+                };
+
+                likeCheck.value = likeCheck.value === "true" ? "false" : "true";
+                likeBtn.innerHTML = likeCheck.value === "true" ? '<p class="heart on">온</p>' : '<p class="heart off">오프</p>';
+            } else {
+                alert("로그인 후 이용 가능합니다.");
+            }
+        })
+    }
 //    좋아요 끝 -----------
     //댓글
     //출력 메서드
@@ -240,14 +243,12 @@
     const commentList = document.querySelector('.comment-body'); // 댓글 목록 DOM
     const commentPaging = document.querySelector('.commentPaging'); // 페이지 목록 DOM
     const commentCnt = document.querySelector('.commentCnt'); //댓글 수 DOM
-    const auth = [[${#authentication.principal}]];
 
     function printCommentCnt(total){
         commentCnt.textContent=total + " Contents";
     }
 
     function printList(dtoList) { // 댓글 목록 출력
-        console.log("self: "  + self);
         let str = '';
         if (dtoList && dtoList.length > 0) {
             for (const dto of dtoList) {

@@ -26,13 +26,13 @@ public interface MainBoardMapper {
 
     void updateBoard(MainBoardVO mainBoardVO); //게시판 수정
 
-    boolean isMainBoardLike(Long mno, Long mbNo); // 유저가 특정 게시물에 좋아요를 달았는지 여부
+    boolean isMainBoardLike(@Param("mno") Long mno, @Param("mbNo") Long mbNo); // 유저가 특정 게시물에 좋아요를 달았는지 여부
 
-    boolean insertMainBoardLike(Long mno, Long mbNo); // 좋아요 추가
+    boolean insertMainBoardLike(@Param("mno") Long mno, @Param("mbNo") Long mbNo); // 좋아요 추가
 
-    boolean removeMainBoardLike(Long mno, Long mbNo); // 좋아요 제거
+    boolean removeMainBoardLike(@Param("mno") Long mno, @Param("mbNo")  Long mbNo); // 좋아요 제거
 
-    void likeCntUpdate(Long mbNo, boolean flag); // 좋아요 수 업데이트
+    void likeCntUpdate(@Param("mbNo") Long mbNo,@Param("flag") boolean flag); // 좋아요 수 업데이트
 
     void upCommentCnt (Long mbNo); //댓글수 증가
 
