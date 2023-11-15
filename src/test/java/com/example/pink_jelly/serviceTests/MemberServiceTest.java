@@ -66,4 +66,10 @@ public class MemberServiceTest {
     public void login(){
         log.info(memberService.login("test3", "3333"));
     }
+
+    @Test
+    public void getFileNameTest() {
+        String fileName = memberService.getFileName(3L);
+        log.info(fileName);
+    }
 }

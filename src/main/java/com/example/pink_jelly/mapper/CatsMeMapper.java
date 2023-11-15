@@ -7,6 +7,7 @@ import com.example.pink_jelly.domain.MemberVO;
 import com.example.pink_jelly.dto.MemberDTO;
 import com.example.pink_jelly.dto.PageRequestDTO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
 import java.util.List;
@@ -16,7 +17,7 @@ public interface CatsMeMapper {
     void insert(CatsMeBoardVO catsMeBoardVO); //게시물 등록
     List<CatsMeBoardVO> selectAll(PageRequestDTO pageRequestDTO); //전체 목록
     int getCount(PageRequestDTO pageRequestDTO); //총 게시물 수 = total
-    List<CatsMeBoardVO> selectList(int skip, int size, Long mno, String memberId); //리스트 출력
+    List<CatsMeBoardVO> selectList(@Param("skip") int skip, @Param("size") int size, @Param("mno") Long mno, @Param("memberId") String memberId); //리스트 출력
     CatsMeBoardVO getOne(Long cmbNo); //게시판 불러오기
     void updateHit(Long cmbNo); //조회수 증가
     void deleteOne(Long cmbNo); // 삭제

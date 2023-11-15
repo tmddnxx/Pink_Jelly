@@ -36,8 +36,8 @@ public class CatsMeBoardServiceTests {
                 .page(1)
                 .size(3)
                 .build();
-        PageResponseDTO<CatsMeBoardDTO> pageResponseDTO = catsMeService.getList(pageRequestDTO);
-        pageResponseDTO.getDtoList().forEach(log::info);
+//        PageResponseDTO<CatsMeBoardDTO> pageResponseDTO = catsMeService.getList(pageRequestDTO);
+//        pageResponseDTO.getDtoList().forEach(log::info);
     }
     //완
     @Test

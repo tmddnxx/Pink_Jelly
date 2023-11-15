@@ -35,4 +35,12 @@
         select * from member where memberId = #{memberId} and passwd = #{passwd};
     </select>
 
+    <select id="findByMnoWithImg" resultType="String">
+        select profileImg from member where mno = #{mno};
+    </select>
+
+    <delete id="updateProfileImg">
+        update member set profileImg = #{profileImg} where mno = #{mno};
+    </delete>
+
 </mapper>

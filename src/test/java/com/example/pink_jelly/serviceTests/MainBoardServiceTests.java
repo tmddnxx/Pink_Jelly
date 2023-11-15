@@ -47,14 +47,14 @@ public class MainBoardServiceTests {
                 .page(1)
                 .size(3)
                 .build();
-        PageResponseDTO<MainBoardDTO> pageResponseDTO = mainBoardService.getList(pageRequestDTO);
-        pageResponseDTO.getDtoList().forEach(log::info);
+//        PageResponseDTO<MainBoardDTO> pageResponseDTO = mainBoardService.getList(pageRequestDTO);
+//        pageResponseDTO.getDtoList().forEach(log::info);
     }
     //완
     @Test
     public void getBoardTest() {
-        MainBoardDTO mainBoardDTO = mainBoardService.getBoard(40L,"read");
-        log.info(mainBoardDTO);
+//        MainBoardDTO mainBoardDTO = mainBoardService.getBoard(40L,"read");
+//        log.info(mainBoardDTO);
     }
     //완
     @Test

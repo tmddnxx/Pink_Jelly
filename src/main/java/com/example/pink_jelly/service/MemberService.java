@@ -21,4 +21,6 @@ public interface MemberService {
     MemberDTO findById(String memberId); // 아이디로 회원 정보 조회
 
     boolean checkIdDuplicate(String memberId); // 아이디 중복 체크
+    
+    String getFileName(Long mno); // 프로필 사진 가져오기
 }

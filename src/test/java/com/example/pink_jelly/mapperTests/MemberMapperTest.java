@@ -85,4 +85,18 @@ public class MemberMapperTest {
         boolean isMemberId = memberMapper.exitsById("admin");
         log.info(isMemberId);
     }
+
+    @Test
+    public void findByIdWithImagesTest() {
+        Long mno = 3L;
+        String fileName = memberMapper.findByMnoWithImg(mno);
+        log.info(fileName);
+    }
+
+    @Test
+    public void updateProfileImgTest() {
+        Long mno = 3L;
+        String profileImg = "updateImg.jpg";
+        memberMapper.updateProfileImg(profileImg, mno);
+    }
 }

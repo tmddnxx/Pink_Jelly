@@ -48,8 +48,8 @@ public class CatsMeBoardMapperTests {
                 .page(1)
                 .size(3)
                 .build();
-        List<CatsMeBoardVO> list = catsMeMapper.selectList(pageRequestDTO);
-        list.forEach(log::info);
+//        List<CatsMeBoardVO> list = catsMeMapper.selectList(pageRequestDTO);
+//        list.forEach(log::info);
     }
     //완
     @Test

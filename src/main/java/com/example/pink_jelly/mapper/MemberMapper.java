@@ -2,6 +2,7 @@ package com.example.pink_jelly.mapper;
 
 import com.example.pink_jelly.domain.MemberVO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 @Mapper
 public interface MemberMapper {
@@ -24,6 +25,8 @@ public interface MemberMapper {
 
     boolean exitsById(String memberId); // 아이디 존재 여부
 
+    String findByMnoWithImg(Long mno); // 회원번호와 일치하는 프로필 이미지 반환
 
+    void updateProfileImg(@Param("profileImg") String profileImg, @Param("mno") Long mno); // 회원번호와 일치하는 프로필 이미지 모두 삭제
 
 }

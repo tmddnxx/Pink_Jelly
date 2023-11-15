@@ -80,4 +80,10 @@ public class MemberServiceImpl implements MemberService {
         // 아이디 중복검사
         return memberMapper.exitsById(memberId);
     }
+
+    @Override
+    public String getFileName(Long mno) {
+        // 프로필 이미지 파일명 가져오기
+        return memberMapper.findByMnoWithImg(mno);
+    }
 }

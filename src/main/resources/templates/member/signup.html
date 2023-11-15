@@ -132,7 +132,8 @@
 
                                 <div class="col-6 mb-3">
                                     <label for="profileImg" class="form-label">프로필 이미지</label>
-                                    <input class="form-control" type="file" id="profileImg" style="height: 35px;">
+                                    <input class="form-control" type="file" name="files" id="profileImg" style="height: 35px;">
+                                    <div class="uploadResult"></div>
                                 </div>
                                 <div class="col-6 mb-3">
                                     <div>성별</div>
@@ -158,9 +159,51 @@
 
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
         <script src="/js/signup/validation.js"></script>
+        <script src="/js/signup/upload.js"></script>
     </div>
 
     <script layout:fragment="script" th:inline="javascript">
+        const errors = [[${errors}]];
+        console.log(errors);
+
+        let errorMsg = '';
+
+        if (errors) {
+            for (const error of errors) {
+                errorMsg += `${error.field}은(는) ${error.code} \n`;
+            }
+            alert(errorMsg);
+        }
+
+        const fileInput = document.querySelector('input[name=files]');
+        fileInput.addEventListener('change', function () {
+            const formObj = new FormData();
+            const files = fileInput.files;
+            console.log(files);
+
+            for (const file of files) {
+                formObj.append('files', file);
+            }
+
+            uploadToSrver('/upload/profileUpload', formObj).then(result => {
+                console.log(result);
+                for (const uploadResult of result) {
+                    showUploadFile(uploadResult);
+                }
+                console.log(files);
+            });
+        });
+
+        // 업로드된 이미지를 보여줌
+        const uploadResult = document.querySelector('.uploadResult');
+
+        function showUploadFile({fileName, link}) {
+            const str = `<div>
+                            <img src="/upload/profileView/${link}" data-src="${fileName}">
+                         </div>`
+            uploadResult.innerHTML = str;
+        }
+
         const inputMemberId = document.getElementById('memberId');
         const inputPasswd = document.getElementById('passwd');
         const inputPasswdRetype = document.getElementById('password-retype');

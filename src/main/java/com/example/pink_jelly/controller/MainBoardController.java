@@ -59,22 +59,34 @@ public class MainBoardController {
     }
 
     @GetMapping({"/view", "/modify"})
-    public void view(Long mbNo, Model model, HttpServletRequest request, @AuthenticationPrincipal MemberDTO memberDTO) {
+    public void view(Long mbNo, Model model,Long mno ,HttpServletRequest request, @AuthenticationPrincipal MemberDTO memberDTO) {
         log.info("/main/view GET...");
         log.info(mbNo);
         MainBoardDTO mainBoardDTO = null;
         String requestedUrl = request.getRequestURI();
         // 로그인 한 놈 들고와
-        Long mno = memberDTO.getMno();
 
-        if (requestedUrl.equals("/main/view")) {
-            mainBoardDTO = mainBoardService.getBoard(mbNo, "view", mno);
-            mainBoardDTO.setFlag(mainBoardService.isBoardLike(mno, mbNo));
+        if(memberDTO != null){
+            mno = memberDTO.getMno();
+            if (requestedUrl.equals("/main/view")) {
+                mainBoardDTO = mainBoardService.getBoard(mbNo, "view", mno);
+                mainBoardDTO.setFlag(mainBoardService.isBoardLike(mno, mbNo));
+            } else {
+                mainBoardDTO = mainBoardService.getBoard(mbNo, "modify", mno);
+            }
+            log.info(mainBoardDTO);
+            model.addAttribute("mainBoard", mainBoardDTO);
         } else {
-            mainBoardDTO = mainBoardService.getBoard(mbNo, "modify", mno);
+            if (requestedUrl.equals("/main/view")) {
+                mainBoardDTO = mainBoardService.getBoard(mbNo, "view", mno);
+
+            } else {
+                mainBoardDTO = mainBoardService.getBoard(mbNo, "modify", mno);
+            }
+            log.info(mainBoardDTO);
+            model.addAttribute("mainBoard", mainBoardDTO);
         }
-        log.info(mainBoardDTO);
-        model.addAttribute("mainBoard", mainBoardDTO);
+
     }
 
     //게시판 등록

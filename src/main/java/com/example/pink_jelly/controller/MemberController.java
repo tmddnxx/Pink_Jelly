@@ -208,6 +208,7 @@ public class MemberController {
 
     @PostMapping("/exit")
     public String exit(Long mno){
+        // 회원탈퇴
         log.info("/member/exit");
 
         memberService.removeMember(mno);

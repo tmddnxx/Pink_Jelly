@@ -58,7 +58,10 @@ public class MainBoardServiceImpl implements MainBoardService{
 
     @Override
     public PageResponseDTO<MainBoardDTO> getList(PageRequestDTO pageRequestDTO, Long mno, String memberId) {
-        List<MainBoardVO> mainBoardVOList = mainBoardMapper.selectList(pageRequestDTO.getSkip(), pageRequestDTO.getSize(), pageRequestDTO.getType(), pageRequestDTO.getKeyword(), pageRequestDTO.getLink(), mno, memberId);
+        log.info(pageRequestDTO);
+        log.info(mno);
+        log.info(memberId);
+        List<MainBoardVO> mainBoardVOList = mainBoardMapper.selectList(pageRequestDTO.getSkip(), pageRequestDTO.getSize(), pageRequestDTO.getType(), pageRequestDTO.getKeyword(), mno, memberId);
         List<MainBoardDTO> mainBoardDTOList = new ArrayList<>();
 
         mainBoardVOList.forEach(mainBoardVO -> {

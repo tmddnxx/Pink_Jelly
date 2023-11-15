@@ -49,7 +49,7 @@ public class MainBoardMapperTests {
                 .page(1)
                 .size(3)
                 .build();
-        List<MainBoardVO> list = mainBoardMapper.selectList(pageRequestDTO);
+        List<MainBoardVO> list = mainBoardMapper.selectList(1, 9, null, null, null, null);
         list.forEach(log::info);
     }
     //완
