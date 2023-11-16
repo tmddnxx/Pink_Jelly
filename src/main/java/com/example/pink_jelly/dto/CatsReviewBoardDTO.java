@@ -26,4 +26,5 @@ public class CatsReviewBoardDTO {
     private Long mno; //회원 고유넘버
 
     private boolean flag; // 좋아요 눌럿냐 안눌럿냐
+
 }

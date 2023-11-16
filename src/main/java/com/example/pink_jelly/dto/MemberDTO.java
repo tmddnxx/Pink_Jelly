@@ -45,6 +45,7 @@ public class MemberDTO implements UserDetails {
     private int gmingCnt; // 그루밍 수
     private int gmerCnt; // 그루머 수
     private String introduce; // 소개글
+    private boolean del; // 탈퇴여부
 
     private boolean flag; // 친구 여부
     private boolean ban; // 차단 여부

@@ -24,4 +24,5 @@ public class MemberVO { // 회원정보
     private int gmingCnt; // 그루밍 수
     private int gmerCnt; // 그루머 수
     private String introduce; // 소개글
+    private boolean del; // 탈퇴여부
 }

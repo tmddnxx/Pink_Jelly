@@ -28,7 +28,8 @@ public class CatsMeServiceImpl implements CatsMeService{
 
     @Override
     public PageResponseDTO<CatsMeBoardDTO> getList(PageRequestDTO pageRequestDTO, Long mno, String memberId) {
-        List<CatsMeBoardVO> catsMeBoardVOList = catsMeMapper.selectList(pageRequestDTO.getSkip(), pageRequestDTO.getSize(), mno, memberId);
+        List<CatsMeBoardVO> catsMeBoardVOList = catsMeMapper.selectList(pageRequestDTO.getSkip(), pageRequestDTO.getSize(),
+                pageRequestDTO.getType(), pageRequestDTO.getKeyword(), mno, memberId);
         List<CatsMeBoardDTO> catsMeBoardDTOList = new ArrayList<>();
         catsMeBoardVOList.forEach(catsMeBoardVO -> catsMeBoardDTOList.add(modelMapper.map(catsMeBoardVO, CatsMeBoardDTO.class)));
         int total = catsMeMapper.getCount(pageRequestDTO);
@@ -80,7 +81,8 @@ public class CatsMeServiceImpl implements CatsMeService{
 
     @Override
     public PageResponseDTO<CatsReviewBoardDTO> getReviewBoardList(PageRequestDTO pageRequestDTO, Long mno, String memberId) {
-        List<CatsReviewBoardVO> catsMeBoardVOList = catsMeMapper.selectReviewBoardList(pageRequestDTO.getSkip(), pageRequestDTO.getSize(), mno, memberId);
+        List<CatsReviewBoardVO> catsMeBoardVOList = catsMeMapper.selectReviewBoardList(pageRequestDTO.getSkip(), pageRequestDTO.getSize(),
+                pageRequestDTO.getType(), pageRequestDTO.getKeyword(), mno, memberId);
         List<CatsReviewBoardDTO> catsReviewBoardDTOList = new ArrayList<>();
         catsMeBoardVOList.forEach(catsReviewBoardVO -> catsReviewBoardDTOList.add(modelMapper.map(catsReviewBoardVO, CatsReviewBoardDTO.class)));
         int total = catsMeMapper.getCount(pageRequestDTO);

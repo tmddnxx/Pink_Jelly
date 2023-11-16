@@ -24,7 +24,7 @@ public class CatsMeTabController {
     private final CatsMeService catsMeService;
 
     @GetMapping("/board")
-    public ResponseEntity<PageResponseDTO<CatsMeBoardDTO>>catsMeTab(@RequestParam int page, @RequestParam int size,Long mno, String memberId,@AuthenticationPrincipal MemberDTO memberDTO){
+    public ResponseEntity<PageResponseDTO<CatsMeBoardDTO>>catsMeTab(@RequestParam int page, @RequestParam int size, Long mno, String memberId,@AuthenticationPrincipal MemberDTO memberDTO){
         log.info("사이즈 " + size);
         PageRequestDTO pageRequestDTO = new PageRequestDTO();
         pageRequestDTO.setPage(page);
