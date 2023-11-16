@@ -91,6 +91,7 @@ public class UpDownController {
 
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
                 String dateString = currentDate.format(formatter); // 날짜를 문자열로 변환
+                log.info(dateString);
 
                 String path = tempPath + "/" + dateString;
                 File file = new File(path);

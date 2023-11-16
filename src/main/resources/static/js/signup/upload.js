@@ -1,6 +1,6 @@
 'use strict'
 
-async function uploadToSrver(url, formObj) {
+async function uploadToServer(url, formObj) {
     // 서버에 이미지 파일 업로드
     console.log("upload to server...");
     console.log(formObj);

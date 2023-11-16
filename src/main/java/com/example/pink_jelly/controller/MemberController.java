@@ -54,6 +54,8 @@ public class MemberController {
         String encPasswd = passwordEncoder.encode(memberDTO.getPasswd());
         memberDTO.setPasswd(encPasswd);
 
+        log.info(memberDTO.getProfileImg());
+
         /* 검증 */
 //        if(bindingResult.hasErrors()) {
 //            /* 회원가입 실패 시 입력 데이터 값 유지 */

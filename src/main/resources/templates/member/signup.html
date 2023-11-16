@@ -188,9 +188,11 @@
                 formObj.append('files', file);
             }
 
-            uploadToSrver('/upload/tempUpload', formObj).then(result => {
+            uploadToServer('/upload/tempUpload', formObj).then(result => {
                 console.log(result);
                 for (const uploadResult of result) {
+                    console.log("uploadResult");
+                    console.log(uploadResult);
                     showUploadFile(uploadResult) // 업로드한 이미지를 보여준다
                 }
                 console.log(files);
@@ -205,8 +207,6 @@
                             <img src="/upload/tempView/${dateString}/${link}" data-src="${fileName}/${dateString}">
                          </div>`
             uploadResult.innerHTML = str;
-            console.log(dateString);
-            console.log(fileName);
         }
 
         // 회원가입 등록 처리
