@@ -20,7 +20,6 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public void registerMember(MemberDTO memberDTO) { // 회원가입
-        String profileImg = memberDTO.getProfileImg();
         MemberVO memberVO = modelMapper.map(memberDTO, MemberVO.class);
 
         memberMapper.insertMember(memberVO);

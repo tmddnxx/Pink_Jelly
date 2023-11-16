@@ -48,11 +48,11 @@ public class MemberDTO implements UserDetails {
     private int gmingCnt; // 그루밍 수
     private int gmerCnt; // 그루머 수
     private String introduce; // 소개글
-    private String dateString; // 이미지 저장 날짜
 
     private boolean del; // 회원 탈퇴 여부
     private boolean social; // 소셜 로그인
 
+    private String dateString; // 이미지 저장 날짜
     private boolean flag; // 친구 여부
     private boolean ban; // 차단 여부
 
