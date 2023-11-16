@@ -213,6 +213,12 @@
     const banBtn = document.querySelector('.banBtn');
     const banCheck = document.querySelector('input[name=ban]');
     console.log("ban 여부 : " + banCheck.value);
+
+    // 친구 버튼
+    let frmFriend = document.querySelector('form[name=frmFriend]');
+    let friendBtn = document.querySelector('.friendBtn');
+    let friendCheck = document.querySelector('input[name=friend]');
+
     if (banCheck.value === "true" || banCheck.value === true) {
         banBtn.innerText = '차단 해제';
         console.log(banCheck.value);
@@ -235,11 +241,19 @@
             let response;
             try {
                 if(banCheck.value === 'true'){
-                    const url = `/ban/remove?mno=${mno}&memberId=${memberId}`;
-                    response = await axios.post(url);
+                    const banUrl = `/ban/remove?mno=${mno}&memberId=${memberId}`;
+                    response = await axios.post(banUrl);
+
                 }else {
-                    const url = `/ban/add?mno=${mno}`;
-                    response = await axios.post(url, banDTO);
+                    alert('차단하시겠습니까?');
+                    const banUrl = `/ban/add?mno=${mno}`;
+                    response1 = await axios.post(banUrl, banDTO);
+                    const removeFUrl = `/friends/remove?mno=${mno}&memberId=${memberId}`;
+                    response2 = await axios.post(removeFUrl);
+
+                    response = {
+                        response1, response2
+                    };
                 }
                 console.log(response.data);
 
@@ -258,6 +272,8 @@
             }
             banCheck.value = banCheck.value === "true" ? "false" : "true";
             banBtn.innerText = banCheck.value === "true" ? '차단 해제' : '차단';
+            friendBtn.innerText = "그루밍 추가";
+
         } else {
             alert("로그인 후 이용 가능합니다.");
         }
@@ -265,9 +281,6 @@
 
         if(banCheck.value === false || "false"){
             // 친구추가 버튼
-            const frmFriend = document.querySelector('form[name=frmFriend]');
-            const friendBtn = document.querySelector('.friendBtn');
-            const friendCheck = document.querySelector('input[name=friend]');
 
             if (friendCheck.value === "true" || friendCheck.value === true) {
                 friendBtn.innerText = '그루밍 해제';
@@ -291,6 +304,7 @@
                     let response;
                     try {
                         if(friendCheck.value === 'true'){
+                            alert('친구를 삭제하시겠습니까 ? ');
                             const url = `/friends/remove?mno=${mno}&memberId=${memberId}`;
                             response = await axios.post(url);
                         }else {
