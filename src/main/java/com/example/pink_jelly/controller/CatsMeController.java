@@ -143,6 +143,6 @@ public class CatsMeController {
     @GetMapping("/review/remove")
     public String removeReview(Long crbNo){
         catsMeService.removeReviewBoardOne(crbNo);
-        return "redirect:/catsMeTab/review";
+        return "redirect:/catsMe/review/list";
     }
 }

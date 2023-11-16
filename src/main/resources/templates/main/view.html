@@ -183,6 +183,15 @@
     <script src="/js/mainBoard/mainBoard.js?aa"></script>
 </div>
 <script layout:fragment="script" th:inline="javascript">
+    // 탈퇴한 회원일경우
+    let isDel;
+    isDel   =  [[${isDel}]];
+    console.log(isDel);
+
+    if(isDel === true){
+        alert('탈퇴한 계정입니다');
+    }
+
     const auth = [[${#authentication.principal}]];
 
     if (auth !== 'anonymousUser') {

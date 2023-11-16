@@ -88,10 +88,12 @@
 
 <body>
 <div layout:fragment="content">
+<!--    차단당한 계정이 차단한 계정으로 접근할 경우-->
     <th:block th:if="${banned}">
         <p style="color: black">[[${banned}]]</p>
         <p style="color: black">비공개 계정입니다</p>
     </th:block>
+<!--    로그인한 사람이 차단한 계정으로 접근할 경우-->
     <th:block th:unless="${banned}">
         <th:block th:if="${memberDTO.ban}">
             <form name="frmBan" method="post">

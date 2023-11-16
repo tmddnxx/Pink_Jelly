@@ -23,4 +23,6 @@ public class CatsMeBoardDTO {
     private String status; // 입양 여부
     private int hit; // 조회수
     private Long mno; //회원 고유넘버
+
+
 }
