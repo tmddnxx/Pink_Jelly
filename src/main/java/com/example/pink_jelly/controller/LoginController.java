@@ -14,6 +14,10 @@ public class LoginController {
         log.info("login get...");
         log.info("logout: " + logout);
 
+        if (logout != null) {
+            log.info("user logout...");
+        }
+
         return "/login/login";
     }
 

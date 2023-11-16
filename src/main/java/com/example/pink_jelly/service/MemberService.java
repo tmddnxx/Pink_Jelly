@@ -4,6 +4,10 @@ import com.example.pink_jelly.dto.MemberDTO;
 
 public interface MemberService {
 
+    static class MidExistException extends Exception {
+
+    }
+
     void registerMember(MemberDTO memberDTO); // 회원가입
 
     void removeMember(Long mno); // 회원탈퇴
@@ -20,7 +24,7 @@ public interface MemberService {
 
     MemberDTO findById(String memberId); // 아이디로 회원 정보 조회
 
-    boolean checkIdDuplicate(String memberId); // 아이디 중복 체크
+    boolean checkIdDuplicate(String memberId) throws MidExistException; // 아이디 중복 체크
     
     String getFileName(Long mno); // 프로필 사진 가져오기
 }

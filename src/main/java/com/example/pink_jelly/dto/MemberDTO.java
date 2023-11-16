@@ -1,19 +1,18 @@
 package com.example.pink_jelly.dto;
 
+import com.example.pink_jelly.dto.upload.UploadResultDTO;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.User;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import java.util.Collection;
-import java.util.HashSet;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
-public class MemberDTO implements UserDetails {
+@Getter
+@Setter
+@ToString
+public class MemberDTO extends User {
     private Long mno; // 회원 고유 넘버
 
     @NotBlank(message = "아이디를 입력해주세요.")
@@ -47,41 +46,47 @@ public class MemberDTO implements UserDetails {
     private String introduce; // 소개글
     private boolean del; // 탈퇴여부
 
+    private boolean del; // 회원 탈퇴 여부
+    private boolean social; // 소셜 로그인
+
     private boolean flag; // 친구 여부
     private boolean ban; // 차단 여부
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return new HashSet<GrantedAuthority>();
+    public MemberDTO(Long mno, String username, String password, String email,String memberName,
+                     String phone, String nickName, boolean hasCat, String catAge, String catSex,
+                     String variety, String profileImg, int gmingCnt, int gmerCnt, String introduce,
+                     boolean del, boolean social, Collection<? extends GrantedAuthority> authorities) {
+        super(username, password, authorities);
+
+        this.mno = mno;
+        this.memberId = username;
+        this.passwd = password;
+        this.email = email;
+        this.memberName = memberName;
+        this.phone = phone;
+        this.nickName = nickName;
+        this.hasCat = hasCat;
+        this.catAge = catAge;
+        this.catSex = catSex;
+        this.variety = variety;
+        this.profileImg = profileImg;
+        this.gmingCnt = gmingCnt;
+        this.gmerCnt = gmerCnt;
+        this.introduce = introduce;
+        this.flag = flag;
+        this.ban = ban;
+        this.del = del;
+        this.social = social;
     }
 
-    @Override
-    public String getPassword() {
-        return this.passwd;
+    public UploadResultDTO getImagePath() {
+        String[] splits = this.profileImg.split("/");
+
+        return UploadResultDTO.builder()
+                .fileName(splits[0])
+                .dateFolder(splits[1])
+                .isImage(true)
+                .build();
     }
 
-    @Override
-    public String getUsername() {
-        return this.memberId;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
 }

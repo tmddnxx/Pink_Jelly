@@ -4,6 +4,7 @@ import com.example.pink_jelly.dto.*;
 import com.example.pink_jelly.service.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -27,7 +28,7 @@ public class ProfileController {
     private final BanService banService;
     private final ProfileService profileService;
 
-
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/myProfile")
     public String profile(@AuthenticationPrincipal MemberDTO memberDTO, Model model){
         Long mno = memberDTO.getMno();
