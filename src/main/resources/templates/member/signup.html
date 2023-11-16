@@ -200,9 +200,9 @@
         // 업로드된 이미지를 보여줌
         const uploadResult = document.querySelector('.uploadResult');
 
-        function showUploadFile({dateFolder, fileName, link}) {
+        function showUploadFile({dateString, fileName, link}) {
             const str = `<div>
-                            <img src="/upload/tempView/${dateFolder}/${link}" data-src="${fileName}/${dateFolder}">
+                            <img src="/upload/tempView/${dateString}/${link}" data-src="${fileName}/${dateString}">
                          </div>`
             uploadResult.innerHTML = str;
         }
