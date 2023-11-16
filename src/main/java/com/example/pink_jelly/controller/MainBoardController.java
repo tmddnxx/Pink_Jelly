@@ -36,7 +36,6 @@ public class MainBoardController {
     @GetMapping("")
     public String main(Model model, PageRequestDTO pageRequestDTO, Long mno, String memberId, @AuthenticationPrincipal MemberDTO memberDTO) {
         log.info("main GET ...");
-        log.info("메인 멤버디티오 : " + memberDTO);
         log.info("타입은? : " + pageRequestDTO.getType());
         log.info("키워드는? : " + pageRequestDTO.getKeyword());
         pageRequestDTO.setType(pageRequestDTO.getType()); // ?
@@ -47,6 +46,7 @@ public class MainBoardController {
             model.addAttribute("mainBoardList", mainBoardList);
             mainBoardList.getDtoList().forEach(log::info);
         } else {
+            log.info("메인 멤버디티오 : " + memberDTO);
             PageResponseDTO<MainBoardDTO> mainBoardList = mainBoardService.getList(pageRequestDTO, mno, memberId);
             model.addAttribute("mainBoardList", mainBoardList);
             mainBoardList.getDtoList().forEach(log::info);

@@ -56,14 +56,6 @@ public class MemberDTO implements UserDetails {
     private boolean flag; // 친구 여부
     private boolean ban; // 차단 여부
 
-    public String getProfileImg() {
-        return this.profileImg.split("/")[0];
-    }
-    public String getDateString() {
-
-        return this.profileImg.split("/")[1];
-    }
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return new HashSet<GrantedAuthority>();

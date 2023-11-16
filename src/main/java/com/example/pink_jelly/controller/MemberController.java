@@ -70,13 +70,16 @@ public class MemberController {
 //            /* 회원가입 페이지로 리턴 */
 //            return "/member/signup";
 //        }
-        memberService.registerMember(memberDTO);
 
         /* 데이터가 저장된 후에 이미지 파일 이동 */
         if (memberDTO.getProfileImg() != null) {
-            moveFile(memberDTO.getProfileImg());
-            moveFile("s_" + memberDTO.getProfileImg());
+            String splits[] = memberDTO.getProfileImg().split("/");
+
+            moveFile(splits[0]);
+            moveFile("s_" + splits[0]);
         }
+
+        memberService.registerMember(memberDTO);
 
         return "redirect:/member/welcome";
     }

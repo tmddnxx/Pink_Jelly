@@ -205,6 +205,8 @@
                             <img src="/upload/tempView/${dateString}/${link}" data-src="${fileName}/${dateString}">
                          </div>`
             uploadResult.innerHTML = str;
+            console.log(dateString);
+            console.log(fileName);
         }
 
         // 회원가입 등록 처리
@@ -219,6 +221,7 @@
             // 업로드한 이미지가 존재할 경우
             if (uploadFile != null) {
                 const imgLink = uploadFile.getAttribute('data-src');
+                console.log(imgLink);
 
                 str = `<input type="hidden" name="profileImg" value="${imgLink}">`;
 
