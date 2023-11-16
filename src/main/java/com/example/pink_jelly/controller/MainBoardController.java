@@ -39,7 +39,7 @@ public class MainBoardController {
         log.info("메인 멤버디티오 : " + memberDTO);
         log.info("타입은? : " + pageRequestDTO.getType());
         log.info("키워드는? : " + pageRequestDTO.getKeyword());
-        pageRequestDTO.setType(pageRequestDTO.getType()); // ?
+
         if(memberDTO != null){
             String loginId = memberDTO.getMemberId();
             Long loginMno = memberDTO.getMno();

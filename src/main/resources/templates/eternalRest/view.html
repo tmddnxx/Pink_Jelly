@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{layout/basic.html}">
+<head>
+    <meta charset="UTF-8">
+    <title>추모 뷰 페이지</title>
+</head>
+<style layout:fragment="style">
+    .bannerWrap{
+        width: 100%;
+        height: 250px;
+    }
+    .banner{
+        background-image: url("/images/EternalRest/memorial_noBg.png");
+        background-repeat: no-repeat;
+        background-color: black;
+        width: 100%;
+        height: 100%;
+        background-position: center center;
+        background-size: 100% 100%;
+    }
+</style>
+<body>
+<!-- 배너 시작 -->
+<div layout:fragment="banner">
+    <div class="bannerWrap">
+        <div class="banner">
+        </div>
+    </div>
+</div>
+<!--배너 끝-->
+
+<div layout:fragment="content">
+    <!--슬퍼요 정보 -->
+    <form name="frmSad" method="post" th:if="${#authentication.principal != 'anonymousUser'}">
+        <input type="hidden" name="sad" th:value="${eternalRestBoard.flag}">
+        <input type="hidden" name="erbNo" th:value="${eternalRestBoard.erbNo}">
+        <input type="hidden" name="mno" th:value="${#authentication.principal.mno}">
+        <div class="sadBtn">
+            <p class="sad on">슬퍼요 온</p>
+            <p class="sad off">슬퍼요 오프</p>
+        </div>
+    </form>
+
+    <!--    게시물 내용-->
+    <div>
+        <div class="post-content-body">
+            <h1>[[${eternalRestBoard.title}]]</h1>
+        </div>
+        <div class="post-content-body">
+            <p>[[${eternalRestBoard.nickName}]]</p><p>([[${eternalRestBoard.memberId}]])</p>
+        </div>
+        <div class="post-content-body">
+           <img src="/images/defalut.png" width="400" height="400">
+        </div>
+        <div class="post-content-body">
+            <p>[[${eternalRestBoard.content}]]</p>
+        </div>
+    </div>
+    <!--게시물 내용 끝-->
+    <a th:href="|@{/eternalRest}|" class="btn btn-primary">목록</a>
+    <th:block th:if="${#authentication.principal != 'anonymousUser' && #authentication.principal.mno == eternalRestBoard.mno}">
+        <a th:href="|@{/eternalRest/remove(erbNo=${eternalRestBoard.erbNo})}|" class="btn btn-danger">삭제</a>
+    </th:block>
+
+
+</div>
+<script layout:fragment="script" th:inline="javascript">
+    // 탈퇴한 회원일경우
+    let isDel;
+    isDel   =  [[${isDel}]];
+    console.log(isDel);
+
+    if(isDel === true){
+        alert('탈퇴한 계정입니다');
+    }
+
+    const auth = [[${#authentication.principal}]];
+
+    if (auth !== 'anonymousUser') {
+
+        <!-- 슬퍼요 버튼 -->
+        const xhr = new XMLHttpRequest(); // ajax 작업을 위한 객체 생성
+        const sadBtn = document.querySelector('.sadBtn');
+        const sadCheck = document.querySelector('input[name=sad]');
+        const frmSad = document.querySelector('form[name=frmSad]');
+
+        console.log("first : " + sadCheck.value);
+
+        if (sadCheck.value === "true" || sadCheck.value === true) {
+            sadBtn.innerHTML = '<p class="heart on">온</p>';
+        } else {
+            sadBtn.innerHTML = '<p class="heart off">오프</p>'
+        }
+
+        sadBtn.addEventListener('click', function () {
+            const erbNo = frmSad.erbNo.value;
+            const mno = frmSad.mno.value;
+
+            if (mno !== "") {
+                const url = sadCheck.value === 'true' ? `/sad/remove?erbNo=${erbNo}&mno=${mno}` : `/sad/add?erbNo=${erbNo}&mno=${mno}`;
+
+                xhr.open('POST', url);
+                xhr.send();
+
+                xhr.onreadystatechange = () => {
+                    if (xhr.readyState !== XMLHttpRequest.DONE)
+                        return;
+
+                    console.log(xhr.response);
+
+                    if (xhr.status === 200) {
+                        const json = JSON.parse(xhr.response);
+                        if (json.result === true) {
+                            // 성공적으로 처리된 경우 추가적인 동작 수행
+                        } else {
+                            alert('등록에 실패했습니다.');
+                        }
+                    } else {
+                        console.error(xhr.status, xhr.statusText);
+                    }
+                };
+
+                sadCheck.value = sadCheck.value === "true" ? "false" : "true";
+                sadBtn.innerHTML = sadCheck.value === "true" ? '<p class="heart on">온</p>' : '<p class="heart off">오프</p>';
+            } else {
+                alert("로그인 후 이용 가능합니다.");
+            }
+        })
+    }
+</script>
+</body>
+</html>

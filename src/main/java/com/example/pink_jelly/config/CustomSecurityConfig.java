@@ -74,11 +74,11 @@ public class CustomSecurityConfig {
 
         http.exceptionHandling().accessDeniedHandler(accessDeniedHandler()); // 403
 
-//        http.logout()
-//                .logoutUrl("/logout")
-//                .logoutSuccessUrl("/main")
-//                .invalidateHttpSession(true)
-//                .deleteCookies("JSESSIONID", "remember-me");
+        http.logout()
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/main")
+                .invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID", "remember-me");
 //        http.authorizeRequests()
 //                .antMatchers("/", "/member/signup", "/member/welcome", "/member/sendConfirmMail",
 //                        "/member/matchConfirmKey", "/member/removeConfirmKey", "/member/checkMemberId").permitAll()

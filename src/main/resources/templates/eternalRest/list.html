@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{layout/basic.html}">
+<head>
+    <meta charset="UTF-8">
+    <title>영원한 휴식처</title>
+</head>
+<style layout:fragment="style">
+    .sadCnt{
+        width: 100px;
+        display: flex;
+        justify-content: space-evenly;
+    }
+</style>
+<div layout:fragment="content">
+<!--선택버튼-->
+    <div class="row mb-4">
+        <div class="col-sm-6">
+            <h2 class="posts-entry-title">Pink Jelly</h2>
+        </div>
+<!--        로그인하고 고양이 있는 사람만 버튼 보임-->
+        <th:block th:if="${#authentication.principal != 'anonymousUser' && #authentication.principal.hasCat == true}">
+            <form action="/eternalRest/write" method="post" name="autoWrite">
+                <input type="hidden" name="memberId" th:value="${#authentication.principal.memberId}">
+                <input type="hidden" name="nickName" th:value="${#authentication.principal.nickName}">
+                <input type="hidden" name="profileImg" th:value="${#authentication.principal.profileImg}">
+                <input type="hidden" name="mno" th:value="${#authentication.principal.mno}">
+                <button type="button" class="autoWriteBtn">Crossed Rainbow Bridge..</button>
+            </form>
+        </th:block>
+    </div>
+<!--    선택 버튼 끝-->
+    <div style="border-bottom: 2px dotted black">
+        <div>
+            <h2>[안내] 이 곳은 무지개 다리를 건너간 우리 가족을 추모하는 공간입니다.</h2>
+        </div>
+    </div>
+<!--    게시글 목록 -->
+    <div>
+        <div class="d-flex justify-content-evenly" th:each="restBoardList:${restBoardList.dtoList}" style="border-bottom: 1px solid black;">
+            <div>
+                <h2><a th:href="|@{/eternalRest/view(erbNo=${restBoardList.erbNo})}|">[[${restBoardList.title}]]</a></h2>
+            </div>
+            <div>
+                <a th:href="|@{/profile/friendProfile(memberId=${restBoardList.memberId})}|">
+                    <span class="d-inline-block mt-1 boardNickName">[[${restBoardList.nickName}]]</span>
+                    <span class="boardMemberId">([[${restBoardList.memberId}]])</span>
+                </a>
+            </div>
+            <div>
+                <p>[[${#temporals.format(restBoardList.addDate, 'yyyy-MM-dd HH:mm')}]]</p>
+            </div>
+            <div class="sadCnt">
+                <span>[[${restBoardList.sad}]]</span><span>[[${restBoardList.commentCnt}]]</span>
+            </div>
+        </div>
+
+    </div>
+<!--    게시글 목록 끝-->
+<!--    페이징-->
+    <div class="float-end page_wrap">
+        <ul class="pagination flex-wrap" th:with="restBoardList=${restBoardList}">
+            <li class="page-item" th:if="${restBoardList.prev}">
+                <a class="page-link" th:href="|@{/eternalRest(page=${restBoardList.page - 1},size=10)}|" th:data-num="${restBoardList.start - 1}">Previous</a>
+            </li>
+            <th:block th:each="i: ${#numbers.sequence(restBoardList.start, restBoardList.end)}">
+                <li th:class="${restBoardList.page == i} ? 'page-item-active' : 'page-item'" >
+                    <a class="page-link" th:href="|@{/eternalRest(page=${i},size=10)}|" th:data-num="${i}" th:style="${restBoardList.page == i} ? 'color:red; font-weight:bold;'">[[${i}]]</a>
+                </li>
+            </th:block>
+            <li class="page-item" th:if="${restBoardList.next}">
+                <a class="page-link" th:href="${restBoardList.page + 1}" th:data-num="${restBoardList.end + 1}">Next</a>
+            </li>
+        </ul>
+    </div>
+<!--페이징 끝-->
+</div>
+<script layout:fragment="script" th:inline="javascript">
+
+    // 탈퇴한 회원일경우
+    let isDel;
+    isDel   =  [[${isDel}]];
+    console.log(isDel);
+
+    if(isDel === true){
+        alert('탈퇴한 계정입니다');
+    }
+
+    const frmAutoWrite = document.querySelector('form[name=autoWrite]');
+    const autoWriteBtn = document.querySelector('.autoWriteBtn');
+
+    autoWriteBtn.addEventListener('click', function (){
+        if(confirm('정말 떠나보내시겠습니까 ? ')){
+            if(confirm('추모 게시물이 자동 등록됩니다. 동의하시겠습니까 ?')){
+                frmAutoWrite.submit();
+            }
+        }
+        return;
+    })
+
+</script>
+</html>
