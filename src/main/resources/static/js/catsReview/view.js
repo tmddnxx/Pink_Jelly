@@ -10,8 +10,10 @@ async function getList({crbNo, page, size, goLast}) {
     if (goLast) {
         const total = result.data.total;
         const lastPage = parseInt(Math.ceil(total/size));
+
         return getList({crbNo: crbNo, page: page, size: size});
     }
+    console.log(result.data);
     return result.data;
 }
 //댓글 삭제

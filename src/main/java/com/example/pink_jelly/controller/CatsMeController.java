@@ -104,24 +104,34 @@ public class CatsMeController {
     public String writeReview(CatsReviewBoardDTO catsReviewBoardDTO){
         log.info("/catsMe/review/write... postMapping");
         catsMeService.registerReviewBoard(catsReviewBoardDTO);
-        return "redirect:/catsMeTab/review";
+        return "redirect:/catsMe/review/list";
     }
     @GetMapping({"/review/view", "/review/modify"})
-    public void viewReview(Long crbNo, Model model, HttpServletRequest request, @AuthenticationPrincipal MemberDTO memberDTO){
+    public void viewReview(Long crbNo, Model model, Long mno, HttpServletRequest request, @AuthenticationPrincipal MemberDTO memberDTO){
         log.info("/catsMe/review/view");
         CatsReviewBoardDTO catsReviewBoardDTO = null;
         String requestedUrl = request.getRequestURI();
 
-        Long mno = memberDTO.getMno();
+        if(memberDTO != null){
+            mno = memberDTO.getMno();
+            if (requestedUrl.equals("/review/view")) {
+                catsReviewBoardDTO = catsMeService.getReviewBoard(crbNo, "view", mno);
+                catsReviewBoardDTO.setFlag(catsMeService.isReviewBoardLike(mno, crbNo));
+            } else {
+                catsReviewBoardDTO = catsMeService.getReviewBoard(crbNo, "modify", mno);
+            }
+            log.info(catsReviewBoardDTO);
+            model.addAttribute("catsReviewBoard", catsReviewBoardDTO);
+        } else {
+            if (requestedUrl.equals("/review/view")) {
+                catsReviewBoardDTO = catsMeService.getReviewBoard(crbNo, "view", mno);
 
-        if(requestedUrl.equals("/catsMe/review/view")){
-            catsReviewBoardDTO = catsMeService.getReviewBoard(crbNo, "view", mno);
-            catsReviewBoardDTO.setFlag(catsMeService.isReviewBoardLike(mno, crbNo));
-        }else {
-            catsReviewBoardDTO = catsMeService.getReviewBoard(crbNo, "modify", mno);
+            } else {
+                catsReviewBoardDTO = catsMeService.getReviewBoard(crbNo, "modify", mno);
+            }
+            log.info(catsReviewBoardDTO);
+            model.addAttribute("catsReviewBoard", catsReviewBoardDTO);
         }
-        model.addAttribute("catsReviewBoard", catsReviewBoardDTO);
-
     }
     @PostMapping("/review/modify")
     public String modifyReview(CatsReviewBoardDTO catsReviewBoardDTO, Model model){

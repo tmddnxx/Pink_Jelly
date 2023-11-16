@@ -29,7 +29,7 @@ async function uploadToServer(formObj) {
 
     const response = await axios({
         method: 'post',
-        url : '/mainBoardUpload',
+        url : '/upload/mainBoardUpload',
         data: formObj,
         headers: {
             'Content-Type' : 'multipart/form-data',
@@ -38,8 +38,8 @@ async function uploadToServer(formObj) {
     return response.data;
 }
 // 파일 삭제
-async function removeFileToServer(uuid, fileName) {
-    const response = await axios.delete(`/mainBoardRemove/${uuid}_${fileName}`);
+async function removeFileToServer(fileName) {
+    const response = await axios.delete(`/upload/mainBoardRemove/${fileName}`);
     return response.data;
 
 }

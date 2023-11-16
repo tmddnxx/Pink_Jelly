@@ -37,7 +37,7 @@
 
 <div layout:fragment="content">
 <!--좋아요 정보 -->
-    <form name="frmLike" method="post">
+    <form name="frmLike" method="post" th:if="${#authentication.principal != 'anonymousUser'}">
         <input type="hidden" name="like" th:value="${mainBoard.flag}">
         <input type="hidden" name="mbNo" th:value="${mainBoard.mbNo}">
         <input type="hidden" name="mno" th:value="${#authentication.principal.mno}">
@@ -52,7 +52,7 @@
             <div class="col-md-12 mb-4">
                 <img class="img-fluid round"
                      th:each="mainImg : ${mainBoard.mainImg}"
-                     th:src="|/view/${mainImg}|" alt="Image placeholder">
+                     th:src="|/upload/mainBoardView/${mainImg}|" alt="Image placeholder">
             </div>
         </div>
     </div>
@@ -183,55 +183,59 @@
     <script src="/js/mainBoard/mainBoard.js?aa"></script>
 </div>
 <script layout:fragment="script" th:inline="javascript">
-<!-- 좋아요 버튼 -->
-    const xhr = new XMLHttpRequest(); // ajax 작업을 위한 객체 생성
-    const likeBtn = document.querySelector('.likeBtn');
-    const likeCheck = document.querySelector('input[name=like]');
-    const frmLike = document.querySelector('form[name=frmLike]');
+    const auth = [[${#authentication.principal}]];
 
-    console.log("first : " + likeCheck.value);
+    if (auth !== 'anonymousUser') {
 
-    if(likeCheck.value === "true" || likeCheck.value === true){
-        likeBtn.innerHTML = '<p class="heart on">온</p>';
-    }
-    else{
-        likeBtn.innerHTML = '<p class="heart off">오프</p>'
-    }
+        <!-- 좋아요 버튼 -->
+        const xhr = new XMLHttpRequest(); // ajax 작업을 위한 객체 생성
+        const likeBtn = document.querySelector('.likeBtn');
+        const likeCheck = document.querySelector('input[name=like]');
+        const frmLike = document.querySelector('form[name=frmLike]');
 
-    likeBtn.addEventListener('click', function (){
-        const mbNo = frmLike.mbNo.value;
-        const mno = frmLike.mno.value;
+        console.log("first : " + likeCheck.value);
 
-        if (mno !== "") {
-            const url = likeCheck.value === 'true' ? `/mainLike/remove?mbNo=${mbNo}&mno=${mno}` : `/mainLike/add?mbNo=${mbNo}&mno=${mno}`;
-
-            xhr.open('POST', url);
-            xhr.send();
-
-            xhr.onreadystatechange = () => {
-                if (xhr.readyState !== XMLHttpRequest.DONE)
-                    return;
-
-                console.log(xhr.response);
-
-                if (xhr.status === 200) {
-                    const json = JSON.parse(xhr.response);
-                    if (json.result === true) {
-                        // 성공적으로 처리된 경우 추가적인 동작 수행
-                    } else {
-                        alert('등록에 실패했습니다.');
-                    }
-                } else {
-                    console.error(xhr.status, xhr.statusText);
-                }
-            };
-
-            likeCheck.value = likeCheck.value === "true" ? "false" : "true";
-            likeBtn.innerHTML = likeCheck.value === "true" ? '<p class="heart on">온</p>' : '<p class="heart off">오프</p>';
+        if (likeCheck.value === "true" || likeCheck.value === true) {
+            likeBtn.innerHTML = '<p class="heart on">온</p>';
         } else {
-            alert("로그인 후 이용 가능합니다.");
+            likeBtn.innerHTML = '<p class="heart off">오프</p>'
         }
-    })
+
+        likeBtn.addEventListener('click', function () {
+            const mbNo = frmLike.mbNo.value;
+            const mno = frmLike.mno.value;
+
+            if (mno !== "") {
+                const url = likeCheck.value === 'true' ? `/mainLike/remove?mbNo=${mbNo}&mno=${mno}` : `/mainLike/add?mbNo=${mbNo}&mno=${mno}`;
+
+                xhr.open('POST', url);
+                xhr.send();
+
+                xhr.onreadystatechange = () => {
+                    if (xhr.readyState !== XMLHttpRequest.DONE)
+                        return;
+
+                    console.log(xhr.response);
+
+                    if (xhr.status === 200) {
+                        const json = JSON.parse(xhr.response);
+                        if (json.result === true) {
+                            // 성공적으로 처리된 경우 추가적인 동작 수행
+                        } else {
+                            alert('등록에 실패했습니다.');
+                        }
+                    } else {
+                        console.error(xhr.status, xhr.statusText);
+                    }
+                };
+
+                likeCheck.value = likeCheck.value === "true" ? "false" : "true";
+                likeBtn.innerHTML = likeCheck.value === "true" ? '<p class="heart on">온</p>' : '<p class="heart off">오프</p>';
+            } else {
+                alert("로그인 후 이용 가능합니다.");
+            }
+        })
+    }
 
     //댓글
     //출력 메서드
@@ -251,7 +255,6 @@ printComments(1, 10, true);
 const commentList = document.querySelector('.comment-body'); // 댓글 목록 DOM
 const commentPaging = document.querySelector('.commentPaging'); // 페이지 목록 DOM
 const commentCnt = document.querySelector('.commentCnt'); //댓글 수 DOM
-const auth = [[${#authentication.principal}]];
 function printCommentCnt(total){
     commentCnt.textContent=total + " Comments";
 }

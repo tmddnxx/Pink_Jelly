@@ -86,14 +86,14 @@
     //업로드된 이미지 썸네일 출력
     const uploadResult = document.querySelector('.uploadResult');
 
-    function showUploadFile({uuid, fileName, link}){
+    function showUploadFile({fileName, link}){
         const str = `<div class="card col-4">
         <div class="card-header d-flex justify-content-center">
           ${fileName}
-          <button type="button" class="btn-sm btn btn-danger" onclick="javascript:removeFile('${uuid}', '${fileName}', this)">X</button>
+          <button type="button" class="btn-sm btn btn-danger" onclick="javascript:removeFile('${fileName}', this)">X</button>
          </div>
          <div class="card-body">
-          <img src="/view/${link}" data-src="${uuid+"_"+fileName}">
+          <img src="/upload/mainBoardView/${link}" data-src="${fileName}">
          </div>
         </div><!--card-->`;
 
@@ -101,14 +101,13 @@
     }
 
     //x버튼 파일 삭제
-    function removeFile(uuid, fileName, obj) {
-        console.log(uuid);
+    function removeFile(fileName, obj) {
         console.log(fileName);
         console.log(obj);
 
         const targetDiv = obj.closest('.card'); //obj에서 가장 가까운 '.card';
 
-        removeFileToServer(uuid, fileName).then(data => {
+        removeFileToServer(fileName).then(data => {
             targetDiv.remove();
         });
     }

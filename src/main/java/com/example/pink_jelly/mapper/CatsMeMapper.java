@@ -27,18 +27,18 @@ public interface CatsMeMapper {
     void insertReviewBoard(CatsReviewBoardVO catsReviewBoardVO); //게시물 등록
     List<CatsReviewBoardVO> selectReviewBoardAll(PageRequestDTO pageRequestDTO); //전체 목록
     int getReviewBoardCount(PageRequestDTO pageRequestDTO); //총 게시물 수 = total
-    List<CatsReviewBoardVO> selectReviewBoardList(int skip, int size, Long mno, String memberId); //리스트 출력
+    List<CatsReviewBoardVO> selectReviewBoardList(@Param("skip") int skip,@Param("size") int size,@Param("mno") Long mno,@Param("memberId") String memberId); //리스트 출력
     CatsReviewBoardVO getReviewBoardOne(Long crbNo); //게시판 불러오기
     void updateReviewBoardHit(Long crbNo); //조회수 증가
     void deleteReviewBoardOne(Long crbNo); // 삭제
     void updateReviewBoard(CatsReviewBoardVO catsReviewBoardVO); //수정
 
-    boolean isReviewBoardLike(Long mno, Long crbNo); // 유저가 특정 게시물에 좋아요를 달았는지 여부
+    boolean isReviewBoardLike(@Param("mno")Long mno,@Param("crbNo") Long crbNo); // 유저가 특정 게시물에 좋아요를 달았는지 여부
 
-    boolean insertReviewBoardLike(Long mno, Long crbNo); // 좋아요 추가
+    boolean insertReviewBoardLike(@Param("mno")Long mno,@Param("crbNo") Long crbNo); // 좋아요 추가
 
-    boolean removeReviewBoardLike(Long mno, Long crbNo); // 좋아요 제거
-    void likeCntUpdate(Long crbNo, boolean flag); // 좋아요 수 업데이트
+    boolean removeReviewBoardLike(@Param("mno")Long mno,@Param("crbNo") Long crbNo); // 좋아요 제거
+    void likeCntUpdate(@Param("crbNo")Long crbNo,@Param("flag") boolean flag); // 좋아요 수 업데이트
     void upCommentCnt(Long crbNo); //댓글 수 증가
     void downCommentCnt(Long mbNo); //댓글 수 감소
 }

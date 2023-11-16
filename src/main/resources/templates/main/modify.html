@@ -41,12 +41,11 @@
                         <th:block th:each="mainImg:${mainBoard.mainImg}">
                             <div class="card col-4" th:with="arr = ${mainImg.split('_')}">
                                 <div class="card-header d-flex justify-content-center">
-                                    [[${arr[1]}]]
                                     <button class="btn-sm btn btn-danger"
-                                            th:onclick="removeFile([[${arr[0]}]], [[${arr[1]}]], this)">X</button>
+                                            th:onclick="removeFile([[${arr[0]}]], this)">X</button>
                                 </div>
                                 <div class="card-body">
-                                    <img th:src="|/view/s_${mainImg}|" th:data-src="${mainImg}">
+                                    <img th:src="|/upload/mainBoardView/s_${mainImg}|" th:data-src="${mainImg}">
                                 </div>
                             </div> <!-- card-->
                         </th:block>
@@ -79,12 +78,12 @@
 <script layout:fragment="script" th:inline="javascript">
     //x버튼 이미지 삭제
     const removeFileList = []; //최종 삭제 파일
-    function removeFile(uuid, fileName, obj){
+    function removeFile(fileName, obj){
         if(!confirm('파일을 삭제하시겠습니까?')){
             return;
         }
-        console.log(uuid + fileName + obj);
-        removeFileList.push({uuid, fileName});
+        console.log(fileName + obj);
+        removeFileList.push({fileName});
 
         const targetDiv = obj.closest('.card');
         targetDiv.remove();
@@ -108,14 +107,13 @@
     //업로드된 이미지 썸네일 출력
     const uploadResult = document.querySelector('.uploadResult');
 
-    function showUploadFile({uuid, fileName, link}){
+    function showUploadFile({fileName, link}){
         const str = `<div class="card col-4">
         <div class="card-header d-flex justify-content-center">
-          ${fileName}
-          <button type="button" class="btn-sm btn btn-danger" onclick="javascript:removeFile('${uuid}', '${fileName}', this)">X</button>
+          <button type="button" class="btn-sm btn btn-danger" onclick="javascript:removeFile('${fileName}', this)">X</button>
          </div>
          <div class="card-body">
-          <img src="/view/${link}" data-src="${uuid+"_"+fileName}">
+          <img src="/upload/mainBoardView/${link}" data-src="${fileName}">
          </div>
         </div><!--card-->`;
 
@@ -142,8 +140,8 @@
         target.innerHTML = str;
 
 
-        removeFileList.forEach(({uuid,fileName}) => {
-            removeFileToServer(uuid, fileName);
+        removeFileList.forEach(({fileName}) => {
+            removeFileToServer(fileName);
         });
         formObj.submit();
     });

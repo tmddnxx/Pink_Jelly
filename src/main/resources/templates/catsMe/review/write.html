@@ -28,7 +28,7 @@
             <div class="form-group row">
                 <label class="col-sm-3 col-form-label">profileImg</label>
                 <div class="col-sm-3">
-                    <input type="file" name="profileImg" class="form-control">
+                    <input type="file" name="profileImg" class="form-control" th:value="${#authentication.principal.profileImg}" readonly>
                 </div>
             </div>
             <div class="form-group row">
