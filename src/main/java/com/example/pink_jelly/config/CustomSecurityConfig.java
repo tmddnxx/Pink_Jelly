@@ -63,8 +63,8 @@ public class CustomSecurityConfig {
                 .loginProcessingUrl("/loginProc")
                 .usernameParameter("memberId")
                 .passwordParameter("passwd")
-                .defaultSuccessUrl("/main");
-//                .failureUrl("/login");
+                .defaultSuccessUrl("/main")
+                .failureUrl("/login");
 
         http.rememberMe()
                 .key("12345678")

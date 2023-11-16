@@ -1,18 +1,22 @@
 package com.example.pink_jelly.dto;
 
-import com.example.pink_jelly.dto.upload.UploadResultDTO;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import java.util.Collection;
+import java.util.HashSet;
 
-@Getter
-@Setter
-@ToString
-public class MemberDTO extends User {
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+public class MemberDTO implements UserDetails {
     private Long mno; // 회원 고유 넘버
 
     @NotBlank(message = "아이디를 입력해주세요.")
@@ -44,6 +48,7 @@ public class MemberDTO extends User {
     private int gmingCnt; // 그루밍 수
     private int gmerCnt; // 그루머 수
     private String introduce; // 소개글
+    private String imagePath; // 이미지 경로
 
     private boolean del; // 회원 탈퇴 여부
     private boolean social; // 소셜 로그인
@@ -51,41 +56,47 @@ public class MemberDTO extends User {
     private boolean flag; // 친구 여부
     private boolean ban; // 차단 여부
 
-    public MemberDTO(Long mno, String username, String password, String email,String memberName,
-                     String phone, String nickName, boolean hasCat, String catAge, String catSex,
-                     String variety, String profileImg, int gmingCnt, int gmerCnt, String introduce,
-                     boolean del, boolean social, Collection<? extends GrantedAuthority> authorities) {
-        super(username, password, authorities);
+    public String getImagePath() {
+        String[] splits = new String[2];
+        if (this.profileImg != null) {
+            splits = this.profileImg.split("/");
+        }
 
-        this.mno = mno;
-        this.memberId = username;
-        this.passwd = password;
-        this.email = email;
-        this.memberName = memberName;
-        this.phone = phone;
-        this.nickName = nickName;
-        this.hasCat = hasCat;
-        this.catAge = catAge;
-        this.catSex = catSex;
-        this.variety = variety;
-        this.profileImg = profileImg;
-        this.gmingCnt = gmingCnt;
-        this.gmerCnt = gmerCnt;
-        this.introduce = introduce;
-        this.flag = flag;
-        this.ban = ban;
-        this.del = del;
-        this.social = social;
+        return splits[1] + "/" + splits[0];
     }
 
-    public UploadResultDTO getImagePath() {
-        String[] splits = this.profileImg.split("/");
-
-        return UploadResultDTO.builder()
-                .fileName(splits[0])
-                .dateFolder(splits[1])
-                .isImage(true)
-                .build();
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return new HashSet<GrantedAuthority>();
     }
 
+    @Override
+    public String getPassword() {
+        return this.passwd;
+    }
+
+    @Override
+    public String getUsername() {
+        return this.memberId;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }

@@ -432,7 +432,9 @@
             const nickName = e.target.value;
             const checkMsg = document.querySelector('.nickNameCheck-message');
 
+            console.log(nickName);
             if (nickName.length != 0) { // 닉네임 입력시
+                console.log(onlyNumbersAndEnglishAndKorean(nickName));
                 if (onlyNumbersAndEnglishAndKorean(nickName) && isLength(nickName, 2, 15)) { // 숫자, 영어, 한글, 2 ~ 15글자
                     checkMsg.classList.remove('fail');
                 }

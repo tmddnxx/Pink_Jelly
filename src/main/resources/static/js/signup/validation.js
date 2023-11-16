@@ -23,7 +23,7 @@ function isEmailValid(str) {
 
 function onlyNumbersAndEnglishAndKorean(str) {
     // 한글, 영문자, 숫자
-    return /^[가-힣a-zA-Z0-9]$/.test(str);
+    return /^[0-9a-zA-Z\uAC00-\uD7A3]*$/.test(str);
 }
 
 async function checkMemberId(memberId) {

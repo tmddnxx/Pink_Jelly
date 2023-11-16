@@ -76,15 +76,10 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public boolean checkIdDuplicate(String memberId) throws MidExistException{
+    public boolean checkIdDuplicate(String memberId){
         // 아이디 중복검사
-        boolean exist = memberMapper.exitsById(memberId);
 
-        if (exist) { // 동일한 아이디가 있을 경우 예외 발생.
-            throw new MidExistException();
-        }
-
-        return exist;
+        return memberMapper.exitsById(memberId);
     }
 
     @Override

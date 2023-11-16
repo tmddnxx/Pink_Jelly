@@ -36,30 +36,6 @@ public class CustomUserDetailService implements UserDetailsService {
             throw new UsernameNotFoundException("사용자를 찾을 수 없습니다.");
         }
 
-        MemberDTO memberDTO = new MemberDTO(
-                memberVO.getMno(),
-                memberVO.getMemberId(),
-                memberVO.getPasswd(),
-                memberVO.getEmail(),
-                memberVO.getMemberName(),
-                memberVO.getPhone(),
-                memberVO.getNickName(),
-                memberVO.isHasCat(),
-                memberVO.getCatAge(),
-                memberVO.getCatSex(),
-                memberVO.getVariety(),
-                memberVO.getProfileImg(),
-                memberVO.getGmingCnt(),
-                memberVO.getGmerCnt(),
-                memberVO.getIntroduce(),
-                memberVO.isDel(),
-                memberVO.isSocial(),
-                memberVO.getRoleSet().stream()
-                        .map(memberRole -> new SimpleGrantedAuthority("ROLE_" + memberRole.name()))
-                        .collect(Collectors.toList())
-        );
-        log.info(memberDTO);
-
-        return memberDTO;
+        return modelMapper.map(memberVO, MemberDTO.class);
     }
 }
