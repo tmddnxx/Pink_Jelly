@@ -36,6 +36,11 @@ public class CustomUserDetailService implements UserDetailsService {
             throw new UsernameNotFoundException("사용자를 찾을 수 없습니다.");
         }
 
-        return modelMapper.map(memberVO, MemberDTO.class);
+        String[] splits = memberVO.getProfileImg().split("/");
+        MemberDTO memberDTO = modelMapper.map(memberVO, MemberDTO.class);
+        memberDTO.setProfileImg(splits[0]);
+        memberDTO.setDateString(splits[1]);
+
+        return memberDTO;
     }
 }

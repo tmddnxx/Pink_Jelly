@@ -6,6 +6,7 @@ import com.example.pink_jelly.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -18,6 +19,11 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,6 +33,12 @@ import java.util.Map;
 @RequestMapping("/member")
 @RequiredArgsConstructor
 public class MemberController {
+    @Value("${com.example.tempUpload.path}")
+    private String tempPath;
+
+    @Value("${com.example.profileUpload.path}")
+    private String profilePath; // 프로필 저장 경로
+
     private final MemberService memberService;
     private final MailSenderService mailSenderService;
     private final PasswordEncoder passwordEncoder;
@@ -41,6 +53,8 @@ public class MemberController {
         // 회원가입 처리
         String encPasswd = passwordEncoder.encode(memberDTO.getPasswd());
         memberDTO.setPasswd(encPasswd);
+
+        log.info(memberDTO.getProfileImg());
 
         /* 검증 */
 //        if(bindingResult.hasErrors()) {
@@ -58,6 +72,15 @@ public class MemberController {
 //            /* 회원가입 페이지로 리턴 */
 //            return "/member/signup";
 //        }
+
+        /* 데이터가 저장된 후에 이미지 파일 이동 */
+        if (memberDTO.getProfileImg() != null) {
+            String splits[] = memberDTO.getProfileImg().split("/");
+
+            moveFile(splits[0]);
+            moveFile("s_" + splits[0]);
+        }
+
         memberService.registerMember(memberDTO);
 
         return "redirect:/member/welcome";
@@ -216,6 +239,48 @@ public class MemberController {
 
         memberService.removeMember(mno);
         return "redirect:/logout";
+    }
+
+    private void moveFile(String fileName) {
+        /* 등록시에 첨부 파일을 이동 */
+
+        // 오늘 날짜로 폴더 생성
+        LocalDate currentDate = LocalDate.now(); // 오늘 날짜 가져오기
+        // 날짜 포맷 지정(원하는 형식으로)
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String dateString = currentDate.format(formatter); // 날짜를 문자열로 변환
+
+        String newTempPath = tempPath + "/" + dateString;
+        String newProfilePath = profilePath + "/" + dateString;
+
+        File file = new File(newProfilePath);
+        if (!file.exists()) { // 폴더가 존재하지 않으면
+            file.mkdirs(); // 폴더 생성
+        }
+
+        try {
+            // 읽을 파일과 쓰기 파일을 구분해서 객체 생성.
+            FileInputStream fileInputStream = new FileInputStream(newTempPath + File.separator + fileName);
+            FileOutputStream fileOutputStream = new FileOutputStream(newProfilePath + File.separator + fileName);
+
+            // 파일 복사의 경우 buffer를 사용해야 속도가 빠름.
+            BufferedInputStream bufferedInputStream = new BufferedInputStream(fileInputStream);
+            BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(fileOutputStream);
+
+            int i;
+            while ((i = bufferedInputStream.read()) != -1) { // 파일 끝까지 읽기
+                bufferedOutputStream.write(i); // 읽은 만큼 쓰기
+            }
+            bufferedInputStream.close();
+            bufferedOutputStream.close();
+            fileInputStream.close();
+            fileOutputStream.close();
+
+            Files.delete(Paths.get(newTempPath + File.separator + fileName));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
 

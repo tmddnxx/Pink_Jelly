@@ -188,9 +188,11 @@
                 formObj.append('files', file);
             }
 
-            uploadToSrver('/upload/tempUpload', formObj).then(result => {
+            uploadToServer('/upload/tempUpload', formObj).then(result => {
                 console.log(result);
                 for (const uploadResult of result) {
+                    console.log("uploadResult");
+                    console.log(uploadResult);
                     showUploadFile(uploadResult) // 업로드한 이미지를 보여준다
                 }
                 console.log(files);
@@ -200,9 +202,9 @@
         // 업로드된 이미지를 보여줌
         const uploadResult = document.querySelector('.uploadResult');
 
-        function showUploadFile({dateFolder, fileName, link}) {
+        function showUploadFile({dateString, fileName, link}) {
             const str = `<div>
-                            <img src="/upload/tempView/${dateFolder}/${link}" data-src="${fileName}/${dateFolder}">
+                            <img src="/upload/tempView/${dateString}/${link}" data-src="${fileName}/${dateString}">
                          </div>`
             uploadResult.innerHTML = str;
         }
@@ -219,6 +221,7 @@
             // 업로드한 이미지가 존재할 경우
             if (uploadFile != null) {
                 const imgLink = uploadFile.getAttribute('data-src');
+                console.log(imgLink);
 
                 str = `<input type="hidden" name="profileImg" value="${imgLink}">`;
 
@@ -279,6 +282,7 @@
                 checkIdMsg.classList.remove('success');
             }
             else {
+                confirm('사용할 수 있는 아이디입니다.')
                 alert("사용할 수 있는 아이디입니다.");
                 checkIdMsg.textContent = '사용할 수 있는 아이디입니다';
                 checkIdMsg.classList.add('success');

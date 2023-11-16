@@ -1,5 +1,6 @@
 package com.example.pink_jelly.domain;
 
+import com.example.pink_jelly.dto.upload.UploadResultDTO;
 import lombok.*;
 
 import java.util.HashSet;
@@ -32,10 +33,6 @@ public class MemberVO { // 회원정보
 
     @Builder.Default
     private Set<MemberRole> roleSet=new HashSet<>();
-
-    public void changePassword(String passwd) {
-        this.passwd=passwd;
-    }
 
     public void changeEmail(String email) {
         this.email=email;

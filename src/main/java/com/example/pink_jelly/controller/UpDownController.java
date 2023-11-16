@@ -38,32 +38,18 @@ public class UpDownController {
     @Value("${com.example.profileUpload.path}")
     private String profilePath; // 프로필 저장 경로
 
-    @ApiOperation(value = "Temp Upload Post", notes = "POST 방식으로 임시 파일 등록")
-    @PostMapping(value = "/tempUpload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public List<UploadResultDTO> tempUpload(UploadFileDTO uploadFileDTO) {
-        // 이미지 파일 임시 업로드
-        return uploadFile(uploadFileDTO, tempPath);
-    }
-
     @ApiOperation(value = "Temp View GET", notes = "GET방식으로 임시 첨부파일 조회")
-    @GetMapping("/tempView/{dateFolder}/{fileName}")
-    public ResponseEntity<Resource> getTempViewFile(@PathVariable String dateFolder, @PathVariable String fileName) {
+    @GetMapping("/tempView/{dateString}/{fileName}")
+    public ResponseEntity<Resource> getTempViewFile(@PathVariable String dateString, @PathVariable String fileName) {
         // 임시 저장 이미지 조회
-        return getViewFile(dateFolder ,fileName, tempPath);
-    }
-    
-    @ApiOperation(value = "MainBoard Upload Post", notes = "POST 방식으로 파일 등록")
-    @PostMapping(value = "/mainBoardUpload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public List<UploadResultDTO> mainBoardUpload(UploadFileDTO uploadFileDTO) {
-        // 메인보드 이미지 파일 업로드
-        return uploadFile(uploadFileDTO, mainBoardPath);
+        return getViewFile(dateString ,fileName, tempPath);
     }
 
     @ApiOperation(value = "view 파일", notes = "GET방식으로 첨부파일 조회")
-    @GetMapping("/mainBoardView/{dateFolder}/{fileName}")
-    public ResponseEntity<Resource> GetMainBoardViewFile(@PathVariable String dateFolder,  @PathVariable String fileName){
+    @GetMapping("/mainBoardView/{dateString}/{fileName}")
+    public ResponseEntity<Resource> GetMainBoardViewFile(@PathVariable String dateString,  @PathVariable String fileName){
         // 메인보드 이미지 파일 조회
-        return getViewFile(dateFolder, fileName, mainBoardPath);
+        return getViewFile(dateString, fileName, mainBoardPath);
     }
 
     @ApiOperation(value = "remove 파일", notes = "DELETE 방식으로 파일 삭제")
@@ -73,28 +59,23 @@ public class UpDownController {
         return removeFile(fileName, mainBoardPath);
     }
 
-    @ApiOperation(value = "Profile Upload POST", notes = "POST 방식으로 프로필 사진 등록")
-    @PostMapping(value = "/profileUpload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public List<UploadResultDTO> uploadProfileFile(UploadFileDTO uploadFileDTO) {
-        // 프로필 사진 업로드
-        return uploadFile(uploadFileDTO, profilePath);
-    }
-
     @ApiOperation(value = "Profile View GET", notes = "GET방식으로 프로필 첨부파일 조회")
-    @GetMapping("/profileView/{dateFolder}/{fileName}")
-    public ResponseEntity<Resource> getProfileViewFile(@PathVariable String dateFolder, @PathVariable String fileName) {
+    @GetMapping("/profileView/{dateString}/{fileName}")
+    public ResponseEntity<Resource> getProfileViewFile(@PathVariable String dateString, @PathVariable String fileName) {
         // 프로필 사진 조회
-        return getViewFile(dateFolder ,fileName, profilePath);
+        return getViewFile(dateString ,fileName, profilePath);
     }
 
     @ApiOperation(value = "Profile Remove DELETE", notes = "DELETE 방식으로 파일 삭제")
-    @DeleteMapping("/profileRemove/{dateFolder}/{fileName}")
+    @DeleteMapping("/profileRemove/{dateString}/{fileName}")
     private Map<String, Boolean> removeProfileFile(@PathVariable String fileName) {
         // 프로필 사진 삭제
         return removeFile(fileName, profilePath);
     }
 
-    private List<UploadResultDTO> uploadFile(UploadFileDTO uploadFileDTO, String uploadPath) {
+    @ApiOperation(value = "Temp Upload Post", notes = "POST 방식으로 임시 파일 등록")
+    @PostMapping(value = "/tempUpload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    private List<UploadResultDTO> uploadFile(UploadFileDTO uploadFileDTO) {
         // 이미지 업로드
         log.info(uploadFileDTO);
         if (uploadFileDTO.getFiles() != null) {
@@ -110,8 +91,9 @@ public class UpDownController {
 
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
                 String dateString = currentDate.format(formatter); // 날짜를 문자열로 변환
+                log.info(dateString);
 
-                String path = uploadPath + "/" + dateString;
+                String path = tempPath + "/" + dateString;
                 File file = new File(path);
                 if (!file.exists()) { // 폴더가 존재하지 않으면
                     file.mkdirs(); // 폴더 생성
@@ -136,7 +118,7 @@ public class UpDownController {
                 list.add(UploadResultDTO.builder()
                         .fileName(fileName)
                         .isImage(isImage)
-                        .dateFolder(dateString)
+                        .dateString(dateString)
                         .build());
             }
             return list;
@@ -144,10 +126,10 @@ public class UpDownController {
         return null;
     }
 
-    private ResponseEntity<Resource> getViewFile(String dateFolder, String fileName, String uploadPath) {
+    private ResponseEntity<Resource> getViewFile(String dateString, String fileName, String uploadPath) {
         // 첨부파일 조회
         Resource resource = new FileSystemResource(uploadPath +File.separator
-                + dateFolder + File.separator + fileName);
+                + dateString + File.separator + fileName);
 
         String resourceName = resource.getFilename();
         HttpHeaders headers = new HttpHeaders();

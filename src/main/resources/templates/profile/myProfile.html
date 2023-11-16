@@ -146,8 +146,8 @@
     <div class="info">
         <div class="info-inner">
             <div class="inner-top">
-                <div class="top-info">
-                    <img th:src="|/upload/profileView/${#authentication.principal.imagePath}|" alt="Image placeholder" class="profileImg" width="200px" height="200px">
+                <div class="top-info" th:with="member=${#authentication.principal}">
+                    <img th:src="|/upload/profileView/${member.dateString}/${member.profileImg}|" alt="Image placeholder" class="profileImg" width="200px" height="200px">
                     <div class="inner-top-info">
                         <input type="hidden" name="mno" th:value="${#authentication.principal.mno}">
                         <p> 아이디 : <span th:text="${#authentication.principal.memberId}"></span></p>
