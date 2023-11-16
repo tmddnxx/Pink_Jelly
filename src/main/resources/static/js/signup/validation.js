@@ -1,8 +1,8 @@
 'use strict'
 
-function idLength(value) {
-    // 아이디 5~20자
-    return value.length >= 5 && value.length <= 20;
+function isLength(str, a, b) {
+    // a ~ b 자리까지
+    return str.length >= a && str.length <= b;
 }
 function onlyNumbersAndEnglish(str) {
     // 영문 소문자, 숫자와 특수기호(_),(-)
@@ -22,7 +22,8 @@ function isEmailValid(str) {
 }
 
 function onlyNumbersAndEnglishAndKorean(str) {
-    return /^[가-힣a-zA-Z0-9]{2,15}$/.test(str);
+    // 한글, 영문자, 숫자
+    return /^[가-힣a-zA-Z0-9]$/.test(str);
 }
 
 async function checkMemberId(memberId) {

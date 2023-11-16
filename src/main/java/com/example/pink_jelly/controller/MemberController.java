@@ -14,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -65,11 +66,18 @@ public class MemberController {
 
     @PostMapping("/checkMemberId")
     @ResponseBody
-    public String checkMemberId(@RequestParam("memberId") String memberId) {
+    public String  checkMemberId(@RequestParam("memberId") String memberId) {
         // 아이디 중복 검사
-        boolean result = memberService.checkIdDuplicate(memberId);
+        log.info("checkMemberId...");
+        log.info(memberId);
 
-        return result ? "true" : "false";
+        try {
+            memberService.checkIdDuplicate(memberId);
+        } catch (MemberService.MidExistException e) { // 동일아이디가 있는 경우
+            return "true";
+        }
+
+        return "false";
     }
 
     @GetMapping("/sendConfirmMail")

@@ -2,6 +2,9 @@ package com.example.pink_jelly.domain;
 
 import lombok.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Getter
 @Builder
 @AllArgsConstructor
@@ -24,4 +27,33 @@ public class MemberVO { // 회원정보
     private int gmingCnt; // 그루밍 수
     private int gmerCnt; // 그루머 수
     private String introduce; // 소개글
+    private boolean del; // 회원 탈퇴 여부
+    private boolean social; // 소셜 로그인
+
+    @Builder.Default
+    private Set<MemberRole> roleSet=new HashSet<>();
+
+    public void changePassword(String passwd) {
+        this.passwd=passwd;
+    }
+
+    public void changeEmail(String email) {
+        this.email=email;
+    }
+
+    public void changeDel(boolean del) {
+        this.del=del;
+    }
+
+    public void addRole(MemberRole memberRole) {
+        this.roleSet.add(memberRole);
+    }
+
+    public void clearRoles() {
+        this.roleSet.clear();
+    }
+
+    public void changeSocial(boolean social) {
+        this.social=social;
+    }
 }

@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 public class UploadResultDTO {
 
     private String fileName; // 이미지 파일명
+    private String dateFolder; // 날짜 폴더명
     private boolean isImage; //이미지 파일 여부
 
     public String getLink() {
