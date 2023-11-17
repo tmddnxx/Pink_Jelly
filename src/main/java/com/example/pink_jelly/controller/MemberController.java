@@ -5,28 +5,29 @@ import com.example.pink_jelly.service.MailSenderService;
 import com.example.pink_jelly.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import javax.validation.Valid;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 
 @Log4j2
 @Controller
@@ -41,6 +42,7 @@ public class MemberController {
 
     private final MemberService memberService;
     private final MailSenderService mailSenderService;
+    private final UserDetailsService userDetailsService;
     private final PasswordEncoder passwordEncoder;
 
     @GetMapping("/signup")
@@ -157,44 +159,32 @@ public class MemberController {
     }
 
     @GetMapping("/memberInfo")
-    public void memberInfo(@AuthenticationPrincipal MemberDTO memberDTO, Model model){
+    public void memberInfo(){
         // 회원정보 페이지 이동
-        log.info("/member/memberInfo...");
-        String email = memberDTO.getEmail();
-        String phone = memberDTO.getPhone();
 
-        String[] emails = email.split("@");
-        String[] phones = phone.split("-");
-        log.info("emails: " + emails);
-        log.info("phones: " + phones);
-
-        model.addAttribute("emails", emails);
-        model.addAttribute("phones", phones);
     }
 
 
-    @GetMapping("/modifyMember")
+    @GetMapping("/modifyMemberInfo")
     public void modifyMember(@AuthenticationPrincipal MemberDTO memberDTO, Model model){
         // 회원정보 수정 페이지 이동
-        log.info("/member/modifyMember...");
-        String email = memberDTO.getEmail();
+        log.info("/member/modifyMemberInfo...");
         String phone = memberDTO.getPhone();
 
-        String[] emails = email.split("@");
         String[] phones = phone.split("-");
-        log.info("emails: " + emails);
         log.info("phones: " + phones);
 
-        model.addAttribute("emails", emails);
         model.addAttribute("phones", phones);
     }
 
-    @PostMapping("/modifyMember")
-    public String modifyMember(MemberDTO memberDTO){
+    @PostMapping("/modifyMemberInfo")
+    public String modifyMember(@AuthenticationPrincipal MemberDTO memberDTO, MemberDTO updateMemberDTO){
         // 회원 정보 수정
-        log.info("/member/modifyMember(POST)...");
+        log.info("/member/modifyMemberInfo(POST)...");
 
-        memberService.modifyMember(memberDTO);
+        memberService.modifyMemberInfo(updateMemberDTO);
+
+        sessionReset(memberDTO);
 
         return "redirect:/member/memberInfo";
     }
@@ -239,6 +229,13 @@ public class MemberController {
 
         memberService.removeMember(mno);
         return "redirect:/logout";
+    }
+
+    private void sessionReset(MemberDTO memberDTO) { 
+        // 세션 사용자 정보 업데이트
+        UserDetails userDetails = userDetailsService.loadUserByUsername(memberDTO.getMemberId());
+        Authentication newAuthentication = new UsernamePasswordAuthenticationToken(userDetails, null, new HashSet<GrantedAuthority>());
+        SecurityContextHolder.getContext().setAuthentication(newAuthentication);
     }
 
     private void moveFile(String fileName) {

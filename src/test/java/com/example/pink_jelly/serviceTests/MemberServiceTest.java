@@ -46,7 +46,7 @@ public class MemberServiceTest {
                 .nickName("modifyNickName")
                 .mno(1L)
                 .build();
-        memberService.modifyMember(memberDTO);
+        memberService.modifyMemberInfo(memberDTO);
     }
 
     @Test
@@ -69,7 +69,7 @@ public class MemberServiceTest {
 
     @Test
     public void getFileNameTest() {
-        String fileName = memberService.getFileName(3L);
+        String fileName = memberService.getFileName(27L);
         log.info(fileName);
     }
 }

@@ -67,7 +67,25 @@ public class MainBoardServiceImpl implements MainBoardService{
         mainBoardVOList.forEach(mainBoardVO -> {
             MainBoardDTO mainBoardDTO = modelMapper.map(mainBoardVO, MainBoardDTO.class);
             List<String> imgs = List.of(mainBoardVO.getMainImg().split(", "));
-            mainBoardDTO.setMainImg(imgs);
+
+            List<String> dateList = new ArrayList<>();
+            List<String> fileList = new ArrayList<>();
+
+            for (String img : imgs) {
+                String[] parts = img.split("/");
+                if (parts.length == 2) {
+                    fileList.add(parts[0]);
+                    dateList.add(parts[1]);
+                }
+            }
+            //프로필 이미지 분리
+            String[] profile = mainBoardVO.getProfileImg().split("/");
+
+
+            mainBoardDTO.setProfileImg(profile[0]);
+            mainBoardDTO.setProfileString(profile[1]);
+            mainBoardDTO.setDateString(dateList);
+            mainBoardDTO.setMainImg(fileList);
             mainBoardDTOList.add(mainBoardDTO);
         });
 
@@ -94,8 +112,28 @@ public class MainBoardServiceImpl implements MainBoardService{
             mainBoardVO = mainBoardMapper.getOne(mbNo);
         }
         MainBoardDTO mainBoardDTO = modelMapper.map(mainBoardVO, MainBoardDTO.class);
+
+        //mainImg 를 dateString과 fileName으로 나눔
         List<String> imgs = List.of(mainBoardVO.getMainImg().split(", "));
-        mainBoardDTO.setMainImg(imgs);
+
+        List<String> dateList = new ArrayList<>();
+        List<String> fileList = new ArrayList<>();
+        for (String img : imgs) {
+            String[] parts = img.split("/");
+            if (parts.length == 2) {
+                fileList.add(parts[0]);
+                dateList.add(parts[1]);
+            }
+        }
+        //프로필 이미지 분리
+        String[] profile = mainBoardVO.getProfileImg().split("/");
+
+        log.info(profile[0] + " 좀 좀 좀 " + profile[1]);
+
+        mainBoardDTO.setProfileImg(profile[0]);
+        mainBoardDTO.setProfileString(profile[1]);
+        mainBoardDTO.setDateString(dateList);
+        mainBoardDTO.setMainImg(fileList);
         mainBoardDTO.setFlag(flag);
         return mainBoardDTO;
     }

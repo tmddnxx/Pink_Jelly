@@ -42,12 +42,12 @@
         <div class="row">
             <div class="col-lg-4 mb-4" th:each="mainBoard:${mainBoardList.dtoList}">
                 <div class="post-entry-alt">
-                    <a th:href="|@{/main/view(mbNo=${mainBoard.mbNo})}|" class="img-link"><img th:src="|/upload/mainBoardView/${mainBoard.mainImg[0]}|" alt="Image" class="img-fluid"></a>
+                    <a th:href="|@{/main/view(mbNo=${mainBoard.mbNo})}|" class="img-link"><img th:src="|/upload/mainBoardView/${mainBoard.dateString[0]}/${mainBoard.mainImg[0]}|" alt="Image" class="img-fluid"></a>
                     <div class="excerpt">
                         <h2><a th:href="|@{/main/view(mbNo=${mainBoard.mbNo})}|">[[${mainBoard.title}]]</a></h2>
                         <p>[[${mainBoard.content}]]</p>
                         <div class="post-meta align-items-center text-left clearfix">
-                            <figure class="author-figure mb-0 me-3 float-start"><img src="/images/person_1.jpg" alt="Image" class="img-fluid"></figure>
+                            <figure class="author-figure mb-0 me-3 float-start"><img th:src="|/upload/profileView/${mainBoard.profileString}/${mainBoard.profileImg}|" alt="Image placeholder" class="img-fluid"></figure>
                             <a th:href="|@{/profile/friendProfile(memberId=${mainBoard.memberId})}|">
                                 <span class="d-inline-block mt-1 boardNickName">[[${mainBoard.nickName}]]</span>
                                 <span class="boardMemberId">([[${mainBoard.memberId}]])</span>

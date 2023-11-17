@@ -23,7 +23,6 @@
         margin: 0 auto;
     }
 </style>
-<body>
 <div layout:fragment="banner">
     <!-- 배너 start -->
     <div class="site-cover site-cover-sm same-height overlay single-page" style="background-image: url('/images/mainBoard/banner1.jpg');">
@@ -33,7 +32,7 @@
                     <div class="post-entry text-center">
                         <h1 class="mb-4">Loving Cats</h1>
                         <div class="post-meta align-items-center text-center">
-                            <figure class="author-figure mb-0 me-3 d-inline-block"><img src="/images/person_3.jpg.jpg" alt="Image" class="img-fluid"></figure>
+                            <figure class="author-figure mb-0 me-3 d-inline-block"><img th:src="|/upload/profileView/${mainBoard.profileString}/${mainBoard.profileImg}|" alt="Image" class="img-fluid"></figure>
                             <a th:href="|@{/profile/friendProfile(memberId=${mainBoard.memberId})}|">
                                 <span class="d-inline-block mt-1 boardNickName">[[${mainBoard.nickName}]]</span>
                                 <span class="boardMemberId">([[${mainBoard.memberId}]])</span>
@@ -66,7 +65,8 @@
             <div class="col-md-12 mb-4">
                 <img class="img-fluid round"
                      th:each="mainImg : ${mainBoard.mainImg}"
-                     th:src="|/upload/mainBoardView/${mainImg}|" alt="Image placeholder">
+                     th:src="@{|/upload/mainBoardView/${mainBoard.dateString[0]}/${mainImg}|}" alt="Image placeholder">
+
             </div>
         </div>
     </div>
@@ -107,8 +107,12 @@
                     <h3 class="mb-5">댓글 쓰기</h3>
                     <form action="/mainComment/register" class="p-5 bg-light" method="post">
                         <input type="hidden" name="mbNo" th:value="${mainBoard.mbNo}">
-                        <input type="hidden" name="mno" id="mno" th:value="${#authentication.principal.mno}">
-
+                        <input type="hidden" name="mno" id="mno" th:value="${#authentication.principal.mno}" readonly>
+                        <input type="hidden" name="profileImg" class="form-control" th:value="${#authentication.principal.profileImg}+'/'+${#authentication.principal.dateString}">
+                        <div class="form-group">
+                            <label for="profileImg">profileImg</label>
+                            <img id="profileImg" th:src="|/upload/profileView/${#authentication.principal.dateString}/${#authentication.principal.profileImg}|" alt="Image placeholder"  class="img-fluid" readonly>
+                        </div>
                         <div class="form-group">
                             <label for="memberId">memberId</label>
                             <input type="text" class="form-control" id="memberId" th:value="${#authentication.principal.memberId}" readonly>
@@ -185,9 +189,8 @@
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script src="/js/mainBoard/mainBoard.js?aa"></script>
+    <script src="/js/mainBoard/mainBoard.js"></script>
 </div>
-</body>
 <script layout:fragment="script" th:inline="javascript">
     // 탈퇴한 회원일경우
     let isDel;
@@ -269,7 +272,7 @@ function printComments(page, size, goLast) {
 printComments(1, 10); // 무조건 호출
 printComments(1, 10, true);
 
-const commentList = document.querySelector('.comment-body'); // 댓글 목록 DOM
+const commentList = document.querySelector('.comment-view'); // 댓글 목록 DOM
 const commentPaging = document.querySelector('.commentPaging'); // 페이지 목록 DOM
 const commentCnt = document.querySelector('.commentCnt'); //댓글 수 DOM
 function printCommentCnt(total){
@@ -282,11 +285,14 @@ function printList(dtoList) { // 댓글 목록 출력
         for (const dto of dtoList) {
             console.log("dto 는 ?",dto);
             if(dto.comNo == dto.parentNo){
-                str += `<div class="wrap_comment">
-                        <h3>${dto.memberId}</h3>
-                        <div class="meta">${dto.addDate[0]}-${dto.addDate[1]}-${dto.addDate[2]} ${dto.addDate[3]}:${dto.addDate[4]}</div>
-                        <p data-comNo="${dto.comNo}">${dto.comment}</p>
-                        <button class="recommentBtn">Reply</button>`
+                str += `<div class="vcard">
+                        <img src="/upload/profileView/${dto.dateString}/${dto.profileImg}" alt="Image placeholder">
+                    </div>
+                    <div class="comment-body">
+                    </div><h3>${dto.memberId}</h3>
+                    <div class="meta">${dto.addDate[0]}-${dto.addDate[1]}-${dto.addDate[2]} ${dto.addDate[3]}:${dto.addDate[4]}</div>
+                    <p data-comNo="${dto.comNo}">${dto.comment}</p>
+                    <p><a href="#" class="reply rounded">Reply</a></p>`
                     + xBtn(dto) +
                     `<div class="recommentWrap toggleOff">
                         <form class="form-group frmAddReComment" method="post">
@@ -421,7 +427,8 @@ function printList(dtoList) { // 댓글 목록 출력
                 memberId: commentId.value,
                 nickName: commentnickName.value,
                 comment: comment.value,
-                mno: mno.value
+                mno: mno.value,
+                profileImg: profileImg.value
             };
 
             addComment(commentObj).then(result => {

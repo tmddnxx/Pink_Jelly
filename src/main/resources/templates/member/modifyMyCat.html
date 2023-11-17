@@ -1,77 +1,107 @@
 <!DOCTYPE html>
-<html lang="en"
-      xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/basic.html}">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <style layout:fragment="style">
+
+        input[type="number"]::-webkit-outer-spin-button,
+        input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+    </style>
 </head>
 <body>
-<div class="menu">
-    <a th:href="@{/member/modifyMember}">회원정보수정</a>
-    <a th:href="@{/member/modifyPasswd}">비밀번호 변경</a>
-    <a th:href="@{/member/modifyMyCat}">고양이 정보 수정</a>
-</div>
-<h1> 고양이 정보 수정</h1>
-<form id="frmModMyCat" action="/member/modifyMyCat" method="post" th:with="member=${#authentication.principal}">
-    <input type="hidden" name="mno" th:value="${member.mno}">
 
-    <div class="col-12 mb-3">
-        <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" name="hasCat" th:value="${member.hasCat}" role="switch" id="hasCat" checked>
-            <label class="form-check-label" for="hasCat">고양이를 키우고 계신가요?</label>
-        </div>
+<div layout:fragment="content">
 
-        <div class="row catInfo">
-            <div class="col-6 mb-3">
-                <input id="catAge" type="number" class="form-control">
-                <input type="hidden" name="catAge" th:value="${member.catAge}">
-            </div>
-            <div class="col-6 mb-3">
-                <div class="form-check-inline">
-                    <input class="form-check-input" type="radio" name="ageRdo" id="month" value="개월">
-                    <label class="form-check-label" for="month">개월</label>
+    <div class="menu">
+        <a th:href="@{/member/modifyMemberInfo}">회원정보수정</a>
+        <a th:href="@{/member/modifyPasswd}">비밀번호 변경</a>
+        <a th:href="@{/member/modifyMyCat}">고양이 정보 수정</a>
+    </div>
+
+    <h1> 고양이 정보 수정</h1>
+
+    <div class="row">
+        <div class="col-lg-8" data-aos="fade-up" data-aos-delay="200">
+            <form id="frmModMyCat" action="/member/modifyMyCat" method="post" th:with="member=${#authentication.principal}">
+                <div class="row">
+
+                    <input type="hidden" name="mno" th:value="${member.mno}">
+
+                    <div class="col-12 mb-3">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" name="hasCat" th:value="${member.hasCat}" role="switch" id="hasCat" checked>
+                            <label class="form-check-label" for="hasCat">고양이를 키우고 계신가요?</label>
+                        </div>
+
+                        <div class="row catInfo hide">
+                            <div class="col-6 mb-3">
+                                <input id="catAge" type="number" class="form-control" placeholder="고양이 나이">
+                                <input type="hidden" name="catAge">
+                            </div>
+                            <div class="col-6 mb-3">
+                                <div class="form-check-inline">
+                                    <input class="form-check-input" type="radio" name="ageRdo" id="month" value="개월">
+                                    <label class="form-check-label" for="month">개월</label>
+                                </div>
+                                <div class="form-check-inline">
+                                    <input class="form-check-input" type="radio" name="ageRdo" id="year" value="년">
+                                    <label class="form-check-label" for="year">년</label>
+                                </div>
+                            </div>
+
+                            <div class="col-6 mb-3">
+                                <input type="text" name="variety" class="form-control" placeholder="품종">
+                            </div>
+
+                            <div class="col-6 mb-3">
+                                <select id="varietySelect" class="form-select" style="height: 54px;">
+                                    <option value="-1" selected>직접입력</option>
+                                    <option> 코리안 숏 헤어 </option>
+                                    <option> 노르웨이 숲 </option>
+                                    <option> 페르시안 </option>
+                                    <option> 샴 </option>
+                                </select>
+                            </div>
+
+                            <div class="col-6 mb-3">
+                                <label for="profileImg" class="form-label">프로필 이미지</label>
+                                <input class="form-control" type="file" name="files" id="profileImg" style="height: 35px;">
+                                <div class="uploadResult"></div>
+                                <div class="uploadHidden"></div>
+                            </div>
+                            <div class="col-6 mb-3">
+                                <div>성별</div>
+                                <div class="form-check-inline">
+                                    <input class="form-check-input" type="radio" name="catSex" id="male">
+                                    <label class="form-check-label" for="male">남아</label>
+                                </div>
+                                <div class="form-check-inline">
+                                    <input class="form-check-input" type="radio" name="catSex" id="female">
+                                    <label class="form-check-label" for="female">여아</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary">수정 완료</button>
+                        <a th:href="@{/member/memberInfo}">
+                            <button type="button" class="btn btn-secondary">뒤로가기</button>
+                        </a>
+                    </div>
                 </div>
-                <div class="form-check-inline">
-                    <input class="form-check-input" type="radio" name="ageRdo" id="year" value="년">
-                    <label class="form-check-label" for="year">년</label>
-                </div>
-            </div>
-
-            <div class="col-6 mb-3">
-                <input type="text" name="variety" class="form-control" th:value="${member.variety}">
-            </div>
-
-            <div class="col-6 mb-3">
-                <select id="varietySelect" class="form-select" style="height: 54px;">
-                    <option value="-1" selected>직접입력</option>
-                    <option> 코리안 숏 헤어 </option>
-                    <option> 노르웨이 숲 </option>
-                    <option> 페르시안 </option>
-                    <option> 샴 </option>
-                </select>
-            </div>
-
-            <div class="col-6 mb-3">
-                <label for="profileImg" class="form-label">프로필 이미지</label>
-                <input class="form-control" type="file" id="profileImg" style="height: 35px;">
-            </div>
-            <div class="col-6 mb-3">
-                <div>성별</div>
-                <div class="form-check-inline">
-                    <input class="form-check-input" type="radio" name="catSex" id="male" value="남아" th:checked="${member.catSex == '남아'}">
-                    <label class="form-check-label" for="male">남아</label>
-                </div>
-                <div class="form-check-inline">
-                    <input class="form-check-input" type="radio" name="catSex" id="female" value="여아" th:checked="${member.catSex == '여아'}">
-                    <label class="form-check-label" for="female">여아</label>
-                </div>
-            </div>
+            </form>
         </div>
     </div>
 
-    <button type="submit" class="btn-secondary">수정 완료</button>
-    <a href="/member/memberInfo"> 뒤로 가기 </a>
-</form>
+</div>
 
 <script th:inline="javascript">
     document.addEventListener('DOMContentLoaded', function () {

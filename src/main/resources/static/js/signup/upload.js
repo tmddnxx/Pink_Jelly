@@ -10,7 +10,6 @@ async function uploadToServer(url, formObj) {
             'Content-Type' : 'multipart/form-data',
         }
     });
-
     return response.data;
 }
 

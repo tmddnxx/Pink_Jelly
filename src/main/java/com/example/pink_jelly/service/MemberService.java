@@ -7,7 +7,7 @@ public interface MemberService {
 
     void removeMember(Long mno); // 회원탈퇴
 
-    void modifyMember(MemberDTO memberDTO);  // 회원수정(이메일, 이름, 전화번호, 닉네임, 소개글)
+    void modifyMemberInfo(MemberDTO memberDTO);  // 회원수정(이메일, 이름, 전화번호, 닉네임, 소개글)
 
     void modifyPasswd(MemberDTO memberDTO); // 비밀번호변경
 

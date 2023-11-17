@@ -7,6 +7,8 @@ import com.example.pink_jelly.mapper.MemberMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -31,9 +33,8 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public void modifyMember(MemberDTO memberDTO) { // 회원정보수정(이메일, 이름, 전화번호, 닉네임, 소개글)
+    public void modifyMemberInfo(MemberDTO memberDTO) { // 회원정보수정(이메일, 이름, 전화번호, 닉네임, 소개글)
         MemberVO memberVO = modelMapper.map(memberDTO, MemberVO.class);
-
         memberMapper.updateMember(memberVO);
     }
 
