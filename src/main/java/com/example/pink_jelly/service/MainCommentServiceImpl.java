@@ -24,8 +24,14 @@ public class MainCommentServiceImpl implements MainCommentService{
     private final ModelMapper modelMapper;
     @Override
     public Long register(MainCommentDTO mainCommentDTO) {
+
+
         MainCommentVO mainCommentVO = modelMapper.map(mainCommentDTO, MainCommentVO.class);
+
         int success = mainCommentMapper.insert(mainCommentVO);
+
+        mainCommentMapper.updateParentNo();
+
         if(success == 1) {
             mainBoardMapper.upCommentCnt(mainCommentDTO.getMbNo());
         }

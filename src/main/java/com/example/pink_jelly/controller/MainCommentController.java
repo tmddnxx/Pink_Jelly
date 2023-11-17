@@ -27,11 +27,12 @@ public class MainCommentController {
     @ApiOperation(value = "Comments POST", notes = "POST 방식으로 댓글 등록")
     @PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_VALUE)
     public Map<String, Long> register(@Valid @RequestBody MainCommentDTO mainCommentDTO, BindingResult bindingResult) throws BindException {
-//        log.info("왔습니다j--------------");
         if(bindingResult.hasErrors()) {
             throw new BindException((bindingResult));
         }
+
         Map<String, Long> resultMap = new HashMap<>();
+
         Long rno = mainCommentService.register(mainCommentDTO);;
 
         resultMap.put("rno", rno);

@@ -12,6 +12,7 @@ async function getList({mbNo, page, size, goLast}) {
 
         return getList({mbNo: mbNo, page: page, size: size});
     }
+    console.log(result.data);
     return result.data;
 }
 //댓글 삭제

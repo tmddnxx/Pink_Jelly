@@ -14,9 +14,13 @@
         SELECT COUNT(comNo) FROM mainComment WHERE mbNo=#{mbNo}
     </select>
     <select id="selectList" resultType="com.example.pink_jelly.domain.MainCommentVO">
-        SELECT * FROM mainComment WHERE mbNo=#{mbNo} ORDER BY comNo LIMIT #{skip}, #{size}
+        SELECT * FROM mainComment WHERE mbNo=#{mbNo} ORDER BY parentNo, comNo LIMIT #{skip}, #{size}
     </select>
     <delete id="deleteOne">
         DELETE FROM mainComment WHERE comNo=#{comNo}
     </delete>
+    <update id="updateParentNo">
+        update `maincomment` set `parentNo` = `comNo` where `parentNo` is null;
+    </update>
+
 </mapper>
