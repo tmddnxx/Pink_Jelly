@@ -10,6 +10,11 @@
         .hide {display: none;}
         .fail {color: #ff0000;}
         .success {color: #00ff00}
+        input[type="number"]::-webkit-outer-spin-button,
+        input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
     </style>
 </head>
 <body>
@@ -21,6 +26,7 @@
                     <div class="row">
                         <div class="col-10 mb-3">
                             <input id="memberId" type="text" class="form-control" name="memberId" minlength="5" maxlength="20" placeholder="아이디" required>
+                            <input type="hidden" name="isDuplicate" value="false">
                             <span class="checkId-message hide fail"></span>
                         </div>
                         <div class="col-2 mb-3">
@@ -47,10 +53,10 @@
                             </select>
                         </div>
                         <div class="col-4 mb-3">
-                            <input type="number" class="form-control input-phone" placeholder="1234" required>
+                            <input type="number" class="form-control input-phone" placeholder="1234" maxlength="4" required>
                         </div>
                         <div class="col-4 mb-3">
-                            <input type="number" class="form-control input-phone" placeholder="5678" required>
+                            <input type="number" class="form-control input-phone" placeholder="5678" maxlength="4" required>
                             <input type="hidden" name="phone">
                         </div>
 
@@ -90,6 +96,7 @@
                         <div class="col-6 mb-3">
                             <input id="memberName" type="text" name="memberName" class="form-control" placeholder="이름" required/>
                         </div>
+
                         <div class="col-6 mb-3">
                             <input id="nickName" type="text" name="nickName" class="form-control" minlength="2" maxlength="15" placeholder="닉네임" required/>
                             <span class="nickNameCheck-message">2 ~ 15글자, 숫자, 영어, 한글만 입력할 수 있습니다</span>
@@ -275,6 +282,7 @@
         // 아이디 중복체크
         document.getElementById('checkIdBtn').addEventListener('click', async function () {
             const memberId = inputMemberId.value;
+            const isDuplicate = document.querySelector('input[name=isDuplicate]');
             const result = await checkMemberId(memberId);
             console.log(result);
             if (result === "true") { // 아이디가 존재할때
@@ -282,11 +290,12 @@
                 checkIdMsg.classList.remove('success');
             }
             else {
-                confirm('사용할 수 있는 아이디입니다.')
-                alert("사용할 수 있는 아이디입니다.");
+                if (confirm('사용할 수 있는 아이디입니다. \n 이 아이디를 사용하시겠습니까?')) {
+                    inputMemberId.readOnly = true;
+                    isDuplicate.value = "true"; // 중복 검사 완료
+                }
                 checkIdMsg.textContent = '사용할 수 있는 아이디입니다';
                 checkIdMsg.classList.add('success');
-                inputMemberId.readOnly = true;
             }
         });
 
@@ -368,11 +377,12 @@
             else {
                 const result = await sendConfirmMail(mailTo);
                 if (result.toString() === "true") { // 이메일 전송 성공시
+                    // 인증하기 버튼 비활성화
+                    emailBtn.disabled = true;
+
                     alert('인증번호가 전송되었습니다.');
                     // 이메일 저장
                     email.value = mailTo;
-                    // 인증하기 버튼 비활성화
-                    emailBtn.disabled = true;
                     confirmWrap.classList.remove('hide'); // 인증코드 입력폼 보여줌
 
                     // 이메일 인증 타이머

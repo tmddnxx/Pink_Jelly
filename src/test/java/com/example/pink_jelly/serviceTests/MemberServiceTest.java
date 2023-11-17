@@ -46,7 +46,7 @@ public class MemberServiceTest {
                 .nickName("modifyNickName")
                 .mno(1L)
                 .build();
-        memberService.modifyMember(memberDTO);
+        memberService.modifyMemberInfo(memberDTO);
     }
 
     @Test

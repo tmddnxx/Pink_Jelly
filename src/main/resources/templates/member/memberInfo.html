@@ -15,97 +15,86 @@
 
     <div class="menu">
         <a th:href="@{/member/memberInfo}">회원정보확인</a>
-        <a th:href="@{/member/modifyMember}">회원정보수정</a>
+        <a th:href="@{/member/modifyMemberInfo}">회원정보수정</a>
         <a th:href="@{/member/modifyPasswd}">비밀번호 변경</a>
         <a th:href="@{/member/modifyMyCat}">고양이 정보 수정</a>
     </div>
     <h1> 회원 정보 </h1>
 
-    <div class="row">
+    <div class="row" th:with="member=${#authentication.principal}">
         <div class="col-lg-8" data-aos="fade-up" data-aos-delay="200">
-            <form action="#" method="get">
-                <div class="row">
-                    <div class="col-10 mb-3">
-                        <input id="memberId" type="text" class="form-control" name="memberId" th:value="${#authentication.principal.memberId}" readonly>
+            <div class="row">
+                <div class="col-12 mb-3">
+                    <h4>아이디</h4>
+                    <p>[[${member.memberId}]]</p>
+                </div>
+
+                <div class="col-12 mb-3">
+                    <a th:href="@{/member/modifyPasswd}">
+                        <button type="button" class="btn btn-primary">비밀번호 변경</button>
+                    </a>
+                </div>
+
+                <div class="col-12 mb-3">
+                    <h4>전화번호</h4>
+                    <p>[[${member.phone}]]</p>
+                </div>
+
+                <div class="col-12 mb-3">
+                    <h4>이메일</h4>
+                    <p>[[${member.email}]]</p>
+                </div>
+
+                <div class="col-12 mb-3">
+                    <h4>이름</h4>
+                    <p>[[${member.memberName}]]</p>
+                </div>
+
+                <div class="col-12 mb-3">
+                    <h4>닉네임</h4>
+                    <p>[[${member.nickName}]]</p>
+                </div>
+
+                <div class="col-12 mb-3">
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" name="hasCat" th:value="${member.hasCat}"
+                               role="switch" id="hasCat" th:checked="${member.hasCat}" readonly>
+                        <label class="form-check-label" for="hasCat">고양이를 키우고 계신가요?</label>
                     </div>
 
-                    <div class="col-6 mb-3">
-                        <button type="button" class="btn-primary">비밀번호 변경</button>
-                    </div>
+                    <div th:class="|row catInfo ${member.hasCat == 'true' ? '' : 'hide'}|">
 
-                    <!-- 전화번호 -->
-                    <div class="col-4 mb-3">
-                        <input type="text" class="form-control input-phone" th:value="${phones[0]}" readonly>
-                    </div>
-                    <div class="col-4 mb-3">
-                        <input type="text" class="form-control input-phone" th:value="${phones[1]}" readonly>
-                    </div>
-                    <div class="col-4 mb-3">
-                        <input type="text" class="form-control input-phone" th:value="${phones[2]}" readonly>
-                    </div>
-
-                    <div class="col-4 mb-3">
-                        <input id="emailId" type="text" class="form-control" th:value="${emails[0]}" readonly>
-                    </div>
-
-                    <div class="col-4 mb-3">
-                        <input id="domain" type="text" class="form-control" th:value="${emails[1]}" readonly>
-                        <input type="hidden" name="email">
-                    </div>
-
-                    <div class="col-6 mb-3">
-                        <input id="memberName" type="text" name="memberName" class="form-control" th:value="${#authentication.principal.memberName}" readonly/>
-                    </div>
-                    <div class="col-6 mb-3">
-                        <input id="nickName" type="text" name="nickName" class="form-control" th:value="${#authentication.principal.nickName}" readonly/>
-                    </div>
-
-                    <div class="col-12 mb-3">
-                        <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" name="hasCat" th:value="${#authentication.principal.hasCat}"
-                                   role="switch" id="hasCat" th:checked="${#authentication.principal.hasCat == 'true'}" readonly>
-                            <label class="form-check-label" for="hasCat">고양이를 키우고 계신가요?</label>
+                        <div class="col-6 mb-3">
+                            <h4>고양이 나이</h4>
+                            <p>[[${member.catAge}]]</p>
                         </div>
 
-                        <div th:class="|row catInfo ${#authentication.principal.hasCat == 'true' ? '' : 'hide'}|">
-                            <div class="col-6 mb-3">
-                                <input id="catAge" type="text" class="form-control" th:value="${#authentication.principal.catAge}" readonly>
-                            </div>
-
-                            <div class="col-6 mb-3">
-                                <input type="text" name="variety" class="form-control" th:value="${#authentication.principal.variety}" readonly>
-                            </div>
-
-                            <div class="col-6 mb-3">
-                                <label for="profileImg" class="form-label">프로필 이미지</label>
-                                <input class="form-control" type="file" id="profileImg" style="height: 35px;">
-                            </div>
-                            <div class="col-6 mb-3">
-                                <div>성별</div>
-                                <div class="form-check-inline">
-                                    <input class="form-check-input" type="radio" name="catSex" id="male"
-                                           th:checked="${#authentication.principal.catSex == '남아'}">
-                                    <label class="form-check-label" for="male">남아</label>
-                                </div>
-                                <div class="form-check-inline">
-                                    <input class="form-check-input" type="radio" name="catSex" id="female"
-                                           th:checked="${#authentication.principal.catSex == '여아'}">
-                                    <label class="form-check-label" for="female">여아</label>
-                                </div>
-                            </div>
+                        <div class="col-6 mb-3">
+                            <h4>고양이 품종</h4>
+                            <p>[[${member.variety}]]</p>
                         </div>
-                    </div>
 
-                    <div class="col-12">
-                        <a th:href="@{/member/modifyMember}">
-                            <button type="button" class="btn btn-primary">정보수정</button>
-                        </a>
-                        <a th:href="@{/profile}">
-                            <button type="button" class="btn btn-primary">뒤로가기</button>
-                        </a>
+                        <div class="col-6 mb-3">
+                            <h4>고양이 성별</h4>
+                            <p>[[${member.catSex}]]</p>
+                        </div>
+
+                        <div class="col-6 mb-3">
+                            <h4>프로필 이미지</h4>
+                            <img th:src="|/upload/profileView/${member.dateString}/${member.profileImg}|">
+                        </div>
                     </div>
                 </div>
-            </form>
+
+                <div class="col-12">
+                    <a th:href="@{/member/modifyMemberInfo}">
+                        <button type="button" class="btn btn-primary">정보수정</button>
+                    </a>
+                    <a th:href="@{/profile}">
+                        <button type="button" class="btn btn-primary">뒤로가기</button>
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
 </div>

@@ -29,7 +29,7 @@ public class CustomUserDetailService implements UserDetailsService {
         log.info("loadUserByUsername: " + memberId);
 
         MemberVO memberVO = memberMapper.findById(memberId);
-        log.info("passwd: " + memberVO.getPasswd());
+//        log.info("passwd: " + memberVO.getPasswd());
 
         // 사용자 정보가 없는 경우
         if (memberVO == null) {
