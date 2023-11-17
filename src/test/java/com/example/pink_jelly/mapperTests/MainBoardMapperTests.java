@@ -49,7 +49,7 @@ public class MainBoardMapperTests {
                 .page(1)
                 .size(3)
                 .build();
-        List<MainBoardVO> list = mainBoardMapper.selectList(1, 9, null, null, null, null);
+        List<MainBoardVO> list = mainBoardMapper.selectList(0, 9, null, null, null, null);
         list.forEach(log::info);
     }
     //완
@@ -84,5 +84,12 @@ public class MainBoardMapperTests {
     @Test
     public void upCnt() {
         mainBoardMapper.upCommentCnt(21L);
+    }
+
+    @Test
+    public void getOneTest() {
+        MainBoardVO mainBoard = mainBoardMapper.getOne(83L);
+        log.info(mainBoard);
+
     }
 }

@@ -29,5 +29,7 @@ public class MainBoardDTO { // 메인 게시판 DTO
     private Long hit; // 게시물 조회수
     private Long mno; //회원 고유넘버
 
+    private String profileString; //프로필 이미지 저장장소
+    private List<String> dateString; // 이미지 저장 날짜
     private boolean flag; // 좋아요 눌럿냐 안눌럿냐
 }

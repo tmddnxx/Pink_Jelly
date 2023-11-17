@@ -23,23 +23,23 @@ async function removeComment(comNo, mbNo) {
 
 //write
 //파일 업로드 이벤트
-async function uploadToServer(formObj) {
-    console.log("upload to server");
-    console.log(formObj);
-
-    const response = await axios({
-        method: 'post',
-        url : '/upload/mainBoardUpload',
-        data: formObj,
-        headers: {
-            'Content-Type' : 'multipart/form-data',
-        },
-    });
-    return response.data;
-}
-// 파일 삭제
-async function removeFileToServer(fileName) {
-    const response = await axios.delete(`/upload/mainBoardRemove/${fileName}`);
-    return response.data;
-
-}
+// async function uploadToServer(formObj) {
+//     console.log("upload to server");
+//     console.log(formObj);
+//
+//     const response = await axios({
+//         method: 'post',
+//         url : '/upload/mainBoardUpload',
+//         data: formObj,
+//         headers: {
+//             'Content-Type' : 'multipart/form-data',
+//         },
+//     });
+//     return response.data;
+// }
+// // 파일 삭제
+// async function removeFileToServer(fileName) {
+//     const response = await axios.delete(`/upload/mainBoardRemove/${fileName}`);
+//     return response.data;
+//
+// }

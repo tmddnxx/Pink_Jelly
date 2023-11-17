@@ -53,8 +53,8 @@ public class MainBoardServiceTests {
     //완
     @Test
     public void getBoardTest() {
-//        MainBoardDTO mainBoardDTO = mainBoardService.getBoard(40L,"read");
-//        log.info(mainBoardDTO);
+        MainBoardDTO mainBoardDTO = mainBoardService.getBoard(81L,"read", 27L);;
+        log.info(mainBoardDTO);
     }
     //완
     @Test
@@ -78,5 +78,9 @@ public class MainBoardServiceTests {
                 .variety("고얌미")
                 .build();
         mainBoardService.modifyBoard(mainBoardDTO);
+    }
+    @Test
+    public void boardlistTest() {
+        mainBoardService.getBoard(82L, "read", 27L);
     }
 }

@@ -18,9 +18,12 @@ import org.springframework.web.bind.annotation.*;
 import springfox.documentation.spring.web.json.Json;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.security.Principal;
 
@@ -29,6 +32,8 @@ import java.security.Principal;
 @RequestMapping({"/main", "/"})
 @RequiredArgsConstructor
 public class MainBoardController {
+    @Value("${com.example.tempUpload.path}")
+    private String tempPath;
     @Value("${com.example.mainBoardUpload.path}")
     private String mainBoardPath;
     private final MainBoardService mainBoardService;
@@ -96,6 +101,21 @@ public class MainBoardController {
     @PostMapping("/write")
     public String write(MainBoardDTO mainBoardDTO, HttpServletRequest request) {
         log.info("/main/write... postMapping");
+
+
+        if (mainBoardDTO.getMainImg() != null) {
+            for(int i = 0; i < mainBoardDTO.getMainImg().size(); i++) {
+                String mainImg = mainBoardDTO.getMainImg().get(i);
+                String[] share = mainImg.split("/");
+                moveFile(share[0]);
+                moveFile("s_" + share[0]);
+            }
+            String splits[] = mainBoardDTO.getProfileImg().split("/");
+
+            moveFile(splits[0]);
+            moveFile("s_" + splits[0]);
+        }
+
         mainBoardService.register(mainBoardDTO);
         return "redirect:/main";
     }
@@ -142,4 +162,47 @@ public class MainBoardController {
         return "redirect:/main/view?mbNo=" + mainBoardDTO.getMbNo();
     }
 
+
+
+    private void moveFile(String fileName) {
+        /* 등록시에 첨부 파일을 이동 */
+
+        // 오늘 날짜로 폴더 생성
+        LocalDate currentDate = LocalDate.now(); // 오늘 날짜 가져오기
+        // 날짜 포맷 지정(원하는 형식으로)
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String dateString = currentDate.format(formatter); // 날짜를 문자열로 변환
+
+        String newTempPath = tempPath + "/" + dateString;
+        String newProfilePath = mainBoardPath + "/" + dateString;
+
+        File file = new File(newProfilePath);
+        if (!file.exists()) { // 폴더가 존재하지 않으면
+            file.mkdirs(); // 폴더 생성
+        }
+
+        try {
+            // 읽을 파일과 쓰기 파일을 구분해서 객체 생성.
+            FileInputStream fileInputStream = new FileInputStream(newTempPath + File.separator + fileName);
+            FileOutputStream fileOutputStream = new FileOutputStream(newProfilePath + File.separator + fileName);
+
+            // 파일 복사의 경우 buffer를 사용해야 속도가 빠름.
+            BufferedInputStream bufferedInputStream = new BufferedInputStream(fileInputStream);
+            BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(fileOutputStream);
+
+            int i;
+            while ((i = bufferedInputStream.read()) != -1) { // 파일 끝까지 읽기
+                bufferedOutputStream.write(i); // 읽은 만큼 쓰기
+            }
+            bufferedInputStream.close();
+            bufferedOutputStream.close();
+            fileInputStream.close();
+            fileOutputStream.close();
+
+            Files.delete(Paths.get(newTempPath + File.separator + fileName));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

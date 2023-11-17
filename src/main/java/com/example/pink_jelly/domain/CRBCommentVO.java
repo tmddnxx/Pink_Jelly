@@ -18,4 +18,5 @@ public class CRBCommentVO {
     private Long parentNo; // 대댓글 고유 번호
     private LocalDateTime addDate; // 등록 날짜
     private Long mno; //회원 고유넘버
+    private String profileImg; //프로필 이미지
 }

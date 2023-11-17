@@ -38,41 +38,7 @@ public class UpDownController {
     @Value("${com.example.profileUpload.path}")
     private String profilePath; // 프로필 저장 경로
 
-    @ApiOperation(value = "Temp View GET", notes = "GET방식으로 임시 첨부파일 조회")
-    @GetMapping("/tempView/{dateString}/{fileName}")
-    public ResponseEntity<Resource> getTempViewFile(@PathVariable String dateString, @PathVariable String fileName) {
-        // 임시 저장 이미지 조회
-        return getViewFile(dateString ,fileName, tempPath);
-    }
-
-    @ApiOperation(value = "view 파일", notes = "GET방식으로 첨부파일 조회")
-    @GetMapping("/mainBoardView/{dateString}/{fileName}")
-    public ResponseEntity<Resource> GetMainBoardViewFile(@PathVariable String dateString,  @PathVariable String fileName){
-        // 메인보드 이미지 파일 조회
-        return getViewFile(dateString, fileName, mainBoardPath);
-    }
-
-    @ApiOperation(value = "remove 파일", notes = "DELETE 방식으로 파일 삭제")
-    @DeleteMapping("/mainBoardRemove/{fileName}")
-    public Map<String, Boolean> removeMainBoardFile(@PathVariable String fileName) {
-        // 메인보드 이미지 파일 삭제
-        return removeFile(fileName, mainBoardPath);
-    }
-
-    @ApiOperation(value = "Profile View GET", notes = "GET방식으로 프로필 첨부파일 조회")
-    @GetMapping("/profileView/{dateString}/{fileName}")
-    public ResponseEntity<Resource> getProfileViewFile(@PathVariable String dateString, @PathVariable String fileName) {
-        // 프로필 사진 조회
-        return getViewFile(dateString ,fileName, profilePath);
-    }
-
-    @ApiOperation(value = "Profile Remove DELETE", notes = "DELETE 방식으로 파일 삭제")
-    @DeleteMapping("/profileRemove/{dateString}/{fileName}")
-    private Map<String, Boolean> removeProfileFile(@PathVariable String fileName) {
-        // 프로필 사진 삭제
-        return removeFile(fileName, profilePath);
-    }
-
+    //임시 저장소 temp
     @ApiOperation(value = "Temp Upload Post", notes = "POST 방식으로 임시 파일 등록")
     @PostMapping(value = "/tempUpload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     private List<UploadResultDTO> uploadFile(UploadFileDTO uploadFileDTO) {
@@ -126,10 +92,56 @@ public class UpDownController {
         return null;
     }
 
+    @ApiOperation(value = "Temp View GET", notes = "GET방식으로 임시 첨부파일 조회")
+    @GetMapping("/tempView/{dateString}/{fileName}")
+    public ResponseEntity<Resource> getTempViewFile(@PathVariable String dateString, @PathVariable String fileName) {
+        // 임시 저장 이미지 조회
+        return getViewFile(dateString ,fileName, tempPath);
+    }
+
+
+
+    //메인보드 //upload
+    @ApiOperation(value = "view 파일", notes = "GET방식으로 첨부파일 조회")
+    @GetMapping("/mainBoardView/{dateString}/{fileName}")
+    public ResponseEntity<Resource> GetMainBoardViewFile(@PathVariable String dateString,  @PathVariable String fileName){
+        // 메인보드 이미지 파일 조회
+        return getViewFile(dateString, fileName, mainBoardPath);
+    }
+
+    @ApiOperation(value = "remove 파일", notes = "DELETE 방식으로 파일 삭제")
+    @DeleteMapping("/mainBoardRemove/{fileName}")
+    public Map<String, Boolean> removeMainBoardFile(@PathVariable String fileName) {
+        // 메인보드 이미지 파일 삭제
+        return removeFile(fileName, mainBoardPath);
+    }
+
+
+
+    //프로필 upload
+    @ApiOperation(value = "Profile View GET", notes = "GET방식으로 프로필 첨부파일 조회")
+    @GetMapping("/profileView/{dateString}/{fileName}")
+    public ResponseEntity<Resource> getProfileViewFile(@PathVariable String dateString, @PathVariable String fileName) {
+        // 프로필 사진 조회
+        return getViewFile(dateString ,fileName, profilePath);
+    }
+
+    @ApiOperation(value = "Profile Remove DELETE", notes = "DELETE 방식으로 파일 삭제")
+    @DeleteMapping("/profileRemove/{dateString}/{fileName}")
+    private Map<String, Boolean> removeProfileFile(@PathVariable String fileName) {
+        // 프로필 사진 삭제
+        return removeFile(fileName, profilePath);
+    }
+
+
+
+
+
     private ResponseEntity<Resource> getViewFile(String dateString, String fileName, String uploadPath) {
         // 첨부파일 조회
         Resource resource = new FileSystemResource(uploadPath +File.separator
                 + dateString + File.separator + fileName);
+
 
         String resourceName = resource.getFilename();
         HttpHeaders headers = new HttpHeaders();

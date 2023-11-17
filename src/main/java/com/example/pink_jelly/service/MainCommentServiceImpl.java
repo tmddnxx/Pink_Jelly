@@ -47,8 +47,20 @@ public class MainCommentServiceImpl implements MainCommentService{
         List<MainCommentVO> mainCommentVOList = mainCommentMapper.selectList(mbNo, pageRequestDTO.getSkip(), pageRequestDTO.getSize());
         List<MainCommentDTO> mainCommentDTOList = new ArrayList<>();
 
-        mainCommentVOList.forEach(mainCommentVO -> mainCommentDTOList.add(modelMapper.map(mainCommentVO, MainCommentDTO.class)));
+        mainCommentVOList.forEach(mainCommentVO -> {
+            mainCommentDTOList.add(modelMapper.map(mainCommentVO, MainCommentDTO.class));
+        });
+        mainCommentDTOList.forEach(mainCommentDTO -> {
+            String[] splits = mainCommentDTO.getProfileImg().split("/");
+            String profileImg = splits[0];
+            String dateString = splits[1];
+            mainCommentDTO.setProfileImg(profileImg);
+            mainCommentDTO.setDateString(dateString);
+            log.info(dateString);
+        });
 
+
+        mainCommentDTOList.forEach(log::info);
         return PageResponseDTO.<MainCommentDTO>withAll()
                 .pageRequestDTO(pageRequestDTO)
                 .dtoList(mainCommentDTOList)
