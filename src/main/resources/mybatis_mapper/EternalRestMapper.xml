@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.pink_jelly.mapper.EternalRestBoardMapper">
+
+    <insert id="insert">
+        INSERT INTO eternalRestBoard (memberId, nickName, profileImg, title, content, addDate, mno)
+        VALUES (#{memberId}, #{nickName}, #{profileImg}, #{title}, #{content}, now(), #{mno})
+    </insert>
+    <select id="getCount" resultType="int">
+        SELECT COUNT(erbNo) FROM eternalRestBoard
+    </select>
+    <select id="selectList" resultType="com.example.pink_jelly.domain.EternalRestBoardVO">
+        SELECT * FROM eternalRestBoard ORDER BY erbNo DESC LIMIT #{skip}, #{size};
+    </select>
+    <select id="getOne" resultType="com.example.pink_jelly.domain.EternalRestBoardVO">
+        SELECT * FROM eternalRestBoard WHERE erbNo = #{erbNo}
+    </select>
+    <delete id="delete">
+        DELETE FROM eternalRestBoard WHERE erbNo = #{erbNo};
+    </delete>
+    <select id="isRestSad">
+        select count(*) from eternalRestBoard where mno = #{mno} and erbNo = #{erbNo};
+    </select>
+    <insert id="insertRestSad">
+        insert into erbSad (mno, erbNo) values (#{mno}, #{erbNo});
+    </insert>
+    <delete id="removeRestSad">
+        delete from erbSad where mno = #{mno} and erbNo = #{erbNo};
+    </delete>
+    <update id="sadCntUpdate">
+        <choose>
+            <when test="flag">
+                update `eternalRestBoard` set `sad` = `sad` + 1 where erbNo = #{erbNo};
+            </when>
+            <when test="!flag">
+                update `eternalRestBoard` set `sad` = `sad` - 1 where erbNo = #{erbNo};
+            </when>
+        </choose>
+    </update>
+    <update id="catInfoDel">
+        update member set `hasCat` = 0 , `catAge` = null, `catSex` = null, `variety` = null where mno = #{mno};
+    </update>
+    <update id="upCommentCnt">
+        UPDATE `eternalRestBoard` SET commentCnt = commentCnt+1 WHERE erbNo = #{erbNo}
+    </update>
+    <update id="downCommentCnt">
+        UPDATE `eternalRestBoard` SET commentCnt = commentCnt-1 WHERE erbNo = #{erbNo}
+    </update>
+
+</mapper>
