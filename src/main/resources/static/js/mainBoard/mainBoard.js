@@ -17,7 +17,8 @@ async function getList({mbNo, page, size, goLast}) {
 }
 //댓글 삭제
 async function removeComment(comNo, mbNo) {
-    console.log(mbNo);
+    console.log("mbNo는 ?",mbNo);
+    console.log("comNo는 ?",comNo);
     const response = await axios.delete(`/mainComment/${comNo}/${mbNo}`);
     return response.data;
 }

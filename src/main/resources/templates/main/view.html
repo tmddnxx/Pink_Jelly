@@ -291,13 +291,14 @@ function printList(dtoList) { // 댓글 목록 출력
                 str += `<div class="vcard">
                         <img src="/upload/profileView/${dto.dateString}/${dto.profileImg}" alt="Image placeholder">
                     </div>
-                    <div class="comment-body">
-                    </div><h3>${dto.memberId}</h3>
+                    <div class="comment-view">
+                    <h3>${dto.memberId}</h3>
                     <div class="meta">${dto.addDate[0]}-${dto.addDate[1]}-${dto.addDate[2]} ${dto.addDate[3]}:${dto.addDate[4]}</div>
                     <p data-comNo="${dto.comNo}">${dto.comment}</p>
                     <p><a class="reply rounded recommentBtn">Reply</a></p>`
                     + xBtn(dto) +
-                    `<div class="recommentWrap toggleOff">
+                    `</div>
+                    <div class="recommentWrap toggleOff">
                         <form class="form-group frmAddReComment" method="post">
                             <input type="hidden" name="mno" value="${auth.mno}">
                             <input type="hidden" name="nickName" value="${auth.nickName}">
@@ -324,9 +325,8 @@ function printList(dtoList) { // 댓글 목록 출력
                             <h3>(${dto.memberId})</h3>
                             <div class="meta">${dto.addDate[0]}-${dto.addDate[1]}-${dto.addDate[2]} ${dto.addDate[3]}:${dto.addDate[4]}</div>
                             <p data-comNo="${dto.comNo}">${dto.comment}</p>
-                        </ul>` + xBtn(dto)
+                        `+xBtn(dto)+`</ul>`
             }
-
         }
     }
     commentList.innerHTML = str;
@@ -347,6 +347,7 @@ function printList(dtoList) { // 댓글 목록 출력
             if (!comNo) {
                 return;
             }
+            console.log(comNo);
             removeComment(comNo, mbNo).then(result => {
                 page = 1; // 이 부분이 없다면 원래 페이지로
                 size = 10;
