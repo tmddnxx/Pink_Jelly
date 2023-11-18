@@ -4,8 +4,8 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.pink_jelly.mapper.CRBCommentMapper">
     <insert id="insert" parameterType="com.example.pink_jelly.domain.CRBCommentVO" useGeneratedKeys="true" keyProperty="crbNo">
-        INSERT INTO catscomment (crbNo, memberId, nickName, comment, parentNo, addDate, mno)
-        VALUES (#{crbNo}, #{memberId}, #{nickName}, #{comment}, #{parentNo}, now(), #{mno})
+        INSERT INTO catscomment (crbNo, memberId, nickName, comment, parentNo, addDate, mno, profileImg)
+        VALUES (#{crbNo}, #{memberId}, #{nickName}, #{comment}, #{parentNo}, now(), #{mno}, #{profileImg})
     </insert>
     <select id="selectAll" resultType="com.example.pink_jelly.domain.CRBCommentVO">
             SELECT * FROM catsComment WHERE crbNo=#{crbNo} ORDER BY comNo ASC

@@ -74,14 +74,9 @@
                 <h3 class="mb-5 heading commentCnt">[[${catsReviewBoard.commentCnt}]] Comments </h3>
                 <ul class="comment-list">
                     <!-- 댓글 start -->
-                    <li class="comment">
-                        <div class="vcard">
-                            <img src="/images/person_1.jpg" alt="Image placeholder">
-                        </div>
-                        <!-- 댓글 리스트 출력 -->
-                        <div class="comment-body">
+                    <!-- 댓글 리스트 출력 -->
+                    <li class="comment comment-view">
 
-                        </div>
                     </li>
                     <!-- /댓글 end -->
                 </ul>
@@ -92,7 +87,11 @@
                     <form action="/crbComment/register" class="p-5 bg-light" method="post">
                         <input type="hidden" name="crbNo" th:value="${catsReviewBoard.crbNo}">
                         <input type="hidden" name="mno" id="mno" th:value="${#authentication.principal.mno}">
-                        <!-- 나중에 memberId, nickName 받아서 넣기 -->
+                        <input type="hidden" name="profileImg" class="form-control" th:value="${#authentication.principal.profileImg}+'/'+${#authentication.principal.dateString}">
+                        <div class="form-group">
+                            <label for="profileImg">profileImg</label>
+                            <img id="profileImg" th:src="|/upload/profileView/${#authentication.principal.dateString}/${#authentication.principal.profileImg}|" alt="Image placeholder"  class="img-fluid" readonly>
+                        </div>
                         <div class="form-group">
                             <label for="memberId">memberId</label>
                             <input type="text" class="form-control" id="memberId" th:value="${#authentication.principal.memberId}">
@@ -250,7 +249,7 @@
     printComments(1, 10); // 무조건 호출
     printComments(1, 10, true);
 
-    const commentList = document.querySelector('.comment-body'); // 댓글 목록 DOM
+    const commentList = document.querySelector('.comment-view'); // 댓글 목록 DOM
     const commentPaging = document.querySelector('.commentPaging'); // 페이지 목록 DOM
     const commentCnt = document.querySelector('.commentCnt'); //댓글 수 DOM
 
@@ -262,7 +261,11 @@
         let str = '';
         if (dtoList && dtoList.length > 0) {
             for (const dto of dtoList) {
-                str += `<h3>${dto.memberId}</h3>
+                str += `<div class="vcard">
+                        <img src="/upload/profileView/${dto.dateString}/${dto.profileImg}" alt="Image placeholder">
+                    </div>
+                    <div class="comment-body"></div>
+                    <h3>${dto.memberId}</h3>
                     <div class="meta">${dto.addDate[0]}-${dto.addDate[1]}-${dto.addDate[2]} ${dto.addDate[3]}:${dto.addDate[4]}</div>
                     <p data-comNo="${dto.comNo}">${dto.comment}</p>
                     <p><a href="#" class="reply rounded">Reply</a></p>`
@@ -279,17 +282,19 @@
             }return btn;
         }
         //댓글 목록 출력 후 삭제 버튼
-        const removeCommentBtn = document.querySelector('.removeCommentBtn');
-        removeCommentBtn.addEventListener('click', function (e) {
-            const comNo = e.target.parentElement.querySelector('p[data-comNo]').getAttribute('data-comNo');
-            if (!comNo) {
-                return;
-            }
-            removeComment(comNo, crbNo).then(result => {
-                page = 1; // 이 부분이 없다면 원래 페이지로
-                size = 10;
-                printComments(page, size);
-            }).catch(e => console.log(e));
+        const removeCommentBtns = document.querySelectorAll('.removeCommentBtn');
+        removeCommentBtns.forEach(removeCommentBtn => {
+            removeCommentBtn.addEventListener('click', function (e) {
+                const comNo = e.target.parentElement.querySelector('p[data-comNo]').getAttribute('data-comNo');
+                if (!comNo) {
+                    return;
+                }
+                removeComment(comNo, crbNo).then(result => {
+                    page = 1; // 이 부분이 없다면 원래 페이지로
+                    size = 10;
+                    printComments(page, size);
+                }).catch(e => console.log(e));
+            });
         });
     }
 
@@ -321,11 +326,20 @@
     const commentnickName = document.getElementById("nickName");
     const comment = document.getElementById("CRBComment");
     const mno = document.getElementById("mno");
+    const profileImg = document.querySelector('input[name=profileImg]');
+
 
     if (auth !== 'anonymousUser') {
     commentBtn.addEventListener('click', function (e) {
         // console.log("왔다");
-        const commentObj = {crbNo: crbNo, memberId: commentId.value, nickName: commentnickName.value, comment: comment.value, mno: mno.value};
+        const commentObj = {
+            crbNo: crbNo,
+            memberId: commentId.value,
+            nickName: commentnickName.value,
+            comment: comment.value,
+            mno: mno.value,
+            profileImg: profileImg.value
+        };
         console.log(commentObj);
         addComment(commentObj).then(result => {
             comment.value='';

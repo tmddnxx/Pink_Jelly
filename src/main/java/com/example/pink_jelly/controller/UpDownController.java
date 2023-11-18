@@ -16,8 +16,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -43,7 +41,7 @@ public class UpDownController {
     @PostMapping(value = "/tempUpload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     private List<UploadResultDTO> uploadFile(UploadFileDTO uploadFileDTO) {
         // 이미지 업로드
-        log.info(uploadFileDTO);
+
         if (uploadFileDTO.getFiles() != null) {
             List<UploadResultDTO> list = new ArrayList<>();
             for (MultipartFile multipartFile : uploadFileDTO.getFiles()) {
@@ -69,9 +67,9 @@ public class UpDownController {
                 boolean isImage = false;
                 try {
                     multipartFile.transferTo(savePath); // 실제 파일 저장
-
+                    String contentType = Files.probeContentType(savePath);
                     // 이미지 파일이면 썸네일 생성
-                    if (Files.probeContentType(savePath).startsWith("image")) {
+                    if (contentType.startsWith("image") && contentType != null) {
                         log.info(Files.probeContentType(savePath));
                         isImage = true;
                         File thumbFile = new File(path, "s_" + fileName); // 썸네일 파일 경로

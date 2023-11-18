@@ -13,6 +13,13 @@
     <div class="container">
         <form name="mainAdd" action="/main/write" method="post" class="form">
             <input type="hidden" name="mno" th:value="${#authentication.principal.mno}" readonly>
+            <input type="hidden" name="profileImg" class="form-control" th:value="${#authentication.principal.profileImg}+'/'+${#authentication.principal.dateString}" readonly>
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">profileImg</label>
+                <div class="col-sm-3">
+                    <img id="profileImg" th:src="|/upload/profileView/${#authentication.principal.dateString}/${#authentication.principal.profileImg}|" alt="Image placeholder"  class="img-fluid" readonly>
+                </div>
+            </div>
             <div class="form-group row">
                 <label class="col-sm-3 col-form-label">memberId</label>
                 <div class="col-sm-3">
@@ -23,12 +30,6 @@
                 <label class="col-sm-3 col-form-label">nickName</label>
                 <div class="col-sm-3">
                     <input type="text" name="nickName" class="form-control" th:value="${#authentication.principal.nickName}" readonly>
-                </div>
-            </div>
-            <div class="form-group row">
-<!--                <label class="col-sm-3 col-form-label">profileImg</label>-->
-                <div class="col-sm-3">
-                    <input type="hidden" name="profileImg" class="form-control" th:value="${#authentication.principal.profileImg}+'/'+${#authentication.principal.dateString}" readonly>
                 </div>
             </div>
             <div class="form-group row">

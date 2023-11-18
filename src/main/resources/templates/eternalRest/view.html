@@ -63,8 +63,67 @@
     <th:block th:if="${#authentication.principal != 'anonymousUser' && #authentication.principal.mno == eternalRestBoard.mno}">
         <a th:href="|@{/eternalRest/remove(erbNo=${eternalRestBoard.erbNo})}|" class="btn btn-danger">삭제</a>
     </th:block>
+    <div class="pt-5 comment-wrap">
+        <h3 class="mb-5 heading commentCnt">[[${eternalRestBoard.commentCnt}]] Comments</h3>
+        <ul class="comment-list">
+            <!-- 댓글 start -->
+            <!-- 댓글 리스트 출력 -->
+            <li class="comment comment-view">
 
+            </li>
+            <!-- /댓글 end -->
+            <!--*  대댓글 start -->
+            <ul class="children">
+                <li class="comment">
 
+                </li>
+            </ul>
+            <!-- /대댓글 end -->
+            </li>
+            <!-- /댓글 end -->
+        </ul>
+        <!-- END comment-list -->
+        <!-- 댓글 쓰기 창 -->
+        <th:block th:if="${#authentication.principal != 'anonymousUser'}">
+            <div class="comment-form-wrap pt-5">
+                <h3 class="mb-5">댓글 쓰기</h3>
+                <form action="/erbComment/register" class="p-5 bg-light" method="post">
+                    <input type="hidden" name="erbNo" th:value="${eternalRestBoard.erbNo}">
+                    <input type="hidden" name="mno" id="mno" th:value="${#authentication.principal.mno}" readonly>
+                    <input type="hidden" name="profileImg" class="form-control" th:value="${#authentication.principal.profileImg}+'/'+${#authentication.principal.dateString}">
+                    <div class="form-group">
+                        <label for="profileImg">profileImg</label>
+                        <img id="profileImg" th:src="|/upload/profileView/${#authentication.principal.dateString}/${#authentication.principal.profileImg}|" alt="Image placeholder"  class="img-fluid" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="memberId">memberId</label>
+                        <input type="text" class="form-control" id="memberId" th:value="${#authentication.principal.memberId}" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="nickName">nickName</label>
+                        <input type="text" class="form-control" id="nickName" th:value="${#authentication.principal.nickName}" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="mainComment">Comment</label>
+                        <input type="text" class="form-control" id="mainComment">
+                    </div>
+                    <div class="form-group">
+                        <button type="button" class="btn btn-primary commentBtn">Post Comment</button>
+                    </div>
+                </form>
+            </div>
+        </th:block>
+    </div>
+    <!-- 댓글 페이징 -->
+    <div class="row mt-3">
+        <div class="col">
+            <ul class="pagination commentPaging">
+
+            </ul>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="/js/eternalRest/view.js?r"></script>
 </div>
 <script layout:fragment="script" th:inline="javascript">
     // 탈퇴한 회원일경우
@@ -129,6 +188,136 @@
             }
         })
     }
+
+    //댓글
+    //출력 메서드
+    const erbNo = [[${eternalRestBoard.erbNo}]]
+    function printComments(page, size, goLast) {
+        getList({erbNo, page, size, goLast})
+            .then(data => {
+                printCommentCnt(data.total); //댓글 수 처리
+                printList(data.dtoList); // 목록처리
+                printPages(data); // 페이지 처리
+            })
+            .catch(e => console.error());
+    }
+    printComments(1, 10); // 무조건 호출
+    printComments(1, 10, true);
+
+    const commentList = document.querySelector('.comment-view'); // 댓글 목록 DOM
+    const commentPaging = document.querySelector('.commentPaging'); // 페이지 목록 DOM
+    const commentCnt = document.querySelector('.commentCnt'); //댓글 수 DOM
+    function printCommentCnt(total){
+        commentCnt.textContent=total + " Comments";
+    }
+
+    function printList(dtoList) { // 댓글 목록 출력
+        let str = '';
+        if (dtoList && dtoList.length > 0) {
+            for (const dto of dtoList) {
+                str += `<div class="vcard">
+                        <img src="/upload/profileView/${dto.dateString}/${dto.profileImg}" alt="Image placeholder">
+                    </div>
+                    <div class="comment-body"></div>
+                    <h3>${dto.memberId}</h3>
+                    <div class="meta">${dto.addDate[0]}-${dto.addDate[1]}-${dto.addDate[2]} ${dto.addDate[3]}:${dto.addDate[4]}</div>
+                    <p data-comNo="${dto.comNo}">${dto.comment}</p>
+                    <p><a href="#" class="reply rounded">Reply</a></p>`
+                    + xBtn(dto);
+            }
+        }
+        commentList.innerHTML = str;
+
+        function xBtn(dto){
+            let btn = '';
+            if(auth.mno === dto.mno){
+                btn = `<button type="button" class="btn btn-danger removeCommentBtn">Remove</button>`;
+            }return btn;
+        }
+
+        //댓글 목록 출력 후 삭제 버튼
+        const removeCommentBtns = document.querySelectorAll('.removeCommentBtn');
+        removeCommentBtns.forEach(removeCommentBtn => {
+            removeCommentBtn.addEventListener('click', function (e) {
+                const comNo = e.target.parentElement.querySelector('p[data-comNo]').getAttribute('data-comNo');
+                if (!comNo) {
+                    return;
+                }
+                removeComment(comNo, erbNo).then(result => {
+                    page = 1; // 이 부분이 없다면 원래 페이지로
+                    size = 10;
+                    printComments(page, size);
+                }).catch(e => console.log(e));
+            });
+        });
+    }
+
+    function printPages(data) { // 페이지 목록 출력
+        // pagination
+        let pageStr = '';
+        if (data.prev) {
+            pageStr += `<li class="page-item">
+                        <a class="page-link" data-page="${data.start - 1}">PREV</a>
+                    </li>`;
+        }
+        for (let i = data.start; i <= data.end; i++) {
+            pageStr += `<li class="page-item ${i === data.page ? "active" : ""}">
+                        <a class="page-link" data-page="${i}">${i}</a>
+                    </li>`;
+        }
+        if (data.next) {
+            pageStr += `<li class="page-item">
+                        <a class="page-link" data-page="${data.end + 1}">NEXT</a>
+                    </li>`;
+        }
+        console.log(pageStr);
+        commentPaging.innerHTML = pageStr;
+    }
+
+    //댓글 등록
+    const commentBtn = document.querySelector('.commentBtn');
+    const commentId = document.getElementById("memberId");
+    const commentnickName = document.getElementById("nickName");
+    const comment = document.getElementById("mainComment");
+    const mno = document.getElementById("mno");
+    const profileImg = document.querySelector('input[name=profileImg]');
+    if (auth !== 'anonymousUser') {
+        commentBtn.addEventListener('click', function (e) {
+            // console.log("왔다");
+            const commentObj = {
+                erbNo: erbNo,
+                memberId: commentId.value,
+                nickName: commentnickName.value,
+                comment: comment.value,
+                mno: mno.value,
+                profileImg: profileImg.value
+            };
+            console.log(commentObj);
+            addComment(commentObj).then(result => {
+                comment.value = '';
+                printComments(1, 10, true); // 댓글 목록 갱신
+            }).catch(e => {
+                alert("댓글 등록에 실패했습니다. 다시 시도해주세요");
+            });
+        });
+    }
+    let page = 1;
+    let size = 10;
+
+    commentPaging.addEventListener('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+
+        const target = e.target;
+
+        if (!target || target.tagName != 'A') {
+            return;
+        }
+
+        page = target.getAttribute('data-page');
+        printComments(page, size);
+    });
 </script>
 </body>
 </html>

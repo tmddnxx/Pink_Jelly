@@ -25,6 +25,7 @@ public class CRBCommentServiceImpl implements CRBCommentService{
     public Long register(CRBCommentDTO crbCommentDTO) {
         CRBCommentVO crbCommentVO = modelMapper.map(crbCommentDTO, CRBCommentVO.class);
         int success = crbCommentMapper.insert(crbCommentVO);
+        log.info("crbCommentVO : " + crbCommentVO);
         if(success == 1) {
             catsMeMapper.upCommentCnt(crbCommentDTO.getCrbNo());
         }
@@ -46,6 +47,13 @@ public class CRBCommentServiceImpl implements CRBCommentService{
         List<CRBCommentDTO> crbCommentDTOList = new ArrayList<>();
 
         crbCommentVOList.forEach(crbCommentVO -> crbCommentDTOList.add(modelMapper.map(crbCommentVO, CRBCommentDTO.class)));
+        crbCommentDTOList.forEach(crbCommentDTO -> {
+            String[] splits = crbCommentDTO.getProfileImg().split("/");
+            String profileImg = splits[0];
+            String dateString = splits[1];
+            crbCommentDTO.setProfileImg(profileImg);
+            crbCommentDTO.setDateString(dateString);
+        });
 
         return PageResponseDTO.<CRBCommentDTO>withAll()
                 .pageRequestDTO(pageRequestDTO)

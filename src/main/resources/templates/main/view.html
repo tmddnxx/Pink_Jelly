@@ -114,7 +114,7 @@
                         <input type="hidden" name="profileImg" class="form-control" th:value="${#authentication.principal.profileImg}+'/'+${#authentication.principal.dateString}">
                         <div class="form-group">
                             <label for="profileImg">profileImg</label>
-                            <img class="img-fluid profileImg"  th:src="|/upload/profileView/${#authentication.principal.dateString}/${#authentication.principal.profileImg}|" alt="Image placeholder" readonly>
+                            <img class="img-fluid profileImg" id="profileImg" th:src="|/upload/profileView/${#authentication.principal.dateString}/${#authentication.principal.profileImg}|" alt="Image placeholder" readonly>
                         </div>
                         <div class="form-group">
                             <label for="memberId">memberId</label>
