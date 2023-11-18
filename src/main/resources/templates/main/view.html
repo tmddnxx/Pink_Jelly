@@ -22,6 +22,9 @@
         color: white;
         margin: 0 auto;
     }
+    .profileImg {
+        border-radius: 50%;
+    }
 </style>
 <div layout:fragment="banner">
     <!-- 배너 start -->
@@ -111,7 +114,7 @@
                         <input type="hidden" name="profileImg" class="form-control" th:value="${#authentication.principal.profileImg}+'/'+${#authentication.principal.dateString}">
                         <div class="form-group">
                             <label for="profileImg">profileImg</label>
-                            <img id="profileImg" th:src="|/upload/profileView/${#authentication.principal.dateString}/${#authentication.principal.profileImg}|" alt="Image placeholder"  class="img-fluid" readonly>
+                            <img class="img-fluid profileImg"  th:src="|/upload/profileView/${#authentication.principal.dateString}/${#authentication.principal.profileImg}|" alt="Image placeholder" readonly>
                         </div>
                         <div class="form-group">
                             <label for="memberId">memberId</label>
@@ -272,7 +275,7 @@ function printComments(page, size, goLast) {
 printComments(1, 10); // 무조건 호출
 printComments(1, 10, true);
 
-const commentList = document.querySelector('.comment-view'); // 댓글 목록 DOM
+const commentList = document.querySelector('.comment-body'); // 댓글 목록 DOM
 const commentPaging = document.querySelector('.commentPaging'); // 페이지 목록 DOM
 const commentCnt = document.querySelector('.commentCnt'); //댓글 수 DOM
 function printCommentCnt(total){
@@ -292,7 +295,7 @@ function printList(dtoList) { // 댓글 목록 출력
                     </div><h3>${dto.memberId}</h3>
                     <div class="meta">${dto.addDate[0]}-${dto.addDate[1]}-${dto.addDate[2]} ${dto.addDate[3]}:${dto.addDate[4]}</div>
                     <p data-comNo="${dto.comNo}">${dto.comment}</p>
-                    <p><a href="#" class="reply rounded">Reply</a></p>`
+                    <p><a class="reply rounded recommentBtn">Reply</a></p>`
                     + xBtn(dto) +
                     `<div class="recommentWrap toggleOff">
                         <form class="form-group frmAddReComment" method="post">
@@ -301,8 +304,10 @@ function printList(dtoList) { // 댓글 목록 출력
                             <input type="hidden" name="memberId" value="${auth.memberId}">
                             <input type="hidden" name="mbNo" value="${mbNo}">
                             <input type="hidden" name="parentNo" value="${dto.comNo}">
+                            <input type="hidden" name="profileImg" class="form-control" value="${auth.profileImg}+'/'+${auth.dateString}">
                             <div class="recomment_write">
                                 <div class="writerInfo">
+                                <img class="img-fluid profileImg" src="/upload/profileView/${auth.dateString}/${auth.profileImg}" alt="Image placeholder"  class="img-fluid" readonly>
                                     <p>${auth.nickName}</p>
                                     <p>(${auth.memberId})</p>
                                 </div>
@@ -314,6 +319,7 @@ function printList(dtoList) { // 댓글 목록 출력
                      </div>`;
             } else {
                 str += `<ul class="recommentList">
+                            <img class="img-fluid profileImg" src="/upload/profileView/${auth.dateString}/${auth.profileImg}" alt="Image placeholder"  class="img-fluid" readonly>
                             <h3>${dto.nickName}</h3>
                             <h3>(${dto.memberId})</h3>
                             <div class="meta">${dto.addDate[0]}-${dto.addDate[1]}-${dto.addDate[2]} ${dto.addDate[3]}:${dto.addDate[4]}</div>
@@ -372,6 +378,7 @@ function printList(dtoList) { // 댓글 목록 출력
         let reMbNo = frmAddReComment.mbNo.value;
         let parentNo = frmAddReComment.parentNo.value;
         let reComment = frmAddReComment.comment.value;
+        let profileImg = frmAddReComment.profileImg.value;
 
             let commentObj = {
                 mbNo: reMbNo,
@@ -379,7 +386,8 @@ function printList(dtoList) { // 댓글 목록 출력
                 nickName: reNickName,
                 comment: reComment,
                 mno: reMno,
-                parentNo: parentNo
+                parentNo: parentNo,
+                profileImg: profileImg
             };
 
             addComment(commentObj).then(result => {
@@ -419,6 +427,8 @@ function printList(dtoList) { // 댓글 목록 출력
     const commentnickName = document.getElementById("nickName");
     const comment = document.getElementById("mainComment");
     const mno = document.getElementById("mno");
+    const profileImg = document.querySelector('input[name=profileImg]');
+
     if (auth !== 'anonymousUser') {
         commentBtn.addEventListener('click', function (e) {
 

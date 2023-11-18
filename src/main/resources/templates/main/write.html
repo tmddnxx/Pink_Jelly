@@ -9,7 +9,7 @@
     <title>메인 글씨기</title>
 </head>
 <body>
-<div layout:fragment="content">
+<div layout:fragment="content" th:if="${#authentication.principal != 'anonymousUser'}">
     <div class="container">
         <form name="mainAdd" action="/main/write" method="post" class="form">
             <input type="hidden" name="mno" th:value="${#authentication.principal.mno}" readonly>
