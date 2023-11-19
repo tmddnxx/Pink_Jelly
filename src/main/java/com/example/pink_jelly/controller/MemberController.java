@@ -6,6 +6,8 @@ import com.example.pink_jelly.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -18,6 +20,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
 import java.io.*;
@@ -25,9 +28,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
+import java.util.*;
 
 @Log4j2
 @Controller
@@ -51,12 +52,11 @@ public class MemberController {
     }
 
     @PostMapping("/signup")
-    public String signup(MemberDTO memberDTO, BindingResult bindingResult, Model model){
+    public String signup(@AuthenticationPrincipal MemberDTO principal, MemberDTO memberDTO, BindingResult bindingResult, Model model){
         // 회원가입 처리
         String encPasswd = passwordEncoder.encode(memberDTO.getPasswd());
         memberDTO.setPasswd(encPasswd);
 
-        log.info(memberDTO.getProfileImg());
 
         /* 검증 */
 //        if(bindingResult.hasErrors()) {
@@ -75,6 +75,12 @@ public class MemberController {
 //            return "/member/signup";
 //        }
 
+        if (principal != null || !principal.equals("anonymousUser")) {
+            memberDTO.setMemberId(principal.getMemberId());
+        }
+
+        memberService.registerMember(memberDTO);
+
         /* 데이터가 저장된 후에 이미지 파일 이동 */
         if (memberDTO.getProfileImg() != null) {
             String splits[] = memberDTO.getProfileImg().split("/");
@@ -83,9 +89,7 @@ public class MemberController {
             moveFile("s_" + splits[0]);
         }
 
-        memberService.registerMember(memberDTO);
-
-        return "redirect:/member/welcome";
+        return "/member/welcome";
     }
 
     @PostMapping("/checkMemberId")
@@ -144,10 +148,11 @@ public class MemberController {
         // 회원 수정 전 비밀번호 확인 페이지 이동
     }
     @PostMapping("/checkPW")
-    public String checkPWPost(String passwd, @AuthenticationPrincipal MemberDTO memberDTO) {
+    public String checkPWPost(@AuthenticationPrincipal MemberDTO memberDTO, String passwd) {
         log.info("/checkPW(POST)...");
         log.info("passwd: " + passwd);
         log.info("encPasswd: " + memberDTO.getPasswd());
+
         // 회원 수정 전 비밀번호 확인
         if (memberDTO != null) {
             if (passwordEncoder.matches(passwd, memberDTO.getPassword())) { // 로그인한 비밀번호와 입력한 비밀번호가 일치할 때
@@ -161,7 +166,6 @@ public class MemberController {
     @GetMapping("/memberInfo")
     public void memberInfo(){
         // 회원정보 페이지 이동
-
     }
 
 
@@ -169,10 +173,10 @@ public class MemberController {
     public void modifyMember(@AuthenticationPrincipal MemberDTO memberDTO, Model model){
         // 회원정보 수정 페이지 이동
         log.info("/member/modifyMemberInfo...");
+        
+        // 전화번호 '-' 기준으로 분리
         String phone = memberDTO.getPhone();
-
         String[] phones = phone.split("-");
-        log.info("phones: " + phones);
 
         model.addAttribute("phones", phones);
     }
@@ -181,17 +185,22 @@ public class MemberController {
     public String modifyMember(@AuthenticationPrincipal MemberDTO memberDTO, MemberDTO updateMemberDTO){
         // 회원 정보 수정
         log.info("/member/modifyMemberInfo(POST)...");
+        log.info(memberDTO.isHasCat());
+        log.info(updateMemberDTO.isHasCat());
 
         memberService.modifyMemberInfo(updateMemberDTO);
 
+        // 세션 사용자 정보 업데이트
         sessionReset(memberDTO);
 
         return "redirect:/member/memberInfo";
     }
 
     @GetMapping("/modifyPasswd")
-    public void modifyPasswd(){
+    public String modifyPasswd(String matchPw){
         // 비밀번호 변경 페이지
+
+        return "/member/modifyPasswd";
     }
     @PostMapping("/modifyPasswd")
     public String modifyPasswd(@AuthenticationPrincipal MemberDTO memberDTO, String newPasswd){
@@ -214,10 +223,28 @@ public class MemberController {
     }
 
     @PostMapping("/modifyMyCat")
-    public String modifyMyCatPost(MemberDTO memberDTO){
+    public String modifyMyCatPost(@AuthenticationPrincipal MemberDTO memberDTO, MemberDTO updateMemberDTO){
         // 고양이 정보수정
-        log.info(memberDTO);
-        memberService.modifyMyCat(memberDTO);
+        log.info(updateMemberDTO);
+
+        memberService.modifyMyCat(updateMemberDTO);
+
+        /* 데이터가 저장된 후에 이미지 파일 이동 */
+        if (updateMemberDTO.getProfileImg() != null) {
+            String splits[] = updateMemberDTO.getProfileImg().split("/");
+
+            moveFile(splits[0]);
+            moveFile("s_" + splits[0]);
+
+            // 변경전 프로필 이미지
+            String dateString = memberDTO.getDateString();
+            String profileImg = memberDTO.getProfileImg();
+
+            removeFile(dateString, profileImg, profilePath);
+        }
+
+        // 세션 사용자 정보 업데이트
+        sessionReset(memberDTO);
 
         return "redirect:/member/memberInfo";
     }
@@ -278,6 +305,31 @@ public class MemberController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private Map<String, Boolean> removeFile(String dateString, String fileName, String uploadPath) {
+        // 파일 삭제
+        String newUploadPath = uploadPath + "/" + dateString;
+        Resource resource = new FileSystemResource(newUploadPath + File.separator + fileName);
+        String resourceName = resource.getFilename();
+
+
+        Map<String, Boolean> resultMap = new HashMap<>();
+        boolean removed = false;
+        try{
+            String contentType = Files.probeContentType(resource.getFile().toPath());
+            removed = resource.getFile().delete(); //resource.delete 메서드로 삭제
+
+            //썸네일이 존재한다면
+            if(contentType.startsWith("image")){
+                File thumbFile = new File(newUploadPath + File.separator + "s_" + fileName);
+                thumbFile.delete();
+            }
+        } catch (IOException e) {
+            log.error(e.getMessage());
+        }
+        resultMap.put("result", removed);
+        return resultMap;
     }
 }
 

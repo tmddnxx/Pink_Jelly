@@ -49,7 +49,7 @@
         UPDATE catsMeBoard SET hit=hit+1 WHERE cmbNo=#{cmbNo}
     </update>
     <update id="updateBoard">
-        UPDATE catsMeBoard SET title=#{title}, content=#{content}, status=#{status} WHERE cmbNo=#{cmbNo}
+        UPDATE catsMeBoard SET title=#{title}, content=#{content}, status=#{status}, profileImg=#{profileImg} WHERE cmbNo=#{cmbNo}
     </update>
     <delete id="deleteOne">
         DELETE FROM catsMeBoard WHERE cmbNo=#{cmbNo}
@@ -81,7 +81,7 @@
         UPDATE catsReviewBoard SET hit=hit+1 WHERE crbNo=#{crbNo}
     </update>
     <update id="updateReviewBoard">
-        UPDATE catsReviewBoard SET title=#{title}, content=#{content} WHERE crbNo=#{crbNo}
+        UPDATE catsReviewBoard SET title=#{title}, content=#{content}, profileImg=#{profileImg} WHERE crbNo=#{crbNo}
     </update>
     <delete id="deleteReviewBoardOne">
         DELETE FROM catsReviewBoard WHERE crbNo=#{crbNo}

@@ -35,6 +35,10 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public void modifyMemberInfo(MemberDTO memberDTO) { // 회원정보수정(이메일, 이름, 전화번호, 닉네임, 소개글)
         MemberVO memberVO = modelMapper.map(memberDTO, MemberVO.class);
+
+        log.info("modifyMemberInfo,,,");
+        log.info(memberVO.isHasCat());
+
         memberMapper.updateMember(memberVO);
     }
 

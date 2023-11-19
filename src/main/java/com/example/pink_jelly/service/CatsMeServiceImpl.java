@@ -35,7 +35,7 @@ public class CatsMeServiceImpl implements CatsMeService{
             CatsMeBoardDTO catsMeBoardDTO = modelMapper.map(catsMeBoardVO, CatsMeBoardDTO.class);
             String[] profileImg = catsMeBoardVO.getProfileImg().split("/");
             catsMeBoardDTO.setProfileImg(profileImg[0]);
-            catsMeBoardDTO.setProfileString(profileImg[1]);
+            catsMeBoardDTO.setDateString(profileImg[1]);
 
             catsMeBoardDTOList.add(catsMeBoardDTO);
 
@@ -65,7 +65,7 @@ public class CatsMeServiceImpl implements CatsMeService{
         CatsMeBoardDTO catsMeBoardDTO = modelMapper.map(catsMeBoardVO, CatsMeBoardDTO.class);
         String[] profile = catsMeBoardDTO.getProfileImg().split("/");
         catsMeBoardDTO.setProfileImg(profile[0]);
-        catsMeBoardDTO.setProfileString(profile[1]);
+        catsMeBoardDTO.setDateString(profile[1]);
 
         return catsMeBoardDTO;
     }
@@ -103,7 +103,7 @@ public class CatsMeServiceImpl implements CatsMeService{
             CatsReviewBoardDTO catsReviewBoardDTO = modelMapper.map(catsReviewBoardVO, CatsReviewBoardDTO.class);
             String[] profileImg = catsReviewBoardVO.getProfileImg().split("/");
             catsReviewBoardDTO.setProfileImg(profileImg[0]);
-            catsReviewBoardDTO.setProfileString(profileImg[1]);
+            catsReviewBoardDTO.setDateString(profileImg[1]);
 
             catsReviewBoardDTOList.add(catsReviewBoardDTO);
         });
@@ -134,7 +134,7 @@ public class CatsMeServiceImpl implements CatsMeService{
         CatsReviewBoardDTO catsReviewBoardDTO = modelMapper.map(catsReviewBoardVO, CatsReviewBoardDTO.class);
         String[] profile = catsReviewBoardDTO.getProfileImg().split("/");
         catsReviewBoardDTO.setProfileImg(profile[0]);
-        catsReviewBoardDTO.setProfileString(profile[1]);
+        catsReviewBoardDTO.setDateString(profile[1]);
         catsReviewBoardDTO.setFlag(flag);
         return catsReviewBoardDTO;
     }

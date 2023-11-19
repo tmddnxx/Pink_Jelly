@@ -35,15 +35,11 @@
                     <input type="hidden" name="mno" th:value="${member.mno}">
 
                     <div class="col-12 mb-3">
-                        <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" name="hasCat" th:value="${member.hasCat}" role="switch" id="hasCat" checked>
-                            <label class="form-check-label" for="hasCat">고양이를 키우고 계신가요?</label>
-                        </div>
 
                         <div class="row catInfo hide">
                             <div class="col-6 mb-3">
-                                <input id="catAge" type="number" class="form-control" placeholder="고양이 나이">
-                                <input type="hidden" name="catAge">
+                                <input id="catAge" type="number" class="form-control">
+                                <input type="hidden" name="catAge" th:value="${member.catAge}">
                             </div>
                             <div class="col-6 mb-3">
                                 <div class="form-check-inline">
@@ -57,7 +53,7 @@
                             </div>
 
                             <div class="col-6 mb-3">
-                                <input type="text" name="variety" class="form-control" placeholder="품종">
+                                <input type="text" name="variety" class="form-control" th:value="${member.variety}">
                             </div>
 
                             <div class="col-6 mb-3">
@@ -73,17 +69,23 @@
                             <div class="col-6 mb-3">
                                 <label for="profileImg" class="form-label">프로필 이미지</label>
                                 <input class="form-control" type="file" name="files" id="profileImg" style="height: 35px;">
-                                <div class="uploadResult"></div>
-                                <div class="uploadHidden"></div>
+                                <div class="uploadResult">
+                                    <div>
+                                        <img th:src="|/upload/profileView/${member.dateString}/s_${member.profileImg}|" data-th-src="|${member.profileImg}/${member.dateString}|">
+                                    </div>`
+                                </div>
+                                <div class="uploadHidden">
+                                    <input type="hidden" name="profileImg" th:value="|${member.profileImg}/${member.dateString}|">
+                                </div>
                             </div>
                             <div class="col-6 mb-3">
                                 <div>성별</div>
                                 <div class="form-check-inline">
-                                    <input class="form-check-input" type="radio" name="catSex" id="male">
+                                    <input class="form-check-input" type="radio" name="catSex" id="male" value="남아" th:checked="${member.catSex == '남아'}">
                                     <label class="form-check-label" for="male">남아</label>
                                 </div>
                                 <div class="form-check-inline">
-                                    <input class="form-check-input" type="radio" name="catSex" id="female">
+                                    <input class="form-check-input" type="radio" name="catSex" id="female" value="여아" th:checked="${member.catSex == '여아'}">
                                     <label class="form-check-label" for="female">여아</label>
                                 </div>
                             </div>
@@ -91,7 +93,7 @@
                     </div>
 
                     <div class="col-12">
-                        <button type="submit" class="btn btn-primary">수정 완료</button>
+                        <button type="submit" class="btn btn-primary modBtn">수정 완료</button>
                         <a th:href="@{/member/memberInfo}">
                             <button type="button" class="btn btn-secondary">뒤로가기</button>
                         </a>
@@ -101,9 +103,11 @@
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="/js/signup/upload.js"></script>
 </div>
 
-<script th:inline="javascript">
+<script layout:fragment="script" th:inline="javascript">
     document.addEventListener('DOMContentLoaded', function () {
         const auth = [[${#authentication.principal}]]; // 로그인된 사용자 정보
         const authCatAge = auth.catAge; // 로그인된 사용자 고양이 나이
@@ -135,22 +139,73 @@
             console.log("hidden: " + hiddenInput.value);
         });
 
+
         // 품종 셀렉트 박스
         document.getElementById('varietySelect').addEventListener('change', function (e) {
             const varietyInput = document.querySelector('input[name=variety]');
-            console.log(e.target.value);
-            console.log(varietyInput);
 
-            if (e.target.value !== "-1") {
-                varietyInput.value = e.target.value;
-                console.log("variety: " + varietyInput.value);
+            if (e.target.value != "-1") {
                 varietyInput.readOnly = true;
+                varietyInput.value = e.target.value;
             }
             else {
-                varietyInput.value = '';
-                console.log("variety: " + varietyInput.value);
                 varietyInput.readOnly = false;
+                varietyInput.value = '';
             }
+        });
+
+        // 프로필 이미지 임시 폴더에 업로드
+        const fileInput = document.querySelector('input[name=files]');
+        fileInput.addEventListener('change', function () {
+            const formObj = new FormData();
+            const files = fileInput.files;
+            console.log(files);
+
+            for (const file of files) {
+                formObj.append('files', file);
+            }
+
+            uploadToServer('/upload/tempUpload', formObj).then(result => {
+                console.log(result);
+                for (const uploadResult of result) {
+                    console.log("uploadResult");
+                    console.log(uploadResult);
+                    showUploadFile(uploadResult) // 업로드한 이미지를 보여준다
+                }
+                console.log(files);
+            });
+        });
+
+        // 업로드된 이미지를 보여줌
+        const uploadResult = document.querySelector('.uploadResult');
+
+        function showUploadFile({dateString, fileName, link}) {
+            const str = `<div>
+                            <img src="/upload/tempView/${dateString}/${link}" data-src="${fileName}/${dateString}">
+                         </div>`
+            uploadResult.innerHTML = str;
+        }
+
+        // 고양이 정보 수정 처리
+        document.querySelector('.modBtn').addEventListener('click', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            // 1. 썸네일 영역에서 img 태그의 data-src 속성을 들고 옴.
+            const uploadFile = uploadResult.querySelector('img');
+
+            // 업로드한 이미지가 존재할 경우
+            if (uploadFile != null) {
+                const imgLink = uploadFile.getAttribute('data-src');
+                console.log(imgLink);
+
+                // 2. 프로필 사진 첨부
+                document.querySelector('input[name=profileImg]').value = imgLink;
+            }
+
+            // 3. submit() 처리
+            const frmModMyCat = document.getElementById('frmModMyCat');
+            frmModMyCat.submit();
         });
     });
 </script>

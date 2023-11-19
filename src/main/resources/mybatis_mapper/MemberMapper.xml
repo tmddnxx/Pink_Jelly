@@ -11,13 +11,13 @@
         delete FROM member where mno = #{mno};
     </delete>
     <update id="updateMember">
-        update member set `email` = #{email}, `memberName` = #{memberName}, `phone` = #{phone}, `nickName` = #{nickName}, `introduce` = #{introduce} where mno = #{mno};
+        update member set `email` = #{email}, `memberName` = #{memberName}, `phone` = #{phone}, `nickName` = #{nickName}, `introduce` = #{introduce}, `hasCat` = #{hasCat} where mno = #{mno};
     </update>
     <update id="updatePasswd">
         update member set `passwd` = #{passwd} where mno = #{mno};
     </update>
     <update id="updateMyCat">
-        update member set `hasCat` = #{hasCat}, `catAge` = #{catAge}, `catSex` = #{catSex}, `variety` = #{variety}, `profileImg` = #{profileImg} where mno = #{mno};
+        update member set `catAge` = #{catAge}, `catSex` = #{catSex}, `variety` = #{variety}, `profileImg` = #{profileImg} where mno = #{mno};
     </update>
     <select id="getMember" resultType="com.example.pink_jelly.domain.MemberVO">
         select * from member where mno = #{mno};
@@ -25,6 +25,10 @@
 
     <select id="findById" resultType="com.example.pink_jelly.domain.MemberVO">
         select * from member where memberId = #{memberId};
+    </select>
+
+    <select id="findByEmail" resultType="com.example.pink_jelly.domain.MemberVO">
+        select * from member where email = #{email};
     </select>
 
     <select id="exitsById" resultType="boolean">
