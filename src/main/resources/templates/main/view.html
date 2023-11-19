@@ -36,7 +36,7 @@
                         <h1 class="mb-4">Loving Cats</h1>
                         <div class="post-meta align-items-center text-center">
                             <figure class="author-figure mb-0 me-3 d-inline-block">
-                                <img th:src="|/upload/profileView/${mainBoard.profileString}/${mainBoard.profileImg}|" alt="Image" class="img-fluid">
+                                <img th:src="|/upload/profileView/${mainBoard.dateString}/${mainBoard.profileImg}|" alt="Image" class="img-fluid">
                             </figure>
                             <a th:href="|@{/profile/friendProfile(memberId=${mainBoard.memberId})}|">
                                 <span class="d-inline-block mt-1 boardNickName">[[${mainBoard.nickName}]]</span>
@@ -70,7 +70,7 @@
             <div class="col-md-12 mb-4">
                 <img class="img-fluid round"
                      th:each="mainImg : ${mainBoard.mainImg}"
-                     th:src="@{|/upload/mainBoardView/${mainBoard.dateString[0]}/${mainImg}|}" alt="Image placeholder">
+                     th:src="@{|/upload/mainBoardView/${mainBoard.boardDateString[0]}/${mainImg}|}" alt="Image placeholder">
 
             </div>
         </div>
@@ -302,7 +302,7 @@ function printList(dtoList) { // 댓글 목록 출력
                             <input type="hidden" name="memberId" value="${auth.memberId}">
                             <input type="hidden" name="mbNo" value="${mbNo}">
                             <input type="hidden" name="parentNo" value="${dto.comNo}">
-                            <input type="hidden" name="profileImg" class="form-control" value="${auth.profileImg}+'/'+${auth.dateString}">
+                            <input type="hidden" name="profileImg" class="form-control" value="${auth.profileImg}/${auth.dateString}">
                             <div class="recomment_write">
                                 <div class="writerInfo">
                                 <img class="img-fluid profileImg" src="/upload/profileView/${auth.dateString}/${auth.profileImg}" alt="Image placeholder"  class="img-fluid" readonly>
@@ -317,7 +317,7 @@ function printList(dtoList) { // 댓글 목록 출력
                      </div>`;
             } else {
                 str += `<ul class="recommentList">
-                            <img class="img-fluid profileImg" src="/upload/profileView/${auth.dateString}/${auth.profileImg}" alt="Image placeholder"  class="img-fluid" readonly>
+                            <img class="img-fluid profileImg" src="/upload/profileView/${dto.dateString}/${dto.profileImg}" alt="Image placeholder"  class="img-fluid" readonly>
                             <h3>${dto.nickName}</h3>
                             <h3>(${dto.memberId})</h3>
                             <div class="meta">${dto.addDate[0]}-${dto.addDate[1]}-${dto.addDate[2]} ${dto.addDate[3]}:${dto.addDate[4]}</div>

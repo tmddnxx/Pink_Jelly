@@ -101,17 +101,17 @@ public class UpDownController {
 
     //메인보드 //upload
     @ApiOperation(value = "view 파일", notes = "GET방식으로 첨부파일 조회")
-    @GetMapping("/mainBoardView/{dateString}/{fileName}")
-    public ResponseEntity<Resource> GetMainBoardViewFile(@PathVariable String dateString,  @PathVariable String fileName){
+    @GetMapping("/mainBoardView/{boardDateString}/{fileName}")
+    public ResponseEntity<Resource> GetMainBoardViewFile(@PathVariable String boardDateString,  @PathVariable String fileName){
         // 메인보드 이미지 파일 조회
-        return getViewFile(dateString, fileName, mainBoardPath);
+        return getViewFile(boardDateString, fileName, mainBoardPath);
     }
 
     @ApiOperation(value = "remove 파일", notes = "DELETE 방식으로 파일 삭제")
-    @DeleteMapping("/mainBoardRemove/{dateString}/{fileName}")
-    public Map<String, Boolean> removeMainBoardFile(@PathVariable String dateString,  @PathVariable String fileName) {
+    @DeleteMapping("/mainBoardRemove/{boardDateString}/{fileName}")
+    public Map<String, Boolean> removeMainBoardFile(@PathVariable String boardDateString,  @PathVariable String fileName) {
         // 메인보드 이미지 파일 삭제
-        return removeFile(dateString ,fileName, mainBoardPath);
+        return removeFile(boardDateString ,fileName, mainBoardPath);
     }
 
 

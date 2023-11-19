@@ -24,7 +24,7 @@ public class CatsReviewBoardDTO {
     private int like; // 꾹꾹이 수 (좋아요 수)
     private int hit; // 조회수
     private Long mno; //회원 고유넘버
-    private String profileString; //프로필 이미지 폴더
+    private String dateString; //프로필 이미지 폴더
 
     private boolean flag; // 좋아요 눌럿냐 안눌럿냐
 

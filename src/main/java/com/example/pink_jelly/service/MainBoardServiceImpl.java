@@ -83,8 +83,8 @@ public class MainBoardServiceImpl implements MainBoardService{
 
 
             mainBoardDTO.setProfileImg(profile[0]);
-            mainBoardDTO.setProfileString(profile[1]);
-            mainBoardDTO.setDateString(dateList);
+            mainBoardDTO.setDateString(profile[1]);
+            mainBoardDTO.setBoardDateString(dateList);
             mainBoardDTO.setMainImg(fileList);
             mainBoardDTOList.add(mainBoardDTO);
         });
@@ -131,8 +131,8 @@ public class MainBoardServiceImpl implements MainBoardService{
         log.info(profile[0] + " 좀 좀 좀 " + profile[1]);
 
         mainBoardDTO.setProfileImg(profile[0]);
-        mainBoardDTO.setProfileString(profile[1]);
-        mainBoardDTO.setDateString(dateList);
+        mainBoardDTO.setDateString(profile[1]);
+        mainBoardDTO.setBoardDateString(dateList);
         mainBoardDTO.setMainImg(fileList);
         mainBoardDTO.setFlag(flag);
         return mainBoardDTO;
@@ -172,6 +172,7 @@ public class MainBoardServiceImpl implements MainBoardService{
                 .myCat(mainBoardDTO.getMyCat())
                 .variety(mainBoardDTO.getVariety())
                 .mbNo(mainBoardDTO.getMbNo())
+                .profileImg(mainBoardDTO.getProfileImg())
                 .build();
         log.info("mainBoard MainImg : " + mainBoardVO.getMainImg());
         mainBoardMapper.updateBoard(mainBoardVO);

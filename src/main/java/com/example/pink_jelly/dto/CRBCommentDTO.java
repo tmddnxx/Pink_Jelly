@@ -21,6 +21,6 @@ public class CRBCommentDTO {
     private LocalDateTime addDate; // 등록 날짜
     private Long mno; //회원 고유넘버
     private String profileImg; //프로필 이미지
-    private String dateString; // 이미지 저장 날짜
+    private String dateString; // 프로필 이미지 저장 날짜
 
 }
