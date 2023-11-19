@@ -35,7 +35,9 @@
                     <div class="post-entry text-center">
                         <h1 class="mb-4">Loving Cats</h1>
                         <div class="post-meta align-items-center text-center">
-                            <figure class="author-figure mb-0 me-3 d-inline-block"><img th:src="|/upload/profileView/${mainBoard.profileString}/${mainBoard.profileImg}|" alt="Image" class="img-fluid"></figure>
+                            <figure class="author-figure mb-0 me-3 d-inline-block">
+                                <img th:src="|/upload/profileView/${mainBoard.profileString}/${mainBoard.profileImg}|" alt="Image" class="img-fluid">
+                            </figure>
                             <a th:href="|@{/profile/friendProfile(memberId=${mainBoard.memberId})}|">
                                 <span class="d-inline-block mt-1 boardNickName">[[${mainBoard.nickName}]]</span>
                                 <span class="boardMemberId">([[${mainBoard.memberId}]])</span>
@@ -92,15 +94,10 @@
                 <h3 class="mb-5 heading commentCnt">[[${mainBoard.commentCnt}]] Comments</h3>
                 <ul class="comment-list">
                     <!-- 댓글 start -->
-                    <li class="comment">
-                        <!-- 댓글 리스트 출력 -->
-                        <div class="comment-body">
+                    <!-- 댓글 리스트 출력 -->
+                    <li class="comment comment-view">
 
-                        </div>
                     </li>
-                    <!-- /댓글 end -->
-
-                    <!-- /대댓글 end -->
                     <!-- /댓글 end -->
                 </ul>
                 <!-- END comment-list -->
@@ -275,7 +272,7 @@ function printComments(page, size, goLast) {
 printComments(1, 10); // 무조건 호출
 printComments(1, 10, true);
 
-const commentList = document.querySelector('.comment-body'); // 댓글 목록 DOM
+const commentList = document.querySelector('.comment-view'); // 댓글 목록 DOM
 const commentPaging = document.querySelector('.commentPaging'); // 페이지 목록 DOM
 const commentCnt = document.querySelector('.commentCnt'); //댓글 수 DOM
 function printCommentCnt(total){
