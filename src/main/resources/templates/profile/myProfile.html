@@ -10,6 +10,10 @@
 </head>
 
 <style layout:fragment="style">
+    .fa-ban{
+        color: red;
+        cursor: pointer;
+    }
     *{
         margin: 0;
         padding: 0;
@@ -132,8 +136,16 @@
                     <h5 class="modal-title">Ban List</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <ul class="modal-body" th:each="dto: ${banDTOList}">
+                <ul class="modal-body d-flex align-items-center justify-content-between banList" th:each="dto: ${banDTOList}">
                     <li>[[${dto.nickName}]]([[${dto.memberId}]])</li>
+                    <form name="frmBan" method="post">
+                        <input type="hidden" name="memberId" th:value="${dto.memberId}">
+                        <input type="hidden" name="nickName" th:value="${dto.nickName}">
+                        <input type="hidden" name="mno" th:value="${#authentication.principal.mno}">
+                        <div class="banBtn_wrap">
+                            <i class="fa-solid fa-ban"></i>
+                        </div>
+                    </form>
                 </ul>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -151,9 +163,11 @@
                     <div class="inner-top-info">
                         <input type="hidden" name="mno" th:value="${#authentication.principal.mno}">
                         <p> 아이디 : <span th:text="${#authentication.principal.memberId}"></span></p>
-                        <p> 고양이 품종 : <span sec:authentication = "principal.variety"></span> </p>
-                        <p> 고양이 나이 : <span sec:authentication = "principal.catAge"></span> </p>
-                        <p> 고양이 성별 : <span sec:authentication = "principal.catSex"></span></p>
+                        <th:block th:if="${#authentication.principal.hasCat == 'true'}">
+                            <p> 고양이 품종 : <span sec:authentication = "principal.variety"></span> </p>
+                            <p> 고양이 나이 : <span sec:authentication = "principal.catAge"></span> </p>
+                            <p> 고양이 성별 : <span sec:authentication = "principal.catSex"></span></p>
+                        </th:block>
                     </div>
                 </div>
                 <!-- 메뉴 버튼-->
@@ -229,6 +243,7 @@
     </div>
 <!-- 내 게시물 목록 끝-->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </div>
 <script layout:fragment="script">
         // 메뉴 기능
@@ -273,6 +288,39 @@
             banModal.show();
         })
 
+        const noBans = document.querySelectorAll('.fa-ban'); // 차단목록에서 차단해제 버튼
+        const banList = document.querySelector('.banList');
+        const memberId = document.querySelector('input[name=memberId]').value;
+        const nickName = document.querySelector('input[name=nickName]').value;
+        const mno = document.querySelector('input[name=mno]').value;
+
+        noBans.forEach(noBan => {
+            noBan.addEventListener('click', async function () {
+                if (confirm('차단해제 하시겠습니까 ? ')) {
+                    if (mno !== "") {
+                        let response;
+                        try {
+                            const banUrl = `/ban/remove?mno=${mno}&memberId=${memberId}`;
+                            response = await axios.post(banUrl);
+
+                            if (response.status === 200) {
+                                const json = response.data;
+                                if (json.result === true) {
+                                    // 성공적으로 처리된 경우 추가적인 동작 수행
+                                } else {
+                                    alert('등록에 실패했습니다.');
+                                }
+                            } else {
+                                console.error(response.status, response.statusText);
+                            }
+                        } catch (error) {
+                            console.error('에러:', error);
+                        }
+                        banList.innerHTML = "";
+                    }
+                }
+            })
+        })
         // 게시물 목록 기능
         const mainBtn = document.querySelector('.mainBtn');
         const mainList = document.querySelector('.mainBoardList');

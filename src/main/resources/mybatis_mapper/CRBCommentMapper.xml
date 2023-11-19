@@ -19,4 +19,7 @@
     <delete id="deleteOne">
         DELETE FROM catsComment WHERE comNo=#{comNo}
     </delete>
+    <update id="updateParentNo">
+        update `catsComment` set `parentNo` = `comNo` where `parentNo` is null;
+    </update>
 </mapper>

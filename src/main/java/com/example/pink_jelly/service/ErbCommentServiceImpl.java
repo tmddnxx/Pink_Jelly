@@ -27,6 +27,7 @@ public class ErbCommentServiceImpl implements ErbCommentService{
     public Long register(EternalRestCommentDTO eternalRestCommentDTO) {
         EternalRestCommentVO eternalRestCommentVO = modelMapper.map(eternalRestCommentDTO, EternalRestCommentVO.class);
         int success = eternalRestCommentMapper.insert(eternalRestCommentVO);
+        eternalRestCommentMapper.updateParentNo();
         if(success == 1) {
             eternalRestBoardMapper.upCommentCnt(eternalRestCommentDTO.getErbNo());
         }

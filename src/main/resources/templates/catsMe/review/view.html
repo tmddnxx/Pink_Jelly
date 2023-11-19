@@ -9,7 +9,27 @@
     <title>CatsMe</title>
     <link rel="stylesheet" th:href="@{/css/mainBoard.css}">
 </head>
-
+<style layout:fragment="style">
+    i{
+        color: red;
+        font-size: 30pt;
+    }
+    .toggleOff {
+        display: none;
+    }
+    .recomment_write {
+        display: flex;
+        width: 700px;
+    }
+    .writerInfo p{
+        background-color: #444444;
+        color: white;
+        margin: 0 auto;
+    }
+    .profileImg {
+        border-radius: 50%;
+    }
+</style>
 <div layout:fragment="banner">
     <!-- 배너 start -->
     <div class="site-cover site-cover-sm same-height overlay single-page" style="background-image: url('/images/mainBoard/banner1.jpg');">
@@ -45,8 +65,7 @@
         <input type="hidden" name="crbNo" th:value="${catsReviewBoard.crbNo}">
         <input type="hidden" name="mno" th:value="${#authentication.principal.mno}">
         <div class="likeBtn">
-            <p class="heart on">온</p>
-            <p class="heart off">오프</p>
+
         </div>
     </form>
     </th:block>
@@ -195,9 +214,9 @@
         console.log("first : " + likeCheck.value);
 
         if (likeCheck.value === "true" || likeCheck.value === true) {
-            likeBtn.innerHTML = '<p class="heart on">온</p>';
+            likeBtn.innerHTML = '<p class="heart on"><i class="fa-solid fa-heart"></i></p>';
         } else {
-            likeBtn.innerHTML = '<p class="heart off">오프</p>'
+            likeBtn.innerHTML = '<p class="heart off"><i class="fa-regular fa-heart"></i></p>';
         }
 
         likeBtn.addEventListener('click', function () {
@@ -229,7 +248,7 @@
                 };
 
                 likeCheck.value = likeCheck.value === "true" ? "false" : "true";
-                likeBtn.innerHTML = likeCheck.value === "true" ? '<p class="heart on">온</p>' : '<p class="heart off">오프</p>';
+                likeBtn.innerHTML = likeCheck.value === "true" ? '<p class="heart on"><i class="fa-solid fa-heart"></i></p>' : '<p class="heart off"><i class="fa-regular fa-heart"></i></p>';
             } else {
                 alert("로그인 후 이용 가능합니다.");
             }
@@ -263,23 +282,62 @@
         let str = '';
         if (dtoList && dtoList.length > 0) {
             for (const dto of dtoList) {
+                if(dto.comNo == dto.parentNo){
                 str += `<div class="vcard">
                         <img src="/upload/profileView/${dto.dateString}/${dto.profileImg}" alt="Image placeholder">
                     </div>
-                    <div class="comment-body"></div>
-                    <h3>${dto.memberId}</h3>
-                    <div class="meta">${dto.addDate[0]}-${dto.addDate[1]}-${dto.addDate[2]} ${dto.addDate[3]}:${dto.addDate[4]}</div>
-                    <p data-comNo="${dto.comNo}">${dto.comment}</p>
-                    <p><a href="#" class="reply rounded">Reply</a></p>`
-                    + xBtn(dto);
+                    <div class="comment-view">
+                        <h3>${dto.memberId}</h3>
+                        <div class="meta">${dto.addDate[0]}-${dto.addDate[1]}-${dto.addDate[2]} ${dto.addDate[3]}:${dto.addDate[4]}</div>
+                        <p data-comNo="${dto.comNo}">${dto.comment}</p>`
+                        + replyBtn() +
+                        + xBtn(dto) +
+                    `</div>
+                    <div class="recommentWrap toggleOff">
+                        <form class="form-group frmAddReComment" method="post">
+                            <input type="hidden" name="mno" value="${auth.mno}">
+                            <input type="hidden" name="nickName" value="${auth.nickName}">
+                            <input type="hidden" name="memberId" value="${auth.memberId}">
+                            <input type="hidden" name="crbNo" value="${crbNo}">
+                            <input type="hidden" name="parentNo" value="${dto.comNo}">
+                            <input type="hidden" name="profileImg" class="form-control" value="${auth.profileImg}/${auth.dateString}">
+                            <div class="recomment_write">
+                                <div class="writerInfo">
+                                <img class="img-fluid profileImg" src="/upload/profileView/${auth.dateString}/${auth.profileImg}" alt="Image placeholder"  class="img-fluid" readonly>
+                                    <p>${auth.nickName}</p>
+                                    <p>(${auth.memberId})</p>
+                                </div>
+                                <textarea type="text" name="comment" class="form-control"></textarea>
+                                <button type="button" class="btn-primary recommentAddBtn" onclick="submitCommentRe(this)">등록</button>
+                            </div>
+                        </form>
+                      </div>
+                     </div>`;
+                } else{
+                    str += `<ul class="recommentList">
+                            <img class="img-fluid profileImg" src="/upload/profileView/${dto.dateString}/${dto.profileImg}" alt="Image placeholder"  class="img-fluid" readonly>
+                            <h3>${dto.nickName}</h3>
+                            <h3>(${dto.memberId})</h3>
+                            <div class="meta">${dto.addDate[0]}-${dto.addDate[1]}-${dto.addDate[2]} ${dto.addDate[3]}:${dto.addDate[4]}</div>
+                            <p data-comNo="${dto.comNo}">${dto.comment}</p>
+                        `+xBtn(dto)+`
+                        </ul>`
+                }
             }
         }
         commentList.innerHTML = str;
 
+        function replyBtn(){
+            let btn = '';
+            if(auth !== 'anonymousUser' ){
+                btn = `<button class="reply rounded recommentBtn">Reply</button>`;
+            }
+            return btn;
+        }
+
         function xBtn(dto){
             let btn = '';
             if(auth.mno === dto.mno){
-                console.log("같음");
             btn = `<button type="button" class="btn btn-danger removeCommentBtn">Remove</button>`;
             }return btn;
         }
@@ -298,6 +356,48 @@
                 }).catch(e => console.log(e));
             });
         });
+
+        // 대댓글 입력 창
+        let recommentBtns = document.querySelectorAll('.recommentBtn');
+        let recommentWraps = document.querySelectorAll('.recommentWrap');
+
+        for (let i=0; i<= recommentBtns.length; i++){
+            recommentBtns[i].addEventListener('click', function (){
+                recommentWraps[i].classList.toggle('toggleOff')
+            })
+        }
+
+    } // 댓글 목록 끝
+
+    // 대댓글 등록
+    const submitCommentRe = function (btn) {
+        let frmAddReComment = btn.closest('form');
+
+        let reMno = frmAddReComment.mno.value;
+        let reNickName = frmAddReComment.nickName.value;
+        let reMemberId = frmAddReComment.memberId.value;
+        let reCrbNo = frmAddReComment.crbNo.value;
+        let parentNo = frmAddReComment.parentNo.value;
+        let reComment = frmAddReComment.comment.value;
+        let profileImg = frmAddReComment.profileImg.value;
+
+        let commentObj = {
+            crbNo: reCrbNo,
+            memberId: reMemberId,
+            nickName: reNickName,
+            comment: reComment,
+            mno: reMno,
+            parentNo: parentNo,
+            profileImg: profileImg
+        };
+
+        addComment(commentObj).then(result => {
+            comment.value = '';
+            printComments(1, 10, true); // 댓글 목록 갱신
+        }).catch(e => {
+            alert("댓글 등록에 실패했습니다. 다시 시도해주세요");
+        });
+
     }
 
     function printPages(data) { // 페이지 목록 출력

@@ -21,11 +21,15 @@ public class CRBCommentServiceImpl implements CRBCommentService{
     private final CRBCommentMapper crbCommentMapper;
     private final CatsMeMapper catsMeMapper;
     private final ModelMapper modelMapper;
+
     @Override
     public Long register(CRBCommentDTO crbCommentDTO) {
         CRBCommentVO crbCommentVO = modelMapper.map(crbCommentDTO, CRBCommentVO.class);
+
         int success = crbCommentMapper.insert(crbCommentVO);
-        log.info("crbCommentVO : " + crbCommentVO);
+
+        crbCommentMapper.updateParentNo();
+
         if(success == 1) {
             catsMeMapper.upCommentCnt(crbCommentDTO.getCrbNo());
         }

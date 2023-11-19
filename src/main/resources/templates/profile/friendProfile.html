@@ -142,9 +142,11 @@
                         <div class="inner-top-info">
                             <input type="hidden" name="mno" th:value="${memberDTO.mno}">
                             <p> 아이디 : [[${memberDTO.memberId}]]</p>
-                            <p> 고양이 품종 : [[${memberDTO.variety}]] </p>
-                            <p> 고양이 나이 : [[${memberDTO.catAge}]] </p>
-                            <p> 고양이 성별 : [[${memberDTO.catSex}]] </p>
+                            <th:block th:if="${#authentication.principal.hasCat == 'true'}">
+                                <p> 고양이 품종 : [[${memberDTO.variety}]] </p>
+                                <p> 고양이 나이 : [[${memberDTO.catAge}]] </p>
+                                <p> 고양이 성별 : [[${memberDTO.catSex}]] </p>
+                            </th:block>
                         </div>
                     </div>
                 </div>

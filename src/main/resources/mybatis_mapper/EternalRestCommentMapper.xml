@@ -16,4 +16,7 @@
     <delete id="deleteOne">
         DELETE FROM eternalcomment WHERE comNo=#{comNo}
     </delete>
+    <update id="updateParentNo">
+        update `eternalcomment` set `parentNo` = `comNo` where `parentNo` is null;
+    </update>
 </mapper>

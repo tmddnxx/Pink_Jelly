@@ -15,6 +15,6 @@ public interface CRBCommentMapper {
     List<CRBCommentVO> selectList(@Param("crbNo") Long crbNo, @Param("skip") int skip, @Param("size") int size); //리스트 출력
     int deleteOne(Long comNo); // 댓글삭제
 
-
+    void updateParentNo(); // 부모번호 업데이트
 
 }

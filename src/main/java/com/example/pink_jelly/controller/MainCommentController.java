@@ -54,7 +54,7 @@ public class MainCommentController {
     @ApiOperation(value = "Delete Reply", notes = "DELETE 방식으로 특정 댓글 삭제")
     @DeleteMapping(value = "/{comNo}/{mbNo}")
     public Map<String, Long> remove(@PathVariable("comNo") Long comNo, @PathVariable("mbNo") Long mbNo) {
-        log.info("컨트롤러 comNo는 ? " + comNo);
+
         mainCommentService.remove(comNo, mbNo);
         Map<String, Long> resultMap = new HashMap<>();
         resultMap.put("comNo", comNo);
