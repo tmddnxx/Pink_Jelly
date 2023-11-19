@@ -24,6 +24,7 @@
             <form action="/eternalRest/write" method="post" name="autoWrite">
                 <input type="hidden" name="memberId" th:value="${#authentication.principal.memberId}">
                 <input type="hidden" name="nickName" th:value="${#authentication.principal.nickName}">
+                <input type="hidden" name="dateString" th:value="${#authentication.principal.dateString}">
                 <input type="hidden" name="profileImg" th:value="${#authentication.principal.profileImg}">
                 <input type="hidden" name="mno" th:value="${#authentication.principal.mno}">
                 <button type="button" class="autoWriteBtn">Crossed Rainbow Bridge..</button>

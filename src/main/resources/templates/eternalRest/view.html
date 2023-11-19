@@ -52,7 +52,7 @@
             <p>[[${eternalRestBoard.nickName}]]</p><p>([[${eternalRestBoard.memberId}]])</p>
         </div>
         <div class="post-content-body">
-           <img src="/images/defalut.png" width="400" height="400">
+           <img th:src="|/upload/profileView/${eternalRestBoard.profileImg}|" width="400" height="400">
         </div>
         <div class="post-content-body">
             <p>[[${eternalRestBoard.content}]]</p>

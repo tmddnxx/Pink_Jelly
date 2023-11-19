@@ -38,7 +38,9 @@ public class EternalRestController {
         // 로그인유저 정보 입력
         eternalRestBoardDTO.setMemberId(memberDTO.getMemberId());
         eternalRestBoardDTO.setNickName(memberDTO.getNickName());
-        eternalRestBoardDTO.setProfileImg(memberDTO.getProfileImg());
+
+        eternalRestBoardDTO.setProfileImg(memberDTO.getDateString()+"/"+memberDTO.getProfileImg());
+        log.info("----------" + eternalRestBoardDTO.getProfileImg());
         eternalRestBoardDTO.setMno(memberDTO.getMno());
         eternalRestBoardDTO.setTitle("우리의 친구 ["+memberDTO.getNickName()+"]이(가) 무지개 다리를 건넜습니다");
         eternalRestBoardDTO.setContent(memberDTO.getNickName()+"은(는) 당신을 만났기에 가장 행복한 고양이였습니다");

@@ -72,7 +72,9 @@
                     <h2><a th:href="|@{/catsMe/board/view(cmbNo=${catsMeBoard.cmbNo})}|">[[${catsMeBoard.title}]]</a></h2>
                     <p>[[${catsMeBoard.content}]]</p>
                     <div class="post-meta align-items-center text-left clearfix">
-                        <figure class="author-figure mb-0 me-3 float-start"><img src="/images/person_2.jpg" alt="Image" class="img-fluid"></figure>
+                        <figure class="author-figure mb-0 me-3 float-start">
+                            <img th:src="|/upload/profileView/${catsMeBoard.profileString}/${catsMeBoard.profileImg}|" alt="Image" class="img-fluid">
+                        </figure>
                         <a th:href="|@{/profile/friendProfile(memberId=${catsMeBoard.memberId})}|">
                             <span class="d-inline-block mt-1 boardNickName">[[${catsMeBoard.nickName}]]</span>
                             <span class="boardMemberId">([[${catsMeBoard.memberId}]])</span>
@@ -160,7 +162,7 @@
             <p>${dtoList.content}</p>
             <div class="post-meta align-items-center text-left clearfix">
                 <figure class="author-figure mb-0 me-3 float-start">
-                    <img src="/images/person_2.jpg" alt="image" class="img-fluid">
+                    <img src="/upload/profileView/${dtoList.profileString}/${dtoList.profileImg}" alt="image" class="img-fluid">
                 </figure>
                 <a href="/catsMe/board/view?cmbNo=${dtoList.cmbNo}">
                     <span class="d-inline-block mt-1 boardNickName">${dtoList.nickName}</span>
@@ -226,7 +228,7 @@
             <p>${dtoList.content}</p>
             <div class="post-meta align-items-center text-left clearfix">
                 <figure class="author-figure mb-0 me-3 float-start">
-                    <img src="/images/person_3.jpg" alt="image" class="img-fluid">
+                    <img src="/upload/profileView/${dtoList.profileString}/${dtoList.profileImg}" alt="image" class="img-fluid">
                 </figure>
                 <a href="/catsMe/review/view?crbNo=${dtoList.crbNo}">
                     <span class="d-inline-block mt-1 boardNickName">${dtoList.nickName}</span>

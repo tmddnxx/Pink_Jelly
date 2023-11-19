@@ -31,7 +31,18 @@ public class CatsMeServiceImpl implements CatsMeService{
         List<CatsMeBoardVO> catsMeBoardVOList = catsMeMapper.selectList(pageRequestDTO.getSkip(), pageRequestDTO.getSize(),
                 pageRequestDTO.getType(), pageRequestDTO.getKeyword(), mno, memberId);
         List<CatsMeBoardDTO> catsMeBoardDTOList = new ArrayList<>();
-        catsMeBoardVOList.forEach(catsMeBoardVO -> catsMeBoardDTOList.add(modelMapper.map(catsMeBoardVO, CatsMeBoardDTO.class)));
+        catsMeBoardVOList.forEach(catsMeBoardVO -> {
+            CatsMeBoardDTO catsMeBoardDTO = modelMapper.map(catsMeBoardVO, CatsMeBoardDTO.class);
+            String[] profileImg = catsMeBoardVO.getProfileImg().split("/");
+            catsMeBoardDTO.setProfileImg(profileImg[0]);
+            catsMeBoardDTO.setProfileString(profileImg[1]);
+
+            catsMeBoardDTOList.add(catsMeBoardDTO);
+
+        });
+
+        catsMeBoardDTOList.forEach(log::info);
+
         int total = catsMeMapper.getCount(pageRequestDTO);
 
         PageResponseDTO<CatsMeBoardDTO> pageResponseDTO = PageResponseDTO.<CatsMeBoardDTO>withAll()
@@ -52,6 +63,10 @@ public class CatsMeServiceImpl implements CatsMeService{
             catsMeBoardVO = catsMeMapper.getOne(cmbNo);
         }
         CatsMeBoardDTO catsMeBoardDTO = modelMapper.map(catsMeBoardVO, CatsMeBoardDTO.class);
+        String[] profile = catsMeBoardDTO.getProfileImg().split("/");
+        catsMeBoardDTO.setProfileImg(profile[0]);
+        catsMeBoardDTO.setProfileString(profile[1]);
+
         return catsMeBoardDTO;
     }
 
@@ -84,7 +99,17 @@ public class CatsMeServiceImpl implements CatsMeService{
         List<CatsReviewBoardVO> catsMeBoardVOList = catsMeMapper.selectReviewBoardList(pageRequestDTO.getSkip(), pageRequestDTO.getSize(),
                 pageRequestDTO.getType(), pageRequestDTO.getKeyword(), mno, memberId);
         List<CatsReviewBoardDTO> catsReviewBoardDTOList = new ArrayList<>();
-        catsMeBoardVOList.forEach(catsReviewBoardVO -> catsReviewBoardDTOList.add(modelMapper.map(catsReviewBoardVO, CatsReviewBoardDTO.class)));
+        catsMeBoardVOList.forEach(catsReviewBoardVO -> {
+            CatsReviewBoardDTO catsReviewBoardDTO = modelMapper.map(catsReviewBoardVO, CatsReviewBoardDTO.class);
+            String[] profileImg = catsReviewBoardVO.getProfileImg().split("/");
+            catsReviewBoardDTO.setProfileImg(profileImg[0]);
+            catsReviewBoardDTO.setProfileString(profileImg[1]);
+
+            catsReviewBoardDTOList.add(catsReviewBoardDTO);
+        });
+
+
+
         int total = catsMeMapper.getCount(pageRequestDTO);
 
         PageResponseDTO<CatsReviewBoardDTO> pageResponseDTO = PageResponseDTO.<CatsReviewBoardDTO>withAll()
@@ -107,6 +132,9 @@ public class CatsMeServiceImpl implements CatsMeService{
             catsReviewBoardVO = catsMeMapper.getReviewBoardOne(crbNo);
         }
         CatsReviewBoardDTO catsReviewBoardDTO = modelMapper.map(catsReviewBoardVO, CatsReviewBoardDTO.class);
+        String[] profile = catsReviewBoardDTO.getProfileImg().split("/");
+        catsReviewBoardDTO.setProfileImg(profile[0]);
+        catsReviewBoardDTO.setProfileString(profile[1]);
         catsReviewBoardDTO.setFlag(flag);
         return catsReviewBoardDTO;
     }
