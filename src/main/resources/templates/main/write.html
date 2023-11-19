@@ -5,6 +5,7 @@
 <script src="https://kit.fontawesome.com/e83b9315c8.js" crossorigin="anonymous"></script>
 
 <head>
+
     <meta charset="UTF-8">
     <title>메인 글씨기</title>
 </head>
@@ -53,7 +54,7 @@
             </div>
             <div class="form-group row">
                 <label class="col-sm-3 col-form-label">content</label>
-                <textarea name="content" rows="7" cols="50" maxlength="500" placeholder="내용을 입력하세요."></textarea>
+                <textarea id="content" name="content" rows="7" cols="50" maxlength="500" placeholder="내용을 입력하세요."></textarea>
             </div>
             <th:block th:if="${#authentication.principal.hasCat == true}">
             <div class="form-group row">
@@ -67,12 +68,16 @@
             <button type="button" class="btn btn-primary btn-submit">Submit</button>
         </form>
     </div>
+
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="/js/mainBoard/mainBoard.js"></script>
     <script src="/js/signup/upload.js"></script>
 
 </div>
 <script layout:fragment="script" th:inline="javascript">
+
+
+
     const errors = [[${errors}]];
     console.log(errors);
 

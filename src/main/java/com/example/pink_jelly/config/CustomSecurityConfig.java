@@ -72,6 +72,8 @@ public class CustomSecurityConfig {
         // CSRF 토큰 비활성화
         http.csrf().disable();
 
+        http.headers().frameOptions().sameOrigin();
+
         //  커스텀 로그인 페이지
         http.formLogin()
                 .loginPage("/login")

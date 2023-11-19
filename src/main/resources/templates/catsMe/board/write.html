@@ -48,21 +48,22 @@
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                let oEditors = [];
-
-                nhn.husky.EZCreator.createInIFrame({
-                    oAppRef: oEditors,
-                    elPlaceHolder: "content", //id가 content인 요소를 저장
-                    sSkinURI: "/smarteditor2/SmartEditor2Skin.html",
-                    fCreator: "createSEditor2"
-                });
-            });
-        </script>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script type="text/javascript" src="/smarteditor2/js/HuskyEZCreator.js" charset="utf-8"></script>
     <script src="/js/signup/upload.js"></script>
 </div>
+<script layout:fragment="script" th:inline="javascript">
+    document.addEventListener('DOMContentLoaded', function (){
+        let oEditors = [];
+
+        nhn.husky.EZCreator.createInIFrame({
+            oAppRef: oEditors,
+            elPlaceHolder: "content", // textarea 아이디 값
+            sSkinURI: "/smarteditor2/SmartEditor2Skin.html",
+            fCreator: "createSEditor2"
+        });
+    })
+</script>
 </body>
 </html>
