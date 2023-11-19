@@ -6,17 +6,19 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Map;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class MemberDTO implements UserDetails {
+public class MemberDTO implements UserDetails, OAuth2User {
     private Long mno; // 회원 고유 넘버
 
     @NotBlank(message = "아이디를 입력해주세요.")
@@ -51,10 +53,20 @@ public class MemberDTO implements UserDetails {
 
     private boolean del; // 회원 탈퇴 여부
     private boolean social; // 소셜 로그인
+    private Map<String, Object> props; // 소셜 로그인 정보
 
     private String dateString; // 이미지 저장 날짜
     private boolean flag; // 친구 여부
     private boolean ban; // 차단 여부
+
+    @Override
+    public Map<String, Object> getAttributes() {
+        return this.getProps();
+    }
+    @Override
+    public String getName() {
+        return this.memberId;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

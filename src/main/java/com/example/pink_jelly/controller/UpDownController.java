@@ -108,10 +108,10 @@ public class UpDownController {
     }
 
     @ApiOperation(value = "remove 파일", notes = "DELETE 방식으로 파일 삭제")
-    @DeleteMapping("/mainBoardRemove/{fileName}")
-    public Map<String, Boolean> removeMainBoardFile(@PathVariable String fileName) {
+    @DeleteMapping("/mainBoardRemove/{dateString}/{fileName}")
+    public Map<String, Boolean> removeMainBoardFile(@PathVariable String dateString,  @PathVariable String fileName) {
         // 메인보드 이미지 파일 삭제
-        return removeFile(fileName, mainBoardPath);
+        return removeFile(dateString ,fileName, mainBoardPath);
     }
 
 
@@ -126,13 +126,10 @@ public class UpDownController {
 
     @ApiOperation(value = "Profile Remove DELETE", notes = "DELETE 방식으로 파일 삭제")
     @DeleteMapping("/profileRemove/{dateString}/{fileName}")
-    private Map<String, Boolean> removeProfileFile(@PathVariable String fileName) {
+    private Map<String, Boolean> removeProfileFile(@PathVariable String dateString, @PathVariable String fileName) {
         // 프로필 사진 삭제
-        return removeFile(fileName, profilePath);
+        return removeFile(dateString, fileName, profilePath);
     }
-
-
-
 
 
     private ResponseEntity<Resource> getViewFile(String dateString, String fileName, String uploadPath) {
@@ -152,9 +149,10 @@ public class UpDownController {
         return ResponseEntity.ok().headers(headers).body(resource);
     }
 
-    private Map<String, Boolean> removeFile(String fileName, String uploadPath) {
+    private Map<String, Boolean> removeFile(String dateString, String fileName, String uploadPath) {
         // 파일 삭제
-        Resource resource = new FileSystemResource(uploadPath + File.separator + fileName);
+        String newUploadPath = uploadPath + "/" + dateString;
+        Resource resource = new FileSystemResource(newUploadPath + File.separator + fileName);
         String resourceName = resource.getFilename();
 
 
@@ -166,7 +164,7 @@ public class UpDownController {
 
             //썸네일이 존재한다면
             if(contentType.startsWith("image")){
-                File thumbFile = new File(uploadPath + File.separator + "s_" + fileName);
+                File thumbFile = new File(newUploadPath + File.separator + "s_" + fileName);
                 thumbFile.delete();
             }
         } catch (IOException e) {

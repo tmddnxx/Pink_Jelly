@@ -21,9 +21,11 @@ public interface MemberMapper {
 
     MemberVO login(String memberId, String passwd); // 로그인 처리
 
-    MemberVO findById(String memberId); // 아이디로 회원정보 들고오기
+    MemberVO findById(String memberId); // 아이디로 회원정보 찾기
 
     boolean exitsById(String memberId); // 아이디 존재 여부
+
+    MemberVO findByEmail(String email); // 이메일로 회원정보 찾기
 
     String findByMnoWithImg(Long mno); // 회원번호와 일치하는 프로필 이미지 반환
 

@@ -2,6 +2,7 @@ package com.example.pink_jelly.config;
 
 import com.example.pink_jelly.security.CustomUserDetailService;
 import com.example.pink_jelly.security.handler.Custom403Handler;
+import com.example.pink_jelly.security.handler.CustomSocialLoginSuccessHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -18,6 +19,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 
@@ -53,6 +55,16 @@ public class CustomSecurityConfig {
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations());
     }
 
+    @Bean
+    public AccessDeniedHandler accessDeniedHandler() {
+        return new Custom403Handler();
+    }
+
+    @Bean
+    public AuthenticationSuccessHandler authenticationSuccessHandler() {
+        return new CustomSocialLoginSuccessHandler(passwordEncoder());
+    }
+
     // 인증 or 인가에 대한 설정
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -69,30 +81,30 @@ public class CustomSecurityConfig {
                 .defaultSuccessUrl("/main")
                 .failureUrl("/login");
 
+        // 자동로그인
         http.rememberMe()
                 .key("12345678")
                 .tokenRepository(persistentTokenRepository())
                 .userDetailsService(customUserDetailService)
                 .tokenValiditySeconds(60 * 60 * 24 * 30);
 
-        http.exceptionHandling().accessDeniedHandler(accessDeniedHandler()); // 403
-
         http.logout()
                 .logoutUrl("/logout")
-                .logoutSuccessUrl("/main")
+                .logoutSuccessUrl("/")
                 .invalidateHttpSession(true)
                 .deleteCookies("JSESSIONID", "remember-me");
+
 //        http.authorizeRequests()
 //                .antMatchers("/", "/member/signup", "/member/welcome", "/member/sendConfirmMail",
 //                        "/member/matchConfirmKey", "/member/removeConfirmKey", "/member/checkMemberId").permitAll()
 //                .antMatchers("/member/**", "/profile/myProfile").authenticated()
 //                .anyRequest().permitAll();
 
+        http.exceptionHandling().accessDeniedHandler(accessDeniedHandler()); // 403
+
+        http.oauth2Login().loginPage("/login").successHandler(authenticationSuccessHandler());
+
         return http.build();
     }
 
-    @Bean
-    public AccessDeniedHandler accessDeniedHandler() {
-        return new Custom403Handler();
-    }
 }

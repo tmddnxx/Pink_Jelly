@@ -20,7 +20,7 @@ import java.util.Map;
 
 @Controller
 @Log4j2
-@RequestMapping({"/catsMe","/"})
+@RequestMapping({"/catsMe"})
 @RequiredArgsConstructor
 public class CatsMeController {
 

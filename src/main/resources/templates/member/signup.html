@@ -24,13 +24,23 @@
             <div class="col-lg-8" data-aos="fade-up" data-aos-delay="200">
                 <form id="frmSignUp" th:action="@{/member/signup}" method="post">
                     <div class="row">
-                        <div class="col-10 mb-3">
-                            <input id="memberId" type="text" class="form-control" name="memberId" minlength="5" maxlength="20" placeholder="아이디" required>
-                            <input type="hidden" name="isDuplicate" value="false">
-                            <span class="checkId-message hide fail"></span>
-                        </div>
-                        <div class="col-2 mb-3">
-                            <button id="checkIdBtn" type="button" class="btn btn-primary">중복검사</button>
+                        <div class="col-12">
+                            <div class="row idWrap">
+                                <div class="col-10 mb-3">
+                                    <input id="memberId" type="text" class="form-control" name="memberId" minlength="5" maxlength="20" placeholder="아이디" required>
+                                    <input type="hidden" name="isDuplicate" value="false">
+                                    <span class="checkId-message hide fail"></span>
+                                </div>
+
+                                <div class="col-2 mb-3">
+                                    <button id="checkIdBtn" type="button" class="btn btn-primary">중복검사</button>
+                                </div>
+                            </div>
+
+                            <div th:if="${#authentication.principal != 'anonymousUser'}" th:with="member=${#authentication.principal}">
+                                <h6>아이디</h6>
+                                <p>[[${member.memberId}]]</p>
+                            </div>
                         </div>
 
                         <div class="col-6 mb-3">
@@ -60,27 +70,37 @@
                             <input type="hidden" name="phone">
                         </div>
 
-                        <div class="col-4 mb-3">
-                            <input id="emailId" type="text" class="form-control" placeholder="이메일" required>
+                        <div class="col-12">
+                            <div class="row emailWrap">
+                                <div class="col-4 mb-3">
+                                    <input id="emailId" type="text" class="form-control" placeholder="이메일" required>
+                                </div>
+
+                                <div class="col-4 mb-3">
+                                    <input id="domain" type="text" class="form-control" placeholder="ex) @example.com" required>
+                                    <input type="hidden" name="email" required>
+                                </div>
+
+                                <div class="col-2 mb-3">
+                                    <select id="domainSelect" class="form-select" style="height: 54px;">
+                                        <option name="domain" value="-1" selected>직접입력</option>
+                                        <option name="domain" value="@naver.com">naver.com</option>
+                                        <option name="domain" value="@daum.net">daum.net</option>
+                                        <option name="domain" value="@gmail.com">gmail.com</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-2 mb-3">
+                                    <button id="emailBtn" type="button" class="btn btn-primary" style="height: 54px;">인증하기</button>
+                                </div>
+                            </div>
+
+                            <div th:if="${#authentication.principal != 'anonymousUser'}" th:with="member=${#authentication.principal}">
+                                <h6>이메일</h6>
+                                <p>[[${member.email}]]</p>
+                            </div>
                         </div>
 
-                        <div class="col-4 mb-3">
-                            <input id="domain" type="text" class="form-control" placeholder="ex) @example.com" required>
-                            <input type="hidden" name="email" required>
-                        </div>
-
-                        <div class="col-2 mb-3">
-                            <select id="domainSelect" class="form-select" style="height: 54px;">
-                                <option name="domain" value="-1" selected>직접입력</option>
-                                <option name="domain" value="@naver.com">naver.com</option>
-                                <option name="domain" value="@daum.net">daum.net</option>
-                                <option name="domain" value="@gmail.com">gmail.com</option>
-                            </select>
-                        </div>
-
-                        <div class="col-2 mb-3">
-                            <button id="emailBtn" type="button" class="btn btn-primary" style="height: 54px;">인증하기</button>
-                        </div>
 
                         <div class="col-12 mb-3">
                             <div class="row confirm hide">
@@ -184,62 +204,18 @@
             alert(errorMsg);
         }
 
-        // 프로필 이미지 임시 폴더에 업로드
-        const fileInput = document.querySelector('input[name=files]');
-        fileInput.addEventListener('change', function () {
-            const formObj = new FormData();
-            const files = fileInput.files;
-            console.log(files);
+        const auth = [[${#authentication.principal}]]; // 로그인한 사용자 정보
+        const isDuplicate = document.querySelector('input[name=isDuplicate]');
+        const email = document.querySelector('input[name=email]'); // 이메일을 담을 input
+        if (auth != 'anonymousUser') { // 로그인 한 경우
+            isDuplicate.value = "true";
 
-            for (const file of files) {
-                formObj.append('files', file);
-            }
+            // 아이디, 이메일 입력창 숨김
+            document.querySelector('.idWrap').classList.add('hide');
+            document.querySelector('.emailWrap').classList.add('hide');
 
-            uploadToServer('/upload/tempUpload', formObj).then(result => {
-                console.log(result);
-                for (const uploadResult of result) {
-                    console.log("uploadResult");
-                    console.log(uploadResult);
-                    showUploadFile(uploadResult) // 업로드한 이미지를 보여준다
-                }
-                console.log(files);
-            });
-        });
-
-        // 업로드된 이미지를 보여줌
-        const uploadResult = document.querySelector('.uploadResult');
-
-        function showUploadFile({dateString, fileName, link}) {
-            const str = `<div>
-                            <img src="/upload/tempView/${dateString}/${link}" data-src="${fileName}/${dateString}">
-                         </div>`
-            uploadResult.innerHTML = str;
+            email.value = auth.email;
         }
-
-        // 회원가입 등록 처리
-        document.querySelector('.submitBtn').addEventListener('click', function (e) {
-            e.preventDefault();
-            e.stopPropagation();
-
-            // 1. 썸네일 영역에서 img 태그의 data-src 속성을 들고 옴.
-            const uploadFile = uploadResult.querySelector('img');
-            let str = '';
-
-            // 업로드한 이미지가 존재할 경우
-            if (uploadFile != null) {
-                const imgLink = uploadFile.getAttribute('data-src');
-                console.log(imgLink);
-
-                str = `<input type="hidden" name="profileImg" value="${imgLink}">`;
-
-                // 2. 프로필 사진 첨부 영역에 태그 추가
-                document.querySelector('.uploadHidden').innerHTML = str;
-            }
-
-            // 3. submit() 처리
-            const frmSignUp = document.getElementById('frmSignUp');
-            frmSignUp.submit();
-        });
 
         const inputMemberId = document.getElementById('memberId');
         const checkIdBtn = document.getElementById('checkIdBtn');
@@ -282,7 +258,6 @@
         // 아이디 중복체크
         document.getElementById('checkIdBtn').addEventListener('click', async function () {
             const memberId = inputMemberId.value;
-            const isDuplicate = document.querySelector('input[name=isDuplicate]');
             const result = await checkMemberId(memberId);
             console.log(result);
             if (result === "true") { // 아이디가 존재할때
@@ -360,7 +335,6 @@
 
         // 이메일 인증번호 전송
         let currentTime = 0;
-        const email = document.querySelector('input[name=email]'); // 이메일을 담을 input
         const confirmWrap = document.querySelector('.confirm'); // 인증코드 wrap
         document.getElementById('emailBtn').addEventListener('click', async function (e) {
             const emailBtn = e.target;
@@ -499,6 +473,68 @@
                 varietyInput.readOnly = false;
                 varietyInput.value = '';
             }
+        });
+
+        // 프로필 이미지 임시 폴더에 업로드
+        const fileInput = document.querySelector('input[name=files]');
+        fileInput.addEventListener('change', function () {
+            const formObj = new FormData();
+            const files = fileInput.files;
+            console.log(files);
+
+            for (const file of files) {
+                formObj.append('files', file);
+            }
+
+            uploadToServer('/upload/tempUpload', formObj).then(result => {
+                console.log(result);
+                for (const uploadResult of result) {
+                    console.log("uploadResult");
+                    console.log(uploadResult);
+                    showUploadFile(uploadResult) // 업로드한 이미지를 보여준다
+                }
+                console.log(files);
+            });
+        });
+
+        // 업로드된 이미지를 보여줌
+        const uploadResult = document.querySelector('.uploadResult');
+
+        function showUploadFile({dateString, fileName, link}) {
+            const str = `<div>
+                            <img src="/upload/tempView/${dateString}/${link}" data-src="${fileName}/${dateString}">
+                         </div>`
+            uploadResult.innerHTML = str;
+        }
+
+        // 회원가입 등록 처리
+        document.querySelector('.submitBtn').addEventListener('click', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            if (isDuplicate.value === "false") { // 중복검사 안했을 때
+                alert('아이디 중복검사를 해주세요.');
+                return;
+            }
+
+            // 1. 썸네일 영역에서 img 태그의 data-src 속성을 들고 옴.
+            const uploadFile = uploadResult.querySelector('img');
+            let str = '';
+
+            // 업로드한 이미지가 존재할 경우
+            if (uploadFile != null) {
+                const imgLink = uploadFile.getAttribute('data-src');
+                console.log(imgLink);
+
+                str = `<input type="hidden" name="profileImg" value="${imgLink}">`;
+
+                // 2. 프로필 사진 첨부 영역에 태그 추가
+                document.querySelector('.uploadHidden').innerHTML = str;
+            }
+
+            // 3. submit() 처리
+            const frmSignUp = document.getElementById('frmSignUp');
+            frmSignUp.submit();
         });
     </script>
 </body>

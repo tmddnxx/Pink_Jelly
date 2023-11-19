@@ -41,6 +41,9 @@ public class CustomUserDetailService implements UserDetailsService {
         memberDTO.setProfileImg(splits[0]);
         memberDTO.setDateString(splits[1]);
 
+        log.info("loadUserByUsername...");
+        log.info(memberDTO.isHasCat());
+
         return memberDTO;
     }
 }
