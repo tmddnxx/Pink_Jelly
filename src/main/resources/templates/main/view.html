@@ -91,8 +91,8 @@
             </div>
             <a th:href="|@{/main}|" class="btn btn-primary">목록</a>
             <th:block th:if="${#authentication.principal != 'anonymousUser'}">
-                <a th:href="|@{/main/modify(mbNo=${mainBoard.mbNo})}|" th:if="${#authentication.principal.mno == mainBoard.mno}" class="btn btn-success">수정</a>
-                <a th:href="|@{/main/remove(mbNo=${mainBoard.mbNo})}|" th:if="${#authentication.principal.mno == mainBoard.mno}" class="btn btn-danger">삭제</a>
+                <a th:if="${#authentication.principal.mno == mainBoard.mno}" class="btn btn-success modifyBtn">수정</a>
+                <a th:if="${#authentication.principal.mno == mainBoard.mno}" class="btn btn-danger deleteBtn">삭제</a>
             </th:block>
                 <!-- comment-wrap start -->
             <div class="pt-5 comment-wrap">
@@ -197,6 +197,21 @@
     <script src="/js/mainBoard/mainBoard.js"></script>
 </div>
 <script layout:fragment="script" th:inline="javascript">
+    const mbNo = [[${mainBoard.mbNo}]]
+
+    const modifyBtn = document.querySelector('.modifyBtn');
+    const deleteBtn = document.querySelector('.deleteBtn');
+    modifyBtn.addEventListener('click', function() {
+        if(!confirm("게시글을 수정하시겠습니까?")){
+        }
+        window.location.href = "/main/modify?mbNo=" + mbNo;
+    });
+    deleteBtn.addEventListener('click', function() {
+        if(!confirm("게시글을 삭제하시겠습니까?")) {
+        }
+        window.location.href = "/main/remove?mbNo=" + mbNo;
+    })
+
     // 탈퇴한 회원일경우
     let isDel;
     isDel   =  [[${isDel}]];
@@ -264,7 +279,6 @@
 
     //댓글
     //출력 메서드
-const mbNo = [[${mainBoard.mbNo}]]
 function printComments(page, size, goLast) {
     getList({mbNo, page, size, goLast})
         .then(data => {

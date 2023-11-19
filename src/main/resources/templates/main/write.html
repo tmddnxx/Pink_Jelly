@@ -126,7 +126,7 @@
         const str = `<div class="card col-4">
         <div class="card-header d-flex justify-content-center">
           ${fileName}
-          <button type="button" class="btn-sm btn btn-danger">X</button>
+          <button type="button" class="btn-sm btn btn-danger" onclick="javascript:removeFile('${dateString}','${fileName}', this)" >X</button>
          </div>
          <div class="card-body">
           <img src="/upload/tempView/${dateString}/${link}" data-src="${fileName}/${dateString}">
@@ -137,7 +137,7 @@
     }
 
     //x버튼 파일 삭제
-    function removeFile(fileName, obj) {
+    function removeFile(boardDateString, fileName, obj) {
         if(!confirm('파일을 삭제하시겠습니까?')){
             return;
         }

@@ -108,10 +108,16 @@ public class UpDownController {
     }
 
     @ApiOperation(value = "remove 파일", notes = "DELETE 방식으로 파일 삭제")
-    @DeleteMapping("/mainBoardRemove/{boardDateString}/{fileName}")
-    public Map<String, Boolean> removeMainBoardFile(@PathVariable String boardDateString,  @PathVariable String fileName) {
+    @DeleteMapping("/mainBoardRemove/{fileName}")
+    public Map<String, Boolean> removeMainBoardFile(@PathVariable String fileName) {
+        log.info("fileName: " + fileName);
+        String[] splits = fileName.split("/");
+        String boardDateString = splits[0];
+        String file = splits[1];
+
+        log.info("path: " + boardDateString +"/" + file);
         // 메인보드 이미지 파일 삭제
-        return removeFile(boardDateString ,fileName, mainBoardPath);
+        return removeFile(boardDateString ,file, mainBoardPath);
     }
 
 
