@@ -76,15 +76,14 @@
                 <img class="img-fluid round"
                      th:each="mainImg : ${mainBoard.mainImg}"
                      th:src="@{|/upload/mainBoardView/${mainBoard.boardDateString[0]}/${mainImg}|}" alt="Image placeholder">
-
             </div>
         </div>
     </div>
     <div class="row blog-entries element-animate">
         <!-- main-content start -->
-        <div class="col-md-12 col-lg-8 main-content">
+        <div class="col-md-8 col-lg-8 main-content">
             <div class="post-content-body">
-                <p>[[${mainBoard.content}]]</p>
+                <div>[[${mainBoard.content}]]</div>
             </div>
             <div class="pt-5">
                 <p>Categories:  <a href="#">Food</a>, <a href="#">Travel</a>  Tags: <a href="#">#manila</a>, <a href="#">#asia</a></p>

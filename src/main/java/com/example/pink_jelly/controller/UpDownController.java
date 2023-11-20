@@ -35,6 +35,10 @@ public class UpDownController {
 
     @Value("${com.example.profileUpload.path}")
     private String profilePath; // 프로필 저장 경로
+    @Value("${com.example.catsMeUpload.path}")
+    private String catsMeUpload; // 프로필 저장 경로
+
+
 
     //임시 저장소 temp
     @ApiOperation(value = "Temp Upload Post", notes = "POST 방식으로 임시 파일 등록")
@@ -90,6 +94,48 @@ public class UpDownController {
         return null;
     }
 
+    private ResponseEntity<Resource> getViewFile(String dateString, String fileName, String uploadPath) {
+        // 첨부파일 조회
+        Resource resource = new FileSystemResource(uploadPath +File.separator
+                + dateString + File.separator + fileName);
+
+
+        String resourceName = resource.getFilename();
+        HttpHeaders headers = new HttpHeaders();
+
+        try {
+            headers.add("Content-Type", Files.probeContentType(resource.getFile().toPath()));
+        } catch (IOException e) {
+            return ResponseEntity.internalServerError().build();
+        }
+        return ResponseEntity.ok().headers(headers).body(resource);
+    }
+
+    private Map<String, Boolean> removeFile(String dateString, String fileName, String uploadPath) {
+        // 파일 삭제
+        String newUploadPath = uploadPath + "/" + dateString;
+        Resource resource = new FileSystemResource(newUploadPath + File.separator + fileName);
+        String resourceName = resource.getFilename();
+
+
+        Map<String, Boolean> resultMap = new HashMap<>();
+        boolean removed = false;
+        try{
+            String contentType = Files.probeContentType(resource.getFile().toPath());
+            removed = resource.getFile().delete(); //resource.delete 메서드로 삭제
+
+            //썸네일이 존재한다면
+            if(contentType.startsWith("image")){
+                File thumbFile = new File(newUploadPath + File.separator + "s_" + fileName);
+                thumbFile.delete();
+            }
+        } catch (IOException e) {
+            log.error(e.getMessage());
+        }
+        resultMap.put("result", removed);
+        return resultMap;
+    }
+
     @ApiOperation(value = "Temp View GET", notes = "GET방식으로 임시 첨부파일 조회")
     @GetMapping("/tempView/{dateString}/{fileName}")
     public ResponseEntity<Resource> getTempViewFile(@PathVariable String dateString, @PathVariable String fileName) {
@@ -138,45 +184,48 @@ public class UpDownController {
     }
 
 
-    private ResponseEntity<Resource> getViewFile(String dateString, String fileName, String uploadPath) {
-        // 첨부파일 조회
-        Resource resource = new FileSystemResource(uploadPath +File.separator
-                + dateString + File.separator + fileName);
 
-
-        String resourceName = resource.getFilename();
-        HttpHeaders headers = new HttpHeaders();
-
-        try {
-            headers.add("Content-Type", Files.probeContentType(resource.getFile().toPath()));
-        } catch (IOException e) {
-            return ResponseEntity.internalServerError().build();
-        }
-        return ResponseEntity.ok().headers(headers).body(resource);
+    //catsMeBoard
+    @ApiOperation(value = "view 파일", notes = "GET방식으로 첨부파일 조회")
+    @GetMapping("/catsMeBoardView/{boardDateString}/{fileName}")
+    public ResponseEntity<Resource> GetCatsMeBoardViewFile(@PathVariable String boardDateString,  @PathVariable String fileName){
+        // 메인보드 이미지 파일 조회
+        return getViewFile(boardDateString, fileName, catsMeUpload);
     }
 
-    private Map<String, Boolean> removeFile(String dateString, String fileName, String uploadPath) {
-        // 파일 삭제
-        String newUploadPath = uploadPath + "/" + dateString;
-        Resource resource = new FileSystemResource(newUploadPath + File.separator + fileName);
-        String resourceName = resource.getFilename();
+    @ApiOperation(value = "remove 파일", notes = "DELETE 방식으로 파일 삭제")
+    @DeleteMapping("/catsMeBoardRemove/{fileName}")
+    public Map<String, Boolean> removeCatsMeBoardFile(@PathVariable String fileName) {
+        log.info("fileName: " + fileName);
+        String[] splits = fileName.split("/");
+        String boardDateString = splits[0];
+        String file = splits[1];
 
-
-        Map<String, Boolean> resultMap = new HashMap<>();
-        boolean removed = false;
-        try{
-            String contentType = Files.probeContentType(resource.getFile().toPath());
-            removed = resource.getFile().delete(); //resource.delete 메서드로 삭제
-
-            //썸네일이 존재한다면
-            if(contentType.startsWith("image")){
-                File thumbFile = new File(newUploadPath + File.separator + "s_" + fileName);
-                thumbFile.delete();
-            }
-        } catch (IOException e) {
-            log.error(e.getMessage());
-        }
-        resultMap.put("result", removed);
-        return resultMap;
+        log.info("path: " + boardDateString +"/" + file);
+        // 메인보드 이미지 파일 삭제
+        return removeFile(boardDateString ,file, catsMeUpload);
     }
+
+
+    //catsReview
+    @ApiOperation(value = "view 파일", notes = "GET방식으로 첨부파일 조회")
+    @GetMapping("/catsReviewView/{boardDateString}/{fileName}")
+    public ResponseEntity<Resource> GetCatsReviewViewFile(@PathVariable String boardDateString,  @PathVariable String fileName){
+        // 메인보드 이미지 파일 조회
+        return getViewFile(boardDateString, fileName, catsMeUpload);
+    }
+
+    @ApiOperation(value = "remove 파일", notes = "DELETE 방식으로 파일 삭제")
+    @DeleteMapping("/catsReviewRemove/{fileName}")
+    public Map<String, Boolean> removeCatsReviewFile(@PathVariable String fileName) {
+        log.info("fileName: " + fileName);
+        String[] splits = fileName.split("/");
+        String boardDateString = splits[0];
+        String file = splits[1];
+
+        log.info("path: " + boardDateString +"/" + file);
+        // 메인보드 이미지 파일 삭제
+        return removeFile(boardDateString ,file, catsMeUpload);
+    }
+
 }

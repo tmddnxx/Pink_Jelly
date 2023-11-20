@@ -8,6 +8,7 @@ import com.example.pink_jelly.mapper.CatsMeMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
+import org.springframework.expression.spel.ast.Literal;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -22,7 +23,32 @@ public class CatsMeServiceImpl implements CatsMeService{
 
     @Override
     public void register(CatsMeBoardDTO catsMeBoardDTO) {
-        CatsMeBoardVO catsMeBoardVO = modelMapper.map(catsMeBoardDTO, CatsMeBoardVO.class);
+        String catsMeImg = null;
+        if(catsMeBoardDTO.getCatsMeImg() != null) {
+            List<String> files = catsMeBoardDTO.getCatsMeImg();
+            StringBuilder catsMeImgBuilder = new StringBuilder();
+            for (int i = 0; i < files.size(); i++) {
+                String file = files.get(i);
+                catsMeImgBuilder.append(file);
+
+                // 마지막 파일이 아니면 쉼표로 구분
+                if (i < files.size() - 1) {
+                    catsMeImgBuilder.append(", ");
+                }
+            }
+            // 최종적으로 mainImg 문자열 생성
+            catsMeImg = catsMeImgBuilder.toString();
+        }
+        CatsMeBoardVO catsMeBoardVO = CatsMeBoardVO.builder()
+                .memberId(catsMeBoardDTO.getMemberId())
+                .nickName(catsMeBoardDTO.getNickName())
+                .profileImg(catsMeBoardDTO.getProfileImg())
+                .title(catsMeBoardDTO.getTitle())
+                .content(catsMeBoardDTO.getContent())
+                .catsMeImg(catsMeImg)
+                .mno(catsMeBoardDTO.getMno())
+                .status(catsMeBoardDTO.getStatus())
+                .build();
         catsMeMapper.insert(catsMeBoardVO);
     }
 
@@ -33,6 +59,21 @@ public class CatsMeServiceImpl implements CatsMeService{
         List<CatsMeBoardDTO> catsMeBoardDTOList = new ArrayList<>();
         catsMeBoardVOList.forEach(catsMeBoardVO -> {
             CatsMeBoardDTO catsMeBoardDTO = modelMapper.map(catsMeBoardVO, CatsMeBoardDTO.class);
+            List<String> imgs = List.of(catsMeBoardVO.getCatsMeImg().split(", "));
+
+            List<String> dateList = new ArrayList<>();
+            List<String> fileList = new ArrayList<>();
+
+            for(String img : imgs) {
+                String[] parts = img.split("/");
+                if(parts.length == 2) {
+                    fileList.add(parts[0]);
+                    dateList.add(parts[1]);
+                }
+            }
+            catsMeBoardDTO.setBoardDateString(dateList);
+            catsMeBoardDTO.setCatsMeImg(fileList);
+
             String[] profileImg = catsMeBoardVO.getProfileImg().split("/");
             catsMeBoardDTO.setProfileImg(profileImg[0]);
             catsMeBoardDTO.setDateString(profileImg[1]);
@@ -63,6 +104,21 @@ public class CatsMeServiceImpl implements CatsMeService{
             catsMeBoardVO = catsMeMapper.getOne(cmbNo);
         }
         CatsMeBoardDTO catsMeBoardDTO = modelMapper.map(catsMeBoardVO, CatsMeBoardDTO.class);
+
+        List<String> imgs = List.of(catsMeBoardVO.getCatsMeImg().split(", "));
+
+        List<String> dateList = new ArrayList<>();
+        List<String> fileList = new ArrayList<>();
+        for(String img : imgs) {
+            String[] parts = img.split("/");
+            if(parts.length == 2) {
+                fileList.add(parts[0]);
+                dateList.add(parts[1]);
+            }
+        }
+        catsMeBoardDTO.setCatsMeImg(fileList);
+        catsMeBoardDTO.setBoardDateString(dateList);
+
         String[] profile = catsMeBoardDTO.getProfileImg().split("/");
         catsMeBoardDTO.setProfileImg(profile[0]);
         catsMeBoardDTO.setDateString(profile[1]);
@@ -77,7 +133,34 @@ public class CatsMeServiceImpl implements CatsMeService{
 
     @Override
     public void modifyBoard(CatsMeBoardDTO catsMeBoardDTO) {
-        CatsMeBoardVO catsMeBoardVO = modelMapper.map(catsMeBoardDTO, CatsMeBoardVO.class);
+        String catsMeImg = null;
+        if (catsMeBoardDTO.getCatsMeImg() != null) {
+            List<String> files = catsMeBoardDTO.getCatsMeImg();
+            StringBuilder CatsMeImgBuilder = new StringBuilder();
+            for (int i = 0; i < files.size(); i++) {
+                String file = files.get(i);
+                String[] splits = file.split("/");
+                file = splits[1] +"/" + splits[0];
+                CatsMeImgBuilder.append(file);
+
+                // 마지막 파일이 아니면 쉼표로 구분
+                if (i < files.size() - 1) {
+                    CatsMeImgBuilder.append(", ");
+                }
+            }
+            // 최종적으로 mainImg 문자열 생성
+            catsMeImg = CatsMeImgBuilder.toString();
+        }
+
+        CatsMeBoardVO catsMeBoardVO = CatsMeBoardVO.builder()
+                .title(catsMeBoardDTO.getTitle())
+                .content(catsMeBoardDTO.getContent())
+                .catsMeImg(catsMeImg)
+                .profileImg(catsMeBoardDTO.getProfileImg())
+                .status(catsMeBoardDTO.getStatus())
+                .cmbNo(catsMeBoardDTO.getCmbNo())
+                .build();
+
         catsMeMapper.updateBoard(catsMeBoardVO);
     }
 
@@ -90,7 +173,31 @@ public class CatsMeServiceImpl implements CatsMeService{
     //catsReviewBoard
     @Override
     public void registerReviewBoard(CatsReviewBoardDTO catsReviewBoardDTO) {
-        CatsReviewBoardVO catsReviewBoardVO = modelMapper.map(catsReviewBoardDTO, CatsReviewBoardVO.class);
+        String catsMeImg = null;
+        if(catsReviewBoardDTO.getCatsMeImg() != null) {
+            List<String> files = catsReviewBoardDTO.getCatsMeImg();
+            StringBuilder catsMeImgBuilder = new StringBuilder();
+            for (int i = 0; i < files.size(); i++) {
+                String file = files.get(i);
+                catsMeImgBuilder.append(file);
+
+                // 마지막 파일이 아니면 쉼표로 구분
+                if (i < files.size() - 1) {
+                    catsMeImgBuilder.append(", ");
+                }
+            }
+            // 최종적으로 mainImg 문자열 생성
+            catsMeImg = catsMeImgBuilder.toString();
+        }
+        CatsReviewBoardVO catsReviewBoardVO = CatsReviewBoardVO.builder()
+                .memberId(catsReviewBoardDTO.getMemberId())
+                .nickName(catsReviewBoardDTO.getNickName())
+                .profileImg(catsReviewBoardDTO.getProfileImg())
+                .title(catsReviewBoardDTO.getTitle())
+                .content(catsReviewBoardDTO.getContent())
+                .catsMeImg(catsMeImg)
+                .mno(catsReviewBoardDTO.getMno())
+                .build();
         catsMeMapper.insertReviewBoard(catsReviewBoardVO);
     }
 
@@ -101,6 +208,21 @@ public class CatsMeServiceImpl implements CatsMeService{
         List<CatsReviewBoardDTO> catsReviewBoardDTOList = new ArrayList<>();
         catsMeBoardVOList.forEach(catsReviewBoardVO -> {
             CatsReviewBoardDTO catsReviewBoardDTO = modelMapper.map(catsReviewBoardVO, CatsReviewBoardDTO.class);
+            List<String> imgs = List.of(catsReviewBoardVO.getCatsMeImg().split(", "));
+
+            List<String> dateList = new ArrayList<>();
+            List<String> fileList = new ArrayList<>();
+
+            for (String img : imgs) {
+                String[] parts = img.split("/");
+                if (parts.length == 2) {
+                    fileList.add(parts[0]);
+                    dateList.add(parts[1]);
+                }
+            }
+            catsReviewBoardDTO.setCatsMeImg(fileList);
+            catsReviewBoardDTO.setBoardDateString(dateList);
+
             String[] profileImg = catsReviewBoardVO.getProfileImg().split("/");
             catsReviewBoardDTO.setProfileImg(profileImg[0]);
             catsReviewBoardDTO.setDateString(profileImg[1]);
@@ -132,6 +254,20 @@ public class CatsMeServiceImpl implements CatsMeService{
             catsReviewBoardVO = catsMeMapper.getReviewBoardOne(crbNo);
         }
         CatsReviewBoardDTO catsReviewBoardDTO = modelMapper.map(catsReviewBoardVO, CatsReviewBoardDTO.class);
+
+        List<String> imgs = List.of(catsReviewBoardVO.getCatsMeImg().split(", "));
+        List<String> dateList = new ArrayList<>();
+        List<String> fileList = new ArrayList<>();
+        for (String img : imgs) {
+            String[] parts = img.split("/");
+            if (parts.length == 2) {
+                fileList.add(parts[0]);
+                dateList.add(parts[1]);
+            }
+        }
+        catsReviewBoardDTO.setCatsMeImg(fileList);
+        catsReviewBoardDTO.setBoardDateString(dateList);
+
         String[] profile = catsReviewBoardDTO.getProfileImg().split("/");
         catsReviewBoardDTO.setProfileImg(profile[0]);
         catsReviewBoardDTO.setDateString(profile[1]);
@@ -146,7 +282,32 @@ public class CatsMeServiceImpl implements CatsMeService{
 
     @Override
     public void modifyReviewBoard(CatsReviewBoardDTO catsReviewBoardDTO) {
-        CatsReviewBoardVO catsReviewBoardVO = modelMapper.map(catsReviewBoardDTO, CatsReviewBoardVO.class);
+        String catsMeImg = null;
+        if (catsReviewBoardDTO.getCatsMeImg() != null) {
+            List<String> files = catsReviewBoardDTO.getCatsMeImg();
+            StringBuilder CatsMeImgBuilder = new StringBuilder();
+            for (int i = 0; i < files.size(); i++) {
+                String file = files.get(i);
+                String[] splits = file.split("/");
+                file = splits[1] +"/" + splits[0];
+                CatsMeImgBuilder.append(file);
+
+                // 마지막 파일이 아니면 쉼표로 구분
+                if (i < files.size() - 1) {
+                    CatsMeImgBuilder.append(", ");
+                }
+            }
+            // 최종적으로 mainImg 문자열 생성
+            catsMeImg = CatsMeImgBuilder.toString();
+        }
+
+        CatsReviewBoardVO catsReviewBoardVO = CatsReviewBoardVO.builder()
+                .title(catsReviewBoardDTO.getTitle())
+                .content(catsReviewBoardDTO.getContent())
+                .catsMeImg(catsMeImg)
+                .profileImg(catsReviewBoardDTO.getProfileImg())
+                .crbNo(catsReviewBoardDTO.getCrbNo())
+                .build();
         catsMeMapper.updateReviewBoard(catsReviewBoardVO);
     }
 

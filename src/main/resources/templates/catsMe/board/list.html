@@ -67,7 +67,9 @@
     <div class="row" id="boardList">
         <div class="col-lg-4 mb-4" th:each="catsMeBoard:${catsMeBoardList.dtoList}">
             <div class="post-entry-alt">
-                <a th:href="|@{/catsMe/board/view(cmbNo=${catsMeBoard.cmbNo})}|" class="img-link"><img src="/images/mainBoard/basic3.jpg" alt="Image" class="img-fluid"></a>
+                <a th:href="|@{/catsMe/board/view(cmbNo=${catsMeBoard.cmbNo})}|" class="img-link">
+                    <img th:src="|/upload/catsMeBoardView/${catsMeBoard.boardDateString[0]}/${catsMeBoard.catsMeImg[0]}|" alt="Image" class="img-fluid">
+                </a>
                 <div class="excerpt">
                     <h2><a th:href="|@{/catsMe/board/view(cmbNo=${catsMeBoard.cmbNo})}|">[[${catsMeBoard.title}]]</a></h2>
                     <p>[[${catsMeBoard.content}]]</p>
@@ -156,7 +158,8 @@
 <div class="col-lg-4 mb-4">
     <div class="post-entry-alt">
         <a href="/catsMe/board/view?cmbNo=${dtoList.cmbNo}" class="img-link">
-        <img src="/images/mainBoard/basic3.jpg" alt="imgae" class="img-fluid"></a>
+            <img src="/upload/catsMeBoardView/${dtoList.boardDateString[0]}/${dtoList.catsMeImg[0]}" alt="Image" class="img-fluid">
+        </a>
         <div class="excerpt">
             <h2><a href="/catsMe/board/view?cmbNo=${dtoList.cmbNo}">${dtoList.title}</h2></a>
             <p>${dtoList.content}</p>
@@ -222,7 +225,8 @@
 <div class="col-lg-4 mb-4">
     <div class="post-entry-alt">
         <a href="/catsMe/review/view?crbNo=${dtoList.crbNo}" class="img-link">
-        <img src="/images/mainBoard/basic5.jpg" alt="imgae" class="img-fluid"></a>
+            <img src="/upload/catsReviewView/${dtoList.boardDateString[0]}/${dtoList.catsMeImg[0]}" alt="Image" class="img-fluid">
+        </a>
         <div class="excerpt">
             <h2><a href="/catsMe/review/view?crbNo=${dtoList.crbNo}">${dtoList.title}</h2></a>
             <p>${dtoList.content}</p>

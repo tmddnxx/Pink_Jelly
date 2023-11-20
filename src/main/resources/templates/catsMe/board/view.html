@@ -41,7 +41,9 @@
     <div class="post-content-body">
         <div class="row my-4 mainBoard-Img">
             <div class="col-md-12 mb-4">
-                <img src="/images/mainBoard/basic5.jpg" alt="Image placeholder" class="img-fluid rounded">
+                <img class="img-fluid round"
+                     th:each="catsMeImg : ${catsMeBoard.catsMeImg}"
+                     th:src="@{|/upload/catsMeBoardView/${catsMeBoard.boardDateString[0]}/${catsMeImg}|}" alt="Image placeholder">
             </div>
         </div>
     </div>
@@ -49,8 +51,7 @@
         <!-- main-content start -->
         <div class="col-md-12 col-lg-8 main-content">
             <div class="post-content-body">
-                <div class="col-sm-8" style="word-break: break-all" th:utext="${catsMeBoard.content}">
-                </div>
+                <div>[[${catsMeBoard.content}]]</div>
             </div>
             <div class="pt-5">
                 <p>Categories:  <a href="#">Food</a>, <a href="#">Travel</a>  Tags: <a href="#">#manila</a>, <a href="#">#asia</a></p>
@@ -58,8 +59,8 @@
             <a th:href="|@{/catsMe}|" class="btn btn-primary">목록</a>
 
             <th:block th:if="${#authentication.principal != 'anonymousUser'}">
-                <a th:href="|@{/catsMe/board/modify(cmbNo=${catsMeBoard.cmbNo})}|" th:if="${#authentication.principal.mno == catsMeBoard.mno}" class="btn btn-success">수정</a>
-                <a th:href="|@{/catsMe/board/remove(cmbNo=${catsMeBoard.cmbNo})}|" th:if="${#authentication.principal.mno == catsMeBoard.mno}" class="btn btn-danger">삭제</a>
+                <a th:if="${#authentication.principal.mno == catsMeBoard.mno}" class="btn btn-success modifyBtn">수정</a>
+                <a th:if="${#authentication.principal.mno == catsMeBoard.mno}" class="btn btn-danger deleteBtn">삭제</a>
             </th:block>
             <!-- comment-wrap start -->
             <div class="pt-5 comment-wrap">
@@ -78,6 +79,19 @@
     if(isDel === true){
         alert('탈퇴한 계정입니다');
     }
+    const cmbNo = [[${catsMeBoard.cmbNo}]];
+    const modifyBtn = document.querySelector('.modifyBtn');
+    const deleteBtn = document.querySelector('.deleteBtn');
+    modifyBtn.addEventListener('click', function() {
+        if(!confirm("게시글을 수정하시겠습니까?")){
+        }
+        window.location.href = "/catsMe/board/modify?cmbNo=" + cmbNo;
+    });
+    deleteBtn.addEventListener('click', function() {
+        if(!confirm("게시글을 삭제하시겠습니까?")) {
+        }
+        window.location.href = "/catsMe/board/remove?cmbNo=" + cmbNo;
+    })
 </script>
 </body>
 </html>

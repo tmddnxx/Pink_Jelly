@@ -31,6 +31,29 @@
                 </div>
             </div>
             <div class="form-group row">
+                <label class="col-sm-3 col-form-label uploadHidden">catsMeImg</label>
+                <div class="col-sm-3 thumbnail">
+                    <input type="file" name="files" class="form-control" multiple onchange="setThumbnail(event);">
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col">
+                    <div class="container-fluid d-flex uploadResult" style="flex-wrap: wrap;">
+                        <th:block th:each="catsMeImg: ${catsReviewBoard.catsMeImg}">
+                            <div class="card col-2" >
+                                <div class="card-header d-flex justify-content-center">
+                                    <button class="btn-sm btn btn-danger"
+                                            th:onclick="removeFile([[${catsReviewBoard.boardDateString[0]}]],[[${catsMeImg}]], this)">X</button>
+                                </div>
+                                <div class="card-body">
+                                    <img th:src="|/upload/catsMeBoardView/${catsReviewBoard.boardDateString[0]+'/s_'+catsMeImg}|" th:data-src="${catsReviewBoard.boardDateString[0]+'/'+catsMeImg}">
+                                </div>
+                            </div> <!-- card-->
+                        </th:block>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
                 <label class="col-sm-3 col-form-label">title</label>
                 <div class="col-sm-8">
                     <input type="text" name="title" class="form-control" th:value="${catsReviewBoard.title}">
@@ -38,17 +61,88 @@
             </div>
             <div class="form-group row">
                 <label class="col-sm-3 col-form-label">content</label>
-                <textarea name="content" rows="45" cols="50" maxlength="1000" minlength="10">[[${catsReviewBoard.content}]]</textarea>
+                <textarea name="content" rows="7" cols="50" maxlength="1000">[[${catsReviewBoard.content}]]</textarea>
             </div>
-            <div class="form-group row">
-                <label class="col-sm-3 col-form-label">crbImg</label>
-                <div class="col-sm-3">
-                    <input type="file" name="crbImg" class="form-control">
-                </div>
-            </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="button" class="btn btn-primary modBtn">Submit</button>
         </form>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="/js/signup/upload.js"></script>
 </div>
+<script layout:fragment="script" th:inline="javascript">
+    //x버튼 이미지 삭제
+    const removeFileList = []; //최종적으로 삭제될 파일들의 목록
+    function removeFile(boardDateString, fileName, obj){
+        if(!confirm('파일을 삭제하시겠습니까?')){
+        }
+        const file = boardDateString + "/"+fileName;
+        removeFileList.push(file);
+        const targetDiv = obj.closest('.card');
+        targetDiv.remove();
+    }
+    // 업로드 버튼
+    function setThumbnail(event){
+        const formObj = new FormData();
+        const fileInput = document.querySelector("input[name='files']");
+        console.log(fileInput.files);
+        const files = fileInput.files;
+        for(let i = 0; i < files.length; i++) {
+            formObj.append("files", files[i]);
+        }
+        uploadToServer('/upload/tempUpload', formObj).then(result =>{
+            console.log(result);
+            for(const uploadResult of result) {
+                showUploadFile(uploadResult);
+            }
+        });
+    }
+    //업로드된 이미지 썸네일 출력
+    const uploadResult = document.querySelector('.uploadResult');
+
+    function showUploadFile({dateString, fileName, link}){
+        const str = `<div class="card col-2">
+        <div class="card-header d-flex justify-content-center">
+          <button type="button" class="btn-sm btn btn-danger" onclick="javascript:removeFile('${dateString}','${fileName}', this)">X</button>
+         </div>
+         <div class="card-body">
+          <img src="/upload/tempView/${dateString}/${link}" data-src="${dateString}/${fileName}">
+         </div>
+        </div><!--card-->`;
+
+        uploadResult.innerHTML += str;
+    }
+    const link = [[${catsReviewBoard.crbNo}]];
+    const formObj = document.querySelector("form[name=catsMeReviewBoardModify]");
+    const target = document.querySelector('.uploadHidden');
+    document.querySelector('.modBtn').addEventListener('click', function(e){
+
+        e.preventDefault();
+        e.stopPropagation();
+
+        //1.섬네일 영역에서 img 태그의 data-src 속성을 들고 옴.
+        const uploadFiles = uploadResult.querySelectorAll('img');
+
+        if(uploadFiles.length === 0) {
+            alert("이미지를 선택하세요");
+            return;
+        }
+        let str = '';
+        for(let i = 0; i < uploadFiles.length; i ++) {
+            const uploadFile = uploadFiles[i];
+            const imgLink = uploadFile.getAttribute('data-src');
+            console.log(imgLink);
+
+            str += `<input type='hidden' name='catsMeImg' value="${imgLink}">`;
+        }
+        console.log(str);
+        target.innerHTML = str;
+
+        let removestr = '';
+        removestr += `<input type="hidden" name='removeImg' value="${removeFileList}">`;
+
+        target.innerHTML += removestr;
+        formObj.submit();
+    });
+</script>
 </body>
 </html>
