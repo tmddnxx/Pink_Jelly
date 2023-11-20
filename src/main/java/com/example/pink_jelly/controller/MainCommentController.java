@@ -32,8 +32,8 @@ public class MainCommentController {
         throw new BindException((bindingResult));
     }
         log.info("hello"+mainCommentDTO.getProfileImg());
-    Map<String, Long> resultMap = new HashMap<>();
-    Long rno = mainCommentService.register(mainCommentDTO);;
+        Map<String, Long> resultMap = new HashMap<>();
+        Long rno = mainCommentService.register(mainCommentDTO);;
 
         resultMap.put("rno", rno);
 

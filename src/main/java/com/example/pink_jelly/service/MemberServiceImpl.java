@@ -92,4 +92,13 @@ public class MemberServiceImpl implements MemberService {
         // 프로필 이미지 파일명 가져오기
         return memberMapper.findByMnoWithImg(mno);
     }
+
+    @Override
+    public void updateIntroduce(MemberDTO memberDTO) {
+        // 회원 소개글 수정
+        MemberVO memberVO = modelMapper.map(memberDTO, MemberVO.class);
+
+        memberMapper.updateIntroduce(memberVO);
+
+    }
 }

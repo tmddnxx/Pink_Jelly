@@ -22,4 +22,6 @@ public interface MemberService {
     boolean checkIdDuplicate(String memberId); // 아이디 중복 체크
     
     String getFileName(Long mno); // 프로필 사진 가져오기
+
+    void updateIntroduce(MemberDTO memberDTO); // 회원 소개글 수정
 }

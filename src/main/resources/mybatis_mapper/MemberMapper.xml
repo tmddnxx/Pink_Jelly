@@ -47,4 +47,7 @@
         update member set profileImg = #{profileImg} where mno = #{mno};
     </delete>
 
+    <update id="updateIntroduce">
+        update member set introduce = #{introduce} where mno = #{mno};
+    </update>
 </mapper>

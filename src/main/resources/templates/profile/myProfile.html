@@ -110,6 +110,7 @@
         </div>
     </div>
     <!--    그루밍 목록 끝-->
+
     <!--    그루머 목록 -->
     <div class="modal groomer_wrap" tabindex="-1">
         <div class="modal-dialog">
@@ -128,6 +129,7 @@
         </div>
     </div>
     <!--    그루머 목록 끝-->
+
     <!--    차단 목록 -->
     <div class="modal ban_wrap" tabindex="-1">
         <div class="modal-dialog">
@@ -138,7 +140,7 @@
                 </div>
                 <ul class="modal-body d-flex align-items-center justify-content-between banList" th:each="dto: ${banDTOList}">
                     <li>[[${dto.nickName}]]([[${dto.memberId}]])</li>
-                    <form name="frmBan" method="post">
+                    <form name="frmBan" method="post" th:if="${#lists.size(dto) > 0}">
                         <input type="hidden" name="memberId" th:value="${dto.memberId}">
                         <input type="hidden" name="nickName" th:value="${dto.nickName}">
                         <input type="hidden" name="mno" th:value="${#authentication.principal.mno}">
@@ -154,6 +156,7 @@
         </div>
     </div>
     <!--    그루머 목록 끝-->
+
 <!--    내 정보-->
     <div class="info">
         <div class="info-inner">
@@ -161,8 +164,9 @@
                 <div class="top-info" th:with="member=${#authentication.principal}">
                     <img th:src="|/upload/profileView/${member.dateString}/${member.profileImg}|" alt="Image placeholder" class="profileImg" width="200px" height="200px">
                     <div class="inner-top-info">
-                        <input type="hidden" name="mno" th:value="${#authentication.principal.mno}">
-                        <p> 아이디 : <span th:text="${#authentication.principal.memberId}"></span></p>
+                        <input type="hidden" name="mno" th:value="${member.mno}">
+                        <p> 닉네임 : <span th:text="${member.nickName}"></span></p>
+                        <p> 아이디 : <span th:text="${member.memberId}"></span></p>
                         <th:block th:if="${#authentication.principal.hasCat == 'true'}">
                             <p> 고양이 품종 : <span sec:authentication = "principal.variety"></span> </p>
                             <p> 고양이 나이 : <span sec:authentication = "principal.catAge"></span> </p>
@@ -185,12 +189,12 @@
                 </div>
 <!--                메뉴버튼 끝-->
             </div>
-            <a th:href="@{/profile/friendProfile(memberId=lsw6878)}" style="color: white;">17번 친구 프로필</a>
 <!--            소개글-->
             <div class="inner-bottom">
                 <div class="bottom-inner">
                     <p>소개</p>
-                    <textarea cols="100" rows="10" name="introduce" th:text="${#authentication.principal.introduce}" readonly></textarea>
+                    <span th:utext="${#authentication.principal.introduce}" style="word-break: break-all; background-color: pink">
+                    </span>
                 </div>
             </div>
         </div>
@@ -288,39 +292,44 @@
             banModal.show();
         })
 
-        const noBans = document.querySelectorAll('.fa-ban'); // 차단목록에서 차단해제 버튼
-        const banList = document.querySelector('.banList');
-        const memberId = document.querySelector('input[name=memberId]').value;
-        const nickName = document.querySelector('input[name=nickName]').value;
-        const mno = document.querySelector('input[name=mno]').value;
+        const banDTOList = [[${banDTOList}]];
+        console.log(banDTOList);
+        if(banDTOList.length > 0){
+            const noBans = document.querySelectorAll('.fa-ban'); // 차단목록에서 차단해제 버튼
+            const banList = document.querySelector('.banList');
+            const memberId = document.querySelector('input[name=memberId]').value;
+            const nickName = document.querySelector('input[name=nickName]').value;
+            const mno = document.querySelector('input[name=mno]').value;
 
-        noBans.forEach(noBan => {
-            noBan.addEventListener('click', async function () {
-                if (confirm('차단해제 하시겠습니까 ? ')) {
-                    if (mno !== "") {
-                        let response;
-                        try {
-                            const banUrl = `/ban/remove?mno=${mno}&memberId=${memberId}`;
-                            response = await axios.post(banUrl);
+            noBans.forEach(noBan => {
+                noBan.addEventListener('click', async function () {
+                    if (confirm('차단해제 하시겠습니까 ? ')) {
+                        if (mno !== "") {
+                            let response;
+                            try {
+                                const banUrl = `/ban/remove?mno=${mno}&memberId=${memberId}`;
+                                response = await axios.post(banUrl);
 
-                            if (response.status === 200) {
-                                const json = response.data;
-                                if (json.result === true) {
-                                    // 성공적으로 처리된 경우 추가적인 동작 수행
+                                if (response.status === 200) {
+                                    const json = response.data;
+                                    if (json.result === true) {
+                                        // 성공적으로 처리된 경우 추가적인 동작 수행
+                                    } else {
+                                        alert('등록에 실패했습니다.');
+                                    }
                                 } else {
-                                    alert('등록에 실패했습니다.');
+                                    console.error(response.status, response.statusText);
                                 }
-                            } else {
-                                console.error(response.status, response.statusText);
+                            } catch (error) {
+                                console.error('에러:', error);
                             }
-                        } catch (error) {
-                            console.error('에러:', error);
+                            banList.innerHTML = "";
                         }
-                        banList.innerHTML = "";
                     }
-                }
+                })
             })
-        })
+        }
+
         // 게시물 목록 기능
         const mainBtn = document.querySelector('.mainBtn');
         const mainList = document.querySelector('.mainBoardList');
