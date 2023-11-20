@@ -155,6 +155,8 @@ public class MainBoardServiceImpl implements MainBoardService{
             StringBuilder mainImgBuilder = new StringBuilder();
             for (int i = 0; i < files.size(); i++) {
                 String file = files.get(i);
+                String[] splits = file.split("/");
+                file = splits[1] +"/" + splits[0];
                 mainImgBuilder.append(file);
 
                 // 마지막 파일이 아니면 쉼표로 구분
@@ -165,6 +167,7 @@ public class MainBoardServiceImpl implements MainBoardService{
             // 최종적으로 mainImg 문자열 생성
             mainImg = mainImgBuilder.toString();
         }
+
         MainBoardVO mainBoardVO = MainBoardVO.builder()
                 .title(mainBoardDTO.getTitle())
                 .content(mainBoardDTO.getContent())

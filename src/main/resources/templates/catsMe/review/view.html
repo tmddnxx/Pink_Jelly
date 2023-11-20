@@ -72,7 +72,9 @@
     <div class="post-content-body">
         <div class="row my-4 mainBoard-Img">
             <div class="col-md-12 mb-4">
-                <img src="/images/mainBoard/basic5.jpg" alt="Image placeholder" class="img-fluid rounded">
+                <img class="img-fluid round"
+                     th:each="catsMeImg : ${catsReviewBoard.catsMeImg}"
+                     th:src="@{|/upload/catsReviewView/${catsReviewBoard.boardDateString[0]}/${catsMeImg}|}" alt="Image placeholder">
             </div>
         </div>
     </div>
@@ -80,15 +82,15 @@
         <!-- main-content start -->
         <div class="col-md-12 col-lg-8 main-content">
             <div class="post-content-body">
-                <p>[[${catsReviewBoard.content}]]</p>
+                <div>[[${catsReviewBoard.content}]]</div>
             </div>
             <div class="pt-5">
                 <p>Categories:  <a href="#">Food</a>, <a href="#">Travel</a>  Tags: <a href="#">#manila</a>, <a href="#">#asia</a></p>
             </div>
             <a th:href="|@{/catsMe/review/list}|" class="btn btn-primary">목록</a>
             <th:block th:if="${#authentication.principal != 'anonymousUser'}">
-                <a th:href="|@{/catsMe/review/modify(crbNo=${catsReviewBoard.crbNo})}|" th:if="${#authentication.principal.mno == catsReviewBoard.mno}" class="btn btn-success">수정</a>
-                <a th:href="|@{/catsMe/review/remove(crbNo=${catsReviewBoard.crbNo})}|" th:if="${#authentication.principal.mno == catsReviewBoard.mno}" class="btn btn-danger">삭제</a>
+                <a th:if="${#authentication.principal.mno == catsReviewBoard.mno}" class="btn btn-success modifyBtn">수정</a>
+                <a th:if="${#authentication.principal.mno == catsReviewBoard.mno}" class="btn btn-danger deleteBtn">삭제</a>
             </th:block>
             <!-- comment-wrap start -->
             <div class="pt-5 comment-wrap">
@@ -201,6 +203,20 @@
     if(isDel === true){
         alert('탈퇴한 계정입니다');
     }
+    const crbNo = [[${catsReviewBoard.crbNo}]]
+
+    const modifyBtn = document.querySelector('.modifyBtn');
+    const deleteBtn = document.querySelector('.deleteBtn');
+    modifyBtn.addEventListener('click', function() {
+        if(!confirm("게시글을 수정하시겠습니까?")){
+        }
+        window.location.href = "/catsMe/review/modify?crbNo=" + crbNo;
+    });
+    deleteBtn.addEventListener('click', function() {
+        if(!confirm("게시글을 삭제하시겠습니까?")) {
+        }
+        window.location.href = "/catsMe/review/remove?crbNo=" + crbNo;
+    })
 
     const auth = [[${#authentication.principal}]];
 
@@ -257,7 +273,6 @@
 //    좋아요 끝 -----------
     //댓글
     //출력 메서드
-    const crbNo = [[${catsReviewBoard.crbNo}]]
     function printComments(page, size, goLast) {
         getList({crbNo, page, size, goLast})
             .then(data => {

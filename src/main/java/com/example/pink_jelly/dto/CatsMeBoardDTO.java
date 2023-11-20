@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Builder
@@ -18,11 +19,12 @@ public class CatsMeBoardDTO {
     private String profileImg; // 프로필 사진
     private String title; // 제목
     private String content; // 내용
-    private String cmbImg; // 입양소 사진
+    private List<String> catsMeImg; // 입양소 사진
     private LocalDateTime addDate; // 등록 날짜
     private String status; // 입양 여부
     private int hit; // 조회수
     private Long mno; //회원 고유넘버
     private String dateString; //프로필 이미지 폴더
+    private List<String> boardDateString; //이미지 저장 폴더
 
 }

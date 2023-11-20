@@ -2,6 +2,7 @@ package com.example.pink_jelly.controller;
 
 import com.example.pink_jelly.dto.upload.EditorUploadDTO;
 import lombok.extern.log4j.Log4j2;
+import net.coobird.thumbnailator.Thumbnailator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
@@ -32,10 +33,10 @@ import java.util.UUID;
 @RequestMapping("/editor")
 public class EditController {
 
-    @Value("${com.example.mainBoardUpload.path}")
-    private String uploadPath;
+    @Value("${com.example.tempUpload.path}")
+    private String tempPath;
 
-    @PostMapping("/upload")
+    @PostMapping("/tempUpload")
     public String upload(EditorUploadDTO editUploadDTO)throws UnsupportedEncodingException {
         log.info("upload");
         log.info(editUploadDTO);
@@ -58,7 +59,7 @@ public class EditController {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             String dateString = currentDate.format(formatter);
 
-            String path = uploadPath +"/" + dateString;
+            String path = tempPath +"/" + dateString;
             File file = new File(path);
             if(!file.exists()){ // 폴더가 존재하지 않으면
                 file.mkdirs(); // 폴더 생성
@@ -66,6 +67,11 @@ public class EditController {
 
             Path savePath = Paths.get(path, newName);
             multipartFile.transferTo(savePath); // 실제 파일 저장
+            String contentType = Files.probeContentType(savePath);
+            if(contentType.startsWith("image") && contentType != null) {
+                File thumbFile = new File(path, "s_" + newName); //썸네일 생성
+                Thumbnailator.createThumbnail(savePath.toFile(), thumbFile, 200, 100);
+            }
 
             originalName = URLEncoder.encode(originalName, StandardCharsets.UTF_8);
             newName = URLEncoder.encode(newName, StandardCharsets.UTF_8);
@@ -83,7 +89,7 @@ public class EditController {
     public ResponseEntity<Resource> viewFile(@PathVariable String dateFolder, @PathVariable String fileName){
         log.info(fileName);
         fileName = URLDecoder.decode(fileName, StandardCharsets.UTF_8);
-        Resource resource = new FileSystemResource(uploadPath + File.separator + dateFolder + File.separator + fileName);
+        Resource resource = new FileSystemResource(tempPath + File.separator + dateFolder + File.separator + fileName);
 
         HttpHeaders headers = new HttpHeaders();
 

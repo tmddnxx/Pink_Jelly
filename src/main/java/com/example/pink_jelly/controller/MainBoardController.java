@@ -23,6 +23,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 @Log4j2
@@ -100,7 +101,6 @@ public class MainBoardController {
     public String write(MainBoardDTO mainBoardDTO, HttpServletRequest request) {
         log.info("/main/write... postMapping");
 
-
         if (mainBoardDTO.getMainImg() != null) {
             for(int i = 0; i < mainBoardDTO.getMainImg().size(); i++) {
                 String mainImg = mainBoardDTO.getMainImg().get(i);
@@ -108,10 +108,6 @@ public class MainBoardController {
                 moveFile(share[0]);
                 moveFile("s_" + share[0]);
             }
-            String splits[] = mainBoardDTO.getProfileImg().split("/");
-
-            moveFile(splits[0]);
-            moveFile("s_" + splits[0]);
         }
 
         mainBoardService.register(mainBoardDTO);
@@ -123,43 +119,77 @@ public class MainBoardController {
     public String remove(Long mbNo, @AuthenticationPrincipal MemberDTO memberDTO) {
         Long mno = memberDTO.getMno();
         MainBoardDTO mainBoardDTO = mainBoardService.getBoard(mbNo, "remove", mno);
-        List<String> files = mainBoardDTO.getMainImg();
+        List<String> mainImg= mainBoardDTO.getMainImg();
+        List<String> boardDateString = mainBoardDTO.getBoardDateString();
 
-        if(files != null && files.size() > 0) {
-            removeFiles(files);
-            log.info("removeFiles----------------");
-
+        if(mainImg != null & mainImg.size() >0) {
+            for (int i = 0; i < mainImg.size(); i++) {
+                removeFiles(boardDateString.get(i), mainImg.get(i));
+            }
         }
         mainBoardService.removeOne(mbNo);
         return "redirect:/main";
     }
-    public void removeFiles(List<String> files) {
-        for(String fileName:files) {
-            Resource resource = new FileSystemResource(mainBoardPath + File.separator + fileName);
-            log.info(resource);
-            try{
-                String contentType = Files.probeContentType(resource.getFile().toPath());
-                resource.getFile().delete();
-
-                //섬네일이 존재한다면
-                if(contentType.startsWith("image")) {
-                    File thumbFile = new File(mainBoardPath + File.separator + "s_" + fileName);
-                    thumbFile.delete();
-                }
-            } catch (IOException e) {
-                log.error(e.getMessage());
-            }
-        }
-    }
 
     @PostMapping("/modify")
-    public String modify(MainBoardDTO mainBoardDTO, Model model) {
+    public String modify(MainBoardDTO mainBoardDTO, Model model, String removeImg) {
         log.info("Post modify");
         log.info(mainBoardDTO);
+        log.info("RemoveImg " + removeImg);
+
+        MainBoardDTO checkBoard = mainBoardService.getBoard(mainBoardDTO.getMbNo(), "check", mainBoardDTO.getMno());
+        for(int i =0; i < checkBoard.getMainImg().size(); i++) {
+            for(int j = 0; j < mainBoardDTO.getMainImg().size(); j++) {
+                String[] img = mainBoardDTO.getMainImg().get(j).split("/");
+                String mainImg = img[1];
+                log.info(mainImg + "--???-");
+                if(!(checkBoard.getMainImg().get(i).equals(mainImg))) {
+                    moveFile(mainImg);
+                    moveFile("s_" + mainImg);
+                }
+            }
+        }
         mainBoardService.modifyBoard(mainBoardDTO);
+
+        if(!(removeImg.equals(""))) {
+            List<String> removeImgs = List.of(removeImg.split(","));
+
+            List<String> dateList = new ArrayList<>();
+            List<String> fileList = new ArrayList<>();
+            for (String img : removeImgs) {
+                String[] parts = img.split("/");
+                if (parts.length == 2) {
+                    fileList.add(parts[1]);
+                    dateList.add(parts[0]);
+                }
+            }
+            dateList.forEach(log::info);
+            fileList.forEach(log::info);
+
+            for (int i = 0; i < removeImgs.size(); i++) {
+                removeFiles(dateList.get(i), fileList.get(i));
+            }
+        }
+
         return "redirect:/main/view?mbNo=" + mainBoardDTO.getMbNo();
     }
 
+    public void removeFiles(String boardDateString, String mainImg) {
+        Resource resource = new FileSystemResource(mainBoardPath + File.separator + boardDateString + File.separator + mainImg);
+        log.info(resource);
+        try{
+            String contentType = Files.probeContentType(resource.getFile().toPath());
+            resource.getFile().delete();
+
+            //섬네일이 존재한다면
+            if(contentType.startsWith("image")) {
+                File thumbFile = new File(mainBoardPath + File.separator + boardDateString + File.separator + "s_" + mainImg);
+                thumbFile.delete();
+            }
+        } catch (IOException e) {
+            log.error(e.getMessage());
+        }
+    }
 
 
     private void moveFile(String fileName) {

@@ -35,6 +35,10 @@ public class UpDownController {
 
     @Value("${com.example.profileUpload.path}")
     private String profilePath; // 프로필 저장 경로
+    @Value("${com.example.catsMeUpload.path}")
+    private String catsMeUpload; // 프로필 저장 경로
+
+
 
     //임시 저장소 temp
     @ApiOperation(value = "Temp Upload Post", notes = "POST 방식으로 임시 파일 등록")
@@ -90,48 +94,6 @@ public class UpDownController {
         return null;
     }
 
-    @ApiOperation(value = "Temp View GET", notes = "GET방식으로 임시 첨부파일 조회")
-    @GetMapping("/tempView/{dateString}/{fileName}")
-    public ResponseEntity<Resource> getTempViewFile(@PathVariable String dateString, @PathVariable String fileName) {
-        // 임시 저장 이미지 조회
-        return getViewFile(dateString ,fileName, tempPath);
-    }
-
-
-
-    //메인보드 //upload
-    @ApiOperation(value = "view 파일", notes = "GET방식으로 첨부파일 조회")
-    @GetMapping("/mainBoardView/{boardDateString}/{fileName}")
-    public ResponseEntity<Resource> GetMainBoardViewFile(@PathVariable String boardDateString,  @PathVariable String fileName){
-        // 메인보드 이미지 파일 조회
-        return getViewFile(boardDateString, fileName, mainBoardPath);
-    }
-
-    @ApiOperation(value = "remove 파일", notes = "DELETE 방식으로 파일 삭제")
-    @DeleteMapping("/mainBoardRemove/{boardDateString}/{fileName}")
-    public Map<String, Boolean> removeMainBoardFile(@PathVariable String boardDateString,  @PathVariable String fileName) {
-        // 메인보드 이미지 파일 삭제
-        return removeFile(boardDateString ,fileName, mainBoardPath);
-    }
-
-
-
-    //프로필 upload
-    @ApiOperation(value = "Profile View GET", notes = "GET방식으로 프로필 첨부파일 조회")
-    @GetMapping("/profileView/{dateString}/{fileName}")
-    public ResponseEntity<Resource> getProfileViewFile(@PathVariable String dateString, @PathVariable String fileName) {
-        // 프로필 사진 조회
-        return getViewFile(dateString ,fileName, profilePath);
-    }
-
-    @ApiOperation(value = "Profile Remove DELETE", notes = "DELETE 방식으로 파일 삭제")
-    @DeleteMapping("/profileRemove/{dateString}/{fileName}")
-    private Map<String, Boolean> removeProfileFile(@PathVariable String dateString, @PathVariable String fileName) {
-        // 프로필 사진 삭제
-        return removeFile(dateString, fileName, profilePath);
-    }
-
-
     private ResponseEntity<Resource> getViewFile(String dateString, String fileName, String uploadPath) {
         // 첨부파일 조회
         Resource resource = new FileSystemResource(uploadPath +File.separator
@@ -173,4 +135,97 @@ public class UpDownController {
         resultMap.put("result", removed);
         return resultMap;
     }
+
+    @ApiOperation(value = "Temp View GET", notes = "GET방식으로 임시 첨부파일 조회")
+    @GetMapping("/tempView/{dateString}/{fileName}")
+    public ResponseEntity<Resource> getTempViewFile(@PathVariable String dateString, @PathVariable String fileName) {
+        // 임시 저장 이미지 조회
+        return getViewFile(dateString ,fileName, tempPath);
+    }
+
+
+
+    //메인보드 //upload
+    @ApiOperation(value = "view 파일", notes = "GET방식으로 첨부파일 조회")
+    @GetMapping("/mainBoardView/{boardDateString}/{fileName}")
+    public ResponseEntity<Resource> GetMainBoardViewFile(@PathVariable String boardDateString,  @PathVariable String fileName){
+        // 메인보드 이미지 파일 조회
+        return getViewFile(boardDateString, fileName, mainBoardPath);
+    }
+
+    @ApiOperation(value = "remove 파일", notes = "DELETE 방식으로 파일 삭제")
+    @DeleteMapping("/mainBoardRemove/{fileName}")
+    public Map<String, Boolean> removeMainBoardFile(@PathVariable String fileName) {
+        log.info("fileName: " + fileName);
+        String[] splits = fileName.split("/");
+        String boardDateString = splits[0];
+        String file = splits[1];
+
+        log.info("path: " + boardDateString +"/" + file);
+        // 메인보드 이미지 파일 삭제
+        return removeFile(boardDateString ,file, mainBoardPath);
+    }
+
+
+
+    //프로필 upload
+    @ApiOperation(value = "Profile View GET", notes = "GET방식으로 프로필 첨부파일 조회")
+    @GetMapping("/profileView/{dateString}/{fileName}")
+    public ResponseEntity<Resource> getProfileViewFile(@PathVariable String dateString, @PathVariable String fileName) {
+        // 프로필 사진 조회
+        return getViewFile(dateString ,fileName, profilePath);
+    }
+
+    @ApiOperation(value = "Profile Remove DELETE", notes = "DELETE 방식으로 파일 삭제")
+    @DeleteMapping("/profileRemove/{dateString}/{fileName}")
+    private Map<String, Boolean> removeProfileFile(@PathVariable String dateString, @PathVariable String fileName) {
+        // 프로필 사진 삭제
+        return removeFile(dateString, fileName, profilePath);
+    }
+
+
+
+    //catsMeBoard
+    @ApiOperation(value = "view 파일", notes = "GET방식으로 첨부파일 조회")
+    @GetMapping("/catsMeBoardView/{boardDateString}/{fileName}")
+    public ResponseEntity<Resource> GetCatsMeBoardViewFile(@PathVariable String boardDateString,  @PathVariable String fileName){
+        // 메인보드 이미지 파일 조회
+        return getViewFile(boardDateString, fileName, catsMeUpload);
+    }
+
+    @ApiOperation(value = "remove 파일", notes = "DELETE 방식으로 파일 삭제")
+    @DeleteMapping("/catsMeBoardRemove/{fileName}")
+    public Map<String, Boolean> removeCatsMeBoardFile(@PathVariable String fileName) {
+        log.info("fileName: " + fileName);
+        String[] splits = fileName.split("/");
+        String boardDateString = splits[0];
+        String file = splits[1];
+
+        log.info("path: " + boardDateString +"/" + file);
+        // 메인보드 이미지 파일 삭제
+        return removeFile(boardDateString ,file, catsMeUpload);
+    }
+
+
+    //catsReview
+    @ApiOperation(value = "view 파일", notes = "GET방식으로 첨부파일 조회")
+    @GetMapping("/catsReviewView/{boardDateString}/{fileName}")
+    public ResponseEntity<Resource> GetCatsReviewViewFile(@PathVariable String boardDateString,  @PathVariable String fileName){
+        // 메인보드 이미지 파일 조회
+        return getViewFile(boardDateString, fileName, catsMeUpload);
+    }
+
+    @ApiOperation(value = "remove 파일", notes = "DELETE 방식으로 파일 삭제")
+    @DeleteMapping("/catsReviewRemove/{fileName}")
+    public Map<String, Boolean> removeCatsReviewFile(@PathVariable String fileName) {
+        log.info("fileName: " + fileName);
+        String[] splits = fileName.split("/");
+        String boardDateString = splits[0];
+        String file = splits[1];
+
+        log.info("path: " + boardDateString +"/" + file);
+        // 메인보드 이미지 파일 삭제
+        return removeFile(boardDateString ,file, catsMeUpload);
+    }
+
 }
