@@ -79,6 +79,7 @@
         display: flex;
         padding-top: 20px;
         gap: 50px;
+        margin-left: 2rem;
     }
     .tab-content:hover{
         border-bottom: 2px solid #ffcdd2;
@@ -120,6 +121,9 @@
     }
     .btn-secondary:hover{
         background-color: #ffb4be;
+    }
+    .row{
+        margin-left: 2rem;
     }
 </style>
 
@@ -200,7 +204,7 @@
                         <input type="hidden" name="mno" th:value="${member.mno}">
                         <p> 닉네임 : <span th:text="${member.nickName}"></span></p>
                         <p> 아이디 : <span th:text="${member.memberId}"></span></p>
-                        <th:block th:if="${#authentication.principal.hasCat == 'true'}">
+                        <th:block th:if="${#authentication.principal.hasCat == true}">
                             <p> 고양이 품종 : <span sec:authentication = "principal.variety"></span> </p>
                             <p> 고양이 나이 : <span sec:authentication = "principal.catAge"></span> </p>
                             <p> 고양이 성별 : <span sec:authentication = "principal.catSex"></span></p>
