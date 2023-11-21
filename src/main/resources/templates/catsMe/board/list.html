@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{layout/basic.html}">
+<head>
+  <meta charset="UTF-8">
+  <title>입양소 페이지</title>
+  <link rel="stylesheet" th:href="@{/css/mainBoard.css}">
+</head>
+<body>
+<div layout:fragment="content">
+  <!--        검색 창-->
+  <div class="input-group-prepend">
+    <input type="radio" name="category" id="catsMeSearch" checked> 입양소
+    <input type="radio" name="category" id="reviewSearch"> 입양후기
+  </div>
+  <form action="/catsMe" method="get" name="frmSearch">
+    <div class="col">
+      <input type="hidden" name="size" th:value="${pageRequestDTO.size}">
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <select class="form-select" id="type" th:name="type">
+            <option value="">---</option>
+            <option value="title" >제목</option>
+            <option value="content">내용</option>
+            <option value="nickName" >닉네임</option>
+            <option value="memberId">아이디</option>
+          </select>
+        </div>
+        <input type="text" class="form-control" id="keyword" name="keyword">
+        <div class="input-group-append">
+          <button class="btn btn-outline-secondary searchBtn" type="submit">Search</button>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <div class="row mb-4">
+    <div class="col-sm-6">
+      <h2 class="posts-entry-title">CatsMe 입양소</h2>
+    </div>
+    <button type="button" class="btn btn-primary catsMe">입양소</button>
+    <button type="button" class="btn btn-primary catsReview">입양후기</button>
+    <button type="button" class="btn btn-primary writeModalBtn">글쓰기</button>
+  </div>
+  <!--    글쓰기 모달 -->
+  <div class="modal writeBtn_wrap" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-body">
+          <div class="input-group mb-3 writeBtn" style="display: flex; flex-direction: column; align-items: center;justify-content: center">
+            <div>
+              <a href="/catsMe/board/write" class="form-control">입양소 글쓰기</a>
+            </div>
+            <div>
+              <a href="/catsMe/review/write" class="form-control">입양후기 글쓰기</a>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-dark closeBtn">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--    게시물 목록-->
+  <div class="row posts-entry" id="boardList">
+    <div class="col-lg-8">
+      <div class="blog-entry d-flex blog-entry-search-item" th:each="catsMeBoard:${catsMeBoardList.dtoList}">
+        <a th:href="|@{/catsMe/board/view(cmbNo=${catsMeBoard.cmbNo})}|" class="img-link">
+          <img th:src="|/upload/catsMeBoardView/${catsMeBoard.boardDateString[0]}/${catsMeBoard.catsMeImg[0]}|" alt="Image" style="width:250px; height: 250px; "class="img-fluid">
+        </a>
+        <div>
+          <span>[[${#temporals.format(catsMeBoard.addDate, 'yyyy-MM-dd HH:mm')}]]</span><br>
+          <figure class="author-figure mb-0 me-3 float-start">
+            <img th:src="|/upload/profileView/${catsMeBoard.dateString}/${catsMeBoard.profileImg}|" alt="Image" style="height: 30px; width: 30px; border-radius: 50%;" class="img-fluid">
+          </figure>
+          <a th:href="|@{/profile/friendProfile(memberId=${catsMeBoard.memberId})}|">
+            <span class="d-inline-block mt-1 boardNickName">[[${catsMeBoard.nickName}]]</span>
+            <span class="boardMemberId">([[${catsMeBoard.memberId}]])</span>
+          </a>
+          <a th:href="|@{/catsMe/board/view(cmbNo=${catsMeBoard.cmbNo})}|">
+            <h2>[[${catsMeBoard.title}]]</h2>
+            <p>[[${catsMeBoard.content}]]</p>
+            <div class="excerpt">
+              <div class="post-meta align-items-center text-left clearfix">
+                <p class="likeHitCnt"><span>조회수</span><br></p>
+                <p class="likeHitCnt"><span>[[${catsMeBoard.hit}]]</span></p>
+              </div>
+              <p><a th:href="|@{/catsMe/board/view(cmbNo=${catsMeBoard.cmbNo})}|" class="read-more">Continue Reading</a></p>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-4 sidebar">
+      <div class="sidebar-box">
+        <h3 class="heading">Popular Posts</h3>
+        <div class="post-entry-sidebar">
+          <ul>
+            <li>
+              <a href="">
+                <img src="/images/img_1_sq.jpg" alt="Image placeholder" class="me-4 rounded">
+                <div class="text">
+                  <h4>There’s a Cool New Way for Men to Wear Socks and Sandals</h4>
+                  <div class="post-meta">
+                    <span class="mr-2">March 15, 2018 </span>
+                  </div>
+                </div>
+              </a>
+            </li>
+            <li>
+              <a href="">
+                <img src="/images/img_2_sq.jpg" alt="Image placeholder" class="me-4 rounded">
+                <div class="text">
+                  <h4>There’s a Cool New Way for Men to Wear Socks and Sandals</h4>
+                  <div class="post-meta">
+                    <span class="mr-2">March 15, 2018 </span>
+                  </div>
+                </div>
+              </a>
+            </li>
+            <li>
+              <a href="">
+                <img src="/images/img_3_sq.jpg" alt="Image placeholder" class="me-4 rounded">
+                <div class="text">
+                  <h4>There’s a Cool New Way for Men to Wear Socks and Sandals</h4>
+                  <div class="post-meta">
+                    <span class="mr-2">March 15, 2018 </span>
+                  </div>
+                </div>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--    페이징 버튼-->
+  <div class="float-end page_wrap">
+    <ul class="pagination flex-wrap" th:with="catsMeBoard=${catsMeBoardList}">
+      <li class="page-item" th:if="${catsMeBoard.prev}">
+        <a class="page-link" th:href="|@{/catsMe(page=${catsMeBoard.page - 1},size=9)}|" th:data-num="${catsMeBoard.start - 1}">Previous</a>
+      </li>
+      <th:block th:each="i: ${#numbers.sequence(catsMeBoard.start, catsMeBoard.end)}">
+        <li th:class="${catsMeBoard.page == i} ? 'page-item-active' : 'page-item'" >
+          <a class="page-link" th:href="|@{/catsMe(page=${i},size=9)}|" th:data-num="${i}" th:style="${catsMeBoard.page == i} ? 'color:red; font-weight:bold;'">[[${i}]]</a>
+        </li>
+      </th:block>
+      <li class="page-item" th:if="${catsMeBoard.next}">
+        <a class="page-link" th:href="${catsMeBoard.page + 1}" th:data-num="${catsMeBoard.end + 1}">Next</a>
+      </li>
+    </ul>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+</div>
+<script layout:fragment="script" th:inline="javascript">
+  // 탈퇴한 회원일경우
+  let isDel;
+  isDel   =  [[${isDel}]];
+  console.log(isDel);
+
+  if(isDel === true){
+    alert('탈퇴한 계정입니다');
+  }
+
+  // 검색하기
+  const frmSearch = document.querySelector('form[name=frmSearch]')
+  const catsMeSearch = document.getElementById('catsMeSearch');
+  const reviewSearch = document.getElementById('reviewSearch');
+
+  frmSearch.addEventListener('submit', function (e){
+    e.preventDefault();
+    if(catsMeSearch.checked){
+      frmSearch.action = '/catsMe';
+      catsMeSearch.checked = true;
+    }else{
+      frmSearch.action = '/catsMe/review/list';
+      reviewSearch.checked = true;
+    }
+    frmSearch.submit();
+  })
+
+
+  const catsMeBtn = document.querySelector('.catsMe'); // 입양소 버튼
+  const reviewBtn = document.querySelector('.catsReview'); // 입양후기 버튼
+
+  const page = 1; // 예시로 1로 설정, 필요한 값으로 변경
+  const size = 9; // 예시로 10으로 설정, 필요한 값으로 변경
+
+  // 입양소 탭 클릭 시 입양게시물 목록 비동기 출력
+  catsMeBtn.addEventListener('click', async function (){
+    const url = `/catsMeTab/board?page=${page}&size=${size}`;
+    try{
+      const response = await axios.get(url);
+      const boardList = response.data.dtoList;
+      const pageDTO = response.data;
+      console.log("입양소 게시판 dto : " , boardList);
+      console.log("입양소 게시판 page : " , pageDTO);
+
+      // 게시물 목록
+      const plusList = boardList.map(dtoList => `
+<div class="blog-entry d-flex blog-entry-search-item">
+    <a href="/catsMe/board/view?cmbNo=${dtoList.cmbNo}" class="img-link">
+        <img src="/upload/catsMeBoardView/${dtoList.boardDateString[0]}/${dtoList.catsMeImg[0]}" alt="Image" style="width:250px; height: 250px;" class="img-fluid">
+    </a>
+    <div>
+        <span>${dtoList.addDate[0]+"-"+dtoList.addDate[1]+"-"+dtoList.addDate[2]+""+dtoList.addDate[3]+":"+dtoList.addDate[4]+":"+dtoList.addDate[5]}</span></br>
+        <figure class="author-figure mb-0 me-3 float-start">
+            <img src="/upload/profileView/${dtoList.dateString}/${dtoList.profileImg}" alt="image" style="height: 30px; width: 30px; border-radius: 50%;" class="img-fluid">
+        </figure>
+        <a href="/profile/friendProfile?memberId=${dtoList.memberId}">
+            <span class="d-inline-block mt-1 boardNickName">${dtoList.nickName}</span>
+            <span class="boardMemberId">(${dtoList.memberId})</span>
+        </a>
+        <a href="/catsMe/board/view?cmbNo=${dtoList.cmbNo}"></a>
+            <h2>${dtoList.title}</h2>
+            <p>${dtoList.content}</p>
+        <div class="excerpt">
+            <div class="post-meta align-items-center text-left clearfix">
+                <p class="likeHitCnt"><span>조회수</span><br></p>
+                <p class="likeHitCnt"><span>${dtoList.hit}</span></p>
+            </div>
+            <p><a href="/catsMe/board/view?cmbNo=${dtoList.cmbNo}" class="read-more">Continue Reading</a></p>
+        </div>
+    </div>
+</div>
+`).join('');
+
+
+
+      // 페이징
+      const pagePlus = Array.from({ length: pageDTO.end - pageDTO.start + 1 }, (_, index) => {
+        const pageNumber = pageDTO.start + index;
+        const isActive = pageNumber === pageDTO.page;
+        const pageItemClass = isActive ? 'page-item-active' : 'page-item';
+        const pageLinkStyle = isActive ? 'color:red; font-weight:bold;' : '';
+
+        return `
+        <li class="${pageItemClass}">
+            <a class="page-link" href="/catsMeTab/board?page=${pageNumber}&size=9" style="${pageLinkStyle}">${pageNumber}</a>
+        </li>`;}).join('');
+
+      const paginationHTML = `
+    <ul class="pagination flex-wrap">
+        ${pageDTO.prev ? `<li class="page-item"><a class="page-link" href="/catsMeTab/board?page=${pageDTO.page - 1}&size=9">Previous</a></li>` : ''}
+        ${pagePlus}
+        ${pageDTO.next ? `<li class="page-item"><a class="page-link" href="/catsMeTab/board?page=${pageDTO.page + 1}&size=9">Next</a></li>` : ''}
+    </ul>`;
+
+      console.log("페이징 반복" + paginationHTML);
+
+      document.querySelector('.page_wrap').innerHTML = paginationHTML;
+      document.getElementById('boardList').innerHTML = plusList;
+    }catch (error){
+      console.error('에러발생 ' , error);
+    }
+  })
+
+  // 입양후기 탭 클릭 시 입양게시물 목록 비동기 출력
+  reviewBtn.addEventListener('click', async function (){
+    const url = `/catsMeTab/review?page=${page}&size=${size}`;
+    try{
+      const response = await axios.get(url);
+      const boardList = response.data.dtoList;
+      const pageDTO = response.data;
+      console.log("입양 후기 dtoList",boardList);
+      console.log("입양 후기  pageDTO ", pageDTO);
+
+      const plusList = boardList.map(dtoList => `
+<div class="blog-entry d-flex blog-entry-search-item">
+    <a href="/catsMe/review/view?crbNo=${dtoList.crbNo}" class="img-link">
+        <img src="/upload/catsReviewView/${dtoList.boardDateString[0]}/${dtoList.catsMeImg[0]}" alt="Image" style="width:250px; height: 250px;" class="img-fluid">
+    </a>
+    <div>
+        <span>${dtoList.addDate[0]+"-"+dtoList.addDate[1]+"-"+dtoList.addDate[2]+""+dtoList.addDate[3]+":"+dtoList.addDate[4]+":"+dtoList.addDate[5]}</span></br>
+        <figure class="author-figure mb-0 me-3 float-start">
+            <img src="/upload/profileView/${dtoList.dateString}/${dtoList.profileImg}" alt="image" style="height: 30px; width: 30px; border-radius: 50%;" class="img-fluid">
+        </figure>
+        <a href="/profile/friendProfile?memberId=${dtoList.memberId}">
+            <span class="d-inline-block mt-1 boardNickName">${dtoList.nickName}</span>
+            <span class="boardMemberId">(${dtoList.memberId})</span>
+        </a>
+        <a href="/catsMe/board/view?crbNo=${dtoList.crbNo}"></a>
+            <h2>${dtoList.title}</h2>
+            <p>${dtoList.content}</p>
+        <div class="excerpt">
+            <div class="post-meta align-items-center text-left clearfix">
+                <p class="likeHitCnt"><span>조회수</span><br></p>
+                <p class="likeHitCnt"><span>${dtoList.hit}</span></p>
+            </div>
+            <p><a href="/catsMe/board/view?crbNo=${dtoList.crbNo}" class="read-more">Continue Reading</a></p>
+        </div>
+    </div>
+</div>
+`).join('');
+
+      // 페이징
+      const pagePlus = Array.from({ length: pageDTO.end - pageDTO.start + 1 }, (_, index) => {
+        const pageNumber = pageDTO.start + index;
+        const isActive = pageNumber === pageDTO.page;
+        const pageItemClass = isActive ? 'page-item-active' : 'page-item';
+        const pageLinkStyle = isActive ? 'color:red; font-weight:bold;' : '';
+
+        return `
+        <li class="${pageItemClass}">
+            <a class="page-link" href="/catsMe/review/list?page=${pageNumber}&size=9" style="${pageLinkStyle}">${pageNumber}</a>
+        </li>`;}).join('');
+
+      const paginationHTML = `
+    <ul class="pagination flex-wrap">
+        ${pageDTO.prev ? `<li class="page-item"><a class="page-link" href="/catsMe/review/list?page=${pageDTO.page - 1}&size=9">Previous</a></li>` : ''}
+        ${pagePlus}
+        ${pageDTO.next ? `<li class="page-item"><a class="page-link" href="/catsMe/review/list?page=${pageDTO.page + 1}&size=9">Next</a></li>` : ''}
+    </ul>`;
+
+      console.log("페이징 반복" + paginationHTML);
+
+      document.querySelector('.page_wrap').innerHTML = paginationHTML;
+
+      document.getElementById('boardList').innerHTML = plusList;
+    }catch (error){
+      console.error('에러발생 ' , error);
+    }
+  })
+
+  const writeModalBtn = document.querySelector('.writeModalBtn'); // 글쓰기 버튼
+  const writeModal = new bootstrap.Modal(document.querySelector('.writeBtn_wrap')); // 모달창 열기
+  const closeBtn = document.querySelector('.closeBtn');
+
+  writeModalBtn.addEventListener('click', function (){
+    writeModal.show();
+  })
+
+  closeBtn.addEventListener('click', function (){
+    writeModal.hide();
+  })
+</script>
+
+</body>
+</html>
