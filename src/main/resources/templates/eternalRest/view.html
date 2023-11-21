@@ -100,18 +100,15 @@
                     <input type="hidden" name="erbNo" th:value="${eternalRestBoard.erbNo}">
                     <input type="hidden" name="mno" id="mno" th:value="${#authentication.principal.mno}" readonly>
                     <input type="hidden" name="profileImg" class="form-control" th:value="${#authentication.principal.profileImg}+'/'+${#authentication.principal.dateString}">
-                    <div class="form-group">
-                        <label for="profileImg">profileImg</label>
-                        <img id="profileImg" th:src="|/upload/profileView/${#authentication.principal.dateString}/${#authentication.principal.profileImg}|" alt="Image placeholder"  class="img-fluid" readonly>
-                    </div>
-                    <div class="form-group">
-                        <label for="memberId">memberId</label>
-                        <input type="text" class="form-control" id="memberId" th:value="${#authentication.principal.memberId}" readonly>
-                    </div>
-                    <div class="form-group">
-                        <label for="nickName">nickName</label>
-                        <input type="text" class="form-control" id="nickName" th:value="${#authentication.principal.nickName}" readonly>
-                    </div>
+                    <span class="form-group">
+                        <img id="profileImg" th:src="|/upload/profileView/${#authentication.principal.dateString}/${#authentication.principal.profileImg}|" style="width: 50px; height: 50px; border-radius: 50%;" alt="Image placeholder"  class="img-fluid" readonly>
+
+                        [[${#authentication.principal.nickName}]]
+                        <input type="hidden" class="form-control" id="nickName" th:value="${#authentication.principal.nickName}" readonly>
+
+                        [[${#authentication.principal.memberId}]]
+                        <input type="hidden" class="form-control" id="memberId" th:value="${#authentication.principal.memberId}" readonly>
+                    </span>
                     <div class="form-group">
                         <label for="mainComment">Comment</label>
                         <input type="text" class="form-control" id="mainComment">

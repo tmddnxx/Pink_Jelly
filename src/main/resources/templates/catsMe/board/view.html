@@ -40,10 +40,9 @@
 <div layout:fragment="content">
     <div class="post-content-body">
         <div class="row my-4 mainBoard-Img">
-            <div class="col-md-12 mb-4">
+            <div class="col-md-12 mb-4" th:each="i : ${#numbers.sequence(0, catsMeBoard.boardDateString.size() - 1)}">
                 <img class="img-fluid round"
-                     th:each="catsMeImg : ${catsMeBoard.catsMeImg}"
-                     th:src="@{|/upload/catsMeBoardView/${catsMeBoard.boardDateString[0]}/${catsMeImg}|}" alt="Image placeholder">
+                     th:src="@{|/upload/catsMeBoardView/${catsMeBoard.boardDateString[i]}/${catsMeBoard.catsMeImg[i]}|}" alt="Image placeholder">
             </div>
         </div>
     </div>
@@ -80,18 +79,26 @@
         alert('탈퇴한 계정입니다');
     }
     const cmbNo = [[${catsMeBoard.cmbNo}]];
-    const modifyBtn = document.querySelector('.modifyBtn');
-    const deleteBtn = document.querySelector('.deleteBtn');
-    modifyBtn.addEventListener('click', function() {
-        if(!confirm("게시글을 수정하시겠습니까?")){
-        }
-        window.location.href = "/catsMe/board/modify?cmbNo=" + cmbNo;
-    });
-    deleteBtn.addEventListener('click', function() {
-        if(!confirm("게시글을 삭제하시겠습니까?")) {
-        }
-        window.location.href = "/catsMe/board/remove?cmbNo=" + cmbNo;
-    })
+    const auth = [[${#authentication.principal}]];
+
+    if (auth !== 'anonymousUser') {
+        const modifyBtn = document.querySelector('.modifyBtn');
+        const deleteBtn = document.querySelector('.deleteBtn');
+        modifyBtn.addEventListener('click', function () {
+            if (!confirm("게시글을 수정하시겠습니까?")) {
+                return;
+
+            }
+            window.location.href = "/catsMe/board/modify?cmbNo=" + cmbNo;
+        });
+        deleteBtn.addEventListener('click', function () {
+            if (!confirm("게시글을 삭제하시겠습니까?")) {
+                return;
+
+            }
+            window.location.href = "/catsMe/board/remove?cmbNo=" + cmbNo;
+        });
+    }
 </script>
 </body>
 </html>

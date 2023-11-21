@@ -179,7 +179,7 @@
             <div class="info-inner">
                 <div class="inner-top">
                     <div class="top-info">
-                        <img th:src="|/upload/profileView/${memberDTO.profileImg}/${memberDTO.dateString}|" alt="Image placeholder" class="profileImg" width="200px" height="200px">
+                        <img th:src="|/upload/profileView/${memberDTO.dateString}/${memberDTO.profileImg}|" alt="Image placeholder" class="profileImg" width="200px" height="200px">
                         <div class="inner-top-info">
                             <input type="hidden" name="mno" th:value="${memberDTO.mno}">
                             <p> 닉네임 : <span th:text="${memberDTO.nickName}"></span></p>
@@ -221,7 +221,7 @@
                 <div class="col-lg-3 mb-4"  th:each="mainBoard:${mainBoardList}">
                     <div>
                         <a th:href="|@{/main/view(mbNo=${mainBoard.mbNo})}|" class="img-link">
-                            <img src="/images/mainBoard/basic1.jpg" alt="Image" class="img-fluid" width="200">
+                            <img th:src="|/upload/mainBoardView/${mainBoard.boardDateString[0]}/${mainBoard.mainImg[0]}|" alt="Image" class="img-fluid" width="200">
                             <p>[[${mainBoard.title}]]</p>
                         </a>
                     </div>
@@ -231,7 +231,7 @@
                 <div class="col-lg-3 mb-4" th:each="catsMeBoard:${catsMeBoardList}">
                     <div>
                         <a th:href="|@{/catsMe/board/view(cmbNo=${catsMeBoard.cmbNo})}|" class="img-link">
-                            <img src="/images/mainBoard/basic1.jpg" alt="Image" class="img-fluid" width="200">
+                            <img th:src="|/upload/catsMeBoardView/${catsMeBoard.boardDateString[0]}/${catsMeBoard.catsMeImg[0]}|" alt="Image" class="img-fluid" width="200">
                             <p>[[${catsMeBoard.title}]]</p>
                         </a>
                     </div>
@@ -241,7 +241,7 @@
                 <div class="col-lg-3 mb-4" th:each="reviewBoard:${reviewBoardList}">
                     <div>
                         <a th:href="|@{/catsMe/review/view(crbNo=${reviewBoard.crbNo})}|" class="img-link">
-                            <img src="/images/mainBoard/basic1.jpg" alt="Image" class="img-fluid" width="200">
+                            <img th:src="|/upload/catsReviewView/${reviewBoard.boardDateString[0]}/${reviewBoard.catsMeImg[0]}|" alt="Image" class="img-fluid" width="200">
                             <p>[[${reviewBoard.title}]]</p>
                         </a>
                     </div>

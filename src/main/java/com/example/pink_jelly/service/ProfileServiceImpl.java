@@ -26,7 +26,29 @@ public class ProfileServiceImpl implements ProfileService {
     public List<MainBoardDTO> mainBoardList(String memberId) { // 메인 게시물 목록
         List<MainBoardVO> voList = profileMapper.mainBoardList(memberId);
         List<MainBoardDTO> dtoList = new ArrayList<>();
-        voList.forEach(mainBoardVO -> dtoList.add(modelMapper.map(mainBoardVO, MainBoardDTO.class)));
+        voList.forEach(mainBoardVO -> {
+            MainBoardDTO mainBoardDTO = modelMapper.map(mainBoardVO, MainBoardDTO.class);
+            List<String> imgs = List.of(mainBoardVO.getMainImg().split(", "));
+
+            List<String> dateList = new ArrayList<>();
+            List<String> fileList = new ArrayList<>();
+
+            for (String img : imgs) {
+                String[] parts = img.split("/");
+                if (parts.length == 2) {
+                    fileList.add(parts[0]);
+                    dateList.add(parts[1]);
+                }
+            }
+            //프로필 이미지 분리
+            String[] profile = mainBoardVO.getProfileImg().split("/");
+
+            mainBoardDTO.setProfileImg(profile[0]);
+            mainBoardDTO.setDateString(profile[1]);
+            mainBoardDTO.setMainImg(fileList);
+            mainBoardDTO.setBoardDateString(dateList);
+            dtoList.add(mainBoardDTO);
+        });
 
         return dtoList;
     }
@@ -35,7 +57,29 @@ public class ProfileServiceImpl implements ProfileService {
     public List<CatsMeBoardDTO> catsMeBoardList(String memberId) { // 입양소 게시물 목록
         List<CatsMeBoardVO> voList = profileMapper.catsMeBoardList(memberId);
         List<CatsMeBoardDTO> dtoList = new ArrayList<>();
-        voList.forEach(catsMeBoardVO -> dtoList.add(modelMapper.map(catsMeBoardVO, CatsMeBoardDTO.class)));
+        voList.forEach(catsMeBoardVO -> {
+            CatsMeBoardDTO catsMeBoardDTO = modelMapper.map(catsMeBoardVO, CatsMeBoardDTO.class);
+            List<String> imgs = List.of(catsMeBoardVO.getCatsMeImg().split(", "));
+
+            List<String> dateList = new ArrayList<>();
+            List<String> fileList = new ArrayList<>();
+
+            for(String img : imgs) {
+                String[] parts = img.split("/");
+                if(parts.length == 2) {
+                    fileList.add(parts[0]);
+                    dateList.add(parts[1]);
+                }
+            }
+            catsMeBoardDTO.setBoardDateString(dateList);
+            catsMeBoardDTO.setCatsMeImg(fileList);
+
+            String[] profileImg = catsMeBoardVO.getProfileImg().split("/");
+            catsMeBoardDTO.setProfileImg(profileImg[0]);
+            catsMeBoardDTO.setDateString(profileImg[1]);
+
+            dtoList.add(catsMeBoardDTO);
+        });
 
         return dtoList;
     }
@@ -44,8 +88,31 @@ public class ProfileServiceImpl implements ProfileService {
     public List<CatsReviewBoardDTO> reviewBoardList(String memberId) { // 입양 후기 게시물 목록
         List<CatsReviewBoardVO> voList = profileMapper.reviewBoardList(memberId);
         List<CatsReviewBoardDTO> dtoList = new ArrayList<>();
-        voList.forEach(catsReviewBoardVO -> dtoList.add(modelMapper.map(catsReviewBoardVO, CatsReviewBoardDTO.class)));
+        voList.forEach(catsReviewBoardVO -> {
+            CatsReviewBoardDTO catsReviewBoardDTO = modelMapper.map(catsReviewBoardVO, CatsReviewBoardDTO.class);
+            List<String> imgs = List.of(catsReviewBoardVO.getCatsMeImg().split(", "));
+
+            List<String> dateList = new ArrayList<>();
+            List<String> fileList = new ArrayList<>();
+
+            for(String img : imgs) {
+                String[] parts = img.split("/");
+                if(parts.length == 2) {
+                    fileList.add(parts[0]);
+                    dateList.add(parts[1]);
+                }
+            }
+            catsReviewBoardDTO.setBoardDateString(dateList);
+            catsReviewBoardDTO.setCatsMeImg(fileList);
+
+            String[] profileImg = catsReviewBoardDTO.getProfileImg().split("/");
+            catsReviewBoardDTO.setProfileImg(profileImg[0]);
+            catsReviewBoardDTO.setDateString(profileImg[1]);
+
+            dtoList.add(catsReviewBoardDTO);
+        });
 
         return dtoList;
     }
+
 }
