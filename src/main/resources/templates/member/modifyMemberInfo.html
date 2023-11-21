@@ -363,8 +363,10 @@
         e.preventDefault();
         e.stopPropagation();
 
-        frmMod.action = '/member/exit';
-        frmMod.submit();
+        if (confirm('정말 탈퇴하시겠습니까?')) {
+            frmMod.action = '/member/exit';
+            frmMod.submit();
+        }
     });
 
 </script>

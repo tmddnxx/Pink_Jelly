@@ -75,7 +75,8 @@ public class MemberController {
 //            return "/member/signup";
 //        }
 
-        if (principal != null || !principal.equals("anonymousUser")) {
+        log.info("principal: " + principal);
+        if (principal != null) {
             memberDTO.setMemberId(principal.getMemberId());
         }
 
@@ -148,7 +149,7 @@ public class MemberController {
         // 회원 수정 전 비밀번호 확인 페이지 이동
     }
     @PostMapping("/checkPW")
-    public String checkPWPost(@AuthenticationPrincipal MemberDTO memberDTO, String passwd) {
+    public String checkPWPost(@AuthenticationPrincipal MemberDTO memberDTO, String passwd, Model model) {
         log.info("/checkPW(POST)...");
         log.info("passwd: " + passwd);
         log.info("encPasswd: " + memberDTO.getPasswd());
@@ -159,6 +160,8 @@ public class MemberController {
                 return "redirect:/member/memberInfo"; // 회원정보 수정 페이지로 이동
             }
         }
+
+        model.addAttribute("fail", "비밀번호가 일치하지않습니다.");
 
         return "/member/checkPW";
     }

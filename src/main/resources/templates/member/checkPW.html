@@ -20,7 +20,11 @@
     </form>
 
 <script th:inline="javascript">
+    const failMsg = [[${fail}]];
 
+    if (failMsg !== null) {
+        alert(failMsg);
+    }
 </script>
 </body>
 </html>
