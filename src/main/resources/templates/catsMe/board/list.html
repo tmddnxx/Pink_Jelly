@@ -96,6 +96,7 @@
             <li class="page-item" th:if="${catsMeBoard.prev}">
                 <a class="page-link" th:href="|@{/catsMe(page=${catsMeBoard.page - 1},size=9)}|" th:data-num="${catsMeBoard.start - 1}">Previous</a>
             </li>
+            <p th:text="${catsMeBoardList}"></p>
             <th:block th:each="i: ${#numbers.sequence(catsMeBoard.start, catsMeBoard.end)}">
                 <li th:class="${catsMeBoard.page == i} ? 'page-item-active' : 'page-item'" >
                     <a class="page-link" th:href="|@{/catsMe(page=${i},size=9)}|" th:data-num="${i}" th:style="${catsMeBoard.page == i} ? 'color:red; font-weight:bold;'">[[${i}]]</a>

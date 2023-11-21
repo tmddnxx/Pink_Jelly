@@ -1,24 +1,48 @@
 <!DOCTYPE html>
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/basic.html}">
 <head>
     <meta charset="UTF-8">
     <title>수정 전 비밀번호 확인</title>
 </head>
+<style layout:fragment="style">
+    *{
+        color: black;
+    }
+    .wrap{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 50px;
+    }
+    input{
+        width: 300px;
+        height: 35px;
+        border-radius: 5px;
+        outline: none;
+    }
+    button{
+        height: 35px;
+        background-color: #ffcdd2;
+        border-color: #ffcdd2;
+        border-radius: 5px;
+    }
+    button:hover{
+        background-color: #ffb4be;
+    }
+</style>
 <body>
-<div class="menu">
-    <a th:href="@{/member/memberInfo}">회원정보확인</a>
-    <a th:href="@{/member/modifyMemberInfo}">회원정보수정</a>
-    <a th:href="@{/member/modifyPasswd}">비밀번호 변경</a>
-    <a th:href="@{/member/modifyMyCat}">고양이 정보 수정</a>
+<div layout:fragment="content">
+    <div class="wrap">
+        <h1> 비밀번호를 입력해 주세요 </h1>
+        <form th:action="@{/member/checkPW}" method="post">
+            <input type="password" name="passwd">
+            <button type="submit"> 확인 </button>
+        </form>
+    </div>
 </div>
-    <h1> 비밀번호를 입력해 주세요 </h1>
-    <form th:action="@{/member/checkPW}" method="post">
-        <input type="password" name="passwd">
-        <button type="submit"> 확인 </button>
-    </form>
-
 <script th:inline="javascript">
 
 </script>

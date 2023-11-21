@@ -41,7 +41,7 @@ public class CatsMeController {
     private String catsMePath;
     private final CatsMeService catsMeService;
     @GetMapping("")
-    public String CatsMe(Model model, PageRequestDTO pageRequestDTO,Long mno, String memberId ,@AuthenticationPrincipal MemberDTO memberDTO){
+    public String CatsMe(Model model, PageRequestDTO pageRequestDTO, Long mno, String memberId ,@AuthenticationPrincipal MemberDTO memberDTO){
         log.info("/catsMe Get");
         if(memberDTO != null){
             String loginId = memberDTO.getMemberId();
@@ -148,7 +148,7 @@ public class CatsMeController {
     //review
 
     @GetMapping("/review/list")
-    public void CatsMeReview(Model model, PageRequestDTO pageRequestDTO,Long mno, String memberId ,@AuthenticationPrincipal MemberDTO memberDTO){
+    public void CatsMeReview(Model model, PageRequestDTO pageRequestDTO, Long mno, String memberId ,@AuthenticationPrincipal MemberDTO memberDTO){
         log.info("/catsMe/review/list Get");
         if(memberDTO != null){
             String loginId = memberDTO.getMemberId();

@@ -6,103 +6,158 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <style layout:fragment="style">
-
         input[type="number"]::-webkit-outer-spin-button,
         input[type="number"]::-webkit-inner-spin-button {
             -webkit-appearance: none;
             margin: 0;
         }
-
+        * {
+            color: black;
+        }
+        .wrap{
+            display: flex;
+        }
+        .menu{
+            width: 20%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border-right: 1px solid black;
+            gap: 50px;
+        }
+        .menu a:hover{
+            border-bottom: 2px solid #ffcdd2;
+        }
+        .wrap_inner{
+            width: 70%;
+            margin-left: 40px;
+        }
+        .info{
+            margin-top: 20px;
+        }
+        .info_inner{
+            width: 80%;
+            margin: 0 auto;
+        }
+        .catInfo{
+            align-items: center;
+        }
+        h1, h4{
+            color: black;
+        }
+        h1{
+            text-align: center;
+        }
+        .modBtn{
+            background-color: #ff99a3 !important;
+            border-color: #ff99a3;
+        }
+        .modBtn:hover{
+            background-color: #ff80ab;
+        }
+        .backBtn{
+            background-color: #555555;
+        }
+        .backBtn:hover{
+            background-color: #494949;
+        }
+        .btnWrap{
+            text-align: center;
+        }
     </style>
 </head>
 <body>
 
 <div layout:fragment="content">
+    <div class="wrap">
+        <div class="menu">
+            <a th:href="@{/member/memberInfo}">회원정보확인</a>
+            <a th:href="@{/member/modifyMemberInfo}">회원정보수정</a>
+            <a th:href="@{/member/modifyPasswd}">비밀번호 변경</a>
+            <a th:href="@{/member/modifyMyCat}">고양이 정보 수정</a>
+        </div>
+        <div class="wrap_inner">
+            <h1> 고양이 정보 수정</h1>
 
-    <div class="menu">
-        <a th:href="@{/member/modifyMemberInfo}">회원정보수정</a>
-        <a th:href="@{/member/modifyPasswd}">비밀번호 변경</a>
-        <a th:href="@{/member/modifyMyCat}">고양이 정보 수정</a>
-    </div>
+            <div class="info">
+                <div class="col-lg-8 info_inner" data-aos="fade-up" data-aos-delay="200">
+                    <form id="frmModMyCat" action="/member/modifyMyCat" method="post" th:with="member=${#authentication.principal}">
+                        <div class="row">
 
-    <h1> 고양이 정보 수정</h1>
+                            <input type="hidden" name="mno" th:value="${member.mno}">
 
-    <div class="row">
-        <div class="col-lg-8" data-aos="fade-up" data-aos-delay="200">
-            <form id="frmModMyCat" action="/member/modifyMyCat" method="post" th:with="member=${#authentication.principal}">
-                <div class="row">
+                            <div class="col-12 mb-3">
 
-                    <input type="hidden" name="mno" th:value="${member.mno}">
+                                <div class="row catInfo hide">
+                                    <div class="col-6 mb-3">
+                                        <label>나이</label>
+                                        <input id="catAge" type="number" class="form-control">
+                                        <input type="hidden" name="catAge" th:value="${member.catAge}">
+                                    </div>
+                                    <div class="col-6 mb-3">
+                                        <div class="form-check-inline">
+                                            <input class="form-check-input" type="radio" name="ageRdo" id="month" value="개월">
+                                            <label class="form-check-label" for="month">개월</label>
+                                        </div>
+                                        <div class="form-check-inline">
+                                            <input class="form-check-input" type="radio" name="ageRdo" id="year" value="년">
+                                            <label class="form-check-label" for="year">년</label>
+                                        </div>
+                                    </div>
 
-                    <div class="col-12 mb-3">
+                                    <div class="col-6 mb-3">
+                                        <label>품종</label>
+                                        <input type="text" name="variety" class="form-control" th:value="${member.variety}">
+                                    </div>
 
-                        <div class="row catInfo hide">
-                            <div class="col-6 mb-3">
-                                <input id="catAge" type="number" class="form-control">
-                                <input type="hidden" name="catAge" th:value="${member.catAge}">
+                                    <div class="col-6 mb-3" style="margin-top: 12.5px;">
+                                        <select id="varietySelect" class="form-select" style="height: 54px;">
+                                            <option value="-1" selected>직접입력</option>
+                                            <option> 코리안 숏 헤어 </option>
+                                            <option> 노르웨이 숲 </option>
+                                            <option> 페르시안 </option>
+                                            <option> 샴 </option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-6 mb-3">
+                                        <label for="profileImg" class="form-label">프로필 이미지</label>
+                                        <input class="form-control" type="file" name="files" id="profileImg" style="height: 35px;">
+                                        <div class="uploadResult">
+                                            <div>
+                                                <img th:src="|/upload/profileView/${member.dateString}/s_${member.profileImg}|" data-th-src="|${member.profileImg}/${member.dateString}|">
+                                            </div>`
+                                        </div>
+                                        <div class="uploadHidden">
+                                            <input type="hidden" name="profileImg" th:value="|${member.profileImg}/${member.dateString}|">
+                                        </div>
+                                    </div>
+                                    <div class="col-6 mb-3" style="height: 198px">
+                                        <div>성별</div>
+                                        <div class="form-check-inline">
+                                            <input class="form-check-input" type="radio" name="catSex" id="male" value="남아" th:checked="${member.catSex == '남아'}">
+                                            <label class="form-check-label" for="male">남아</label>
+                                        </div>
+                                        <div class="form-check-inline">
+                                            <input class="form-check-input" type="radio" name="catSex" id="female" value="여아" th:checked="${member.catSex == '여아'}">
+                                            <label class="form-check-label" for="female">여아</label>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col-6 mb-3">
-                                <div class="form-check-inline">
-                                    <input class="form-check-input" type="radio" name="ageRdo" id="month" value="개월">
-                                    <label class="form-check-label" for="month">개월</label>
-                                </div>
-                                <div class="form-check-inline">
-                                    <input class="form-check-input" type="radio" name="ageRdo" id="year" value="년">
-                                    <label class="form-check-label" for="year">년</label>
-                                </div>
-                            </div>
 
-                            <div class="col-6 mb-3">
-                                <input type="text" name="variety" class="form-control" th:value="${member.variety}">
-                            </div>
-
-                            <div class="col-6 mb-3">
-                                <select id="varietySelect" class="form-select" style="height: 54px;">
-                                    <option value="-1" selected>직접입력</option>
-                                    <option> 코리안 숏 헤어 </option>
-                                    <option> 노르웨이 숲 </option>
-                                    <option> 페르시안 </option>
-                                    <option> 샴 </option>
-                                </select>
-                            </div>
-
-                            <div class="col-6 mb-3">
-                                <label for="profileImg" class="form-label">프로필 이미지</label>
-                                <input class="form-control" type="file" name="files" id="profileImg" style="height: 35px;">
-                                <div class="uploadResult">
-                                    <div>
-                                        <img th:src="|/upload/profileView/${member.dateString}/s_${member.profileImg}|" data-th-src="|${member.profileImg}/${member.dateString}|">
-                                    </div>`
-                                </div>
-                                <div class="uploadHidden">
-                                    <input type="hidden" name="profileImg" th:value="|${member.profileImg}/${member.dateString}|">
-                                </div>
-                            </div>
-                            <div class="col-6 mb-3">
-                                <div>성별</div>
-                                <div class="form-check-inline">
-                                    <input class="form-check-input" type="radio" name="catSex" id="male" value="남아" th:checked="${member.catSex == '남아'}">
-                                    <label class="form-check-label" for="male">남아</label>
-                                </div>
-                                <div class="form-check-inline">
-                                    <input class="form-check-input" type="radio" name="catSex" id="female" value="여아" th:checked="${member.catSex == '여아'}">
-                                    <label class="form-check-label" for="female">여아</label>
-                                </div>
+                            <div class="col-12 btnWrap">
+                                <button type="submit" class="btn btn-primary modBtn">수정 완료</button>
+                                <a th:href="@{/member/memberInfo}">
+                                    <button type="button" class="btn btn-secondary backBtn">뒤로가기</button>
+                                </a>
                             </div>
                         </div>
-                    </div>
-
-                    <div class="col-12">
-                        <button type="submit" class="btn btn-primary modBtn">수정 완료</button>
-                        <a th:href="@{/member/memberInfo}">
-                            <button type="button" class="btn btn-secondary">뒤로가기</button>
-                        </a>
-                    </div>
+                    </form>
                 </div>
-            </form>
+            </div>
         </div>
     </div>
-
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="/js/signup/upload.js"></script>
 </div>

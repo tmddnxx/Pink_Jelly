@@ -249,6 +249,11 @@ public class MemberController {
         return "redirect:/member/memberInfo";
     }
 
+    @GetMapping("/exit")
+    public void exit(){
+        // 회원탈퇴페이지
+    }
+
     @PostMapping("/exit")
     public String exit(Long mno){
         // 회원탈퇴
