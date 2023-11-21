@@ -81,7 +81,7 @@ public class ProfileController {
                 log.info("banned : "+ banned);
                 model.addAttribute("banned", banned);
             }
-
+            log.info("고양이 여부 ? " + friends.isHasCat());
             List<MainBoardDTO> mainBoardDTOList = profileService.mainBoardList(memberId); // 메인 게시판 목록
             List<CatsMeBoardDTO> catsMeBoardDTOList = profileService.catsMeBoardList(memberId); // 입양소 게시판 목록
             List<CatsReviewBoardDTO> reviewBoardDTOList = profileService.reviewBoardList(memberId); //입양후기 게시판 목록

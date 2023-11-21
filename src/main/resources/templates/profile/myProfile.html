@@ -17,16 +17,34 @@
     *{
         margin: 0;
         padding: 0;
-
+        color: black;
+    }
+    span {
+        color: black;
+    }
+    p{
+        color: black;
     }
     .info{
-        background-color: #1a3542;
         width: 100%;
         height: 500px;
     }
+    .info-inner{
+        height: 60%;
+    }
+    .bottom-inner{
+        width: 90%;
+        height: 90%;
+        margin: 0 auto;
+    }
+    .bottom-inner h4{
+        border-bottom: 1px solid black;
+    }
+    .introduce{
+        height: 80%;
+    }
     .board-content {
         width: 100%;
-        background-color: #0dcaf0;
     }
     .inner-top{
         display: flex;
@@ -36,12 +54,12 @@
         margin-top: 20px;
         display: flex;
         gap: 20px;
+        margin-left: 50px;
     }
     .profileImg {
         border-radius: 50%;
-        background-color: white;
     }
-    i {
+    .fa-bars{
         width: 50px;
         height: 50px;
         margin-top: 20px;
@@ -49,32 +67,35 @@
     .fa-bars:before{
         content: "\f0c9";
         font-size: 25pt;
+        color: black;
+    }
+    .fa-bars:hover{
+        color: #ffcdd2 !important;
     }
     .inner-bottom {
-        display: flex;
-        flex-direction: column;
-    }
-    p {
-        color: white;
+        height: 40%;
     }
     .tab {
         display: flex;
         padding-top: 20px;
         gap: 50px;
     }
+    .tab-content:hover{
+        border-bottom: 2px solid #ffcdd2;
+    }
     li {
         list-style: none;
     }
     .boardList{
         display: flex;
-        justify-content: space-evenly;
+        justify-content: space-between;
     }
     .boardImg {
         width: 200px;
         height: 200px;
     }
     .menu {
-        width: 90px;
+        width: 100px;
     }
     .menu-tap {
         display: none;
@@ -82,18 +103,30 @@
     .menu-tap ul{
         padding-left: 0;
     }
-    .menu-tap a {
-        color: white;
+    .menu-tap span:hover{
+        border-bottom: 2px solid #ffcdd2;
+        cursor: pointer;
+        gap: 5px;
     }
     .listBtn{
         cursor: pointer;
+    }
+    .container{
+        width: 60%;
+    }
+    .btn-secondary{
+        background-color: #ffcdd2;
+        border-color: #ffcdd2;
+    }
+    .btn-secondary:hover{
+        background-color: #ffb4be;
     }
 </style>
 
 <body>
 <div layout:fragment="content">
 <!--    그루밍 목록 -->
-    <div class="modal grooming_wrap" tabindex="-1">
+    <div class="modal grooming_wrap modal-dialog-scrollable" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -112,7 +145,7 @@
     <!--    그루밍 목록 끝-->
 
     <!--    그루머 목록 -->
-    <div class="modal groomer_wrap" tabindex="-1">
+    <div class="modal groomer_wrap modal-dialog-scrollable" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -131,7 +164,7 @@
     <!--    그루머 목록 끝-->
 
     <!--    차단 목록 -->
-    <div class="modal ban_wrap" tabindex="-1">
+    <div class="modal ban_wrap modal-dialog-scrollable" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -175,26 +208,26 @@
                     </div>
                 </div>
                 <!-- 메뉴 버튼-->
-                <div class="menu">
+                <span class="menu">
                     <i class="fa-solid fa-bars menuBtn"></i>
-                    <div class="menu-tap">
+                    <span class="menu-tap">
                         <ul>
-                            <li><button class="groomingBtn">그루밍</button></li>
-                            <li><button class="groomergBtn">그루머</button></li>
-                            <li><a href="#">채팅목록</a></li>
-                            <li><button class="banBtn">차단목록</button></li>
-                            <li> <a th:href="@{/member/checkPW}">회원정보 수정</a></li>
+                            <li><span class="groomingBtn">그루밍</span></li>
+                            <li><span class="groomergBtn">그루머</span></li>
+                            <li><span href="#">채팅목록</span></li>
+                            <li><span class="banBtn">차단목록</span></li>
+                            <li><span th:href="@{/member/checkPW}">회원정보 수정</span></li>
                         </ul>
-                    </div>
-                </div>
+                    </span>
+                </span>
 <!--                메뉴버튼 끝-->
             </div>
-<!--            소개글-->
-            <div class="inner-bottom">
-                <div class="bottom-inner">
-                    <p>소개</p>
-                    <span th:utext="${#authentication.principal.introduce}" style="word-break: break-all; background-color: pink">
-                    </span>
+        </div>
+        <!--            소개글-->
+        <div class="inner-bottom">
+            <div class="bottom-inner">
+                <h4>소개</h4>
+                <div class="introduce" th:utext="${#authentication.principal.introduce}" style="word-break: break-all; background-color: pink">
                 </div>
             </div>
         </div>
@@ -216,12 +249,10 @@
         <!--  목록-->
         <div class="row mainBoardList">
             <div class="col-lg-3 mb-4"  th:each="mainBoard:${mainBoardList}">
-                <div>
-                    <a th:href="|@{/main/view(mbNo=${mainBoard.mbNo})}|" class="img-link">
-                        <img src="/images/mainBoard/basic1.jpg" alt="Image" class="img-fluid" width="200">
-                        <p>[[${mainBoard.title}]]</p>
-                    </a>
-                </div>
+                <a th:href="|@{/main/view(mbNo=${mainBoard.mbNo})}|" class="img-link">
+                    <img src="/images/mainBoard/basic1.jpg" alt="Image" class="img-fluid" width="200">
+                    <p>[[${mainBoard.title}]]</p>
+                </a>
             </div>
         </div>
         <div class="row catsMeList">
@@ -249,7 +280,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </div>
-<script layout:fragment="script">
+<script layout:fragment="script" th:inline="javascript">
         // 메뉴 기능
         const menuBtn = document.querySelector('.menuBtn');
         const menuTap = document.querySelector('.menu-tap');
@@ -293,12 +324,12 @@
         })
 
         const banDTOList = [[${banDTOList}]];
+
         console.log(banDTOList);
         if(banDTOList.length > 0){
             const noBans = document.querySelectorAll('.fa-ban'); // 차단목록에서 차단해제 버튼
             const banList = document.querySelector('.banList');
             const memberId = document.querySelector('input[name=memberId]').value;
-            const nickName = document.querySelector('input[name=nickName]').value;
             const mno = document.querySelector('input[name=mno]').value;
 
             noBans.forEach(noBan => {
@@ -337,23 +368,32 @@
         const catsMeList = document.querySelector('.catsMeList');
         const reviewBtn = document.querySelector('.reviewBtn');
         const reviewList = document.querySelector('.reviewList');
-
+        const tabContent = document.querySelectorAll('.tab-content');
         catsMeList.style.display = 'none';
         reviewList.style.display = 'none';
 
         mainBtn.addEventListener('click', function (){
+            tabContent[0].style.borderBottom = '2px solid #ffcdd2';
+            tabContent[1].style.borderBottom = 'none';
+            tabContent[2].style.borderBottom = 'none';
             mainList.style.display = 'flex';
             mainList.style.display = '-webkit-box';
             catsMeList.style.display = 'none';
             reviewList.style.display = 'none';
         })
         catsMeBtn.addEventListener('click', function (){
+            tabContent[1].style.borderBottom = '2px solid #ffcdd2';
+            tabContent[0].style.borderBottom = 'none';
+            tabContent[2].style.borderBottom = 'none';
             mainList.style.display = 'none';
             catsMeList.style.display = 'flex';
             catsMeList.style.display = '-webkit-box';
             reviewList.style.display = 'none';
         })
         reviewBtn.addEventListener('click', function (){
+            tabContent[2].style.borderBottom = '2px solid #ffcdd2';
+            tabContent[1].style.borderBottom = 'none';
+            tabContent[0].style.borderBottom = 'none';
             mainList.style.display = 'none';
             catsMeList.style.display = 'none';
             reviewList.style.display = 'flex';
