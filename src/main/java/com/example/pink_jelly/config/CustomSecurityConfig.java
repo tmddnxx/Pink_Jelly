@@ -37,6 +37,7 @@ public class CustomSecurityConfig {
 
     @Bean
     public PersistentTokenRepository persistentTokenRepository() {
+        // 자동로그인
         JdbcTokenRepositoryImpl repository = new JdbcTokenRepositoryImpl();
         repository.setDataSource(dataSource);
         return repository;
@@ -80,7 +81,7 @@ public class CustomSecurityConfig {
                 .loginProcessingUrl("/loginProc")
                 .usernameParameter("memberId")
                 .passwordParameter("passwd")
-                .defaultSuccessUrl("/main")
+                .defaultSuccessUrl("/")
                 .failureUrl("/login");
 
         // 자동로그인
@@ -96,11 +97,12 @@ public class CustomSecurityConfig {
                 .invalidateHttpSession(true)
                 .deleteCookies("JSESSIONID", "remember-me");
 
-//        http.authorizeRequests()
+        http.authorizeRequests()
+                .anyRequest().permitAll();
 //                .antMatchers("/", "/member/signup", "/member/welcome", "/member/sendConfirmMail",
 //                        "/member/matchConfirmKey", "/member/removeConfirmKey", "/member/checkMemberId").permitAll()
 //                .antMatchers("/member/**", "/profile/myProfile").authenticated()
-//                .anyRequest().permitAll();
+
 
         http.exceptionHandling().accessDeniedHandler(accessDeniedHandler()); // 403
 

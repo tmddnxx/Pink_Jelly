@@ -1,5 +1,6 @@
 package com.example.pink_jelly.security;
 
+import com.example.pink_jelly.domain.MemberRole;
 import com.example.pink_jelly.domain.MemberVO;
 import com.example.pink_jelly.dto.MemberDTO;
 import com.example.pink_jelly.mapper.MemberMapper;
@@ -29,6 +30,7 @@ public class CustomUserDetailService implements UserDetailsService {
         log.info("loadUserByUsername: " + memberId);
 
         MemberVO memberVO = memberMapper.findById(memberId);
+        memberVO.addRole(MemberRole.USER);
 //        log.info("passwd: " + memberVO.getPasswd());
 
         // 사용자 정보가 없는 경우
@@ -36,10 +38,13 @@ public class CustomUserDetailService implements UserDetailsService {
             throw new UsernameNotFoundException("사용자를 찾을 수 없습니다.");
         }
 
-        String[] splits = memberVO.getProfileImg().split("/");
         MemberDTO memberDTO = modelMapper.map(memberVO, MemberDTO.class);
-        memberDTO.setProfileImg(splits[0]);
-        memberDTO.setDateString(splits[1]);
+
+        if (memberVO.getProfileImg() != null) {
+            String[] splits = memberVO.getProfileImg().split("/");
+            memberDTO.setProfileImg(splits[0]);
+            memberDTO.setDateString(splits[1]);
+        }
 
         log.info("loadUserByUsername...");
         log.info(memberDTO.isHasCat());
