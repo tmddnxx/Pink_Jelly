@@ -4,15 +4,15 @@
       layout:decorate="~{layout/basic.html}">
 <head>
   <meta charset="UTF-8">
-  <title>입양소 페이지</title>
+  <title>입양후기 페이지</title>
   <link rel="stylesheet" th:href="@{/css/mainBoard.css}">
 </head>
 <body>
 <div layout:fragment="content">
   <!--        검색 창-->
   <div class="input-group-prepend">
-    <input type="radio" name="category" id="catsMeSearch" checked> 입양소
-    <input type="radio" name="category" id="reviewSearch"> 입양후기
+    <input type="radio" name="category" id="catsMeSearch"> 입양소
+    <input type="radio" name="category" id="reviewSearch" checked> 입양후기
   </div>
   <form action="/catsMe" method="get" name="frmSearch">
     <div class="col">
@@ -37,7 +37,7 @@
 
   <div class="row mb-4">
     <div class="col-sm-6">
-      <h2 class="posts-entry-title">CatsMe 입양소</h2>
+      <h2 class="posts-entry-title">CatsMe Review</h2>
     </div>
     <button type="button" class="btn btn-primary catsMe">입양소</button>
     <button type="button" class="btn btn-primary catsReview">입양후기</button>
@@ -63,54 +63,49 @@
       </div>
     </div>
   </div>
-  <!--    게시물 목록-->
-  <div class="row posts-entry" id="boardList">
-    <div class="col-lg-8">
-      <div class="blog-entry d-flex blog-entry-search-item" th:each="catsMeBoard:${catsMeBoardList.dtoList}">
-        <a th:href="|@{/catsMe/board/view(cmbNo=${catsMeBoard.cmbNo})}|" class="img-link">
-          <img th:src="|/upload/catsMeBoardView/${catsMeBoard.boardDateString[0]}/${catsMeBoard.catsMeImg[0]}|" alt="Image" style="width:250px; height: 250px; "class="img-fluid">
+  <!--게시물 목록-->
+  <div class="row" id="boardList">
+    <div class="col-lg-4 mb-4" th:each="catsMeReviewBoard:${catsMeReviewBoardList.dtoList}">
+      <div class="post-entry-alt">
+        <a th:href="|@{/catsMe/review/view(crbNo=${catsMeReviewBoard.crbNo})}|" class="img-link">
+          <img th:src="|/upload/catsReviewView/${catsMeReviewBoard.boardDateString[0]}/${catsMeReviewBoard.catsMeImg[0]}|" alt="Image" class="img-fluid">
         </a>
-        <div>
-          <span>[[${#temporals.format(catsMeBoard.addDate, 'yyyy-MM-dd HH:mm')}]]</span><br>
-          <figure class="author-figure mb-0 me-3 float-start">
-            <img th:src="|/upload/profileView/${catsMeBoard.dateString}/${catsMeBoard.profileImg}|" alt="Image" style="height: 30px; width: 30px; border-radius: 50%;" class="img-fluid">
-          </figure>
-          <a th:href="|@{/profile/friendProfile(memberId=${catsMeBoard.memberId})}|">
-            <span class="d-inline-block mt-1 boardNickName">[[${catsMeBoard.nickName}]]</span>
-            <span class="boardMemberId">([[${catsMeBoard.memberId}]])</span>
-          </a>
-          <a th:href="|@{/catsMe/board/view(cmbNo=${catsMeBoard.cmbNo})}|">
-            <h2>[[${catsMeBoard.title}]]</h2>
-            <p>[[${catsMeBoard.content}]]</p>
-            <div class="excerpt">
-              <div class="post-meta align-items-center text-left clearfix">
-                <p class="likeHitCnt"><span>조회수</span><br></p>
-                <p class="likeHitCnt"><span>[[${catsMeBoard.hit}]]</span></p>
-              </div>
-              <p><a th:href="|@{/catsMe/board/view(cmbNo=${catsMeBoard.cmbNo})}|" class="read-more">Continue Reading</a></p>
-            </div>
-          </a>
+        <div class="excerpt">
+          <h2><a th:href="|@{/catsMe/review/view(crbNo=${catsMeReviewBoard.crbNo})}|">[[${catsMeReviewBoard.title}]]</a></h2>
+          <p>[[${catsMeReviewBoard.content}]]</p>
+          <div class="post-meta align-items-center text-left clearfix">
+            <figure class="author-figure mb-0 me-3 float-start"><img th:src="|/upload/profileView/${catsMeReviewBoard.dateString}/${catsMeReviewBoard.profileImg}|" alt="Image" class="img-fluid"></figure>
+            <a th:href="|@{/profile/friendProfile(memberId=${catsMeReviewBoard.memberId})}|">
+              <span class="d-inline-block mt-1 boardNickName">[[${catsMeReviewBoard.nickName}]]</span>
+              <span class="boardMemberId">([[${catsMeReviewBoard.memberId}]])</span>
+            </a>
+            <span>[[${#temporals.format(catsMeReviewBoard.addDate, 'yyyy-MM-dd HH:mm')}]]</span><br>
+            <p class="likeHitCnt"><span>조회수</span><span>좋아요</span><span>댓글수</span><br></p>
+            <p class="likeHitCnt"><span>[[${catsMeReviewBoard.hit}]]</span><span>[[${catsMeReviewBoard.like}]]</span><span>[[${catsMeReviewBoard.commentCnt}]]</span></p>
+          </div>
+          <p><a href="#" class="read-more">Continue Reading</a></p>
         </div>
       </div>
     </div>
-<!--    페이징 버튼-->
-    <div class="float-end page_wrap">
-        <ul class="pagination flex-wrap" th:with="catsMeBoard=${catsMeBoardList}">
-            <li class="page-item" th:if="${catsMeBoard.prev}">
-                <a class="page-link" th:href="|@{/catsMe(page=${catsMeBoard.page - 1},size=9)}|" th:data-num="${catsMeBoard.start - 1}">Previous</a>
-            </li>
-            <th:block th:each="i: ${#numbers.sequence(catsMeBoard.start, catsMeBoard.end)}">
-                <li th:class="${catsMeBoard.page == i} ? 'page-item-active' : 'page-item'" >
-                    <a class="page-link" th:href="|@{/catsMe(page=${i},size=9)}|" th:data-num="${i}" th:style="${catsMeBoard.page == i} ? 'color:red; font-weight:bold;'">[[${i}]]</a>
-                </li>
-            </th:block>
-            <li class="page-item" th:if="${catsMeBoard.next}">
-                <a class="page-link" th:href="${catsMeBoard.page + 1}" th:data-num="${catsMeBoard.end + 1}">Next</a>
-            </li>
-        </ul>
-    </div>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+  </div>
+  <!--    페이징 버튼-->
+  <div class="float-end page_wrap">
+    <ul class="pagination flex-wrap" th:with="catsMeReviewBoard=${catsMeReviewBoardList}">
+      <li class="page-item" th:if="${catsMeReviewBoard.prev}">
+        <a class="page-link" th:href="|@{/catsMe/review/list(page=${catsMeReviewBoard.page - 1},size=9)}|" th:data-num="${catsMeReviewBoard.start - 1}">Previous</a>
+      </li>
+      <th:block th:each="i: ${#numbers.sequence(catsMeReviewBoard.start, catsMeReviewBoard.end)}">
+        <li th:class="${catsMeReviewBoard.page == i} ? 'page-item-active' : 'page-item'" >
+          <a class="page-link" th:href="|@{/catsMe/review/list(page=${i},size=9)}|" th:data-num="${i}" th:style="${catsMeReviewBoard.page == i} ? 'color:red; font-weight:bold;'">[[${i}]]</a>
+        </li>
+      </th:block>
+      <li class="page-item" th:if="${catsMeReviewBoard.next}">
+        <a class="page-link" th:href="|@{/catsMe/review/list(page=${catsMeReviewBoard.page + 1},size=9)}|" th:data-num="${catsMeReviewBoard.end + 1}">Next</a>
+      </li>
+    </ul>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 </div>
 <script layout:fragment="script" th:inline="javascript">
   // 탈퇴한 회원일경우
@@ -146,46 +141,42 @@
   const page = 1; // 예시로 1로 설정, 필요한 값으로 변경
   const size = 9; // 예시로 10으로 설정, 필요한 값으로 변경
 
-  // 입양소 탭 클릭 시 입양게시물 목록 비동기 출력
   catsMeBtn.addEventListener('click', async function (){
     const url = `/catsMeTab/board?page=${page}&size=${size}`;
-    try{
+    try {
       const response = await axios.get(url);
       const boardList = response.data.dtoList;
       const pageDTO = response.data;
-      console.log("입양소 게시판 dto : " , boardList);
-      console.log("입양소 게시판 page : " , pageDTO);
+      console.log("입양소 게시판 dto : ", boardList);
+      console.log("입양소 게시판 page : ", pageDTO);
 
       // 게시물 목록
       const plusList = boardList.map(dtoList => `
-<div class="blog-entry d-flex blog-entry-search-item">
-    <a href="/catsMe/board/view?cmbNo=${dtoList.cmbNo}" class="img-link">
-        <img src="/upload/catsMeBoardView/${dtoList.boardDateString[0]}/${dtoList.catsMeImg[0]}" alt="Image" style="width:250px; height: 250px;" class="img-fluid">
-    </a>
-    <div>
-        <span>${dtoList.addDate[0]+"-"+dtoList.addDate[1]+"-"+dtoList.addDate[2]+""+dtoList.addDate[3]+":"+dtoList.addDate[4]+":"+dtoList.addDate[5]}</span></br>
-        <figure class="author-figure mb-0 me-3 float-start">
-            <img src="/upload/profileView/${dtoList.dateString}/${dtoList.profileImg}" alt="image" style="height: 30px; width: 30px; border-radius: 50%;" class="img-fluid">
-        </figure>
-        <a href="/profile/friendProfile?memberId=${dtoList.memberId}">
-            <span class="d-inline-block mt-1 boardNickName">${dtoList.nickName}</span>
-            <span class="boardMemberId">(${dtoList.memberId})</span>
+<div class="col-lg-4 mb-4">
+    <div class="post-entry-alt">
+        <a href="/catsMe/board/view?cmbNo=${dtoList.cmbNo}" class="img-link">
+            <img src="/upload/catsMeBoardView/${dtoList.boardDateString[0]}/${dtoList.catsMeImg[0]}" alt="Image" class="img-fluid">
         </a>
-        <a href="/catsMe/board/view?cmbNo=${dtoList.cmbNo}"></a>
-            <h2>${dtoList.title}</h2>
-            <p>${dtoList.content}</p>
         <div class="excerpt">
+            <h2><a href="/catsMe/board/view?cmbNo=${dtoList.cmbNo}">${dtoList.title}</h2></a>
+            <p>${dtoList.content}</p>
             <div class="post-meta align-items-center text-left clearfix">
+                <figure class="author-figure mb-0 me-3 float-start">
+                    <img src="/upload/profileView/${dtoList.dateString}/${dtoList.profileImg}" alt="image" class="img-fluid">
+                </figure>
+                <a href="/catsMe/board/view?cmbNo=${dtoList.cmbNo}">
+                    <span class="d-inline-block mt-1 boardNickName">${dtoList.nickName}</span>
+                    <span class="boardMemberId">(${dtoList.memberId})</span>
+                </a>
+                <span>${dtoList.addDate[0]+"-"+dtoList.addDate[1]+"-"+dtoList.addDate[2]+""+dtoList.addDate[3]+":"+dtoList.addDate[4]+":"+dtoList.addDate[5]}</span></br>
                 <p class="likeHitCnt"><span>조회수</span><br></p>
                 <p class="likeHitCnt"><span>${dtoList.hit}</span></p>
             </div>
-            <p><a href="/catsMe/board/view?cmbNo=${dtoList.cmbNo}" class="read-more">Continue Reading</a></p>
+            <p><a href="#" class="read-more">Continue Reading</a></p>
         </div>
     </div>
 </div>
 `).join('');
-
-
 
       // 페이징
       const pagePlus = Array.from({ length: pageDTO.end - pageDTO.start + 1 }, (_, index) => {
@@ -196,14 +187,14 @@
 
         return `
         <li class="${pageItemClass}">
-            <a class="page-link" href="/catsMeTab/board?page=${pageNumber}&size=9" style="${pageLinkStyle}">${pageNumber}</a>
+            <a class="page-link" href="/catsMe?page=${pageNumber}&size=9" style="${pageLinkStyle}">${pageNumber}</a>
         </li>`;}).join('');
 
       const paginationHTML = `
     <ul class="pagination flex-wrap">
-        ${pageDTO.prev ? `<li class="page-item"><a class="page-link" href="/catsMeTab/board?page=${pageDTO.page - 1}&size=9">Previous</a></li>` : ''}
+        ${pageDTO.prev ? `<li class="page-item"><a class="page-link" href="/catsMe?page=${pageDTO.page - 1}&size=9">Previous</a></li>` : ''}
         ${pagePlus}
-        ${pageDTO.next ? `<li class="page-item"><a class="page-link" href="/catsMeTab/board?page=${pageDTO.page + 1}&size=9">Next</a></li>` : ''}
+        ${pageDTO.next ? `<li class="page-item"><a class="page-link" href="/catsMe?page=${pageDTO.page + 1}&size=9">Next</a></li>` : ''}
     </ul>`;
 
       console.log("페이징 반복" + paginationHTML);
@@ -214,7 +205,6 @@
       console.error('에러발생 ' , error);
     }
   })
-
   // 입양후기 탭 클릭 시 입양게시물 목록 비동기 출력
   reviewBtn.addEventListener('click', async function (){
     const url = `/catsMeTab/review?page=${page}&size=${size}`;
@@ -226,28 +216,27 @@
       console.log("입양 후기  pageDTO ", pageDTO);
 
       const plusList = boardList.map(dtoList => `
-<div class="blog-entry d-flex blog-entry-search-item">
-    <a href="/catsMe/review/view?crbNo=${dtoList.crbNo}" class="img-link">
-        <img src="/upload/catsReviewView/${dtoList.boardDateString[0]}/${dtoList.catsMeImg[0]}" alt="Image" style="width:250px; height: 250px;" class="img-fluid">
-    </a>
-    <div>
-        <span>${dtoList.addDate[0]+"-"+dtoList.addDate[1]+"-"+dtoList.addDate[2]+""+dtoList.addDate[3]+":"+dtoList.addDate[4]+":"+dtoList.addDate[5]}</span></br>
-        <figure class="author-figure mb-0 me-3 float-start">
-            <img src="/upload/profileView/${dtoList.dateString}/${dtoList.profileImg}" alt="image" style="height: 30px; width: 30px; border-radius: 50%;" class="img-fluid">
-        </figure>
-        <a href="/profile/friendProfile?memberId=${dtoList.memberId}">
-            <span class="d-inline-block mt-1 boardNickName">${dtoList.nickName}</span>
-            <span class="boardMemberId">(${dtoList.memberId})</span>
+<div class="col-lg-4 mb-4">
+    <div class="post-entry-alt">
+        <a href="/catsMe/review/view?crbNo=${dtoList.crbNo}" class="img-link">
+            <img src="/upload/catsReviewView/${dtoList.boardDateString[0]}/${dtoList.catsMeImg[0]}" alt="Image" class="img-fluid">
         </a>
-        <a href="/catsMe/board/view?crbNo=${dtoList.crbNo}"></a>
-            <h2>${dtoList.title}</h2>
-            <p>${dtoList.content}</p>
         <div class="excerpt">
+            <h2><a href="/catsMe/review/view?crbNo=${dtoList.crbNo}">${dtoList.title}</h2></a>
+            <p>${dtoList.content}</p>
             <div class="post-meta align-items-center text-left clearfix">
-                <p class="likeHitCnt"><span>조회수</span><br></p>
-                <p class="likeHitCnt"><span>${dtoList.hit}</span></p>
+                <figure class="author-figure mb-0 me-3 float-start">
+                    <img src="/upload/profileView/${dtoList.dateString}/${dtoList.profileImg}" alt="image" class="img-fluid">
+                </figure>
+                <a href="/catsMe/review/view?crbNo=${dtoList.crbNo}">
+                    <span class="d-inline-block mt-1 boardNickName">${dtoList.nickName}</span>
+                    <span class="boardMemberId">(${dtoList.memberId})</span>
+                </a>
+                <span>${dtoList.addDate[0]+"-"+dtoList.addDate[1]+"-"+dtoList.addDate[2]+""+dtoList.addDate[3]+":"+dtoList.addDate[4]+":"+dtoList.addDate[5]}</span></br>
+                <p class="likeHitCnt"><span>조회수</span><span>좋아요</span><span>댓글수</span><br></p>
+                <p class="likeHitCnt"><span>${dtoList.hit}</span><span>${dtoList.like}</span><span>${dtoList.commentCnt}</span></p>
             </div>
-            <p><a href="/catsMe/board/view?crbNo=${dtoList.crbNo}" class="read-more">Continue Reading</a></p>
+            <p><a href="#" class="read-more">Continue Reading</a></p>
         </div>
     </div>
 </div>
@@ -294,6 +283,5 @@
     writeModal.hide();
   })
 </script>
-
 </body>
 </html>

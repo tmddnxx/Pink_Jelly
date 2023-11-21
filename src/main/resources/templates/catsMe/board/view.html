@@ -40,10 +40,9 @@
 <div layout:fragment="content">
     <div class="post-content-body">
         <div class="row my-4 mainBoard-Img">
-            <div class="col-md-12 mb-4">
+            <div class="col-md-12 mb-4" th:each="i : ${#numbers.sequence(0, catsMeBoard.boardDateString.size() - 1)}">
                 <img class="img-fluid round"
-                     th:each="catsMeImg : ${catsMeBoard.catsMeImg}"
-                     th:src="@{|/upload/catsMeBoardView/${catsMeBoard.boardDateString[0]}/${catsMeImg}|}" alt="Image placeholder">
+                     th:src="@{|/upload/catsMeBoardView/${catsMeBoard.boardDateString[i]}/${catsMeBoard.catsMeImg[i]}|}" alt="Image placeholder">
             </div>
         </div>
     </div>
@@ -57,7 +56,11 @@
                 <p>Categories:  <a href="#">Food</a>, <a href="#">Travel</a>  Tags: <a href="#">#manila</a>, <a href="#">#asia</a></p>
             </div>
             <a th:href="|@{/catsMe}|" class="btn btn-primary">목록</a>
-
+            <form action="/chat/room" method="post">
+                <input type="hidden" name="name" value="Test">
+                <input type="hidden" name="fromMno" th:value="${catsMeBoard.mno}">
+                <button type="submit" class="btn btn-primary" id="chatBtn">1 : 1 채팅</button>
+            </form>
             <th:block th:if="${#authentication.principal != 'anonymousUser'}">
                 <a th:if="${#authentication.principal.mno == catsMeBoard.mno}" class="btn btn-success modifyBtn">수정</a>
                 <a th:if="${#authentication.principal.mno == catsMeBoard.mno}" class="btn btn-danger deleteBtn">삭제</a>
@@ -69,8 +72,12 @@
         </div>
         <!-- END main-content -->
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="/js/chat/chat.js"></script>
 </div>
 <script layout:fragment="script" th:inline="javascript">
+
     // 탈퇴한 회원일경우
     let isDel;
     isDel   =  [[${isDel}]];
@@ -80,18 +87,26 @@
         alert('탈퇴한 계정입니다');
     }
     const cmbNo = [[${catsMeBoard.cmbNo}]];
-    const modifyBtn = document.querySelector('.modifyBtn');
-    const deleteBtn = document.querySelector('.deleteBtn');
-    modifyBtn.addEventListener('click', function() {
-        if(!confirm("게시글을 수정하시겠습니까?")){
-        }
-        window.location.href = "/catsMe/board/modify?cmbNo=" + cmbNo;
-    });
-    deleteBtn.addEventListener('click', function() {
-        if(!confirm("게시글을 삭제하시겠습니까?")) {
-        }
-        window.location.href = "/catsMe/board/remove?cmbNo=" + cmbNo;
-    })
+    const auth = [[${#authentication.principal}]];
+
+    if (auth !== 'anonymousUser') {
+        const modifyBtn = document.querySelector('.modifyBtn');
+        const deleteBtn = document.querySelector('.deleteBtn');
+        modifyBtn.addEventListener('click', function () {
+            if (!confirm("게시글을 수정하시겠습니까?")) {
+                return;
+
+            }
+            window.location.href = "/catsMe/board/modify?cmbNo=" + cmbNo;
+        });
+        deleteBtn.addEventListener('click', function () {
+            if (!confirm("게시글을 삭제하시겠습니까?")) {
+                return;
+
+            }
+            window.location.href = "/catsMe/board/remove?cmbNo=" + cmbNo;
+        });
+    }
 </script>
 </body>
 </html>
