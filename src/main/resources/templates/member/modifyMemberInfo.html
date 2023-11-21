@@ -79,6 +79,22 @@
         #submitBtn:hover{
             background-color: #fd689b;
         }
+        .modal-title{
+            color: black;
+        }
+        .registerBtn{
+            background-color: #ff80ab !important;
+            border-color: #ff80ab !important;
+        }
+        .registerBtn:hover{
+            background-color: #fd689b !important;
+        }
+        .backBtn{
+            background-color: #555555;
+        }
+        .backBtn:hover{
+            background-color: #494949;
+        }
     </style>
 </head>
 <body>
@@ -211,7 +227,7 @@
                                 <textarea id="content" name="introduce" rows="20" style="width: 100%;">[[${member.introduce}]]</textarea>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                                <button type="button" class="btn btn-secondary backBtn" data-bs-dismiss="modal">취소</button>
                                 <button type="button" class="btn btn-primary registerBtn">저장</button>
                             </div>
                         </div>
