@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -46,34 +47,30 @@ public class MemberController {
     private final UserDetailsService userDetailsService;
     private final PasswordEncoder passwordEncoder;
 
+    @GetMapping("/kakaoSignup")
+    public void kakaoSignup(MemberDTO memberDTO){
+        // 카카오 로그인 후 회원가입 뷰
+    }
+
     @GetMapping("/signup")
-    public void signup(){
+    public void signup(MemberDTO memberDTO){
         // 회원가입 뷰
     }
 
     @PostMapping("/signup")
-    public String signup(@AuthenticationPrincipal MemberDTO principal, MemberDTO memberDTO, BindingResult bindingResult, Model model){
+    public String signup(@Valid MemberDTO memberDTO, BindingResult bindingResult, @AuthenticationPrincipal MemberDTO principal, Model model){
         // 회원가입 처리
+
+        log.info("/signup...");
+
+
+        if (bindingResult.hasErrors()) {
+            return "/member/signup";
+        }
+
+        // 비밀번호 암호화
         String encPasswd = passwordEncoder.encode(memberDTO.getPasswd());
         memberDTO.setPasswd(encPasswd);
-
-
-        /* 검증 */
-//        if(bindingResult.hasErrors()) {
-//            /* 회원가입 실패 시 입력 데이터 값 유지 */
-//            model.addAttribute("memberDTO", memberDTO);
-//
-//            /* 유효성 검사를 통과하지 못 한 필드와 메시지 핸들링 */
-//            Map<String, String> errorMap = new HashMap<>();
-//
-//            for(FieldError error : bindingResult.getFieldErrors()) {
-//                errorMap.put("valid_"+error.getField(), error.getDefaultMessage());
-//                log.info("error message : "+error.getDefaultMessage());
-//            }
-//
-//            /* 회원가입 페이지로 리턴 */
-//            return "/member/signup";
-//        }
 
         log.info("principal: " + principal);
         if (principal != null) {
@@ -185,18 +182,23 @@ public class MemberController {
     }
 
     @PostMapping("/modifyMemberInfo")
-    public String modifyMember(@AuthenticationPrincipal MemberDTO memberDTO, MemberDTO updateMemberDTO){
+    public String modifyMember(@AuthenticationPrincipal MemberDTO memberDTO, MemberDTO updateMemberDTO, String isConfirm, RedirectAttributes redirectAttributes){
         // 회원 정보 수정
         log.info("/member/modifyMemberInfo(POST)...");
         log.info(memberDTO.isHasCat());
         log.info(updateMemberDTO.isHasCat());
+
+        if (isConfirm.equals("false")) {
+            redirectAttributes.addFlashAttribute("msg", "이메일 인증을 하지않았습니다.");
+            return "redirect:/member/modifyMemberInfo";
+        }
 
         memberService.modifyMemberInfo(updateMemberDTO);
 
         // 세션 사용자 정보 업데이트
         sessionReset(memberDTO);
 
-        return "redirect:/member/memberInfo";
+        return "/member/memberInfo";
     }
 
     @GetMapping("/modifyPasswd")
@@ -238,12 +240,6 @@ public class MemberController {
 
             moveFile(splits[0]);
             moveFile("s_" + splits[0]);
-
-            // 변경전 프로필 이미지
-            String dateString = memberDTO.getDateString();
-            String profileImg = memberDTO.getProfileImg();
-
-            removeFile(dateString, profileImg, profilePath);
         }
 
         // 세션 사용자 정보 업데이트
@@ -263,7 +259,10 @@ public class MemberController {
         log.info("/member/exit");
 
         memberService.removeMember(mno);
-        return "redirect:/logout";
+
+        SecurityContextHolder.clearContext();
+
+        return "redirect:/member/exit";
     }
 
     private void sessionReset(MemberDTO memberDTO) { 

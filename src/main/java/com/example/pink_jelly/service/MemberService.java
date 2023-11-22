@@ -1,6 +1,9 @@
 package com.example.pink_jelly.service;
 
 import com.example.pink_jelly.dto.MemberDTO;
+import org.springframework.validation.Errors;
+
+import java.util.Map;
 
 public interface MemberService {
     void registerMember(MemberDTO memberDTO); // 회원가입
@@ -24,4 +27,5 @@ public interface MemberService {
     String getFileName(Long mno); // 프로필 사진 가져오기
 
     void updateIntroduce(MemberDTO memberDTO); // 회원 소개글 수정
+
 }
