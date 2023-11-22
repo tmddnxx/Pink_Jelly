@@ -4,23 +4,50 @@
       layout:decorate="~{layout/basic.html}">
 <head>
     <meta charset="UTF-8">
-    <title>catMe Board</title>
+    <title>catMe Board Modify</title>
 </head>
+<style layout:fragment="style">
+    .container{
+        color: black;
+    }
+    input{
+        border-color: black;
+    }
+    .modBtn{
+        background-color: #f48fb1 !important;
+        border-color: #f48fb1 !important;
+    }
+    .modBtn:hover{
+        background-color: #f87ea7 !important;
+    }
+    .card-body{
+        margin: 0 auto;
+    }
+</style>
 <body>
 <div layout:fragment="content">
     <div class="container">
         <form name="catsMeBoardModify" action="/catsMe/board/modify" method="post" class="form">
             <input type="hidden" name="cmbNo" th:value="${catsMeBoard.cmbNo}">
             <input type="hidden" name="profileImg" class="form-control" th:value="${#authentication.principal.profileImg}+'/'+${#authentication.principal.dateString}" readonly>
-            <span class="form-group">
-                <img id="profileImg" th:src="|/upload/profileView/${#authentication.principal.dateString}/s_${#authentication.principal.profileImg}|" style="width: 50px; height: 50px; border-radius: 50%;" alt="Image placeholder"  class="img-fluid" readonly>
-                [[${#authentication.principal.nickName}]]
-                <input type="hidden" class="form-control" name="nickName" th:value="${#authentication.principal.nickName}" readonly>
-                [[${#authentication.principal.memberId}]]
-                <input type="hidden" class="form-control" name="memberId" th:value="${#authentication.principal.memberId}" readonly>
-            </span>
+            <div class="form-group pb-3 d-flex justify-content-between">
+                <h2>귀여운 아기 입양 하세요 !</h2>
+                <div class="text-end">
+                    <img id="profileImg" th:src="|/upload/profileView/${#authentication.principal.dateString}/s_${#authentication.principal.profileImg}|" style="width: 50px; height: 50px; border-radius: 50%;" alt="Image placeholder"  class="img-fluid" readonly>
+                    [[${#authentication.principal.nickName}]]
+                    <input type="hidden" class="form-control" name="nickName" th:value="${#authentication.principal.nickName}" readonly>
+                    ([[${#authentication.principal.memberId}]])
+                    <input type="hidden" class="form-control" name="memberId" th:value="${#authentication.principal.memberId}" readonly>
+                </div>
+            </div>
             <div class="form-group row">
-                <label class="col-sm-3 col-form-label uploadHidden">catsMeImg</label>
+                <label class="col-sm-3 col-form-label">title</label>
+                <div class="col-sm-8">
+                    <input type="text" name="title" class="form-control" th:value="${catsMeBoard.title}">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label uploadHidden">Image</label>
                 <div class="col-sm-3 thumbnail">
                     <input type="file" name="files" class="form-control" multiple onchange="setThumbnail(event);">
                 </div>
@@ -42,24 +69,21 @@
                     </div>
                 </div>
             </div>
-            <div class="form-group row">
-                <label class="col-sm-3 col-form-label">title</label>
-                <div class="col-sm-8">
-                    <input type="text" name="title" class="form-control" th:value="${catsMeBoard.title}">
-                </div>
-            </div>
+
             <div class="form-group row">
                 <label class="col-sm-3 col-form-label">content</label>
                 <textarea name="content" rows="7" cols="50" maxlength="1000">[[${catsMeBoard.content}]]</textarea>
 
             </div>
-            <div class="form-group row">
+            <div class="form-group row mt-3">
                 <label class="col-sm-3 col-form-label">입양상태</label>
                 <div class="col-sm-3">
                     <input type="text" name="status" class="form-control" th:value="${catsMeBoard.status}">
                 </div>
             </div>
-            <button type="button" class="btn btn-primary modBtn">Submit</button>
+            <div class="btnWrap text-end">
+                <button type="button" class="btn btn-primary modBtn">Submit</button>
+            </div>
         </form>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
