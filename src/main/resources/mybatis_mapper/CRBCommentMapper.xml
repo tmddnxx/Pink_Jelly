@@ -14,7 +14,7 @@
         SELECT COUNT(comNo) FROM catsComment WHERE crbNo=#{crbNo}
     </select>
     <select id="selectList" resultType="com.example.pink_jelly.domain.CRBCommentVO">
-        SELECT * FROM catsComment WHERE crbNo=#{crbNo} ORDER BY comNo LIMIT #{skip}, #{size}
+        SELECT * FROM catsComment WHERE crbNo=#{crbNo} ORDER BY parentNo, comNo LIMIT #{skip}, #{size}
     </select>
     <delete id="deleteOne">
         DELETE FROM catsComment WHERE comNo=#{comNo}

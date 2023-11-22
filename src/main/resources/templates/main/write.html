@@ -64,7 +64,9 @@
 
 </div>
 <script layout:fragment="script" th:inline="javascript">
+    const auth = [[${#authentication.principal}]];
 
+    if(auth !== 'anonymousUser'){
 
 
     const errors = [[${errors}]];
@@ -81,7 +83,6 @@
 
     const varietyChecked = document.querySelector("input[name=myCat]");
     const variety = document.querySelector("input[name=variety]");
-    const auth = [[${#authentication.principal}]];
     console.log(auth.hasCat);
     if(auth.hasCat === true){
         varietyChecked.addEventListener('change', function () {
@@ -165,6 +166,9 @@
         //3.submit() 처리
         formObj.submit();
     });
+
+
+    }
 </script>
 </body>
 </html>
