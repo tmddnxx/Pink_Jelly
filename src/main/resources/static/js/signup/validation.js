@@ -18,7 +18,7 @@ function isMatch(password1, password2) {
 }
 function isEmailValid(str) {
     // 이메일 양식 확인
-    return /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/.test(str);
+    return /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i.test(str);
 }
 
 function onlyNumbersAndEnglishAndKorean(str) {

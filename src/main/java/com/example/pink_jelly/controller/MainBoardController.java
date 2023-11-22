@@ -1,15 +1,13 @@
 package com.example.pink_jelly.controller;
 
-import com.example.pink_jelly.dto.MainBoardDTO;
-import com.example.pink_jelly.dto.MemberDTO;
-import com.example.pink_jelly.dto.PageRequestDTO;
-import com.example.pink_jelly.dto.PageResponseDTO;
+import com.example.pink_jelly.dto.*;
 import com.example.pink_jelly.service.MainBoardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -42,6 +40,7 @@ public class MainBoardController {
         log.info("main GET ...");
         log.info("타입은? : " + pageRequestDTO.getType());
         log.info("키워드는? : " + pageRequestDTO.getKeyword());
+        log.info(pageRequestDTO);
 
         if(memberDTO != null){
             String loginId = memberDTO.getMemberId();

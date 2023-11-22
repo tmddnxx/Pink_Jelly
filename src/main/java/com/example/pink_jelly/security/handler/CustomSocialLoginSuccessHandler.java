@@ -35,7 +35,7 @@ public class CustomSocialLoginSuccessHandler implements AuthenticationSuccessHan
             log.info("Should Change Password");
 
             log.info("Redirect to MemberModify");
-            response.sendRedirect("/member/signup");
+            response.sendRedirect("/member/kakaoSignup");
         } else {
             response.sendRedirect("/");
         }

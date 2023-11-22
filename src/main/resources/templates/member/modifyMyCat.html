@@ -125,7 +125,7 @@
                                         <input class="form-control" type="file" name="files" id="profileImg" style="height: 35px;">
                                         <div class="uploadResult">
                                             <div>
-                                                <img th:src="|/upload/profileView/${member.dateString}/s_${member.profileImg}|" data-th-src="|${member.profileImg}/${member.dateString}|">
+                                                <img th:src="|/upload/profileView/${member.dateString}/${member.profileImg}|" data-th-src="|${member.profileImg}/${member.dateString}|" style="width: 100px;">
                                             </div>`
                                         </div>
                                         <div class="uploadHidden">

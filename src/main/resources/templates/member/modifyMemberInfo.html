@@ -9,6 +9,7 @@
     <style layout:fragment="style">
         .hide {display: none;}
         .fail {color: #ff0000;}
+        .is_invalid {border-color: #ff0000;}
         input[type="number"]::-webkit-outer-spin-button,
         input[type="number"]::-webkit-inner-spin-button {
             -webkit-appearance: none;
@@ -118,7 +119,7 @@
                         <div class="row">
                             <div class="col-12 mb-3">
                                 <h4>아이디</h4>
-                                <p>[[${#authentication.principal.memberId}]]</p>
+                                <p>[[${member.memberId}]]</p>
                             </div>
 
                             <!-- 전화번호 -->
@@ -135,11 +136,13 @@
                                         </select>
                                     </div>
                                     <div class="col-4 mb-3">
-                                        <input type="number" class="form-control input-phone" maxlength="4" th:value="${phones[1]}" required>
+                                        <input type="text" class="form-control input-phone" maxlength="4"
+                                               onKeyup="this.value=this.value.replace(/[^0-9]/g,'');" th:value="${phones[1]}" required/>
                                     </div>
                                     <div class="col-4 mb-3">
-                                        <input type="text" class="form-control input-phone" maxlength="4" th:value="${phones[2]}" required>
-                                        <input id="phone" type="hidden" name="phone" th:value="${member.phone}">
+                                        <input type="text" class="form-control input-phone" maxlength="4"
+                                               onKeyup="this.value=this.value.replace(/[^0-9]/g,'');" th:value="${phones[2]}" required/>
+                                        <input id="phone" type="hidden" name="phone" th:value="${member.phone}" required>
                                     </div>
                                 </div>
                             </div>
@@ -154,7 +157,7 @@
 
                                     <div class="col-3 mb-3">
                                         <input id="domain" type="text" class="form-control" required>
-                                        <input type="hidden" name="email" th:value="${member.email}">
+                                        <input id="email" type="hidden" name="email" th:value="${member.email}" required>
                                     </div>
 
                                     <div class="col-2 mb-3">
@@ -178,6 +181,7 @@
                                 <div class="row confirm hide">
                                     <div class="col-6 mb-3">
                                         <input type="text" name="confirmKey" class="form-control" placeholder="인증번호">
+                                        <input type="hidden" name="isConfirm" value="false">
                                     </div>
                                     <div class="col-6 mb-3">
                                         <button id="confirmKeyBtn" type="button" class="btn btn-primary">확인</button>
@@ -189,12 +193,15 @@
                                 <div class="row">
                                     <label class="form-check-label">회원이름</label>
                                     <div class="col-8 mb-3">
-                                        <input id="memberName" type="text" name="memberName" class="form-control" th:value="${member.memberName}"/>
+                                        <input id="memberName" type="text" name="memberName" class="form-control" pattern="^[가-힣a-zA-Z]+$"
+                                               th:value="${member.memberName}" required/>
+                                        <span>영문, 한글만 입력할 수 있습니다.</span>
                                     </div>
 
                                     <label class="form-check-label">닉네임</label>
                                     <div class="col-8 mb-3">
-                                        <input id="nickName" type="text" name="nickName" class="form-control" minlength="2" maxlength="15" th:value="${member.nickName}" required/>
+                                        <input id="nickName" type="text" name="nickName" class="form-control" pattern="^[가-힣a-zA-Z0-9]+$"
+                                               minlength="2" maxlength="15" th:value="${member.nickName}" required/>
                                         <span class="nickNameCheck-message">2 ~ 15글자, 숫자, 영어, 한글만 입력할 수 있습니다</span>
                                     </div>
                                 </div>
@@ -245,6 +252,11 @@
 </div>
 
 <script layout:fragment="script" th:inline="javascript">
+
+    const msg = [[${msg}]];
+    if (msg != null) {
+        alert(msg);
+    }
 
     // 도메인 셀렉트박스
     const domainSelect = document.getElementById('domainSelect');
@@ -328,6 +340,7 @@
             alert('인증이 완료되었습니다.');
             currentTime = 0; // 타이머 초기화
             confirmWrap.classList.add('hide');
+            document.querySelector('input[name=isConfirm]').value = "true";
         }
         else {
             alert('인증 실패');
@@ -352,12 +365,12 @@
     });
 
     // 닉네임 확인
-    document.querySelector('input[name=nickName]').addEventListener('keyup', function (e) {
+    document.getElementById('nickName').addEventListener('keyup', function (e) {
         const nickName = e.target.value;
         const checkMsg = document.querySelector('.nickNameCheck-message');
 
         console.log(nickName);
-        if (nickName.length != 0) { // 닉네임 입력시
+        if (nickName.length !== 0) { // 닉네임 입력시
             console.log(onlyNumbersAndEnglishAndKorean(nickName));
             if (onlyNumbersAndEnglishAndKorean(nickName) && isLength(nickName, 2, 15)) { // 숫자, 영어, 한글, 2 ~ 15글자
                 checkMsg.classList.remove('fail');

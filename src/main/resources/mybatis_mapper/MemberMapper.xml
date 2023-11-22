@@ -4,12 +4,12 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.pink_jelly.mapper.MemberMapper">
     <insert id="insertMember">
-        insert into member (memberId, passwd, email, memberName, phone, nickName, hasCat, catAge, catSex, variety, profileImg)
-        values (#{memberId}, #{passwd}, #{email}, #{memberName}, #{phone}, #{nickName}, #{hasCat}, #{catAge}, #{catSex}, #{variety}, #{profileImg});
+        insert into member (memberId, passwd, email, memberName, phone, nickName, hasCat, catAge, catSex, variety, profileImg, social)
+        values (#{memberId}, #{passwd}, #{email}, #{memberName}, #{phone}, #{nickName}, #{hasCat}, #{catAge}, #{catSex}, #{variety}, #{profileImg}, #{social});
     </insert>
-    <delete id="deleteMember">
-        delete FROM member where mno = #{mno};
-    </delete>
+    <update id="deleteMember">
+        update member set passwd = '', memberName = '', phone = '', nickName = '', hasCat = 0, catAge = '', catSex = '', variety = '', profileImg = 'default.png/2002-08-08', del = 1, social = 0 where mno = #{mno};
+    </update>
     <update id="updateMember">
         update member set `email` = #{email}, `memberName` = #{memberName}, `phone` = #{phone}, `nickName` = #{nickName}, `introduce` = #{introduce}, `hasCat` = #{hasCat} where mno = #{mno};
     </update>
