@@ -198,20 +198,22 @@
         const isActive = pageNumber === pageDTO.page;
         const pageItemClass = isActive ? 'page-item-active' : 'page-item';
         const pageLinkStyle = isActive ? 'color:red; font-weight:bold;' : '';
-        if(index !== 0){
+
+        if (index !== 0) {
           return `
-        <li class="${pageItemClass}">
-            <a class="page-link" href="/catsMeTab/board?page=${pageNumber}&size=9" style="${pageLinkStyle}">${pageNumber}</a>
-        </li>`;
+      <li class="${pageItemClass}">
+        <a class="page-link" href="/catsMeTab/board?page=${pageNumber}&size=9" style="${pageLinkStyle}">${pageNumber}</a>
+      </li>`;
         }
-        }).join('');
+      }).join('');
 
       const paginationHTML = `
-    <ul class="pagination flex-wrap">
-        ${pageDTO.prev ? `<li class="page-item"><a class="page-link" href="/catsMeTab/board?page=${pageDTO.page - 1}&size=9">Previous</a></li>` : ''}
-        ${pagePlus}
-        ${pageDTO.next ? `<li class="page-item"><a class="page-link" href="/catsMeTab/board?page=${pageDTO.page + 1}&size=9">Next</a></li>` : ''}
-    </ul>`;
+  <ul class="pagination flex-wrap">
+    ${pageDTO.prev ? `<li class="page-item"><a class="page-link" href="/catsMeTab/board?page=${pageDTO.page - 1}&size=9">Previous</a></li>` : ''}
+    ${pagePlus}
+    ${pageDTO.next ? `<li class="page-item"><a class="page-link" href="/catsMeTab/board?page=${pageDTO.page + 1}&size=9">Next</a></li>` : ''}
+  </ul>`;
+
 
       console.log("페이징 반복" + paginationHTML);
 
@@ -261,7 +263,9 @@
         </div>
     </div>
 </div>
-`).join('');
+`
+
+      ).join('');
 
       // 페이징
       const pagePlus = Array.from({ length: pageDTO.end - pageDTO.start + 1 }, (_, index) => {

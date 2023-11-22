@@ -189,6 +189,7 @@
         </div>
     </div>
 </div>
+
 `).join('');
 
       // 페이징
@@ -276,7 +277,8 @@
         <li class="${pageItemClass}">
             <a class="page-link" href="/catsMe/review/list?page=${pageNumber}&size=9" style="${pageLinkStyle}">${pageNumber}</a>
         </li>`;
-        }}).join('');
+        }
+      }).join('');
 
       const paginationHTML = `
     <ul class="pagination flex-wrap">

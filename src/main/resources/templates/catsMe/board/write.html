@@ -43,9 +43,10 @@
             </div>
             <div class="form-group row">
                 <label class="col-sm-3 col-form-label">입양상태</label>
-                <div class="col-sm-3">
-                    <input type="text" name="status" class="form-control">
-                </div>
+                <select name="status" class="form-select" style="height: 54px;">
+                    <option value="입양대기" selected>입양대기</option>
+                    <option value="입양완료">입양완료</option>
+                </select>
             </div>
             <button type="button" class="btn btn-primary btn-submit">Submit</button>
         </form>
