@@ -85,7 +85,7 @@
         <ul class="comment-list">
             <!-- 댓글 start -->
             <!-- 댓글 리스트 출력 -->
-            <li class="comment comment-view">
+            <li class="comment comment-body">
 
             </li>
             <!-- /댓글 end -->
@@ -129,6 +129,8 @@
     <script src="/js/eternalRest/view.js?r"></script>
 </div>
 <script layout:fragment="script" th:inline="javascript">
+    const erbNo = [[${eternalRestBoard.erbNo}]]
+
     // 탈퇴한 회원일경우
     let isDel;
     isDel   =  [[${isDel}]];
@@ -194,7 +196,6 @@
 
     //댓글
     //출력 메서드
-    const erbNo = [[${eternalRestBoard.erbNo}]]
     function printComments(page, size, goLast) {
         getList({erbNo, page, size, goLast})
             .then(data => {
@@ -207,7 +208,7 @@
     printComments(1, 10); // 무조건 호출
     printComments(1, 10, true);
 
-    const commentList = document.querySelector('.comment-view'); // 댓글 목록 DOM
+    const commentList = document.querySelector('.comment-body'); // 댓글 목록 DOM
     const commentPaging = document.querySelector('.commentPaging'); // 페이지 목록 DOM
     const commentCnt = document.querySelector('.commentCnt'); //댓글 수 DOM
     function printCommentCnt(total){
@@ -223,12 +224,12 @@
                         <img id="profileImg" src="/upload/profileView/${dto.dateString}/${dto.profileImg}" alt="Image placeholder">
                     </div>
                     <div class="comment-view">
-                    <span class="boardNickName">${dto.nickName}</span>
-                    <span class="boardMemberId">${dto.memberId}</span>
-                    <div class="meta">${dto.addDate[0]}-${dto.addDate[1]}-${dto.addDate[2]} ${dto.addDate[3]}:${dto.addDate[4]}</div>
-                    <p data-comNo="${dto.comNo}">${dto.comment}</p>`
-                    + replyBtn()
-                    + xBtn(dto) +
+                        <span class="boardNickName">${dto.nickName}</span>
+                        <span class="boardMemberId">${dto.memberId}</span>
+                        <div class="meta">${dto.addDate[0]}-${dto.addDate[1]}-${dto.addDate[2]} ${dto.addDate[3]}:${dto.addDate[4]}</div>
+                        <p data-comNo="${dto.comNo}">${dto.comment}</p>`
+                        + replyBtn(dto)
+                        + xBtn(dto) +
                     `</div>
                     <div class="recommentWrap toggleOff">
                         <form class="form-group frmAddReComment" method="post">
@@ -252,22 +253,23 @@
                      </div>`;
                 } else{
                     str += `<ul class="recommentList">
-                            <div class="writerInfo">
-                            <img id="profileImg" class="img-fluid profileImg" src="/upload/profileView/${dto.dateString}/${dto.profileImg}" alt="Image placeholder"  class="img-fluid" readonly>
-                                <span class="boardNickName">${dto.nickName}</span>
-                                <span class="boardMemberId">(${dto.memberId})</span>
-                            </div>
-                            <div class="meta">${dto.addDate[0]}-${dto.addDate[1]}-${dto.addDate[2]} ${dto.addDate[3]}:${dto.addDate[4]}</div>
-                            <p data-comNo="${dto.comNo}">${dto.comment}</p>
-                        `+xBtn(dto)+`</ul>`
+                                <div class="writerInfo">
+                                <img id="profileImg" class="img-fluid profileImg" src="/upload/profileView/${dto.dateString}/${dto.profileImg}" alt="Image placeholder"  class="img-fluid" readonly>
+                                    <span class="boardNickName">${dto.nickName}</span>
+                                    <span class="boardMemberId">(${dto.memberId})</span>
+                                </div>
+                                <div class="meta">${dto.addDate[0]}-${dto.addDate[1]}-${dto.addDate[2]} ${dto.addDate[3]}:${dto.addDate[4]}</div>
+                                <p data-comNo="${dto.comNo}">${dto.comment}</p>
+                            `+xBtn(dto)+`
+                            </ul>`
                 }
             }
         }
         commentList.innerHTML = str;
 
-        function replyBtn(){
+        function replyBtn(dto){
             let btn = '';
-            if(auth !== 'anonymousUser' ){
+            if(auth !== 'anonymousUser'){
                 btn = `<button class="reply rounded recommentBtn">Reply</button>`;
             }
             return btn;

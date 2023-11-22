@@ -11,7 +11,7 @@
         SELECT COUNT(comNo) FROM eternalcomment WHERE erbNo=#{erbNo}
     </select>
     <select id="selectList" resultType="com.example.pink_jelly.domain.EternalRestCommentVO">
-        SELECT * FROM eternalcomment WHERE erbNo=#{erbNo} ORDER BY comNo LIMIT #{skip}, #{size}
+        SELECT * FROM eternalcomment WHERE erbNo=#{erbNo} ORDER BY parentNo, comNo LIMIT #{skip}, #{size}
     </select>
     <delete id="deleteOne">
         DELETE FROM eternalcomment WHERE comNo=#{comNo}

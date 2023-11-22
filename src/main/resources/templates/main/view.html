@@ -84,8 +84,8 @@
             </div>
             <a th:href="|@{/main}|" class="btn btn-primary">목록</a>
             <th:block th:if="${#authentication.principal != 'anonymousUser'}">
-                <a th:if="${#authentication.principal.mno == mainBoard.mno}" class="btn btn-success modifyBtn">수정</a>
-                <a th:if="${#authentication.principal.mno == mainBoard.mno}" class="btn btn-danger deleteBtn">삭제</a>
+                <button th:if="${#authentication.principal.mno == mainBoard.mno}" class="btn btn-success modifyBtn">수정</button>
+                <button th:if="${#authentication.principal.mno == mainBoard.mno}" class="btn btn-danger deleteBtn">삭제</button>
             </th:block>
                 <!-- comment-wrap start -->
             <div class="pt-5 comment-wrap">
@@ -250,7 +250,9 @@
         });
 
     }
-    if(auth === [[${mainBoard.mno}]]){
+
+    if(auth.mno === [[${mainBoard.mno}]]){
+
         const modifyBtn = document.querySelector('.modifyBtn');
         const deleteBtn = document.querySelector('.deleteBtn');
         modifyBtn.addEventListener('click', function() {
@@ -299,36 +301,38 @@ function printList(dtoList) { // 댓글 목록 출력
         for (const dto of dtoList) {
             if(dto.comNo == dto.parentNo){
                 str += `<div class="vcard">
-                        <img id="profileImg" src="/upload/profileView/${dto.dateString}/${dto.profileImg}" alt="Image placeholder">
-                    </div>
-                    <div class="comment-view">
-                        <span class="boardNickName">${dto.nickName}</span>
-                        <span class="boardMemberId">${dto.memberId}</span>
-                        <div class="meta">${dto.addDate[0]}-${dto.addDate[1]}-${dto.addDate[2]} ${dto.addDate[3]}:${dto.addDate[4]}</div>
-                        <p data-comNo="${dto.comNo}">${dto.comment}</p>`
+                            <img id="profileImg" src="/upload/profileView/${dto.dateString}/${dto.profileImg}" alt="Image placeholder">
+                        </div>
+                        <div class="comment-view">
+                            <span class="boardNickName">${dto.nickName}</span>
+                            <span class="boardMemberId">${dto.memberId}</span>
+                            <div class="meta">
+                                ${dto.addDate[0]}-${dto.addDate[1]}-${dto.addDate[2]} ${dto.addDate[3]}:${dto.addDate[4]}
+                            </div>
+                            <p data-comNo="${dto.comNo}">${dto.comment}</p>`
                         + replyBtn(dto)
                         + xBtn(dto) +
-                    `</div>
-                    <div class="recommentWrap toggleOff">
-                        <form class="form-group frmAddReComment" method="post">
-                            <input type="hidden" name="mno" value="${auth.mno}">
-                            <input type="hidden" name="nickName" value="${auth.nickName}">
-                            <input type="hidden" name="memberId" value="${auth.memberId}">
-                            <input type="hidden" name="mbNo" value="${mbNo}">
-                            <input type="hidden" name="parentNo" value="${dto.comNo}">
-                            <input type="hidden" name="profileImg" class="form-control" value="${auth.profileImg}/${auth.dateString}">
-                            <div class="recomment_write">
-                                <div class="writerInfo">
-                                    <img id="profileImg" class="img-fluid profileImg" src="/upload/profileView/${auth.dateString}/${auth.profileImg}" alt="Image placeholder" readonly>
-                                    <span class="boardNickName">${auth.nickName}</span>
-                                    <span class="boardNickName">(${auth.memberId})</span>
+                        `</div>
+                        <div class="recommentWrap toggleOff">
+                            <form class="form-group frmAddReComment" method="post">
+                                <input type="hidden" name="mno" value="${auth.mno}">
+                                <input type="hidden" name="nickName" value="${auth.nickName}">
+                                <input type="hidden" name="memberId" value="${auth.memberId}">
+                                <input type="hidden" name="mbNo" value="${mbNo}">
+                                <input type="hidden" name="parentNo" value="${dto.comNo}">
+                                <input type="hidden" name="profileImg" class="form-control" value="${auth.profileImg}/${auth.dateString}">
+                                <div class="recomment_write">
+                                    <div class="writerInfo">
+                                        <img id="profileImg" class="img-fluid profileImg" src="/upload/profileView/${auth.dateString}/${auth.profileImg}" alt="Image placeholder" readonly>
+                                        <span class="boardNickName">${auth.nickName}</span>
+                                        <span class="boardNickName">(${auth.memberId})</span>
+                                    </div>
+                                    <textarea type="text" name="comment" class="form-control"></textarea>
+                                    <button type="button" class="btn-primary recommentAddBtn" onclick="submitCommentRe(this)">등록</button>
                                 </div>
-                                <textarea type="text" name="comment" class="form-control"></textarea>
-                                <button type="button" class="btn-primary recommentAddBtn" onclick="submitCommentRe(this)">등록</button>
-                            </div>
-                        </form>
+                            </form>
                       </div>
-                     </div>`;
+                </div>`;
             } else {
                 str += `<ul class="recommentList">
                             <div class="writerInfo">
@@ -336,7 +340,8 @@ function printList(dtoList) { // 댓글 목록 출력
                                 <span class="boardNickName">${dto.nickName}</span>
                                 <span class="boardMemberId">(${dto.memberId})</span>
                             </div>
-                            <div class="meta">${dto.addDate[0]}-${dto.addDate[1]}-${dto.addDate[2]} ${dto.addDate[3]}:${dto.addDate[4]}</div>
+                                <div class="meta">${dto.addDate[0]}-${dto.addDate[1]}-${dto.addDate[2]} ${dto.addDate[3]}:${dto.addDate[4]}
+                            </div>
                             <p data-comNo="${dto.comNo}">${dto.comment}</p>
                             ` +xBtn(dto)+ `
                         </ul>`

@@ -93,7 +93,7 @@ public class CustomSecurityConfig {
 
         http.logout()
                 .logoutUrl("/logout")
-                .logoutSuccessUrl("/")
+                .logoutSuccessUrl("/main")
                 .invalidateHttpSession(true)
                 .deleteCookies("JSESSIONID", "remember-me");
 

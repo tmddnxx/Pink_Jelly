@@ -12,24 +12,13 @@
         <form name="modifyBoard" action="/main/modify" method="post" class="form" id="f1">
             <input type="hidden" name="mbNo" th:value="${mainBoard.mbNo}">
             <input type="hidden" name="profileImg" class="form-control" th:value="${#authentication.principal.profileImg}+'/'+${#authentication.principal.dateString}" readonly>
-            <div class="form-group row">
-                <label class="col-sm-3 col-form-label">profileImg</label>
-                <div class="col-sm-3">
-                    <img id="profileImg" th:src="|/upload/profileView/${#authentication.principal.dateString}/${#authentication.principal.profileImg}|" alt="Image placeholder"  class="img-fluid" readonly>
-                </div>
-            </div>
-            <div class="form-group row">
-                <label class="col-sm-3 col-form-label">memberId</label>
-                <div class="col-sm-3">
-                    <input type="text" name="memberId" class="form-control" th:value="${mainBoard.memberId}" readonly>
-                </div>
-            </div>
-            <div class="form-group row">
-                <label class="col-sm-3 col-form-label">nickName</label>
-                <div class="col-sm-3">
-                    <input type="text" name="nickName" class="form-control" th:value="${mainBoard.nickName}" readonly>
-                </div>
-            </div>
+            <span class="form-group">
+                <img id="profileImg" th:src="|/upload/profileView/${#authentication.principal.dateString}/s_${#authentication.principal.profileImg}|" style="width: 50px; height: 50px; border-radius: 50%;" alt="Image placeholder"  class="img-fluid" readonly>
+                [[${#authentication.principal.nickName}]]
+                <input type="hidden" class="form-control" name="nickName" th:value="${#authentication.principal.nickName}" readonly>
+                [[${#authentication.principal.memberId}]]
+                <input type="hidden" class="form-control" name="memberId" th:value="${#authentication.principal.memberId}" readonly>
+            </span>
             <div class="form-group row">
                 <label class="col-sm-3 col-form-label uploadHidden">mainImg</label>
                 <div class="col-sm-3 thumbnail">
