@@ -2,14 +2,12 @@
     font-weight: bold;
 }
 .boardMemberId{
-    foint-size:13px;
+    font-size:13px;
 }
 .likeHitCnt{
     text-align: right;
 }
-.mainBoard-Img{
-    text-align: center;
-}
+
 #profileImg{
     width: 30px;
     height: 30px;

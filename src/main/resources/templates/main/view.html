@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.w3.org/1999/xhtml"
       xmlns="http://www.w3.org/1999/xhtml"
       layout:decorate="~{layout/basic.html}">
 <head>
     <meta charset="UTF-8">
     <title>메인 뷰페이지</title>
-    <link rel="stylesheet" th:href="@{/css/mainBoard.css}">
+    <link rel="stylesheet" th:href="@{/css/boardView.css}">
     <script src="https://kit.fontawesome.com/e83b9315c8.js" crossorigin="anonymous"></script>
 
 </head>
@@ -27,9 +26,6 @@
         background-color: #444444;
         color: white;
         margin: 0 auto;
-    }
-    .profileImg {
-        border-radius: 50%;
     }
 </style>
 <div layout:fragment="banner">
@@ -66,7 +62,6 @@
         <input type="hidden" name="mbNo" th:value="${mainBoard.mbNo}">
         <input type="hidden" name="mno" th:value="${#authentication.principal.mno}">
         <div class="likeBtn">
-
         </div>
     </form>
 
@@ -113,16 +108,11 @@
                         <input type="hidden" name="mno" id="mno" th:value="${#authentication.principal.mno}" readonly>
                         <input type="hidden" name="profileImg" class="form-control" th:value="${#authentication.principal.profileImg}+'/'+${#authentication.principal.dateString}">
                         <div class="form-group">
-                            <label for="profileImg">profileImg</label>
-                            <img class="img-fluid profileImg" id="profileImg" th:src="|/upload/profileView/${#authentication.principal.dateString}/s_${#authentication.principal.profileImg}|" alt="Image placeholder" readonly>
-                        </div>
-                        <div class="form-group">
-                            <label for="memberId">memberId</label>
-                            <input type="text" class="form-control" id="memberId" th:value="${#authentication.principal.memberId}" readonly>
-                        </div>
-                        <div class="form-group">
-                            <label for="nickName">nickName</label>
-                            <input type="text" class="form-control" id="nickName" th:value="${#authentication.principal.nickName}" readonly>
+                            <img id="profileImg" th:src="|/upload/profileView/${#authentication.principal.dateString}/s_${#authentication.principal.profileImg}|" style="width: 50px; height: 50px; border-radius: 50%;" alt="Image placeholder"  class="img-fluid" readonly>
+                            <span class="boardNickName">[[${#authentication.principal.nickName}]]</span>
+                            <input type="hidden" class="form-control" id="nickName" th:value="${#authentication.principal.nickName}" readonly>
+                            <span class="boardMemberId">[[${#authentication.principal.memberId}]]</span>
+                            <input type="hidden" class="form-control" id="memberId" th:value="${#authentication.principal.memberId}" readonly>
                         </div>
                         <div class="form-group">
                             <label for="mainComment">Comment</label>
@@ -258,6 +248,9 @@
                 alert("로그인 후 이용 가능합니다.");
             }
         });
+
+    }
+    if(auth === [[${mainBoard.mno}]]){
         const modifyBtn = document.querySelector('.modifyBtn');
         const deleteBtn = document.querySelector('.deleteBtn');
         modifyBtn.addEventListener('click', function() {
@@ -275,8 +268,6 @@
             window.location.href = "/main/remove?mbNo=" + mbNo;
         });
     }
-
-
 
     //댓글
     //출력 메서드
@@ -308,10 +299,11 @@ function printList(dtoList) { // 댓글 목록 출력
         for (const dto of dtoList) {
             if(dto.comNo == dto.parentNo){
                 str += `<div class="vcard">
-                        <img src="/upload/profileView/${dto.dateString}/${dto.profileImg}" alt="Image placeholder">
+                        <img id="profileImg" src="/upload/profileView/${dto.dateString}/${dto.profileImg}" alt="Image placeholder">
                     </div>
                     <div class="comment-view">
-                        <h3>${dto.memberId}</h3>
+                        <span class="boardNickName">${dto.nickName}</span>
+                        <span class="boardMemberId">${dto.memberId}</span>
                         <div class="meta">${dto.addDate[0]}-${dto.addDate[1]}-${dto.addDate[2]} ${dto.addDate[3]}:${dto.addDate[4]}</div>
                         <p data-comNo="${dto.comNo}">${dto.comment}</p>`
                         + replyBtn(dto)
@@ -327,9 +319,9 @@ function printList(dtoList) { // 댓글 목록 출력
                             <input type="hidden" name="profileImg" class="form-control" value="${auth.profileImg}/${auth.dateString}">
                             <div class="recomment_write">
                                 <div class="writerInfo">
-                                <img class="img-fluid profileImg" src="/upload/profileView/${auth.dateString}/${auth.profileImg}" alt="Image placeholder" readonly>
-                                    <p>${auth.nickName}</p>
-                                    <p>(${auth.memberId})</p>
+                                    <img id="profileImg" class="img-fluid profileImg" src="/upload/profileView/${auth.dateString}/${auth.profileImg}" alt="Image placeholder" readonly>
+                                    <span class="boardNickName">${auth.nickName}</span>
+                                    <span class="boardNickName">(${auth.memberId})</span>
                                 </div>
                                 <textarea type="text" name="comment" class="form-control"></textarea>
                                 <button type="button" class="btn-primary recommentAddBtn" onclick="submitCommentRe(this)">등록</button>
@@ -339,9 +331,11 @@ function printList(dtoList) { // 댓글 목록 출력
                      </div>`;
             } else {
                 str += `<ul class="recommentList">
-                            <img class="img-fluid profileImg" src="/upload/profileView/${dto.dateString}/${dto.profileImg}" alt="Image placeholder"  class="img-fluid" readonly>
-                            <h3>${dto.nickName}</h3>
-                            <h3>(${dto.memberId})</h3>
+                            <div class="writerInfo">
+                            <img id="profileImg" class="img-fluid profileImg" src="/upload/profileView/${dto.dateString}/${dto.profileImg}" alt="Image placeholder"  class="img-fluid" readonly>
+                                <span class="boardNickName">${dto.nickName}</span>
+                                <span class="boardMemberId">(${dto.memberId})</span>
+                            </div>
                             <div class="meta">${dto.addDate[0]}-${dto.addDate[1]}-${dto.addDate[2]} ${dto.addDate[3]}:${dto.addDate[4]}</div>
                             <p data-comNo="${dto.comNo}">${dto.comment}</p>
                             ` +xBtn(dto)+ `
@@ -393,7 +387,7 @@ function printList(dtoList) { // 댓글 목록 출력
     let recommentBtns = document.querySelectorAll('.recommentBtn');
     let recommentWraps = document.querySelectorAll('.recommentWrap');
 
-    for (let i=0; i<= recommentBtns.length; i++){
+    for (let i=0; i< recommentBtns.length; i++){
         recommentBtns[i].addEventListener('click', function (){
             console.log("대댓글 창 열기");
             recommentWraps[i].classList.toggle('toggleOff')
@@ -430,7 +424,6 @@ function printList(dtoList) { // 댓글 목록 출력
             }).catch(e => {
                 alert("댓글 등록에 실패했습니다. 다시 시도해주세요");
             });
-
     }
 
     function printPages(data) { // 페이지 목록 출력
@@ -474,13 +467,16 @@ function printList(dtoList) { // 댓글 목록 출력
                 mno: mno.value,
                 profileImg: profileImg.value
             };
-
-            addComment(commentObj).then(result => {
-                comment.value = '';
-                printComments(1, 10, true); // 댓글 목록 갱신
-            }).catch(e => {
-                alert("댓글 등록에 실패했습니다. 다시 시도해주세요");
-            });
+            if(commentObj.comment != '') {
+                addComment(commentObj).then(result => {
+                    comment.value = '';
+                    printComments(1, 10, true); // 댓글 목록 갱신
+                }).catch(e => {
+                    alert("댓글 등록에 실패했습니다. 다시 시도해주세요");
+                });
+            } else {
+                alert("댓글을 입력해주세요.");
+            }
         });
     }
 

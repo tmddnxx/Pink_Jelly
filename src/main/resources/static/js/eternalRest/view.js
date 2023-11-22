@@ -6,7 +6,7 @@ async function addComment(commentObj) {
 }
 //댓글 목록 가져오기
 async function getList({erbNo, page, size, goLast}) {
-    const result = await axios.get(`/erbComment/list/${erbNo}?page=${page}`, {params: {page, size}});
+    const result = await axios.get(`/erbComment/list/${erbNo}?page=${page}`, {params: {size: size}});
     if (goLast) {
         const total = result.data.total;
         const lastPage = parseInt(Math.ceil(total/size));
