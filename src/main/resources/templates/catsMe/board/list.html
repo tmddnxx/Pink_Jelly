@@ -84,8 +84,9 @@
             <p>[[${catsMeBoard.content}]]</p>
             <div class="excerpt">
               <div class="post-meta align-items-center text-left clearfix">
-                <p class="likeHitCnt"><span>조회수</span><br></p>
-                <p class="likeHitCnt"><span>[[${catsMeBoard.hit}]]</span></p>
+                <p class="likeHitCnt">
+                  <span><i class="fa-solid fa-eye"></i>[[${catsMeBoard.hit}]]</span>
+                </p>
               </div>
               <p><a th:href="|@{/catsMe/board/view(cmbNo=${catsMeBoard.cmbNo})}|" class="read-more">Continue Reading</a></p>
             </div>
@@ -93,6 +94,7 @@
         </div>
       </div>
     </div>
+  </div>
 <!--    페이징 버튼-->
     <div class="float-end page_wrap">
         <ul class="pagination flex-wrap" th:with="catsMeBoard=${catsMeBoardList}">
@@ -100,9 +102,11 @@
                 <a class="page-link" th:href="|@{/catsMe(page=${catsMeBoard.page - 1},size=9)}|" th:data-num="${catsMeBoard.start - 1}">Previous</a>
             </li>
             <th:block th:each="i: ${#numbers.sequence(catsMeBoard.start, catsMeBoard.end)}">
+              <th:block th:if="${i != 0}">
                 <li th:class="${catsMeBoard.page == i} ? 'page-item-active' : 'page-item'" >
                     <a class="page-link" th:href="|@{/catsMe(page=${i},size=9)}|" th:data-num="${i}" th:style="${catsMeBoard.page == i} ? 'color:red; font-weight:bold;'">[[${i}]]</a>
                 </li>
+              </th:block>
             </th:block>
             <li class="page-item" th:if="${catsMeBoard.next}">
                 <a class="page-link" th:href="${catsMeBoard.page + 1}" th:data-num="${catsMeBoard.end + 1}">Next</a>
@@ -176,8 +180,9 @@
             <p>${dtoList.content}</p>
         <div class="excerpt">
             <div class="post-meta align-items-center text-left clearfix">
-                <p class="likeHitCnt"><span>조회수</span><br></p>
-                <p class="likeHitCnt"><span>${dtoList.hit}</span></p>
+                <p class="likeHitCnt">
+                  <span><i class="fa-solid fa-eye"></i>${dtoList.hit}</span>
+                </p>
             </div>
             <p><a href="/catsMe/board/view?cmbNo=${dtoList.cmbNo}" class="read-more">Continue Reading</a></p>
         </div>
@@ -193,11 +198,13 @@
         const isActive = pageNumber === pageDTO.page;
         const pageItemClass = isActive ? 'page-item-active' : 'page-item';
         const pageLinkStyle = isActive ? 'color:red; font-weight:bold;' : '';
-
-        return `
+        if(index !== 0){
+          return `
         <li class="${pageItemClass}">
             <a class="page-link" href="/catsMeTab/board?page=${pageNumber}&size=9" style="${pageLinkStyle}">${pageNumber}</a>
-        </li>`;}).join('');
+        </li>`;
+        }
+        }).join('');
 
       const paginationHTML = `
     <ul class="pagination flex-wrap">
@@ -244,8 +251,11 @@
             <p>${dtoList.content}</p>
         <div class="excerpt">
             <div class="post-meta align-items-center text-left clearfix">
-                <p class="likeHitCnt"><span>조회수</span><br></p>
-                <p class="likeHitCnt"><span>${dtoList.hit}</span></p>
+                <p class="likeHitCnt">
+                  <span><i class="fa-solid fa-heart"></i>${dtoList.like}</span>
+                  <span><i class="fa-solid fa-comment"></i>${dtoList.commentCnt}</span>
+                  <span><i class="fa-solid fa-eye"></i>${dtoList.hit}</span>
+                </p>
             </div>
             <p><a href="/catsMe/board/view?crbNo=${dtoList.crbNo}" class="read-more">Continue Reading</a></p>
         </div>
@@ -259,11 +269,13 @@
         const isActive = pageNumber === pageDTO.page;
         const pageItemClass = isActive ? 'page-item-active' : 'page-item';
         const pageLinkStyle = isActive ? 'color:red; font-weight:bold;' : '';
-
-        return `
+        if(index !== 0){
+          return `
         <li class="${pageItemClass}">
             <a class="page-link" href="/catsMe/review/list?page=${pageNumber}&size=9" style="${pageLinkStyle}">${pageNumber}</a>
-        </li>`;}).join('');
+        </li>`;
+        }
+       }).join('');
 
       const paginationHTML = `
     <ul class="pagination flex-wrap">

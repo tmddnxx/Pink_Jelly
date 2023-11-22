@@ -154,10 +154,10 @@
                 <input type="hidden" name="nickName" th:value="${memberDTO.nickName}">
                 <th:block th:if="${#authentication.principal != 'anonymousUser'}">
                     <input type="hidden" name="mno"  th:value="${#authentication.principal.mno}">
+                    <div class="friendBtn_wrap">
+                        <button type="button" class="friendBtn">그루밍 추가</button>
+                    </div>
                 </th:block>
-                <div class="friendBtn_wrap">
-                    <button type="button" class="friendBtn">그루밍 추가</button>
-                </div>
             </form>
             </div>
             <div>
@@ -168,10 +168,10 @@
             <input type="hidden" name="nickName" th:value="${memberDTO.nickName}">
             <th:block th:if="${#authentication.principal != 'anonymousUser'}">
                 <input type="hidden" name="mno" th:value="${#authentication.principal.mno}">
+                <div class="banBtn_wrap">
+                    <button type="button" class="banBtn">차단</button>
+                </div>
             </th:block>
-            <div class="banBtn_wrap">
-                <button type="button" class="banBtn">차단</button>
-            </div>
         </form>
             </div>
         </div>
@@ -256,78 +256,81 @@
     </th:block>
     </th:block>
 </div>
-<script layout:fragment="script">
+<script layout:fragment="script" th:inline="javascript">
 
-    // 차단 버튼
-    const frmBan = document.querySelector('form[name=frmBan]');
-    const banBtn = document.querySelector('.banBtn');
-    const banCheck = document.querySelector('input[name=ban]');
-    console.log("ban 여부 : " + banCheck.value);
+    const auth = [[${#authentication.principal}]];
 
-    // 친구 버튼
-    let frmFriend = document.querySelector('form[name=frmFriend]');
-    let friendBtn = document.querySelector('.friendBtn');
-    let friendCheck = document.querySelector('input[name=friend]');
+    if(auth !== 'anonymousUser'){
+        // 차단 버튼
+        const frmBan = document.querySelector('form[name=frmBan]');
+        const banBtn = document.querySelector('.banBtn');
+        const banCheck = document.querySelector('input[name=ban]');
+        console.log("ban 여부 : " + banCheck.value);
 
-    if (banCheck.value === "true" || banCheck.value === true) {
-        banBtn.innerText = '차단 해제';
-        console.log(banCheck.value);
-    } else {
-        banBtn.innerText = '차단 ';
-        console.log(banCheck.value);
-    }
+        // 친구 버튼
+        let frmFriend = document.querySelector('form[name=frmFriend]');
+        let friendBtn = document.querySelector('.friendBtn');
+        let friendCheck = document.querySelector('input[name=friend]');
 
-    banBtn.addEventListener('click', async function () {
-        const memberId = frmBan.memberId.value;
-        const nickName = frmBan.nickName.value;
-        const mno = frmBan.mno.value;
-        console.log(mno);
-        const banDTO = {
-            memberId: memberId,
-            nickName: nickName
-        };
-
-        if (mno !== "") {
-            let response;
-            try {
-                if(banCheck.value === 'true'){
-                    const banUrl = `/ban/remove?mno=${mno}&memberId=${memberId}`;
-                    response = await axios.post(banUrl);
-
-                }else {
-                    alert('차단하시겠습니까?');
-                    const banUrl = `/ban/add?mno=${mno}`;
-                    response1 = await axios.post(banUrl, banDTO);
-                    const removeFUrl = `/friends/remove?mno=${mno}&memberId=${memberId}`;
-                    response2 = await axios.post(removeFUrl);
-
-                    response = {
-                        response1, response2
-                    };
-                }
-                console.log(response.data);
-
-                if (response.status === 200) {
-                    const json = response.data;
-                    if (json.result === true) {
-                        // 성공적으로 처리된 경우 추가적인 동작 수행
-                    } else {
-                        alert('등록에 실패했습니다.');
-                    }
-                } else {
-                    console.error(response.status, response.statusText);
-                }
-            } catch (error) {
-                console.error('에러:', error);
-            }
-            banCheck.value = banCheck.value === "true" ? "false" : "true";
-            banBtn.innerText = banCheck.value === "true" ? '차단 해제' : '차단';
-            friendBtn.innerText = "그루밍 추가";
-
+        if (banCheck.value === "true" || banCheck.value === true) {
+            banBtn.innerText = '차단 해제';
+            console.log(banCheck.value);
         } else {
-            alert("로그인 후 이용 가능합니다.");
+            banBtn.innerText = '차단 ';
+            console.log(banCheck.value);
         }
-    })
+
+        banBtn.addEventListener('click', async function () {
+            const memberId = frmBan.memberId.value;
+            const nickName = frmBan.nickName.value;
+            const mno = frmBan.mno.value;
+            console.log(mno);
+            const banDTO = {
+                memberId: memberId,
+                nickName: nickName
+            };
+
+            if (mno !== "") {
+                let response;
+                try {
+                    if(banCheck.value === 'true'){
+                        const banUrl = `/ban/remove?mno=${mno}&memberId=${memberId}`;
+                        response = await axios.post(banUrl);
+
+                    }else {
+                        alert('차단하시겠습니까?');
+                        const banUrl = `/ban/add?mno=${mno}`;
+                        response1 = await axios.post(banUrl, banDTO);
+                        const removeFUrl = `/friends/remove?mno=${mno}&memberId=${memberId}`;
+                        response2 = await axios.post(removeFUrl);
+
+                        response = {
+                            response1, response2
+                        };
+                    }
+                    console.log(response.data);
+
+                    if (response.status === 200) {
+                        const json = response.data;
+                        if (json.result === true) {
+                            // 성공적으로 처리된 경우 추가적인 동작 수행
+                        } else {
+                            alert('등록에 실패했습니다.');
+                        }
+                    } else {
+                        console.error(response.status, response.statusText);
+                    }
+                } catch (error) {
+                    console.error('에러:', error);
+                }
+                banCheck.value = banCheck.value === "true" ? "false" : "true";
+                banBtn.innerText = banCheck.value === "true" ? '차단 해제' : '차단';
+                friendBtn.innerText = "그루밍 추가";
+
+            } else {
+                alert("로그인 후 이용 가능합니다.");
+            }
+        })
 
         if(banCheck.value === false || "false"){
             // 친구추가 버튼
@@ -382,39 +385,39 @@
                     alert("로그인 후 이용 가능합니다.");
                 }
             })
-
-            // 게시물 목록
-            // 게시물 목록 기능
-            const mainBtn = document.querySelector('.mainBtn');
-            const mainList = document.querySelector('.mainBoardList');
-            const catsMeBtn = document.querySelector('.catsMeBtn');
-            const catsMeList = document.querySelector('.catsMeList');
-            const reviewBtn = document.querySelector('.reviewBtn');
-            const reviewList = document.querySelector('.reviewList');
-
-
-            catsMeList.style.display = 'none';
-            reviewList.style.display = 'none';
-
-            mainBtn.addEventListener('click', function (){
-                mainList.style.display = 'flex';
-                mainList.style.display = '-webkit-box';
-                catsMeList.style.display = 'none';
-                reviewList.style.display = 'none';
-            })
-            catsMeBtn.addEventListener('click', function (){
-                mainList.style.display = 'none';
-                catsMeList.style.display = 'flex';
-                catsMeList.style.display = '-webkit-box';
-                reviewList.style.display = 'none';
-            })
-            reviewBtn.addEventListener('click', function (){
-                mainList.style.display = 'none';
-                catsMeList.style.display = 'none';
-                reviewList.style.display = 'flex';
-                reviewList.style.display = '-webkit-box';
-            })
         }
+    }
+    // 게시물 목록
+    // 게시물 목록 기능
+    const mainBtn = document.querySelector('.mainBtn');
+    const mainList = document.querySelector('.mainBoardList');
+    const catsMeBtn = document.querySelector('.catsMeBtn');
+    const catsMeList = document.querySelector('.catsMeList');
+    const reviewBtn = document.querySelector('.reviewBtn');
+    const reviewList = document.querySelector('.reviewList');
+
+
+    catsMeList.style.display = 'none';
+    reviewList.style.display = 'none';
+
+    mainBtn.addEventListener('click', function (){
+        mainList.style.display = 'flex';
+        mainList.style.display = '-webkit-box';
+        catsMeList.style.display = 'none';
+        reviewList.style.display = 'none';
+    })
+    catsMeBtn.addEventListener('click', function (){
+        mainList.style.display = 'none';
+        catsMeList.style.display = 'flex';
+        catsMeList.style.display = '-webkit-box';
+        reviewList.style.display = 'none';
+    })
+    reviewBtn.addEventListener('click', function (){
+        mainList.style.display = 'none';
+        catsMeList.style.display = 'none';
+        reviewList.style.display = 'flex';
+        reviewList.style.display = '-webkit-box';
+    })
 
 
 

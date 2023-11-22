@@ -53,7 +53,7 @@ public class EternalRestBoardServiceImpl implements EternalRestBoardService{
     public EternalRestBoardDTO getBoard(Long erbNo, Long mno) { // 게시글 상세
         boolean flag = false;
         EternalRestBoardVO eternalRestBoardVO = eternalRestBoardMapper.getOne(erbNo);
-        flag = eternalRestBoardMapper.isRestSad(mno, erbNo); // 좋아요 눌렀는지
+        flag = eternalRestBoardMapper.isRestSad(mno, erbNo); // 슬퍼요 눌렀는지
         EternalRestBoardDTO eternalRestBoardDTO = modelMapper.map(eternalRestBoardVO, EternalRestBoardDTO.class);
         eternalRestBoardDTO.setFlag(flag);
 
@@ -73,21 +73,25 @@ public class EternalRestBoardServiceImpl implements EternalRestBoardService{
 
     @Override
     public boolean addSad(Long mno, Long erbNo) { // 슬퍼요 추가
+
+        boolean registerSad = eternalRestBoardMapper.insertRestSad(mno, erbNo);
+
         eternalRestBoardMapper.sadCntUpdate(erbNo, true);
 
-        return eternalRestBoardMapper.insertRestSad(mno, erbNo);
+        return registerSad;
     }
 
     @Override
     public boolean removeSad(Long mno, Long erbNo) { // 슬퍼요 제거
-        eternalRestBoardMapper.sadCntUpdate(erbNo, false);
+        boolean deleteSad = eternalRestBoardMapper.removeRestSad(mno, erbNo);
 
-        return eternalRestBoardMapper.removeRestSad(mno, erbNo);
+        eternalRestBoardMapper.sadCntUpdate(erbNo, false);
+        return deleteSad;
     }
 
     @Override
     public boolean isRestSad(Long mno, Long erbNo) { // 슬퍼요 여부
-
+        log.info("서비스 flag : " + eternalRestBoardMapper.isRestSad(mno,erbNo));
         return eternalRestBoardMapper.isRestSad(mno, erbNo);
     }
 }

@@ -7,7 +7,13 @@ import com.example.pink_jelly.dto.PageResponseDTO;
 import com.example.pink_jelly.service.EternalRestBoardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +21,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.lang.reflect.Member;
+import java.util.HashSet;
 
 @Log4j2
 @RequiredArgsConstructor
@@ -23,6 +30,7 @@ import java.lang.reflect.Member;
 public class EternalRestController {
 
     private final EternalRestBoardService eternalRestBoardService;
+    private final UserDetailsService userDetailsService;
 
     @GetMapping("") // 장례식 게시판 목록
     public String list(Model model, PageRequestDTO pageRequestDTO){
@@ -48,6 +56,8 @@ public class EternalRestController {
 
         eternalRestBoardService.register(eternalRestBoardDTO); // 글등록 후
         eternalRestBoardService.catInfoDel(mno); // 정보 삭제
+
+        sessionReset(memberDTO);
         return "redirect:/eternalRest";
     }
 
@@ -59,6 +69,8 @@ public class EternalRestController {
             mno = memberDTO.getMno();
             eternalRestBoardDTO = eternalRestBoardService.getBoard(erbNo, mno);
             eternalRestBoardDTO.setFlag(eternalRestBoardService.isRestSad(mno, erbNo));
+            log.info("컨트롤러 : flag : " +eternalRestBoardService.isRestSad(mno, erbNo));
+            log.info("컨트롤러 dto : " + eternalRestBoardDTO.isFlag());
             model.addAttribute("eternalRestBoard", eternalRestBoardDTO);
         } else {
             eternalRestBoardDTO = eternalRestBoardService.getBoard(erbNo, mno);
@@ -74,5 +86,11 @@ public class EternalRestController {
         return "redirect:/eternalRest";
     }
 
+    private void sessionReset(MemberDTO memberDTO) {
+        // 세션 사용자 정보 업데이트
+        UserDetails userDetails = userDetailsService.loadUserByUsername(memberDTO.getMemberId());
+        Authentication newAuthentication = new UsernamePasswordAuthenticationToken(userDetails, null, new HashSet<GrantedAuthority>());
+        SecurityContextHolder.getContext().setAuthentication(newAuthentication);
+    }
 
 }

@@ -77,10 +77,16 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public MemberDTO findById(String memberId) {
         // 아이디로 회원 정보 조회
-        MemberDTO memberDTO = modelMapper.map(memberMapper.findById(memberId), MemberDTO.class);
-        String[] splits = memberDTO.getProfileImg().split("/");
-        memberDTO.setProfileImg(splits[0]);
-        memberDTO.setDateString(splits[1]);
+        MemberVO memberVO = memberMapper.findById(memberId);
+
+        MemberDTO memberDTO = null;
+        if (memberVO != null) {
+            memberDTO = modelMapper.map(memberVO, MemberDTO.class);
+            String[] splits = memberDTO.getProfileImg().split("/");
+            memberDTO.setProfileImg(splits[0]);
+            memberDTO.setDateString(splits[1]);
+        }
+
         return memberDTO;
     }
 

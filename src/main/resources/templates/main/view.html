@@ -98,7 +98,7 @@
                 <ul class="comment-list">
                     <!-- 댓글 start -->
                     <!-- 댓글 리스트 출력 -->
-                    <li class="comment comment-view">
+                    <li class="comment comment-body">
 
                     </li>
                     <!-- /댓글 end -->
@@ -292,15 +292,18 @@ function printComments(page, size, goLast) {
 printComments(1, 10); // 무조건 호출
 printComments(1, 10, true);
 
-const commentList = document.querySelector('.comment-view'); // 댓글 목록 DOM
+const commentList = document.querySelector('.comment-body'); // 댓글 목록 DOM
 const commentPaging = document.querySelector('.commentPaging'); // 페이지 목록 DOM
 const commentCnt = document.querySelector('.commentCnt'); //댓글 수 DOM
+
+
 function printCommentCnt(total){
     commentCnt.textContent=total + " Comments";
 }
 
 function printList(dtoList) { // 댓글 목록 출력
     let str = '';
+    let reStr = '';
     if (dtoList && dtoList.length > 0) {
         for (const dto of dtoList) {
             if(dto.comNo == dto.parentNo){
@@ -346,6 +349,7 @@ function printList(dtoList) { // 댓글 목록 출력
             }
         }
     }
+
     commentList.innerHTML = str;
     console.log("auth: ? " , auth);
     console.log(" auth는 ?",typeof auth);

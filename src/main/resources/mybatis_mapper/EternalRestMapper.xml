@@ -20,8 +20,8 @@
     <delete id="delete">
         DELETE FROM eternalRestBoard WHERE erbNo = #{erbNo};
     </delete>
-    <select id="isRestSad">
-        select count(*) from eternalRestBoard where mno = #{mno} and erbNo = #{erbNo};
+    <select id="isRestSad" resultType="boolean">
+        select count(*) from erbSad where mno = #{mno} and erbNo = #{erbNo};
     </select>
     <insert id="insertRestSad">
         insert into erbSad (mno, erbNo) values (#{mno}, #{erbNo});

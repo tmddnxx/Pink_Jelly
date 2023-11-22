@@ -37,6 +37,7 @@
     .pageNum{
         background-color: #333333;
         border-color: #333333;
+        color: white;
     }
     .pageNum:hover{
         background-color: #222222 !important;
@@ -84,7 +85,8 @@
                 <p>[[${#temporals.format(restBoardList.addDate, 'yyyy-MM-dd HH:mm')}]]</p>
             </div>
             <div class="sadCnt">
-                <span><i class="fa-solid fa-face-sad-tear"></i>[[${restBoardList.sad}]]</span><span><i class="fa-solid fa-comment"></i>[[${restBoardList.commentCnt}]]</span>
+                <span><i class="fa-solid fa-face-sad-tear"></i>[[${restBoardList.sad}]]</span>
+                <span><i class="fa-solid fa-comment"></i>[[${restBoardList.commentCnt}]]</span>
             </div>
         </div>
     </div>
@@ -93,19 +95,22 @@
     <div class="float-end page_wrap paging">
         <ul class="pagination flex-wrap" th:with="restBoardList=${restBoardList}">
             <li class="page-item" th:if="${restBoardList.prev}">
-                <a class="page-link pageNum" th:href="|@{/eternalRest(page=${restBoardList.page - 1},size=10)}|" th:data-num="${restBoardList.start - 1}">Previous</a>
+                <a class="page-link pageNum" th:href="|@{/eternalRest(page=${restBoardList.start - 1},size=10)}|" th:data-num="${restBoardList.start - 1}">이전</a>
             </li>
             <th:block th:each="i: ${#numbers.sequence(restBoardList.start, restBoardList.end)}">
-                <li th:class="${restBoardList.page == i} ? 'page-item-active' : 'page-item'" >
-                    <a class="page-link pageNum" th:href="|@{/eternalRest(page=${i},size=10)}|" th:data-num="${i}" th:style="${restBoardList.page == i} ? 'color:red; font-weight:bold;' : 'color:white;'">[[${i}]]</a>
-                </li>
+                <th:block th:if="${i != 0}">
+                    <li th:class="${restBoardList.page == i} ? 'page-item-active' : 'page-item'" >
+                        <a class="page-link pageNum" th:href="|@{/eternalRest(page=${i},size=10)}|" th:data-num="${i}" th:style="${restBoardList.page == i} ? 'color:red; font-weight:bold;' : 'color:white;'">[[${i}]]</a>
+                    </li>
+                </th:block>
             </th:block>
             <li class="page-item" th:if="${restBoardList.next}">
-                <a class="page-link pageNum" th:href="${restBoardList.page + 1}" th:data-num="${restBoardList.end + 1}">Next</a>
+                <a class="page-link pageNum" th:href="|@{/eternalRest(page=${restBoardList.end + 1},size=10)}|" th:data-num="${restBoardList.end + 1}">다음</a>
             </li>
         </ul>
     </div>
 <!--페이징 끝-->
+
 </div>
 <script layout:fragment="script" th:inline="javascript">
 

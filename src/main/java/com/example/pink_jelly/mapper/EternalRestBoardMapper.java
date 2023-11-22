@@ -26,7 +26,7 @@ public interface EternalRestBoardMapper {
 
     boolean removeRestSad(@Param("mno") Long mno, @Param("erbNo")  Long erbNo); // 슬퍼요 제거 (mno = 로그인유저)
 
-    void sadCntUpdate(@Param("erbNo") Long erbNo,@Param("flag") boolean flag); // 슬퍼요 수 업데이트
+    void sadCntUpdate(@Param("erbNo") Long erbNo, @Param("flag") boolean flag); // 슬퍼요 수 업데이트
 
     void catInfoDel(Long mno); // 고양이 정보 삭제
 
