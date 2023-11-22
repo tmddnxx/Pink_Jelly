@@ -9,7 +9,7 @@
 </head>
 <style layout:fragment="style">
     i{
-        color: #c4c405;
+        color: #ff5e90;
         font-size: 30pt;
     }
     .bannerWrap{
@@ -17,7 +17,7 @@
         height: 250px;
     }
     .banner{
-        background-image: url("/images/EternalRest/memorial_noBg.png");
+        background-image: url("/images/EternalRest/추모배너.png");
         background-repeat: no-repeat;
         background-color: black;
         width: 100%;
@@ -28,14 +28,163 @@
     .toggleOff {
         display: none;
     }
-    .recomment_write {
-        display: flex;
-        width: 700px;
+    .frmSad{
+        text-align: right;
     }
     .writerInfo p{
         background-color: #444444;
         color: white;
         margin: 0 auto;
+    }
+    .boardContent{
+        color: whitesmoke;
+    }
+    .title{
+        font-size: 35pt;
+        text-align: center;
+    }
+    hr{
+        height: 1px;
+        background-color: #e6e6e6
+    }
+    .name{
+        text-align: right;
+    }
+    .name a{
+        color: whitesmoke;
+    }
+    .innerContent{
+        display: flex;
+    }
+    .imgView{
+        text-align: left;
+    }
+    .contentBody{
+        display: flex;
+        flex-direction: column-reverse;
+    }
+    .contentBody p{
+        font-size: 20pt;
+        margin-left: 20px;
+    }
+    .btnWrap{
+        text-align: right;
+    }
+    .backBtn{
+        background-color: #555555 !important;
+        border-color: #555555;
+    }
+    .backBtn:hover{
+        background-color: #494949;
+    }
+    .commentCnt{
+        color: whitesmoke !important;
+    }
+    .commentCnt p{
+        color: #ff5e90 !important;
+    }
+    .comment-wrap{
+
+    }
+    .comment-form-wrap h3{
+        color: whitesmoke;
+    }
+    .p-2{
+        color: whitesmoke;
+    }
+    #ERComment{
+        border-color: whitesmoke;
+        color: whitesmoke;
+        margin-top: 20px;
+    }
+    #ERComment:focus{
+        border-color: whitesmoke;
+        color: whitesmoke;
+    }
+    .commentBtn{
+        background-color: #ff5e90 !important;
+        border-color: #ff5e90;
+    }
+    .commentBtn:hover{
+        background-color: #f82767 !important;
+    }
+    .comment-view{
+        color: whitesmoke;
+        display: flex;
+        justify-content: space-between;
+    }
+    .comment_content p{
+        margin-top: 10px;
+    }
+    .comment_btn{
+        text-align: center;
+    }
+    .recommentBtn{
+        width: 50px;
+        height: 20px;
+        margin-right: 5px;
+        background-color: #ff5e90 !important;
+        border-color: #ff5e90;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        writing-mode: horizontal-tb;
+        white-space: nowrap;
+    }
+    .recommentBtn:hover{
+        background-color: #f82767 !important;
+    }
+    .removeCommentBtn{
+        width: 50px;
+        height: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        writing-mode: horizontal-tb;
+        white-space: nowrap;
+    }
+    .frmAddReComment{
+        width: 100%;
+        color: whitesmoke;
+    }
+    .recomment_write {
+        display: flex;
+        width: 80%;
+        margin: 0 auto;
+        margin-bottom: 20px;
+        gap: 10px;
+        color: whitesmoke;
+    }
+    .recomment_write textarea{
+        border-color: whitesmoke;
+        color: whitesmoke;
+    }
+    .recomment_write textarea:focus{
+        color: whitesmoke;
+        border-color: whitesmoke;
+    }
+    .recommentAddBtn{
+        width: 50px;
+        height: 30px;
+        background-color: #ff5e90 !important;
+        border-color: #ff5e90;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        writing-mode: horizontal-tb;
+        white-space: nowrap;
+        margin-top: 30px;
+    }
+    .recommentAddBtn:hover{
+        background-color: #f82767 !important;
+    }
+    .commentPaging{
+        margin: 0;
+    }
+    .page-link{
+        cursor: pointer;
+        background-color: #ff5e90 !important;
+        border-color: #ff5e90;
     }
 </style>
 <body>
@@ -50,52 +199,71 @@
 
 <div layout:fragment="content">
     <!--슬퍼요 정보 -->
-    <form name="frmSad" method="post" th:if="${#authentication.principal != 'anonymousUser'}">
+    <form name="frmSad" class="frmSad" method="post" th:if="${#authentication.principal != 'anonymousUser'}">
         <input type="hidden" name="sad" th:value="${eternalRestBoard.flag}">
         <input type="hidden" name="erbNo" th:value="${eternalRestBoard.erbNo}">
         <input type="hidden" name="mno" th:value="${#authentication.principal.mno}">
-        <div class="sadBtn">
+        <span class="sadBtn">
 
-        </div>
+        </span>
     </form>
 
     <!--    게시물 내용-->
-    <div>
-        <div class="post-content-body">
+    <div class="boardContent">
+        <div class="post-content-body title">
             <h1>[[${eternalRestBoard.title}]]</h1>
+            <hr>
         </div>
-        <div class="post-content-body">
+        <div class="post-content-body name">
             <span class="boardNickName">[[${eternalRestBoard.nickName}]]</span>
-            <span class="boardMemberId">([[${eternalRestBoard.memberId}]])</span>
+            <a th:href="@{/profile/friendProfile(memberId=${eternalRestBoard.memberId})}">
+                <span class="boardMemberId">([[${eternalRestBoard.memberId}]])</span>
+            </a>
         </div>
-        <div class="post-content-body">
-           <img th:src="|/upload/profileView/${eternalRestBoard.profileImg}|" width="400" height="400">
-        </div>
-        <div class="post-content-body">
-            <p>[[${eternalRestBoard.content}]]</p>
+        <div class="innerContent">
+            <div class="post-content-body imgView">
+               <img th:src="|/upload/profileView/${eternalRestBoard.profileImg}|" width="400" height="400">
+            </div>
+            <div class="post-content-body contentBody">
+                <p>[[${eternalRestBoard.content}]]</p>
+            </div>
         </div>
     </div>
     <!--게시물 내용 끝-->
-    <a th:href="|@{/eternalRest}|" class="btn btn-primary">목록</a>
-    <th:block th:if="${#authentication.principal != 'anonymousUser' && #authentication.principal.mno == eternalRestBoard.mno}">
-        <a th:href="|@{/eternalRest/remove(erbNo=${eternalRestBoard.erbNo})}|" class="btn btn-danger">삭제</a>
-    </th:block>
+    <div class="btnWrap">
+        <a th:href="|@{/eternalRest}|" class="btn btn-primary backBtn">목록</a>
+        <th:block th:if="${#authentication.principal != 'anonymousUser' && #authentication.principal.mno == eternalRestBoard.mno}">
+            <a th:href="|@{/eternalRest/remove(erbNo=${eternalRestBoard.erbNo})}|" class="btn btn-danger removeBtn">삭제</a>
+        </th:block>
+    </div>
     <div class="pt-5 comment-wrap">
-        <h3 class="mb-5 heading commentCnt">[[${eternalRestBoard.commentCnt}]] Comments</h3>
+        <h2 class="mb-5 heading commentCnt">
+            <span>[[${eternalRestBoard.commentCnt}]]</span>
+            Comments
+        </h2>
         <ul class="comment-list">
             <!-- 댓글 start -->
             <!-- 댓글 리스트 출력 -->
-            <li class="comment comment-view">
+            <li class="comment comment-body">
 
             </li>
             <!-- /댓글 end -->
         </ul>
         <!-- END comment-list -->
+        <!-- 댓글 페이징 -->
+        <div class="row mt-3">
+            <div class="col">
+                <ul class="pagination commentPaging">
+
+                </ul>
+            </div>
+        </div>
         <!-- 댓글 쓰기 창 -->
         <th:block th:if="${#authentication.principal != 'anonymousUser'}">
-            <div class="comment-form-wrap pt-5">
-                <h3 class="mb-5">댓글 쓰기</h3>
-                <form action="/erbComment/register" class="p-5 bg-light" method="post">
+            <div class="comment-form-wrap">
+                <hr>
+                <h3 class="mb-3">댓글 쓰기</h3>
+                <form action="/erbComment/register" class="p-2 bg-gray" method="post">
                     <input type="hidden" name="erbNo" th:value="${eternalRestBoard.erbNo}">
                     <input type="hidden" name="mno" id="mno" th:value="${#authentication.principal.mno}" readonly>
                     <input type="hidden" name="profileImg" class="form-control" th:value="${#authentication.principal.profileImg}+'/'+${#authentication.principal.dateString}">
@@ -103,28 +271,20 @@
                         <img id="profileImg" th:src="|/upload/profileView/${#authentication.principal.dateString}/s_${#authentication.principal.profileImg}|" alt="Image placeholder"  class="img-fluid" readonly>
                         <span class="boardNickName">[[${#authentication.principal.nickName}]]</span>
                         <input type="hidden" class="form-control" id="nickName" th:value="${#authentication.principal.nickName}" readonly>
-                        <span class="boardMemberId">[[${#authentication.principal.memberId}]]</span>
+                        <span class="boardMemberId">([[${#authentication.principal.memberId}]])</span>
                         <input type="hidden" class="form-control" id="memberId" th:value="${#authentication.principal.memberId}" readonly>
                     </span>
                     <div class="form-group">
-                        <label for="ERComment">Comment</label>
-                        <textarea type="text" class="form-control" id="ERComment"></textarea>
+                        <textarea type="text" class="form-control" id="ERComment" rows="3"></textarea>
                     </div>
-                    <div class="form-group">
-                        <button type="button" class="btn btn-primary commentBtn">Post Comment</button>
+                    <div class="form-group btnWrap">
+                        <button type="button" class="btn btn-primary commentBtn">등록</button>
                     </div>
                 </form>
             </div>
         </th:block>
     </div>
-    <!-- 댓글 페이징 -->
-    <div class="row mt-3">
-        <div class="col">
-            <ul class="pagination commentPaging">
 
-            </ul>
-        </div>
-    </div>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="/js/eternalRest/view.js?r"></script>
 </div>
@@ -151,9 +311,9 @@
         console.log("first : " + sadCheck.value);
 
         if (sadCheck.value === "true" || sadCheck.value === true) {
-            sadBtn.innerHTML = '<p class="heart on"><i class="fa-solid fa-face-sad-tear"></i></p>';
+            sadBtn.innerHTML = '<span class="heart on"><i class="fa-solid fa-face-sad-tear"></i></span>';
         } else {
-            sadBtn.innerHTML = '<p class="heart off"><i class="fa-regular fa-face-sad-tear"></i></p>'
+            sadBtn.innerHTML = '<span class="heart off"><i class="fa-regular fa-face-sad-tear"></i></span>'
         }
 
         sadBtn.addEventListener('click', function () {
@@ -185,7 +345,7 @@
                 };
 
                 sadCheck.value = sadCheck.value === "true" ? "false" : "true";
-                sadBtn.innerHTML = sadCheck.value === "true" ? '<p class="heart on"><i class="fa-solid fa-face-sad-tear"></i></p>' : '<p class="heart off"><i class="fa-regular fa-face-sad-tear"></i></p>';
+                sadBtn.innerHTML = sadCheck.value === "true" ? '<span class="heart on"><i class="fa-solid fa-face-sad-tear"></i></span>' : '<span class="heart off"><i class="fa-regular fa-face-sad-tear"></i></span>';
             } else {
                 alert("로그인 후 이용 가능합니다.");
             }
@@ -207,7 +367,7 @@
     printComments(1, 10); // 무조건 호출
     printComments(1, 10, true);
 
-    const commentList = document.querySelector('.comment-view'); // 댓글 목록 DOM
+    const commentList = document.querySelector('.comment-body'); // 댓글 목록 DOM
     const commentPaging = document.querySelector('.commentPaging'); // 페이지 목록 DOM
     const commentCnt = document.querySelector('.commentCnt'); //댓글 수 DOM
     function printCommentCnt(total){
@@ -223,13 +383,20 @@
                         <img id="profileImg" src="/upload/profileView/${dto.dateString}/${dto.profileImg}" alt="Image placeholder">
                     </div>
                     <div class="comment-view">
-                    <span class="boardNickName">${dto.nickName}</span>
-                    <span class="boardMemberId">${dto.memberId}</span>
-                    <div class="meta">${dto.addDate[0]}-${dto.addDate[1]}-${dto.addDate[2]} ${dto.addDate[3]}:${dto.addDate[4]}</div>
-                    <p data-comNo="${dto.comNo}">${dto.comment}</p>`
-                    + replyBtn()
-                    + xBtn(dto) +
-                    `</div>
+                        <div class="comment_content">
+                            <span class="boardNickName">${dto.nickName}</span>
+                            <span class="boardMemberId">${dto.memberId}</span>
+                            <p class="data-comNo" data-comNo="${dto.comNo}">${dto.comment}</p>
+                        </div>
+                        <div class="comment_btn">
+                            <div class="meta">${dto.addDate[0]}-${dto.addDate[1]}-${dto.addDate[2]} ${dto.addDate[3]}:${dto.addDate[4]}</div>
+                            <div class="d-flex">`
+                            + replyBtn()
+                            + xBtn(dto) +
+                        `   </div>
+                        </div>
+                     </div>
+                     <hr>
                     <div class="recommentWrap toggleOff">
                         <form class="form-group frmAddReComment" method="post">
                             <input type="hidden" name="mno" value="${auth.mno}">
@@ -241,25 +408,30 @@
                             <div class="recomment_write">
                                 <div class="writerInfo">
                                     <img id="profileImg" class="img-fluid profileImg" src="/upload/profileView/${auth.dateString}/${auth.profileImg}" alt="Image placeholder" readonly>
-                                    <span class="boardNickName">${auth.nickName}</span>
-                                    <span class="boardMemberId">(${auth.memberId})</span>
+                                    <div class="boardNickName">${auth.nickName}</div>
+                                    <div class="boardMemberId">(${auth.memberId})</div>
                                 </div>
                                 <textarea type="text" name="comment" class="form-control"></textarea>
-                                <button type="button" class="btn-primary recommentAddBtn" onclick="submitCommentRe(this)">등록</button>
+                                <button type="button" class="btn btn-secondary recommentAddBtn" onclick="submitCommentRe(this)">등록</button>
                             </div>
                         </form>
                       </div>
                      </div>`;
                 } else{
-                    str += `<ul class="recommentList">
-                            <div class="writerInfo">
-                            <img id="profileImg" class="img-fluid profileImg" src="/upload/profileView/${dto.dateString}/${dto.profileImg}" alt="Image placeholder"  class="img-fluid" readonly>
-                                <span class="boardNickName">${dto.nickName}</span>
-                                <span class="boardMemberId">(${dto.memberId})</span>
+                    str += `<ul class="comment-view">
+                                <div class="comment_content">
+                                <img id="profileImg" class="img-fluid profileImg" src="/upload/profileView/${dto.dateString}/${dto.profileImg}" alt="Image placeholder"  class="img-fluid" readonly>
+                                    <span class="boardNickName">${dto.nickName}</span>
+                                    <span class="boardMemberId">(${dto.memberId})</span>
+                                    <p data-comNo="${dto.comNo}">${dto.comment}</p>
+                                </div>
+                            <div class="comment_btn">
+                                <div class="meta">${dto.addDate[0]}-${dto.addDate[1]}-${dto.addDate[2]} ${dto.addDate[3]}:${dto.addDate[4]}</div>
+                                <div class="d-flex"> `
+                                    +xBtn(dto)+
+                                `</div>
                             </div>
-                            <div class="meta">${dto.addDate[0]}-${dto.addDate[1]}-${dto.addDate[2]} ${dto.addDate[3]}:${dto.addDate[4]}</div>
-                            <p data-comNo="${dto.comNo}">${dto.comment}</p>
-                        `+xBtn(dto)+`</ul>`
+                        </ul>`
                 }
             }
         }
@@ -268,7 +440,7 @@
         function replyBtn(){
             let btn = '';
             if(auth !== 'anonymousUser' ){
-                btn = `<button class="reply rounded recommentBtn">Reply</button>`;
+                btn = `<button class="btn btn-secondary recommentBtn">답글</button>`;
             }
             return btn;
         }
@@ -276,7 +448,7 @@
         function xBtn(dto){
             let btn = '';
             if(auth.mno === dto.mno){
-                btn = `<button type="button" class="btn btn-danger removeCommentBtn">Remove</button>`;
+                btn = `<button type="button" class="btn btn-danger removeCommentBtn">삭제</button>`;
             }return btn;
         }
 
@@ -284,7 +456,8 @@
         const removeCommentBtns = document.querySelectorAll('.removeCommentBtn');
         removeCommentBtns.forEach(removeCommentBtn => {
             removeCommentBtn.addEventListener('click', function (e) {
-                const comNo = e.target.parentElement.querySelector('p[data-comNo]').getAttribute('data-comNo');
+                const comNo = e.target.closest('.comment-view').querySelector('.comment_content p').getAttribute('data-comNo');
+                console.log("삭제버튼 클릭 :" , comNo)
                 if (!comNo) {
                     return;
                 }
