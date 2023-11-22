@@ -43,7 +43,7 @@ public class ErbCommentController {
     public PageResponseDTO<EternalRestCommentDTO> getList(@PathVariable("erbNo") Long erbNo, PageRequestDTO pageRequestDTO) {
         // @PathVariable 경로에 있는 값 사용
 //        log.info(pageRequestDTO.getSkip());
-        log.info("/list/erbNo---------------"+ erbNo + pageRequestDTO.getSkip()+ pageRequestDTO.getSize());
+        log.info("/list/erbNo---------------"+ erbNo + pageRequestDTO.getSkip()+ pageRequestDTO.getSize() + pageRequestDTO.getPage());
 
         PageResponseDTO<EternalRestCommentDTO> erbComment = erbCommentService.getListERBComment(erbNo, pageRequestDTO);
 
