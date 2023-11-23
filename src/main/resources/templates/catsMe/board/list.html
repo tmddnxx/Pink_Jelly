@@ -7,6 +7,85 @@
   <title>입양소 페이지</title>
   <link rel="stylesheet" th:href="@{/css/mainBoard.css}">
 </head>
+<style layout:fragment="style">
+  *{
+    color: black;
+  }
+  .form-select{
+    height: 54px;
+    text-align: center;
+  }
+  .searchDiv{
+    gap: 10px;
+  }
+  .searchBtn{
+    height: 54px;
+    background-color: #ffcdd2 !important;
+    border-color: #ffcdd2;
+    color: white;
+  }
+  .searchBtn:hover{
+    background-color: #f82767 !important;
+    border-color: #f82767;
+  }
+  .topBtn{
+    background-color: #f48fb1 !important;
+    border-color: #f48fb1;
+    color: white;
+  }
+  .topBtn:hover{
+    background-color: #f82767 !important;
+    border-color: #f82767;
+  }
+  .btnWrap{
+    width: 50%;
+    gap: 10px;
+  }
+  .btnWrap .topBtn{
+    width: 30%;
+  }
+  .writeBtn{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .writeBtn a{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f48fb1 !important;
+    border-color: #f48fb1;
+    color: white;
+  }
+  .writeBtn a:hover{
+    background-color: #f82767 !important;
+    border-color: #f82767;
+  }
+  .closeBtn{
+    background-color: #555555 !important;
+    border-color: #555555;
+    color: white;
+  }
+  .closeBtn:hover{
+    background-color: #494949;
+    border-color: #494949;
+  }
+  .aboard{
+    border-top: 1px solid #bbbbbb;
+    padding-top: 30px;
+    gap: 50px;
+  }
+  .aboard>a {
+    width: 20%;
+  }
+  .aboard>div{
+    width: 65%;
+  }
+  .page-link{
+    background-color: #ff5e90 !important;
+  }
+</style>
 <body>
 <div layout:fragment="content">
   <!--        검색 창-->
@@ -17,8 +96,8 @@
   <form action="/catsMe" method="get" name="frmSearch">
     <div class="col">
       <input type="hidden" name="size" th:value="${pageRequestDTO.size}">
-      <div class="input-group">
-        <div class="input-group-prepend">
+      <div class="input-group searchDiv">
+        <div>
           <select class="form-select" id="type" th:name="type">
             <option value="">---</option>
             <option value="title" >제목</option>
@@ -35,20 +114,24 @@
     </div>
   </form>
 
-  <div class="row mb-4">
+  <div class="row mb-5 mt-3">
     <div class="col-sm-6">
       <h2 class="posts-entry-title">CatsMe 입양소</h2>
     </div>
-    <button type="button" class="btn btn-primary catsMe">입양소</button>
-    <button type="button" class="btn btn-primary catsReview">입양후기</button>
-    <button type="button" class="btn btn-primary writeModalBtn">글쓰기</button>
+    <div class="d-flex justify-content-between">
+      <div class="btnWrap d-flex">
+        <button type="button" class="btn btn-primary topBtn catsMe">입양소</button>
+        <button type="button" class="btn btn-primary topBtn catsReview">입양후기</button>
+      </div>
+      <button type="button" class="btn btn-primary topBtn writeModalBtn">글쓰기</button>
+    </div>
   </div>
   <!--    글쓰기 모달 -->
   <div class="modal writeBtn_wrap" tabindex="-1">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-body">
-          <div class="input-group mb-3 writeBtn" style="display: flex; flex-direction: column; align-items: center;justify-content: center">
+          <div class="input-group writeBtn">
             <div>
               <a href="/catsMe/board/write" class="form-control">입양소 글쓰기</a>
             </div>
@@ -63,34 +146,34 @@
       </div>
     </div>
   </div>
+
   <!--    게시물 목록-->
-  <div class="row posts-entry" id="boardList">
-    <div class="col-lg-8">
-      <div class="blog-entry d-flex blog-entry-search-item" th:each="catsMeBoard:${catsMeBoardList.dtoList}">
+  <div class="row posts-entry mt-5" id="boardList">
+    <div class="col-lg-8 w-100">
+      <div class="blog-entry d-flex blog-entry-search-item w-100 aboard" th:each="catsMeBoard:${catsMeBoardList.dtoList}">
         <a th:href="|@{/catsMe/board/view(cmbNo=${catsMeBoard.cmbNo})}|" class="img-link">
           <img th:src="|/upload/catsMeBoardView/${catsMeBoard.boardDateString[0]}/${catsMeBoard.catsMeImg[0]}|" alt="Image" style="width:250px; height: 250px; "class="img-fluid">
         </a>
-        <div>
-          <span>[[${#temporals.format(catsMeBoard.addDate, 'yyyy-MM-dd HH:mm')}]]</span><br>
-          <figure class="author-figure mb-0 me-3 float-start">
-            <img th:src="|/upload/profileView/${catsMeBoard.dateString}/${catsMeBoard.profileImg}|" alt="Image" style="height: 30px; width: 30px; border-radius: 50%;" class="img-fluid">
-          </figure>
-          <a th:href="|@{/profile/friendProfile(memberId=${catsMeBoard.memberId})}|">
-            <span class="d-inline-block mt-1 boardNickName">[[${catsMeBoard.nickName}]]</span>
-            <span class="boardMemberId">([[${catsMeBoard.memberId}]])</span>
-          </a>
-          <a th:href="|@{/catsMe/board/view(cmbNo=${catsMeBoard.cmbNo})}|">
-            <h2>[[${catsMeBoard.title}]]</h2>
-            <p>[[${catsMeBoard.content}]]</p>
-            <div class="excerpt">
-              <div class="post-meta align-items-center text-left clearfix">
-                <p class="likeHitCnt">
-                  <span><i class="fa-solid fa-eye"></i>[[${catsMeBoard.hit}]]</span>
-                </p>
-              </div>
-              <p><a th:href="|@{/catsMe/board/view(cmbNo=${catsMeBoard.cmbNo})}|" class="read-more">Continue Reading</a></p>
-            </div>
-          </a>
+        <div class="d-flex flex-column justify-content-between">
+          <div class="content">
+            <a th:href="|@{/catsMe/board/view(cmbNo=${catsMeBoard.cmbNo})}|">
+              <h2 class="mb-3">[[${catsMeBoard.title}]]</h2>
+              <p>[[${catsMeBoard.content}]]</p>
+            </a>
+          </div>
+          <div class="memberInfo mb-2 d-flex justify-content-between">
+            <a th:href="|@{/profile/friendProfile(memberId=${catsMeBoard.memberId})}|">
+              <figure class="author-figure mb-0 me-3 float-start">
+                <img th:src="|/upload/profileView/${catsMeBoard.dateString}/${catsMeBoard.profileImg}|" alt="Image" style="height: 30px; width: 30px; border-radius: 50%;" class="img-fluid">
+              </figure>
+              <span class="d-inline-block mt-1 boardNickName">[[${catsMeBoard.nickName}]]</span>
+              <span class="boardMemberId">([[${catsMeBoard.memberId}]])</span>
+            </a>
+            <span class="likeHitCnt">
+              <i class="fa-solid fa-eye"></i>[[${catsMeBoard.hit}]]
+            </span>
+            <span>[[${#temporals.format(catsMeBoard.addDate, 'yyyy-MM-dd HH:mm')}]]</span>
+          </div>
         </div>
       </div>
     </div>
@@ -103,7 +186,7 @@
             </li>
             <th:block th:each="i: ${#numbers.sequence(catsMeBoard.start, catsMeBoard.end)}">
                 <li th:class="${catsMeBoard.page == i} ? 'page-item-active' : 'page-item'" >
-                    <a class="page-link" th:href="|@{/catsMe(page=${i},size=10)}|" th:data-num="${i}" th:style="${catsMeBoard.page == i} ? 'color:red; font-weight:bold;'">[[${i}]]</a>
+                    <a class="page-link" th:href="|@{/catsMe(page=${i},size=10)}|" th:data-num="${i}" th:style="${catsMeBoard.page == i} ? 'color:red; font-weight:bold;' : 'color:white;'">[[${i}]]</a>
                 </li>
             </th:block>
             <li class="page-item" th:if="${catsMeBoard.next}">
@@ -161,32 +244,34 @@
 
       // 게시물 목록
       const plusList = boardList.map(dtoList => `
-        <div class="blog-entry d-flex blog-entry-search-item">
+      <div class="col-lg-8 w-100">
+        <div class="blog-entry d-flex blog-entry-search-item w-100 aboard">
             <a href="/catsMe/board/view?cmbNo=${dtoList.cmbNo}" class="img-link">
                 <img src="/upload/catsMeBoardView/${dtoList.boardDateString[0]}/${dtoList.catsMeImg[0]}" alt="Image" style="width:250px; height: 250px;" class="img-fluid">
             </a>
-            <div>
-                <span>${dtoList.addDate[0]+"-"+dtoList.addDate[1]+"-"+dtoList.addDate[2]+" "+dtoList.addDate[3]+":"+dtoList.addDate[4]}</span></br>
-                <figure class="author-figure mb-0 me-3 float-start">
-                    <img src="/upload/profileView/${dtoList.dateString}/${dtoList.profileImg}" alt="image" style="height: 30px; width: 30px; border-radius: 50%;" class="img-fluid">
-                </figure>
-                <a href="/profile/friendProfile?memberId=${dtoList.memberId}">
-                    <span class="d-inline-block mt-1 boardNickName">${dtoList.nickName}</span>
-                    <span class="boardMemberId">(${dtoList.memberId})</span>
-                </a>
-                <a href="/catsMe/board/view?cmbNo=${dtoList.cmbNo}"></a>
-                    <h2>${dtoList.title}</h2>
-                    <p>${dtoList.content}</p>
-                <div class="excerpt">
-                    <div class="post-meta align-items-center text-left clearfix">
-                        <p class="likeHitCnt">
-                          <span><i class="fa-solid fa-eye"></i>${dtoList.hit}</span>
-                        </p>
-                    </div>
-                    <p><a href="/catsMe/board/view?cmbNo=${dtoList.cmbNo}" class="read-more">Continue Reading</a></p>
+            <div class="d-flex flex-column justify-content-between">
+                <div class="content">
+                  <a href="/catsMe/board/view?cmbNo=${dtoList.cmbNo}">
+                      <h2 class="mb-3">${dtoList.title}</h2>
+                      <p>${dtoList.content}</p>
+                  </a>
+                </div>
+                <div class="memberInfo mb-2 d-flex justify-content-between">
+                    <a href="/profile/friendProfile?memberId=${dtoList.memberId}">
+                      <figure class="author-figure mb-0 me-3 float-start">
+                          <img src="/upload/profileView/${dtoList.dateString}/${dtoList.profileImg}" alt="image" style="height: 30px; width: 30px; border-radius: 50%;" class="img-fluid">
+                      </figure>
+                      <span class="d-inline-block mt-1 boardNickName">${dtoList.nickName}</span>
+                      <span class="boardMemberId">(${dtoList.memberId})</span>
+                    </a>
+                    <span class="likeHitCnt">
+                          <i class="fa-solid fa-eye"></i>${dtoList.hit}
+                    </span>
+                    <span>${dtoList.addDate[0]+"-"+dtoList.addDate[1]+"-"+dtoList.addDate[2]+" "+dtoList.addDate[3]+":"+dtoList.addDate[4]}</span>
                 </div>
             </div>
         </div>
+      </div>
         `).join('');
 
 
@@ -196,7 +281,7 @@
         const pageNumber = pageDTO.start + index;
         const isActive = pageNumber === pageDTO.page;
         const pageItemClass = isActive ? 'page-item-active' : 'page-item';
-        const pageLinkStyle = isActive ? 'color:red; font-weight:bold;' : '';
+        const pageLinkStyle = isActive ? 'color:red; font-weight:bold;' : 'color:white;';
         const page =
                 `<li class="${pageItemClass}">
                     <a class="page-link" href="/catsMeTab/board?page=${pageNumber}&size=10" style="${pageLinkStyle}">${pageNumber}</a>
@@ -233,34 +318,36 @@
       console.log("입양 후기  pageDTO ", pageDTO);
 
       const plusList = boardList.map(dtoList => `
-        <div class="blog-entry d-flex blog-entry-search-item">
-            <a href="/catsMe/review/view?crbNo=${dtoList.crbNo}" class="img-link">
-                <img src="/upload/catsReviewView/${dtoList.boardDateString[0]}/${dtoList.catsMeImg[0]}" alt="Image" style="width:250px; height: 250px;" class="img-fluid">
+        <div class="col-lg-8 w-100">
+  <div class="blog-entry d-flex blog-entry-search-item w-100 aboard">
+      <a href="/catsMe/review/view?crbNo=${dtoList.crbNo}" class="img-link">
+          <img src="/upload/catsReviewView/${dtoList.boardDateString[0]}/${dtoList.catsMeImg[0]}" alt="Image" style="width:250px; height: 250px;" class="img-fluid">
+      </a>
+      <div class="d-flex flex-column justify-content-between">
+          <div class="content">
+              <a href="/catsMe/board/view?crbNo=${dtoList.crbNo}">
+                  <h2>${dtoList.title}</h2>
+                  <p>${dtoList.content}</p>
+              </a>
+          </div>
+          <div class="memberInfo mb-2 d-flex justify-content-between">
+           <a href="/profile/friendProfile?memberId=${dtoList.memberId}">
+              <figure class="author-figure mb-0 me-3 float-start">
+                  <img src="/upload/profileView/${dtoList.dateString}/${dtoList.profileImg}" alt="image" style="height: 30px; width: 30px; border-radius: 50%;" class="img-fluid">
+              </figure>
+              <span class="d-inline-block mt-1 boardNickName">${dtoList.nickName}</span>
+              <span class="boardMemberId">(${dtoList.memberId})</span>
             </a>
-            <div>
-                <span>${dtoList.addDate[0]+"-"+dtoList.addDate[1]+"-"+dtoList.addDate[2]+" "+dtoList.addDate[3]+":"+dtoList.addDate[4]}</span></br>
-                <figure class="author-figure mb-0 me-3 float-start">
-                    <img src="/upload/profileView/${dtoList.dateString}/${dtoList.profileImg}" alt="image" style="height: 30px; width: 30px; border-radius: 50%;" class="img-fluid">
-                </figure>
-                <a href="/profile/friendProfile?memberId=${dtoList.memberId}">
-                    <span class="d-inline-block mt-1 boardNickName">${dtoList.nickName}</span>
-                    <span class="boardMemberId">(${dtoList.memberId})</span>
-                </a>
-                <a href="/catsMe/board/view?crbNo=${dtoList.crbNo}"></a>
-                    <h2>${dtoList.title}</h2>
-                    <p>${dtoList.content}</p>
-                <div class="excerpt">
-                    <div class="post-meta align-items-center text-left clearfix">
-                        <p class="likeHitCnt">
-                          <span><i class="fa-solid fa-heart"></i>${dtoList.like}</span>
-                          <span><i class="fa-solid fa-comment"></i>${dtoList.commentCnt}</span>
-                          <span><i class="fa-solid fa-eye"></i>${dtoList.hit}</span>
-                        </p>
-                    </div>
-                    <p><a href="/catsMe/board/view?crbNo=${dtoList.crbNo}" class="read-more">Continue Reading</a></p>
-                </div>
-            </div>
-        </div>
+            <span class="likeHitCnt">
+                <i class="fa-solid fa-heart"></i>${dtoList.like}
+                <i class="fa-solid fa-comment"></i>${dtoList.commentCnt}
+                <i class="fa-solid fa-eye"></i>${dtoList.hit}
+            </span>
+            <span>${dtoList.addDate[0]+"-"+dtoList.addDate[1]+"-"+dtoList.addDate[2]+" "+dtoList.addDate[3]+":"+dtoList.addDate[4]}</span>
+          </div>
+      </div>
+  </div>
+</div>
         `
 
       ).join('');
@@ -271,7 +358,7 @@
         const pageNumber = pageDTO.start + index;
         const isActive = pageNumber === pageDTO.page;
         const pageItemClass = isActive ? 'page-item-active' : 'page-item';
-        const pageLinkStyle = isActive ? 'color:red; font-weight:bold;' : '';
+        const pageLinkStyle = isActive ? 'color:red; font-weight:bold;' : 'color:white;';
         const page =
         `<li class="${pageItemClass}">
             <a class="page-link" href="/catsMe/review/list?page=${pageNumber}&size=10" style="${pageLinkStyle}">${pageNumber}</a>
