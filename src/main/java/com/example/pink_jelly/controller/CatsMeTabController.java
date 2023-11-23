@@ -41,11 +41,9 @@ public class CatsMeTabController {
     }
 
     @GetMapping("/review")
-    public ResponseEntity<PageResponseDTO<CatsReviewBoardDTO>>catsReviewTab(@RequestParam int page, @RequestParam int size, Long mno, String memberId,@AuthenticationPrincipal MemberDTO memberDTO){
-        log.info("사이즈 " + size);
-        PageRequestDTO pageRequestDTO = new PageRequestDTO();
-        pageRequestDTO.setPage(page);
-        pageRequestDTO.setSize(size);
+    public ResponseEntity<PageResponseDTO<CatsReviewBoardDTO>>catsReviewTab(PageRequestDTO pageRequestDTO, Long mno, String memberId,@AuthenticationPrincipal MemberDTO memberDTO){
+        log.info("/review...");
+        log.info(pageRequestDTO);
         PageResponseDTO<CatsReviewBoardDTO> response;
 
         if(memberDTO != null){

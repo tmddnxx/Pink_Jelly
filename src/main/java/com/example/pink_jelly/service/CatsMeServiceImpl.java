@@ -232,7 +232,7 @@ public class CatsMeServiceImpl implements CatsMeService{
 
 
 
-        int total = catsMeMapper.getCount(pageRequestDTO);
+        int total = catsMeMapper.getReviewBoardCount(pageRequestDTO);
 
         PageResponseDTO<CatsReviewBoardDTO> pageResponseDTO = PageResponseDTO.<CatsReviewBoardDTO>withAll()
                 .dtoList(catsReviewBoardDTOList)
