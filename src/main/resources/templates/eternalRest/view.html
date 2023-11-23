@@ -233,7 +233,7 @@
     <div class="btnWrap">
         <a th:href="|@{/eternalRest}|" class="btn btn-primary backBtn">목록</a>
         <th:block th:if="${#authentication.principal != 'anonymousUser' && #authentication.principal.mno == eternalRestBoard.mno}">
-            <a th:href="|@{/eternalRest/remove(erbNo=${eternalRestBoard.erbNo})}|" class="btn btn-danger removeBtn">삭제</a>
+            <button type="button" class="btn btn-danger removeBtn">삭제</button>
         </th:block>
     </div>
     <div class="pt-5 comment-wrap">
@@ -301,6 +301,12 @@
     const auth = [[${#authentication.principal}]];
 
     if (auth !== 'anonymousUser') {
+        const deleteBtn = document.querySelector('.removeBtn');
+        deleteBtn.addEventListener('click', function() {
+            if(confirm("게시글을 삭제하시겠습니까?")){
+                window.location.href = "/eternalRest/remove?erbNo=" + erbNo;
+            }
+        });
 
         <!-- 슬퍼요 버튼 -->
         const xhr = new XMLHttpRequest(); // ajax 작업을 위한 객체 생성
