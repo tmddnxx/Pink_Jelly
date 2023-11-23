@@ -1,10 +1,30 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{layout/adminBasic.html}">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>관리자 페이지</title>
 </head>
+<style layout:fragment="style">
+    .wrap{
+        display: flex;
+    }
+    .boardList{
+        width: 33%;
+    }
+</style>
 <body>
+<div class="wrap">
+    <div id="mainBoard" class="boardList">
 
+    </div>
+    <div id="catsMeBoard" class="boardList">
+
+    </div>
+    <div id="reviewBoard" class="boardList">
+
+    </div>
+</div>
 </body>
 </html>
