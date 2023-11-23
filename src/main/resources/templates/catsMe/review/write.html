@@ -132,6 +132,12 @@
             alert("이미지를 선택하세요");
             return;
         }
+        const title = formObj.title.value;
+        if(title === '') {
+            alert("제목을 입력해주세요");
+            return;
+        }
+
         let str = '';
         for(let i = 0; i < uploadFiles.length; i ++) {
             const uploadFile = uploadFiles[i];

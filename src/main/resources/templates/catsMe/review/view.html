@@ -247,21 +247,23 @@
                 alert("로그인 후 이용 가능합니다.");
             }
         });
-        const modifyBtn = document.querySelector('.modifyBtn');
-        const deleteBtn = document.querySelector('.deleteBtn');
+        if(auth.mno === [[${catsReviewBoard.mno}]]){
+            const modifyBtn = document.querySelector('.modifyBtn');
+            const deleteBtn = document.querySelector('.deleteBtn');
 
-        modifyBtn.addEventListener('click', function() {
-            if(!confirm("게시글을 수정하시겠습니까?")){
-                return;
-            }
-            window.location.href = "/catsMe/review/modify?crbNo=" + crbNo;
-        });
-        deleteBtn.addEventListener('click', function() {
-            if(!confirm("게시글을 삭제하시겠습니까?")) {
-                return;
-            }
-            window.location.href = "/catsMe/review/remove?crbNo=" + crbNo;
-        });
+            modifyBtn.addEventListener('click', function() {
+                if(!confirm("게시글을 수정하시겠습니까?")){
+                    return;
+                }
+                window.location.href = "/catsMe/review/modify?crbNo=" + crbNo;
+            });
+            deleteBtn.addEventListener('click', function() {
+                if(!confirm("게시글을 삭제하시겠습니까?")) {
+                    return;
+                }
+                window.location.href = "/catsMe/review/remove?crbNo=" + crbNo;
+            });
+        }
     }
 //    좋아요 끝 -----------
     //댓글
@@ -361,6 +363,9 @@
         const removeCommentBtns = document.querySelectorAll('.removeCommentBtn');
         removeCommentBtns.forEach(removeCommentBtn => {
             removeCommentBtn.addEventListener('click', function (e) {
+                if(!(confirm("댓글을 삭제하시겠습니까?"))){
+                    return;
+                }
                 const comNo = e.target.parentElement.querySelector('p[data-comNo]').getAttribute('data-comNo');
                 if (!comNo) {
                     return;

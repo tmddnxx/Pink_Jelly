@@ -124,7 +124,7 @@
     }
     //게시물 등록 (이미지)
     const formObj = document.querySelector("form[name='catsMeBoardAdd']");
-    const target = document.querySelector('.uploadHidden'); //ADD Files 버튼 영역
+    const target = document.querySelector('.uploadHidden');
 
     document.querySelector('.btn-submit').addEventListener('click',function(e) {
         e.preventDefault();
@@ -133,10 +133,17 @@
         //1.섬네일 영역에서 img 태그의 data-src 속성을 들고 옴.
         const uploadFiles = uploadResult.querySelectorAll('img');
 
+        //이미지가 없으면
         if(uploadFiles.length === 0) {
             alert("이미지를 선택하세요");
             return;
         }
+        const title = formObj.title.value;
+        if(title === '') {
+            alert("제목을 입력해주세요");
+            return;
+        }
+
         let str = '';
         for(let i = 0; i < uploadFiles.length; i ++) {
             const uploadFile = uploadFiles[i];

@@ -374,6 +374,9 @@ function printList(dtoList) { // 댓글 목록 출력
     const removeCommentBtns = document.querySelectorAll('.removeCommentBtn');
     removeCommentBtns.forEach(removeCommentBtn => {
         removeCommentBtn.addEventListener('click', function (e) {
+            if(!(confirm("댓글을 삭제하시겠습니까?"))){
+                return;
+            }
             const comNo = e.target.parentElement.querySelector('p[data-comNo]').getAttribute('data-comNo');
             if (!comNo) {
                 return;
@@ -395,7 +398,7 @@ function printList(dtoList) { // 댓글 목록 출력
     for (let i=0; i< recommentBtns.length; i++){
         recommentBtns[i].addEventListener('click', function (){
             console.log("대댓글 창 열기");
-            recommentWraps[i].classList.toggle('toggleOff')
+            recommentWraps[i].classList.toggle('toggleOff');
         })
     }
 

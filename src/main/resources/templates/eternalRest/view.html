@@ -456,6 +456,9 @@
         const removeCommentBtns = document.querySelectorAll('.removeCommentBtn');
         removeCommentBtns.forEach(removeCommentBtn => {
             removeCommentBtn.addEventListener('click', function (e) {
+                if(!(confirm("댓글을 삭제하시겠습니까?"))){
+                    return;
+                }
                 const comNo = e.target.closest('.comment-view').querySelector('.comment_content p').getAttribute('data-comNo');
                 console.log("삭제버튼 클릭 :" , comNo)
                 if (!comNo) {
