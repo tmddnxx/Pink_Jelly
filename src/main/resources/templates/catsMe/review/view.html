@@ -8,6 +8,9 @@
     <meta charset="UTF-8">
     <title>CatsMe</title>
     <link rel="stylesheet" th:href="@{/css/boardView.css}">
+    <link rel="stylesheet" th:href="@{/css/slick/slick.css}">
+    <link rel="stylesheet" th:href="@{/css/slick/slick-theme.css}">
+    <link rel="stylesheet" th:href="@{/css/slick/slider.css}">
 </head>
 <style layout:fragment="style">
     *{
@@ -16,17 +19,6 @@
     .fa-heart{
         color: red;
         font-size: 30pt;
-    }
-    .Board-Img{
-        width: 100%;
-        overflow: hidden;
-    }
-    .imgBox{
-        width: 100%;
-        height: 500px;
-        display: flex;
-        align-items: center;
-        gap: 30px;
     }
     .boardNickName{
         font-size: 12pt;
@@ -174,14 +166,14 @@
     </div>
 
     <div class="post-content-body">
-        <div class="Board-Img d-flex">
-            <i class="fa-solid fa-circle-chevron-right fa-rotate-180"></i>
-            <div class="imgBox" th:each="i : ${#numbers.sequence(0, catsReviewBoard.boardDateString.size() - 1)}">
-                <img class="round"
+        <div class="row my-4 slick">
+            <div class="col-md-12 mb-4" th:each="i : ${#numbers.sequence(0, catsReviewBoard.boardDateString.size() - 1)}">
+                <img class="img-fluid round" style="width: 30%; margin: 0 auto;"
                      th:src="@{|/upload/catsReviewView/${catsReviewBoard.boardDateString[i]}/${catsReviewBoard.catsMeImg[i]}|}" alt="Image placeholder"  height="500">
             </div>
-            <i class="fa-solid fa-circle-chevron-right"></i>
         </div>
+        <button class="prev" id="prev-btn">이전</button>
+        <button class="next" id="next-btn">다음</button>
     </div>
 
     <div class="row blog-entries element-animate mt-lg-5">
@@ -246,6 +238,9 @@
         </div>
         </th:block>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    <script src="/js/slick/slick.min.js"></script>
+    <script src="/js/slick/slider.js"></script>
     <script src="/js/catsReview/view.js?123"></script>
 </div>
 <script layout:fragment="script" th:inline="javascript">

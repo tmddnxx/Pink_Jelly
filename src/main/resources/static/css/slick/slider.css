@@ -1,0 +1,47 @@
+
+.post-content-body { /* 슬라이더 버튼 기준 */
+    position: relative;
+}
+
+#prev-btn, #next-btn {
+    visibility: hidden;
+    position: absolute;
+    z-index: 5;
+    cursor: pointer;
+}
+
+#prev-btn {
+    top: calc(50% - 22px);
+    left: 0;
+}
+#next-btn {
+    top: calc(50% - 22px);
+    right: 0;
+}
+
+.prev::before, .next::before, .prevBlue::before, .nextBlue::before {
+    visibility: visible;
+    content: "";
+    display: block;
+    background: url('../../images/slick/sprite__homemain.svg') no-repeat;
+}
+
+.prev::before {
+    width: 42px; height: 42px;
+    background-position: 0 0;
+}
+.next::before {
+    width: 42px; height: 42px;
+    background-position: -42px 0;
+}
+
+.prevBlue::before {
+    background-position: -454px 0;
+    width: 42px;
+    height: 42px;
+}
+.nextBlue::before {
+    background-position: -496px 0;
+    width: 42px;
+    height: 42px;
+}
