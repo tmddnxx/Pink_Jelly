@@ -7,6 +7,9 @@
     <title>영원한 휴식처</title>
 </head>
 <style layout:fragment="style">
+    .posts-entry-title{
+        color: whitesmoke;
+    }
     .notice{
         border-bottom: 2px dotted black;
         color: whitesmoke;
@@ -14,6 +17,15 @@
     .notice span{
         font-size: 30pt;
         color: whitesmoke;
+    }
+    .autoWriteBtn{
+        width: 300px;
+        height: 50px;
+        color: whitesmoke;
+        background-color: #ff5e90 !important;
+    }
+    .autoWriteBtn:hover{
+        background-color: #f82767 !important;
     }
     .boardList a, p{
         color: whitesmoke;
@@ -49,7 +61,7 @@
 <!--선택버튼-->
     <div class="row mb-4">
         <div class="col-sm-6">
-            <h2 class="posts-entry-title">Pink Jelly</h2>
+            <h1 class="posts-entry-title">Pink Jelly</h1>
         </div>
 <!--        로그인하고 고양이 있는 사람만 버튼 보임-->
         <th:block th:if="${#authentication.principal != 'anonymousUser' && #authentication.principal.hasCat == true}">
@@ -59,7 +71,7 @@
                 <input type="hidden" name="dateString" th:value="${#authentication.principal.dateString}">
                 <input type="hidden" name="profileImg" th:value="${#authentication.principal.profileImg}">
                 <input type="hidden" name="mno" th:value="${#authentication.principal.mno}">
-                <button type="button" class="autoWriteBtn">Crossed Rainbow Bridge..</button>
+                <button type="button" class="btn btn-secondary autoWriteBtn">Crossed Rainbow Bridge..</button>
             </form>
         </th:block>
     </div>
