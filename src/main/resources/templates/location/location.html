@@ -23,24 +23,24 @@
         #placesList .item h5, #placesList .item .info {text-overflow: ellipsis;overflow: hidden;white-space: nowrap;}
         #placesList .item .info{padding:10px 0 10px 55px;}
         #placesList .info .gray {color:#8a8a8a;}
-        #placesList .info .jibun {padding-left:26px;background:url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/places_jibun.png) no-repeat;}
+        #placesList .info .jibun {padding-left:26px;}
         #placesList .info .tel {color:#009900;}
-        #placesList .item .markerbg {float:left;position:absolute;width:36px; height:37px;margin:10px 0 0 10px;background:url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_number_blue.png) no-repeat;}
-        #placesList .item .marker_1 {background-position: 0 -10px;}
-        #placesList .item .marker_2 {background-position: 0 -56px;}
-        #placesList .item .marker_3 {background-position: 0 -102px}
-        #placesList .item .marker_4 {background-position: 0 -148px;}
-        #placesList .item .marker_5 {background-position: 0 -194px;}
-        #placesList .item .marker_6 {background-position: 0 -240px;}
-        #placesList .item .marker_7 {background-position: 0 -286px;}
-        #placesList .item .marker_8 {background-position: 0 -332px;}
-        #placesList .item .marker_9 {background-position: 0 -378px;}
-        #placesList .item .marker_10 {background-position: 0 -423px;}
-        #placesList .item .marker_11 {background-position: 0 -470px;}
-        #placesList .item .marker_12 {background-position: 0 -516px;}
-        #placesList .item .marker_13 {background-position: 0 -562px;}
-        #placesList .item .marker_14 {background-position: 0 -608px;}
-        #placesList .item .marker_15 {background-position: 0 -654px;}
+        #placesList .item .markerbg {float:left;position:absolute;width:36px; height:37px;background:url('/images/basic/defalut마커.png') no-repeat;}
+        #placesList .item .marker_1 {background-position: 0 0;}
+        #placesList .item .marker_2 {background-position: 0 0;}
+        #placesList .item .marker_3 {background-position: 0 0;}
+        #placesList .item .marker_4 {background-position: 0 0;}
+        #placesList .item .marker_5 {background-position: 0 0;}
+        #placesList .item .marker_6 {background-position: 0 0;}
+        #placesList .item .marker_7 {background-position: 0 0;}
+        #placesList .item .marker_8 {background-position: 0 0;}
+        #placesList .item .marker_9 {background-position: 0 0;}
+        #placesList .item .marker_10 {background-position: 0 0;}
+        #placesList .item .marker_11 {background-position: 0 0;}
+        #placesList .item .marker_12 {background-position: 0 0;}
+        #placesList .item .marker_13 {background-position: 0 0;}
+        #placesList .item .marker_14 {background-position: 0 0;}
+        #placesList .item .marker_15 {background-position: 0 0;}
         #pagination {margin:10px auto;text-align: center;}
         #pagination a {display:inline-block;margin-right:10px;}
         #pagination .on {font-weight: bold; cursor: default;color:#777;}
@@ -282,7 +282,7 @@
 
                 if (places.road_address_name) {
                     itemStr += '    <span>' + places.road_address_name + '</span>' +
-                        '   <span class="jibun gray">' +  places.address_name  + '</span>';
+                        '   <span class="jibun gray">↳' +  places.address_name  + '</span>';
                 } else {
                     itemStr += '    <span>' +  places.address_name  + '</span>';
                 }
@@ -298,12 +298,10 @@
 
             // 마커를 생성하고 지도 위에 마커를 표시하는 함수입니다
             function addMarker(position, idx, title) {
-                var imageSrc = './images/basic/default.png', // 마커 이미지 url, 스프라이트 이미지를 씁니다
+                var imageSrc = '/images/basic/defalut마커.png', // 마커 이미지 url, 스프라이트 이미지를 씁니다
                     imageSize = new kakao.maps.Size(36, 37),  // 마커 이미지의 크기
                     imgOptions =  {
-                        spriteSize : new kakao.maps.Size(36, 691), // 스프라이트 이미지의 크기
-                        spriteOrigin : new kakao.maps.Point(0, (idx*46)+10), // 스프라이트 이미지 중 사용할 영역의 좌상단 좌표
-                        offset: new kakao.maps.Point(13, 37) // 마커 좌표에 일치시킬 이미지 내에서의 좌표
+
                     },
                     markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imgOptions),
                     marker = new kakao.maps.Marker({
