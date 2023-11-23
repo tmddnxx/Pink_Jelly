@@ -47,158 +47,177 @@
         .btnWrap{
             text-align: center;
         }
+        span {
+            font-size: 13px;
+        }
+        .modal-content {
+            height: 700px;
+            overflow-y: scroll;
+        }
     </style>
 </head>
 <body>
     <div layout:fragment="content">
-        <div class="imgBox">
-            <img src="/images/basic/PinkJelly_로고.png" width="450px" height="130px">
-        </div>
-        <div class="info">
-            <div class="col-lg-8 info-inner" data-aos="fade-up" data-aos-delay="200">
-                <form id="frmSignUp" th:action="@{/member/kakaoSignup}" th:object="${memberDTO}" method="post">
-                    <input type="hidden" name="social" value="true">
-                    <div class="row">
-                        <div class="col-12">
-                            <div th:if="${#authentication.principal != 'anonymousUser'}" th:with="member=${#authentication.principal}">
-                                <h6>아이디</h6>
-                                <p>[[${member.memberId}]]</p>
-                                <input id="memberId" type="hidden" class="form-control" name="memberId" th:value="${member.memberId}">
-                            </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <div class="imgBox">
+                            <img src="/images/basic/PinkJelly_로고.png" width="450px" height="130px">
                         </div>
+                        <div class="info">
+                            <div class="col-lg-8 info-inner" data-aos="fade-up" data-aos-delay="200">
+                                <form id="frmSignUp" th:action="@{/member/kakaoSignup}" th:object="${memberDTO}" method="post">
+                                    <input type="hidden" name="social" value="true">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div th:if="${#authentication.principal != 'anonymousUser'}" th:with="member=${#authentication.principal}">
+                                                <h6>아이디</h6>
+                                                <p>[[${member.memberId}]]</p>
+                                                <input id="memberId" type="hidden" class="form-control" name="memberId" th:value="${member.memberId}">
+                                            </div>
+                                        </div>
 
-                        <div class="col-6 mb-3">
-                            <input id="passwd" type="password" class="form-control" name="passwd"
-                                   th:classappend="${#fields.hasErrors('passwd')} ? 'is_invalid'" th:field="*{passwd}" placeholder="비밀번호" required>
-                            <span class="checkPW-message"
-                                  th:classappend="${#fields.hasErrors('passwd')} ? 'fail'">8글자 이상, 영문, 숫자, 특수문자(@$!%*#?&)를 포함하여야 합니다</span>
-                        </div>
-                        <div class="col-6 mb-3">
-                            <input id="password-retype" type="password" class="form-control" placeholder="비밀번호 확인" required>
-                            <span class="mismatch-message hide fail"></span>
-                        </div>
+                                        <div class="col-6 mb-3">
+                                            <input id="passwd" type="password" class="form-control" name="passwd"
+                                                   th:classappend="${#fields.hasErrors('passwd')} ? 'is_invalid'" th:field="*{passwd}" placeholder="비밀번호" required>
+                                            <span class="checkPW-message"
+                                                  th:classappend="${#fields.hasErrors('passwd')} ? 'fail'">8글자 이상, 영문, 숫자, 특수문자(@$!%*#?&)</span>
+                                        </div>
+                                        <div class="col-6 mb-3">
+                                            <input id="password-retype" type="password" class="form-control" placeholder="비밀번호 확인" required>
+                                            <span class="mismatch-message hide fail"></span>
+                                        </div>
 
-                        <div class="col-6 mb-3">
-                            <input id="memberName" type="text" name="memberName" class="form-control" placeholder="이름"
-                                   th:classappend="${#fields.hasErrors('memberName')} ? 'is_invalid'" th:field="*{memberName}" required/>
-                            <span class="fail" th:if="${#fields.hasErrors('memberName')}" th:errors="*{memberName}"></span>
-                        </div>
+                                        <div class="col-6 mb-3">
+                                            <input id="memberName" type="text" name="memberName" class="form-control" placeholder="이름"
+                                                   th:classappend="${#fields.hasErrors('memberName')} ? 'is_invalid'" th:field="*{memberName}" required/>
+                                            <span class="fail" th:if="${#fields.hasErrors('memberName')}" th:errors="*{memberName}"></span>
+                                        </div>
 
-                        <div class="col-6 mb-3">
-                            <input id="nickName" type="text" name="nickName" class="form-control" minlength="2" maxlength="15" placeholder="닉네임"
-                                   th:classappend="${#fields.hasErrors('nickName')} ? 'is_invalid'" th:field="*{nickName}" required/>
-                            <span class="nickNameCheck-message"
-                                   th:classappend="${#fields.hasErrors('nickName')} ? 'fail'">2 ~ 15글자, 숫자, 영어, 한글만 입력할 수 있습니다</span>
-                        </div>
+                                        <div class="col-6 mb-3">
+                                            <input id="nickName" type="text" name="nickName" class="form-control" minlength="2" maxlength="15" placeholder="닉네임"
+                                                   th:classappend="${#fields.hasErrors('nickName')} ? 'is_invalid'" th:field="*{nickName}" required/>
+                                            <span class="nickNameCheck-message"
+                                                  th:classappend="${#fields.hasErrors('nickName')} ? 'fail'">2 ~ 15글자, 숫자, 영어, 한글</span>
+                                        </div>
 
-                        <!-- 전화번호 -->
-                        <div class="col-4 mb-3">
-                            <select id="phoneSelect" class="form-select input-phone" style="height: 54px;">
-                                <option selected>010</option>
-                                <option>011</option>
-                                <option>016</option>
-                                <option>017</option>
-                                <option>019</option>
-                            </select>
-                        </div>
-                        <div class="col-4 mb-3">
-                            <input type="text" class="form-control input-phone" placeholder="1234" maxlength="4"
-                                   onKeyup="this.value=this.value.replace(/[^0-9]/g,'');" required/>
-                        </div>
-                        <div class="col-4 mb-3">
-                            <input type="text" class="form-control input-phone" placeholder="5678" maxlength="4"
-                                   onKeyup="this.value=this.value.replace(/[^0-9]/g,'');" required/>
-                            <input type="hidden" name="phone" th:field="*{phone}">
-                        </div>
+                                        <!-- 전화번호 -->
+                                        <div class="col-4 mb-3">
+                                            <select id="phoneSelect" class="form-select input-phone" style="height: 54px;">
+                                                <option selected>010</option>
+                                                <option>011</option>
+                                                <option>016</option>
+                                                <option>017</option>
+                                                <option>019</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-4 mb-3">
+                                            <input type="text" class="form-control input-phone" placeholder="1234" maxlength="4"
+                                                   onKeyup="this.value=this.value.replace(/[^0-9]/g,'');" required/>
+                                        </div>
+                                        <div class="col-4 mb-3">
+                                            <input type="text" class="form-control input-phone" placeholder="5678" maxlength="4"
+                                                   onKeyup="this.value=this.value.replace(/[^0-9]/g,'');" required/>
+                                            <input type="hidden" name="phone" th:field="*{phone}">
+                                        </div>
 
-                        <div class="col-12">
-                            <div th:if="${#authentication.principal != 'anonymousUser'}" th:with="member=${#authentication.principal}">
-                                <h6>이메일</h6>
-                                <p>[[${member.email}]]</p>
-                                <input id="email" type="hidden" name="email" th:value="${#authentication.principal.email}" required>
-                            </div>
-                        </div>
+                                        <div class="col-12">
+                                            <div th:if="${#authentication.principal != 'anonymousUser'}" th:with="member=${#authentication.principal}">
+                                                <h6>이메일</h6>
+                                                <p>[[${member.email}]]</p>
+                                                <input id="email" type="hidden" name="email" th:value="${#authentication.principal.email}" required>
+                                            </div>
+                                        </div>
 
 
-                        <div class="col-12 mb-3">
-                            <div class="row confirm hide">
-                                <div class="col-6 mb-3">
-                                    <input type="text" name="confirmKey" class="form-control" placeholder="인증번호">
-                                </div>
-                                <div class="col-6 mb-3">
-                                    <button id="confirmKeyBtn" type="button" class="btn btn-primary">확인</button>
-                                </div>
-                            </div>
-                        </div>
+                                        <div class="col-12 mb-3">
+                                            <div class="row confirm hide">
+                                                <div class="col-6 mb-3">
+                                                    <input type="text" name="confirmKey" class="form-control" placeholder="인증번호">
+                                                </div>
+                                                <div class="col-6 mb-3">
+                                                    <button id="confirmKeyBtn" type="button" class="btn btn-primary">확인</button>
+                                                </div>
+                                            </div>
+                                        </div>
 
-                        <div class="col-12 mb-3">
-                            <div class="form-check form-switch mb-3">
-                                <input class="form-check-input" type="checkbox" name="hasCat" value="false" role="switch" id="hasCat">
-                                <label class="form-check-label" for="hasCat">고양이를 키우고 계신가요?</label>
-                            </div>
+                                        <div class="col-12 mb-3">
+                                            <div class="form-check form-switch mb-3">
+                                                <input class="form-check-input" type="checkbox" name="hasCat" value="false" role="switch" id="hasCat">
+                                                <label class="form-check-label" for="hasCat">고양이를 키우고 계신가요?</label>
+                                            </div>
 
-                            <div class="row catInfo hide">
-                                <div class="col-6 mb-3">
-                                    <input id="catAge" type="text" class="form-control" placeholder="고양이 나이">
-                                    <input type="hidden" name="catAge">
-                                </div>
-                                <div class="col-6 mb-3">
-                                    <div class="form-check-inline">
-                                        <input class="form-check-input" type="radio" name="ageRdo" id="month" value="개월">
-                                        <label class="form-check-label" for="month">개월</label>
-                                    </div>
-                                    <div class="form-check-inline">
-                                        <input class="form-check-input" type="radio" name="ageRdo" id="year" value="년">
-                                        <label class="form-check-label" for="year">년</label>
-                                    </div>
-                                </div>
+                                            <div class="row catInfo hide">
+                                                <div class="col-6 mb-3">
+                                                    <input id="catAge" type="text" class="form-control" placeholder="고양이 나이">
+                                                    <input type="hidden" name="catAge">
+                                                </div>
+                                                <div class="col-6 mb-3">
+                                                    <div class="form-check-inline">
+                                                        <input class="form-check-input" type="radio" name="ageRdo" id="month" value="개월">
+                                                        <label class="form-check-label" for="month">개월</label>
+                                                    </div>
+                                                    <div class="form-check-inline">
+                                                        <input class="form-check-input" type="radio" name="ageRdo" id="year" value="년">
+                                                        <label class="form-check-label" for="year">년</label>
+                                                    </div>
+                                                </div>
 
-                                <div class="col-6 mb-3">
-                                    <input type="text" name="variety" class="form-control" placeholder="품종">
-                                </div>
+                                                <div class="col-6 mb-3">
+                                                    <input type="text" name="variety" class="form-control" placeholder="품종">
+                                                </div>
 
-                                <div class="col-6 mb-3">
-                                    <select id="varietySelect" class="form-select" style="height: 54px;">
-                                        <option value="-1" selected>직접입력</option>
-                                        <option> 코리안 숏 헤어 </option>
-                                        <option> 노르웨이 숲 </option>
-                                        <option> 페르시안 </option>
-                                        <option> 샴 </option>
-                                    </select>
-                                </div>
+                                                <div class="col-6 mb-3">
+                                                    <select id="varietySelect" class="form-select" style="height: 54px;">
+                                                        <option value="-1" selected>직접입력</option>
+                                                        <option> 코리안 숏 헤어 </option>
+                                                        <option> 노르웨이 숲 </option>
+                                                        <option> 페르시안 </option>
+                                                        <option> 샴 </option>
+                                                    </select>
+                                                </div>
 
-                                <div class="col-6 mb-3">
-                                    <label for="profileImg" class="form-label">프로필 이미지</label>
-                                    <input class="form-control" type="file" name="files" id="profileImg" style="height: 35px;">
-                                    <div class="uploadResult">
-                                        <div>
-                                            <img src="/upload/profileView/2002-08-08/default.png" alt="기본프로필" data-src="default.png/2002-08-08" style="width: 100px;">
+                                                <div class="col-6 mb-3">
+                                                    <label for="profileImg" class="form-label">프로필 이미지</label>
+                                                    <input class="form-control" type="file" name="files" id="profileImg" style="height: 35px;">
+                                                    <div class="uploadResult">
+                                                        <div>
+                                                            <img src="/upload/profileView/2002-08-08/default.png" alt="기본프로필" data-src="default.png/2002-08-08" style="width: 100px;">
+                                                        </div>
+                                                    </div>
+                                                    <div class="uploadHidden"></div>
+                                                </div>
+                                                <div class="col-6 mb-3">
+                                                    <div>성별</div>
+                                                    <div class="form-check-inline">
+                                                        <input class="form-check-input" type="radio" name="catSex" id="male" value="남아">
+                                                        <label class="form-check-label" for="male">남아</label>
+                                                    </div>
+                                                    <div class="form-check-inline">
+                                                        <input class="form-check-input" type="radio" name="catSex" id="female" value="여아">
+                                                        <label class="form-check-label" for="female">여아</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-12 btnWrap">
+                                            <button type="button" class="btn btn-primary submitBtn">회원가입</button>
+                                            <button type="button" class="btn btn-secondary exitBtn" style="background: #444;" data-bs-dismiss="modal">취소</button>
                                         </div>
                                     </div>
-                                    <div class="uploadHidden"></div>
-                                </div>
-                                <div class="col-6 mb-3">
-                                    <div>성별</div>
-                                    <div class="form-check-inline">
-                                        <input class="form-check-input" type="radio" name="catSex" id="male" value="남아">
-                                        <label class="form-check-label" for="male">남아</label>
-                                    </div>
-                                    <div class="form-check-inline">
-                                        <input class="form-check-input" type="radio" name="catSex" id="female" value="여아">
-                                        <label class="form-check-label" for="female">여아</label>
-                                    </div>
-                                </div>
+                                </form>
                             </div>
                         </div>
-
-                        <div class="col-12 btnWrap">
-                            <button type="button" class="btn btn-primary submitBtn">회원가입</button>
-                        </div>
                     </div>
-                </form>
+                </div>
             </div>
         </div>
 
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
         <script src="/js/signup/validation.js"></script>
         <script src="/js/signup/upload.js"></script>
@@ -216,6 +235,17 @@
             }
             alert(errorMsg);
         }
+
+        // 회원가입 모달
+        const kakaoSignup = document.getElementById('staticBackdrop');
+        const modal = new bootstrap.Modal(kakaoSignup);
+        // 첫 로딩시 모달 바로 보여줌
+        modal.show();
+
+        document.querySelector('.exitBtn').addEventListener('click', function () {
+            // 취소버튼 클릭시 로그아웃
+            self.location = '/logout';
+        });
 
         const inputPasswd = document.getElementById('passwd');
         const inputPasswdRetype = document.getElementById('password-retype');
