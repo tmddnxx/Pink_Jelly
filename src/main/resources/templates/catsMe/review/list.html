@@ -101,17 +101,17 @@
   <div class="float-end page_wrap">
     <ul class="pagination flex-wrap" th:with="catsMeReviewBoard=${catsMeReviewBoardList}">
       <li class="page-item" th:if="${catsMeReviewBoard.prev}">
-        <a class="page-link" th:href="|@{/catsMe/review/list(page=${catsMeReviewBoard.page - 1},size=9)}|" th:data-num="${catsMeReviewBoard.start - 1}">Previous</a>
+        <a class="page-link" th:href="|@{/catsMe/review/list(page=${catsMeReviewBoard.start - 1},size=10)}|" th:data-num="${catsMeReviewBoard.start - 1}">Previous</a>
       </li>
       <th:block th:each="i: ${#numbers.sequence(catsMeReviewBoard.start, catsMeReviewBoard.end)}">
         <th:block th:if="${i != 0}">
           <li th:class="${catsMeReviewBoard.page == i} ? 'page-item-active' : 'page-item'" >
-            <a class="page-link" th:href="|@{/catsMe/review/list(page=${i},size=9)}|" th:data-num="${i}" th:style="${catsMeReviewBoard.page == i} ? 'color:red; font-weight:bold;'">[[${i}]]</a>
+            <a class="page-link" th:href="|@{/catsMe/review/list(page=${i},size=10)}|" th:data-num="${i}" th:style="${catsMeReviewBoard.page == i} ? 'color:red; font-weight:bold;'">[[${i}]]</a>
           </li>
         </th:block>
       </th:block>
       <li class="page-item" th:if="${catsMeReviewBoard.next}">
-        <a class="page-link" th:href="|@{/catsMe/review/list(page=${catsMeReviewBoard.page + 1},size=9)}|" th:data-num="${catsMeReviewBoard.end + 1}">Next</a>
+        <a class="page-link" th:href="|@{/catsMe/review/list(page=${catsMeReviewBoard.end + 1},size=10)}|" th:data-num="${catsMeReviewBoard.end + 1}">Next</a>
       </li>
     </ul>
   </div>
@@ -150,7 +150,7 @@
   const reviewBtn = document.querySelector('.catsReview'); // 입양후기 버튼
 
   const page = 1; // 예시로 1로 설정, 필요한 값으로 변경
-  const size = 9; // 예시로 10으로 설정, 필요한 값으로 변경
+  const size = 10; // 예시로 10으로 설정, 필요한 값으로 변경
 
   catsMeBtn.addEventListener('click', async function (){
     const url = `/catsMeTab/board?page=${page}&size=${size}`;
@@ -198,28 +198,26 @@
         const isActive = pageNumber === pageDTO.page;
         const pageItemClass = isActive ? 'page-item-active' : 'page-item';
         const pageLinkStyle = isActive ? 'color:red; font-weight:bold;' : '';
+        const page =
+                `<li class="${pageItemClass}">
+                    <a class="page-link" href="/catsMe?page=${pageNumber}&size=10" style="${pageLinkStyle}">${pageNumber}</a>
+                 </li>`;
 
-
-
-      if(index !== 0){
-        return `
-        <li class="${pageItemClass}">
-            <a class="page-link" href="/catsMe?page=${pageNumber}&size=9" style="${pageLinkStyle}">${pageNumber}</a>
-        </li>`;
-      }}).join('');
+        return page;
+      }).join('');
 
 
       const paginationHTML = `
     <ul class="pagination flex-wrap">
-        ${pageDTO.prev ? `<li class="page-item"><a class="page-link" href="/catsMe?page=${pageDTO.page - 1}&size=9">Previous</a></li>` : ''}
+        ${pageDTO.prev ? `<li class="page-item"><a class="page-link" href="/catsMe?page=${pageDTO.start - 1}&size=10">Previous</a></li>` : ''}
         ${pagePlus}
-        ${pageDTO.next ? `<li class="page-item"><a class="page-link" href="/catsMe?page=${pageDTO.page + 1}&size=9">Next</a></li>` : ''}
+        ${pageDTO.next ? `<li class="page-item"><a class="page-link" href="/catsMe?page=${pageDTO.end + 1}&size=10">Next</a></li>` : ''}
     </ul>`;
 
       console.log("페이징 반복" + paginationHTML);
-
       document.querySelector('.page_wrap').innerHTML = paginationHTML;
       document.getElementById('boardList').innerHTML = plusList;
+
     }catch (error){
       console.error('에러발생 ' , error);
     }
@@ -271,20 +269,19 @@
         const isActive = pageNumber === pageDTO.page;
         const pageItemClass = isActive ? 'page-item-active' : 'page-item';
         const pageLinkStyle = isActive ? 'color:red; font-weight:bold;' : '';
+        const page =
+        `<li class="${pageItemClass}">
+            <a class="page-link" href="/catsMe/review/list?page=${pageNumber}&size=10" style="${pageLinkStyle}">${pageNumber}</a>
+         </li>`;
 
-        if(index !== 0){
-          return `
-        <li class="${pageItemClass}">
-            <a class="page-link" href="/catsMe/review/list?page=${pageNumber}&size=9" style="${pageLinkStyle}">${pageNumber}</a>
-        </li>`;
-        }
+        return page;
       }).join('');
 
       const paginationHTML = `
     <ul class="pagination flex-wrap">
-        ${pageDTO.prev ? `<li class="page-item"><a class="page-link" href="/catsMe/review/list?page=${pageDTO.page - 1}&size=9">Previous</a></li>` : ''}
+        ${pageDTO.prev ? `<li class="page-item"><a class="page-link" href="/catsMe/review/list?page=${pageDTO.start - 1}&size=10">Previous</a></li>` : ''}
         ${pagePlus}
-        ${pageDTO.next ? `<li class="page-item"><a class="page-link" href="/catsMe/review/list?page=${pageDTO.page + 1}&size=9">Next</a></li>` : ''}
+        ${pageDTO.next ? `<li class="page-item"><a class="page-link" href="/catsMe/review/list?page=${pageDTO.end + 1}&size=10">Next</a></li>` : ''}
     </ul>`;
 
       console.log("페이징 반복" + paginationHTML);
