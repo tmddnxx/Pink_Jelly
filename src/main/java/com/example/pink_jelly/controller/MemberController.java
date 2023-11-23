@@ -173,6 +173,8 @@ public class MemberController {
     @GetMapping("/welcome")
     public void welcome(){
         // 회원가입 완료 뷰
+
+        SecurityContextHolder.clearContext();
     }
 
     @GetMapping("/checkPW")
