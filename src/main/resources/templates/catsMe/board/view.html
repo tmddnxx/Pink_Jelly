@@ -2,65 +2,98 @@
 <html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:th="http://www.thymeleaf.org"
       layout:decorate="~{layout/basic.html}">
-
 <head>
     <meta charset="UTF-8">
     <title>CatsMe</title>
     <link rel="stylesheet" th:href="@{/css/mainBoard.css}">
-
 </head>
+<style layout:fragment="style">
+    *{
+        color: black;
+    }
+    .Board-Img{
+        width: 100%;
+        overflow: hidden;
+    }
+    .imgBox{
+        width: 100%;
+        height: 500px;
+        display: flex;
+        align-items: center;
+        gap: 30px;
+    }
+    .boardNickName{
+        font-size: 12pt;
+    }
+    #chatBtn{
+        background-color: #ff5e90 !important;
+        border-color: #ff5e90;
+    }
+    .main-content{
+        width: 100%;
+
+    }
+    .backBtn{
+        background-color: #555555 !important;
+        border-color: #555555;
+    }
+    .backBtn:hover{
+        background-color: #494949;
+    }
+    .modifyBtn{
+        background-color: #ff5e90 !important;
+        border-color: #ff5e90;
+    }
+    .modifyBtn:hover{
+        background-color: #f82767 !important;
+    }
+</style>
 <body>
 <div layout:fragment="banner">
     <!-- 배너 start -->
-    <div class="site-cover site-cover-sm same-height overlay single-page" style="background-image: url('/images/catsMe/입양소배너.png');">
-        <div class="container">
-            <div class="row same-height justify-content-center">
-                <div class="col-md-6">
-                    <div class="post-entry text-center">
-                        <h1 class="mb-4">CatsMe</h1>
-                        <div class="post-meta align-items-center text-center">
-                            <figure class="author-figure mb-0 me-3 d-inline-block">
-                                <img th:src="|/upload/profileView/${catsMeBoard.dateString}/${catsMeBoard.profileImg}|" alt="Image" class="img-fluid">
-                            </figure>
-                            <a th:href="|@{/profile/friendProfile(memberId=${catsMeBoard.memberId})}|">
-                                <span class="d-inline-block mt-1 boardNickName">[[${catsMeBoard.nickName}]]</span>
-                                <span class="boardMemberId">([[${catsMeBoard.memberId}]])</span>
-                            </a>
-                            <span>[[${#temporals.format(catsMeBoard.addDate, 'yyyy-MM-dd HH:mm')}]]</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div class="site-cover site-cover-sm same-height overlay single-page" style="background-image: url('/images/catsMe/입양소배너.png'); height: 300px;">
+
     </div>
     <!-- /배너 end -->
 </div>
 
 
 <div layout:fragment="content">
+    <div class="post-meta align-items-center d-flex justify-content-between">
+        <div>
+            <figure class="author-figure mb-0 me-3 d-inline-block">
+                <img th:src="|/upload/profileView/${catsMeBoard.dateString}/${catsMeBoard.profileImg}|" alt="Image" class="img-fluid">
+            </figure>
+            <a th:href="|@{/profile/friendProfile(memberId=${catsMeBoard.memberId})}|">
+                <span class="d-inline-block mt-1 boardNickName">[[${catsMeBoard.nickName}]]</span>
+                <span class="boardMemberId">([[${catsMeBoard.memberId}]])</span>
+            </a>
+            <span>[[${#temporals.format(catsMeBoard.addDate, 'yyyy-MM-dd HH:mm')}]]</span>
+        </div>
+        <form action="/chat/room" method="post" class="text-end">
+            <input type="hidden" name="name" value="Test">
+            <input type="hidden" name="fromMno" th:value="${catsMeBoard.mno}">
+            <button type="submit" class="btn btn-primary" id="chatBtn">1 : 1 채팅</button>
+        </form>
+    </div>
     <div class="post-content-body">
-        <div class="row my-4 mainBoard-Img">
-            <div class="col-md-12 mb-4" th:each="i : ${#numbers.sequence(0, catsMeBoard.boardDateString.size() - 1)}">
-                <img class="img-fluid round"
-                     th:src="@{|/upload/catsMeBoardView/${catsMeBoard.boardDateString[i]}/${catsMeBoard.catsMeImg[i]}|}" alt="Image placeholder">
+        <div class="Board-Img d-flex">
+            <i class="fa-solid fa-circle-chevron-right fa-rotate-180"></i>
+            <div class="imgBox" th:each="i : ${#numbers.sequence(0, catsMeBoard.boardDateString.size() - 1)}">
+                <img class="round"
+                     th:src="@{|/upload/catsMeBoardView/${catsMeBoard.boardDateString[i]}/${catsMeBoard.catsMeImg[i]}|}" alt="Image placeholder" height="500">
             </div>
+            <i class="fa-solid fa-circle-chevron-right"></i>
         </div>
     </div>
-    <div class="row blog-entries element-animate">
+
+    <div class="row blog-entries element-animate mt-lg-5">
         <!-- main-content start -->
         <div class="col-md-12 col-lg-8 main-content">
             <div class="post-content-body">
                 <div>[[${catsMeBoard.content}]]</div>
             </div>
-            <div class="pt-5">
-                <p>Categories:  <a href="#">Food</a>, <a href="#">Travel</a>  Tags: <a href="#">#manila</a>, <a href="#">#asia</a></p>
-            </div>
-            <a th:href="|@{/catsMe}|" class="btn btn-primary">목록</a>
-            <form action="/chat/room" method="post">
-                <input type="hidden" name="name" value="Test">
-                <input type="hidden" name="fromMno" th:value="${catsMeBoard.mno}">
-                <button type="submit" class="btn btn-primary" id="chatBtn">1 : 1 채팅</button>
-            </form>
+            <a th:href="|@{/catsMe}|" class="btn btn-primary backBtn">목록</a>
             <th:block th:if="${#authentication.principal != 'anonymousUser'}">
                 <a th:if="${#authentication.principal.mno == catsMeBoard.mno}" class="btn btn-success modifyBtn">수정</a>
                 <a th:if="${#authentication.principal.mno == catsMeBoard.mno}" class="btn btn-danger deleteBtn">삭제</a>
@@ -72,9 +105,9 @@
         </div>
         <!-- END main-content -->
     </div>
-
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script src="/js/chat/chat.js"></script>
+<!--    <script src="/js/chat/chat.js"></script>-->
 </div>
 <script layout:fragment="script" th:inline="javascript">
 
