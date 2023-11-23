@@ -90,6 +90,7 @@
     <script src="/js/signup/upload.js"></script>
 </div>
 <script layout:fragment="script" th:inline="javascript">
+
     //x버튼 이미지 삭제
     const removeFileList = []; //최종적으로 삭제될 파일들의 목록
     function removeFile(boardDateString, fileName, obj){
@@ -141,6 +142,11 @@
 
         //1.섬네일 영역에서 img 태그의 data-src 속성을 들고 옴.
         const uploadFiles = uploadResult.querySelectorAll('img');
+        const title = document.querySelector('input[name=title]');
+        if(title.value === ''){
+            alert("제목을 입력해주세요.");
+            return;
+        }
 
         if(uploadFiles.length === 0) {
             alert("이미지를 선택하세요");

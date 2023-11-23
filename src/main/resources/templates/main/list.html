@@ -208,9 +208,10 @@
         }
     });
 
+
     const auth = [[${#authentication.principal}]];
     //모달창 데이터 입력
-const modal =new bootstrap.Modal(document.getElementById('mainViewModal'));
+    const modal =new bootstrap.Modal(document.getElementById('mainViewModal'));
     const modalMemberId = document.querySelector('.modalMemberId');
     const modalNickName = document.querySelector('.modalNickName');
     const modalProfile = document.querySelector('.modalProfile');
@@ -219,6 +220,8 @@ const modal =new bootstrap.Modal(document.getElementById('mainViewModal'));
     const writeComment = document.querySelector('.write-comment');
 
     function modalBtn(mbNo){
+        modal.show();
+
         console.log(mbNo);
         getBoard(mbNo).then(data =>{
             console.log(data);
@@ -272,6 +275,7 @@ const modal =new bootstrap.Modal(document.getElementById('mainViewModal'));
                     mno: mno.value,
                     profileImg: profileImg.value
                 };
+
                 if(commentObj.comment !== '') {
                     addComment(commentObj).then(result => {
                         comment.value = '';
@@ -283,140 +287,175 @@ const modal =new bootstrap.Modal(document.getElementById('mainViewModal'));
                     alert("댓글을 입력해주세요.");
                 }
             });
+            const mbNo = data.mbNo;
+            //댓글
+            //출력 메서드
+            function printComments(page, size, goLast) {
+                getList({mbNo, page, size, goLast})
+                    .then(data => {
+                        printCommentCnt(data.total); //댓글 수 처리
+                        printList(data.dtoList); // 댓글 목록처리
+                        printPages(data); // 페이지 처리
 
-    //댓글
-    //출력 메서드
-    function printComments(page, size, goLast) {
-        getList({mbNo, page, size, goLast})
-            .then(data => {
-                printCommentCnt(data.total); //댓글 수 처리
-                printList(data.dtoList); // 댓글 목록처리
-                printPages(data); // 페이지 처리
+                    }).catch(e => console.error()
+                );
+            }
+            printComments(1, 10); // 무조건 호출
+            printComments(1, 10, true);
 
-            }).catch(e => console.error()
-        );
-    }
-    printComments(1, 10); // 무조건 호출
-    printComments(1, 10, true);
-
-    const commentList = document.querySelector('.comment-body'); // 댓글 목록 DOM
-    const commentPaging = document.querySelector('.commentPaging'); // 페이지 목록 DOM
-    const commentCnt = document.querySelector('.commentCnt'); //댓글 수 DOM
+            const commentList = document.querySelector('.comment-body'); // 댓글 목록 DOM
+            const commentPaging = document.querySelector('.commentPaging'); // 페이지 목록 DOM
+            const commentCnt = document.querySelector('.commentCnt'); //댓글 수 DOM
 
 
-    function printCommentCnt(total){
-        commentCnt.textContent=total + " Comments";
-    }
+            function printCommentCnt(total){
+                commentCnt.textContent=total + " Comments";
+            }
 
-    function printList(dtoList) { // 댓글 목록 출력
-        let str = '';
-        if (dtoList && dtoList.length > 0) {
-            for (const dto of dtoList) {
-                if(dto.comNo == dto.parentNo){
-                    str += `<div class="vcard">
-                            <img id="profileImg" src="/upload/profileView/${dto.dateString}/${dto.profileImg}" alt="Image placeholder">
-                        </div>
-                        <div class="comment-view">
-                            <span class="boardNickName">${dto.nickName}</span>
-                            <span class="boardMemberId">${dto.memberId}</span>
-                            <div class="meta">
-                                ${dto.addDate[0]}-${dto.addDate[1]}-${dto.addDate[2]} ${dto.addDate[3]}:${dto.addDate[4]}
-                            </div>
-                            <p data-comNo="${dto.comNo}">${dto.comment}</p>`
-                        + replyBtn(dto)
-                        + xBtn(dto) +
-                        `</div>
-                        <div class="recommentWrap toggleOff">
-                            <form class="form-group frmAddReComment" method="post">
-                                <input type="hidden" name="mno" value="${auth.mno}">
-                                <input type="hidden" name="nickName" value="${auth.nickName}">
-                                <input type="hidden" name="memberId" value="${auth.memberId}">
-                                <input type="hidden" name="mbNo" value="${mbNo}">
-                                <input type="hidden" name="parentNo" value="${dto.comNo}">
-                                <input type="hidden" name="profileImg" class="form-control" value="${auth.profileImg}/${auth.dateString}">
-                                <div class="recomment_write">
-                                    <div class="writerInfo">
-                                        <img id="profileImg" class="img-fluid profileImg" src="/upload/profileView/${auth.dateString}/${auth.profileImg}" alt="Image placeholder" readonly>
-                                        <span class="boardNickName">${auth.nickName}</span>
-                                        <span class="boardNickName">(${auth.memberId})</span>
+            function printList(dtoList) { // 댓글 목록 출력
+                let str = '';
+                if (dtoList && dtoList.length > 0) {
+                    for (const dto of dtoList) {
+                        if(dto.comNo == dto.parentNo){
+                            str += `<div class="vcard">
+                                        <img id="profileImg" src="/upload/profileView/${dto.dateString}/${dto.profileImg}" alt="Image placeholder">
                                     </div>
-                                    <textarea type="text" name="comment" class="form-control"></textarea>
-                                    <button type="button" class="btn-primary recommentAddBtn" onclick="submitCommentRe(this)">등록</button>
-                                </div>
-                            </form>
-                      </div>
-                </div>`;
-                } else {
-                    str += `<ul class="recommentList">
-                            <div class="writerInfo">
-                            <img id="profileImg" class="img-fluid profileImg" src="/upload/profileView/${dto.dateString}/${dto.profileImg}" alt="Image placeholder"  class="img-fluid" readonly>
-                                <span class="boardNickName">${dto.nickName}</span>
-                                <span class="boardMemberId">(${dto.memberId})</span>
-                            </div>
-                                <div class="meta">${dto.addDate[0]}-${dto.addDate[1]}-${dto.addDate[2]} ${dto.addDate[3]}:${dto.addDate[4]}
-                            </div>
-                            <p data-comNo="${dto.comNo}">${dto.comment}</p>
-                            ` +xBtn(dto)+ `
-                        </ul>`
+                                    <div class="comment-view">
+                                        <span class="boardNickName">${dto.nickName}</span>
+                                        <span class="boardMemberId">${dto.memberId}</span>
+                                        <div class="meta">
+                                            ${dto.addDate[0]}-${dto.addDate[1]}-${dto.addDate[2]} ${dto.addDate[3]}:${dto.addDate[4]}
+                                        </div>
+                                        <p data-comNo="${dto.comNo}">${dto.comment}</p>`
+                                        + replyBtn(dto)
+                                        + xBtn(dto) +
+                                    `</div>
+                                    </div>
+                                <div class="recommentWrap toggleOff">
+                                    <form class="form-group frmAddReComment" method="post">
+                                        <input type="hidden" name="mno" value="${auth.mno}">
+                                        <input type="hidden" name="nickName" value="${auth.nickName}">
+                                        <input type="hidden" name="memberId" value="${auth.memberId}">
+                                        <input type="hidden" name="mbNo" value="${mbNo}">
+                                        <input type="hidden" name="parentNo" value="${dto.comNo}">
+                                        <input type="hidden" name="profileImg" class="form-control" value="${auth.profileImg}/${auth.dateString}">
+                                        <div class="recomment_write">
+                                            <div class="writerInfo">
+                                                <img id="profileImg" class="img-fluid profileImg" src="/upload/profileView/${auth.dateString}/${auth.profileImg}" alt="Image placeholder" readonly>
+                                                <span class="boardNickName">${auth.nickName}</span>
+                                                <span class="boardNickName">(${auth.memberId})</span>
+                                            </div>
+                                            <textarea type="text" name="comment" class="form-control"></textarea>
+                                            <button type="button" class="btn-primary recommentAddBtn" onclick="submitCommentRe(this)">등록</button>
+                                        </div>
+                                    </form>
+                              </div>
+                        </div>`;
+                        } else {
+                            str += `<ul class="recommentList">
+                                    <div class="writerInfo">
+                                    <img id="profileImg" class="img-fluid profileImg" src="/upload/profileView/${dto.dateString}/${dto.profileImg}" alt="Image placeholder"  class="img-fluid" readonly>
+                                        <span class="boardNickName">${dto.nickName}</span>
+                                        <span class="boardMemberId">(${dto.memberId})</span>
+                                    </div>
+                                        <div class="meta">${dto.addDate[0]}-${dto.addDate[1]}-${dto.addDate[2]} ${dto.addDate[3]}:${dto.addDate[4]}
+                                    </div>
+                                    <p data-comNo="${dto.comNo}">${dto.comment}</p>
+                                    ` +xBtn(dto)+ `
+                                </ul>`
+                        }
+                    }
                 }
+                commentList.innerHTML = str;
+                console.log("auth: ? " , auth);
+                console.log(" auth는 ?",typeof auth);
+                console.log("auth.mno? ", auth.mno);
+
+                function replyBtn(dto){
+                    let btn = '';
+                    if(auth !== 'anonymousUser'){
+                        btn = `<button class="reply rounded recommentBtn">Reply</button>`;
+                    }
+                    return btn;
+                }
+                // 대댓글 입력 창
+                let recommentBtns = document.querySelectorAll('.recommentBtn');
+                let recommentWraps = document.querySelectorAll('.recommentWrap');
+
+                for (let i=0; i< recommentBtns.length; i++){
+                    recommentBtns[i].addEventListener('click', function (){
+                        console.log("대댓글 창 열기");
+                        recommentWraps[i].classList.toggle('toggleOff');
+                    })
+                }
+                function xBtn(dto) {
+                    let btn = '';
+                    if (auth.mno === dto.mno) {
+                        btn = `<button type="button" class="btn btn-danger removeCommentBtn">Remove</button>`;
+                    }
+                    return btn;
+                }
+
+                //댓글 목록 출력 후 삭제 버튼
+                const removeCommentBtns = document.querySelectorAll('.removeCommentBtn');
+                removeCommentBtns.forEach(removeCommentBtn => {
+                    removeCommentBtn.addEventListener('click', function (e) {
+                        if(!(confirm("댓글을 삭제하시겠습니까?"))){
+                            return;
+                        }
+                        const comNo = e.target.parentElement.querySelector('p[data-comNo]').getAttribute('data-comNo');
+                        if (!comNo) {
+                            return;
+                        }
+                        console.log(comNo);
+                        removeComment(comNo, mbNo).then(result => {
+                            page = 1; // 이 부분이 없다면 원래 페이지로
+                            size = 10;
+                            printComments(page, size);
+                        }).catch(e => console.log(e));
+                    });
+                });
+            }   // 댓글 목록 출력 끝
+
+            function printPages(data) { // 페이지 목록 출력
+                // pagination
+                let pageStr = '';
+                if (data.prev) {
+                    pageStr += `<li class="page-item">
+                                    <a class="page-link" data-page="${data.start - 1}">PREV</a>
+                                </li>`;
+                }
+                for (let i = data.start; i <= data.end; i++) {
+                    pageStr += `<li class="page-item ${i === data.page ? "active" : ""}">
+                                    <a class="page-link" data-page="${i}">${i}</a>
+                                </li>`;
+                }
+                if (data.next) {
+                    pageStr += `<li class="page-item">
+                                    <a class="page-link" data-page="${data.end + 1}">NEXT</a>
+                                </li>`;
+                }
+                commentPaging.innerHTML = pageStr;
             }
-        }
 
-        commentList.innerHTML = str;
-        console.log("auth: ? " , auth);
-        console.log(" auth는 ?",typeof auth);
-        console.log("auth.mno? ", auth.mno);
+            let page = 1;
+            let size = 10;
+            commentPaging.addEventListener('click', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
 
-        function replyBtn(dto){
-            let btn = '';
-            if(auth !== 'anonymousUser'){
-                btn = `<button class="reply rounded recommentBtn">Reply</button>`;
-            }
-            return btn;
-        }
 
-        // 대댓글 입력 창
-        let recommentBtns = document.querySelectorAll('.recommentBtn');
-        let recommentWraps = document.querySelectorAll('.recommentWrap');
+                const target = e.target;
 
-        for (let i=0; i< recommentBtns.length; i++){
-            recommentBtns[i].addEventListener('click', function (){
-                console.log("대댓글 창 열기");
-                recommentWraps[i].classList.toggle('toggleOff');
-            })
-        }
-
-        function xBtn(dto) {
-            let btn = '';
-            if (auth.mno === dto.mno) {
-                btn = `<button type="button" class="btn btn-danger removeCommentBtn">Remove</button>`;
-            }
-            return btn;
-        }
-
-        //댓글 목록 출력 후 삭제 버튼
-        const removeCommentBtns = document.querySelectorAll('.removeCommentBtn');
-        removeCommentBtns.forEach(removeCommentBtn => {
-            removeCommentBtn.addEventListener('click', function (e) {
-                if(!(confirm("댓글을 삭제하시겠습니까?"))){
+                if (!target || target.tagName != 'A') {
                     return;
                 }
-                const comNo = e.target.parentElement.querySelector('p[data-comNo]').getAttribute('data-comNo');
-                if (!comNo) {
-                    return;
-                }
-                console.log(comNo);
-                removeComment(comNo, mbNo).then(result => {
-                    page = 1; // 이 부분이 없다면 원래 페이지로
-                    size = 10;
-                    printComments(page, size);
-                }).catch(e => console.log(e));
+
+                page = target.getAttribute('data-page');
+                printComments(page, size);
             });
         });
-
-
-    }   // 댓글 목록 출력 끝
-
+    }
     // 대댓글 등록
     const submitCommentRe = function (btn) {
         let frmAddReComment = btn.closest('form');
@@ -438,62 +477,12 @@ const modal =new bootstrap.Modal(document.getElementById('mainViewModal'));
             parentNo: parentNo,
             profileImg: profileImg
         };
-
         addComment(commentObj).then(result => {
-            comment.value = '';
+            frmAddReComment.comment.value = '';
             printComments(1, 10, true); // 댓글 목록 갱신
         }).catch(e => {
             alert("댓글 등록에 실패했습니다. 다시 시도해주세요");
         });
-    }
-
-    function printPages(data) { // 페이지 목록 출력
-        // pagination
-        let pageStr = '';
-        if (data.prev) {
-            pageStr += `<li class="page-item">
-                            <a class="page-link" data-page="${data.start - 1}">PREV</a>
-                        </li>`;
-        }
-        for (let i = data.start; i <= data.end; i++) {
-            pageStr += `<li class="page-item ${i === data.page ? "active" : ""}">
-                            <a class="page-link" data-page="${i}">${i}</a>
-                        </li>`;
-        }
-        if (data.next) {
-            pageStr += `<li class="page-item">
-                            <a class="page-link" data-page="${data.end + 1}">NEXT</a>
-                        </li>`;
-        }
-        commentPaging.innerHTML = pageStr;
-
-    }
-
-
-
-
-    let page = 1;
-    let size = 10;
-
-    commentPaging.addEventListener('click', function (e) {
-        e.preventDefault();
-        e.stopPropagation();
-
-
-        const target = e.target;
-
-        if (!target || target.tagName != 'A') {
-            return;
-        }
-
-        page = target.getAttribute('data-page');
-        printComments(page, size);
-    });
-        });
-        modal.show();
-    }
-    function closeModal() {
-        modal.hide();
     }
 </script>
 </body>
