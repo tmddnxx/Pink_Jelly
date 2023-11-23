@@ -41,6 +41,10 @@ public class MainBoardController {
         log.info("타입은? : " + pageRequestDTO.getType());
         log.info("키워드는? : " + pageRequestDTO.getKeyword());
         log.info(pageRequestDTO);
+        
+        // 메인 게시글 출력 갯수
+        int size = 21;
+        pageRequestDTO.setSize(size);
 
         if(memberDTO != null){
             String loginId = memberDTO.getMemberId();
