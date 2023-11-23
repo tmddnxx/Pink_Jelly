@@ -57,7 +57,32 @@
 
         <!-- 게시글 목록 -->
         <div class="row" id="wrap">
-
+            <div class="col-lg-4 mb-4" th:each="mainBoard:${mainBoardList.dtoList}">
+                <div class="post-entry-alt">
+                    <a th:href="|@{/main/view(mbNo=${mainBoard.mbNo})}|" class="img-link">
+                        <img th:src="|/upload/mainBoardView/${mainBoard.boardDateString[0]}/${mainBoard.mainImg[0]}|" alt="Image" class="img-fluid">
+                    </a>
+                    <div class="excerpt">
+                        <h2><a th:href="|@{/main/view(mbNo=${mainBoard.mbNo})}|">[[${mainBoard.title}]]</a></h2>
+                        <p>[[${mainBoard.content}]]</p>
+                        <div class="post-meta align-items-center text-left clearfix">
+                            <figure class="author-figure mb-0 me-3 float-start"><img th:src="|/upload/profileView/${mainBoard.dateString}/${mainBoard.profileImg}|" alt="Image placeholder" class="img-fluid"></figure>
+                            <a th:href="|@{/profile/friendProfile(memberId=${mainBoard.memberId})}|">
+                                <span class="d-inline-block mt-1 boardNickName">[[${mainBoard.nickName}]]</span>
+                                <span class="boardMemberId">[[${mainBoard.memberId}]]</span>
+                            </a>
+                            <br>
+                            <span>[[${#temporals.format(mainBoard.addDate, 'yyyy-MM-dd HH:mm')}]]</span><br>
+                            <p class="likeHitCnt">
+                                <span><i class="fa-solid fa-heart"></i>[[${mainBoard.like}]]</span>
+                                <span><i class="fa-solid fa-comment"></i>[[${mainBoard.commentCnt}]]</span>
+                                <span><i class="fa-solid fa-eye"></i>[[${mainBoard.hit}]]</span>
+                            </p>
+                        </div>
+                        <p><a href="#" class="read-more">Continue Reading</a></p>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- 게시글 상세 모달 -->
@@ -140,18 +165,40 @@
         let size = 21; // 한번에 출력할 게시물 수
         let total = pageResponse.total; // 총 게시물 수
         let last = Math.ceil(total / size); // 마지막 페이지
-
-        // 첫 화면 로드시 리스트 추가
-        getList();
+        let type; // 검색 종류
+        let keyword; // 검색어
 
         // 스크롤이벤트 적용
         window.addEventListener('scroll', function () {
             console.log('bodyHeight', document.body.offsetHeight);
             console.log('(window.innerHeight + window.scrollY)', window.innerHeight + window.scrollY);
             if ((document.body.offsetHeight * 0.9) <= (window.innerHeight + window.scrollY)) {
+                // 현재 페이지의 쿼리스트링 가져오기
+                var queryString = window.location.search;
+
+                // 쿼리스트링 파싱
+                var params = new URLSearchParams(queryString);
+
+                // 특정 매개변수 값 가져오기
+                var paramValue = params.get('paramName');
+
+                console.log("쿼리스트링:", queryString);
+                console.log("특정 매개변수 값:", paramValue);
+
+                // 모든 매개변수 순회
+                params.forEach(function(value, key) {
+                    if (key === "type") {
+                        type = value;
+                    }
+                    else if (key === "keyword") {
+                        keyword = value;
+                    }
+                });
+
                  // 페이지 증가
                 console.log("page++: ", page)
                 console.log("end: ", last);
+                page++; // 페이지 증가
                 if (page <= last) {
                     getList();
                 }
@@ -160,7 +207,7 @@
 
         // 게시글 목록 가져오기
         async function getList() {
-            const url = `/main/getList?page=${page}&size=${size}`;
+            const url = `/main/getList?page=${page}&size=${size}&type=${type}&keyword=${keyword}`;
             try {
                 const response = await axios.get(url);
                 const mainBoardList = response.data.dtoList;
@@ -201,7 +248,6 @@
 
 
                 document.getElementById('wrap').innerHTML += plusList;
-                page++; // 페이지 증가
             } catch(error) {
                 console.error('에러발생 ' , error);
             }
