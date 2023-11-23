@@ -148,6 +148,7 @@
                             <div class="row confirm hide">
                                 <div class="col-6 mb-3">
                                     <input type="text" name="confirmKey" class="form-control" placeholder="인증번호">
+                                    <input type="hidden" name="isConfirm" value="false">
                                 </div>
                                 <div class="col-6 mb-3">
                                     <button id="confirmKeyBtn" type="button" class="btn btn-primary">확인</button>
@@ -239,6 +240,12 @@
                 errorMsg += `${error.field}은(는) ${error.code} \n`;
             }
             alert(errorMsg);
+        }
+
+        const confirmMsg = [[${msg}]]; // 이메일 인증 실패 메세지
+
+        if ((confirmMsg != null) && (document.querySelector('input[name=isConfirm]').value === "false")) {
+            alert(confirmMsg);
         }
 
         const isDuplicate = document.querySelector('input[name=isDuplicate]');
@@ -418,6 +425,7 @@
                 alert('인증이 완료되었습니다.');
                 currentTime = 0; // 타이머 초기화
                 confirmWrap.classList.add('hide');
+                document.querySelector('input[name=isConfirm]').value = "true";
             }
             else {
                 alert('인증 실패');

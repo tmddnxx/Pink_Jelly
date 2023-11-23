@@ -105,7 +105,7 @@
         let page = 1; // 페이지
         let size = 21; // 한번에 출력할 게시물 수
         let total = pageResponse.total; // 총 게시물 수
-        let end = Math.ceil(total / size); // 마지막 페이지
+        let last = Math.ceil(total / size); // 마지막 페이지
 
         // 첫 화면 로드시 리스트 추가
         getList();
@@ -117,8 +117,8 @@
             if ((document.body.offsetHeight * 0.9) <= (window.innerHeight + window.scrollY)) {
                  // 페이지 증가
                 console.log("page++: ", page)
-                console.log("end: ", end);
-                if (page <= end) {
+                console.log("end: ", last);
+                if (page <= last) {
                     getList();
                 }
             }

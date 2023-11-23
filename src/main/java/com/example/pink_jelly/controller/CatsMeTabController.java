@@ -24,11 +24,10 @@ public class CatsMeTabController {
     private final CatsMeService catsMeService;
 
     @GetMapping("/board")
-    public ResponseEntity<PageResponseDTO<CatsMeBoardDTO>>catsMeTab(@RequestParam int page, @RequestParam int size, Long mno, String memberId,@AuthenticationPrincipal MemberDTO memberDTO){
-        log.info("사이즈 " + size);
-        PageRequestDTO pageRequestDTO = new PageRequestDTO();
-        pageRequestDTO.setPage(page);
-        pageRequestDTO.setSize(size);
+    public ResponseEntity<PageResponseDTO<CatsMeBoardDTO>>catsMeTab(PageRequestDTO pageRequestDTO, Long mno, String memberId,@AuthenticationPrincipal MemberDTO memberDTO){
+        log.info("/board...");
+        log.info(pageRequestDTO);
+
         PageResponseDTO<CatsMeBoardDTO> response;
         if(memberDTO != null){
             String loginId = memberDTO.getMemberId();

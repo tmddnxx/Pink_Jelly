@@ -52,19 +52,53 @@ public class MemberController {
         // 카카오 로그인 후 회원가입 뷰
     }
 
+    @PostMapping("/kakaoSignup")
+    public String kakaoSignup(@Valid MemberDTO memberDTO, BindingResult bindingResult, @AuthenticationPrincipal MemberDTO principal, Model model){
+        // 회원가입 처리
+
+        log.info("/kakaoSignup...");
+
+
+        if (bindingResult.hasErrors()) {
+            return "/member/kakaoSignup";
+        }
+
+        // 비밀번호 암호화
+        String encPasswd = passwordEncoder.encode(memberDTO.getPasswd());
+        memberDTO.setPasswd(encPasswd);
+
+        log.info("principal: " + principal);
+        if (principal != null) {
+            memberDTO.setMemberId(principal.getMemberId());
+        }
+
+        memberService.registerMember(memberDTO);
+
+        /* 데이터가 저장된 후에 이미지 파일 이동 */
+        if (memberDTO.getProfileImg() != null) {
+            String splits[] = memberDTO.getProfileImg().split("/");
+
+            moveFile(splits[0]);
+            moveFile("s_" + splits[0]);
+        }
+
+        return "/member/welcome";
+    }
+
     @GetMapping("/signup")
     public void signup(MemberDTO memberDTO){
         // 회원가입 뷰
     }
 
     @PostMapping("/signup")
-    public String signup(@Valid MemberDTO memberDTO, BindingResult bindingResult, @AuthenticationPrincipal MemberDTO principal, Model model){
+    public String signup(@Valid MemberDTO memberDTO, BindingResult bindingResult, String isConfirm, @AuthenticationPrincipal MemberDTO principal, Model model){
         // 회원가입 처리
 
         log.info("/signup...");
 
 
-        if (bindingResult.hasErrors()) {
+        if (bindingResult.hasErrors() || isConfirm.equals("false")) {
+            model.addAttribute("msg", "이메일 인증을 하지않았습니다.");
             return "/member/signup";
         }
 

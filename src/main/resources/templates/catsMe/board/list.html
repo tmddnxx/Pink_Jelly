@@ -99,14 +99,12 @@
     <div class="float-end page_wrap">
         <ul class="pagination flex-wrap" th:with="catsMeBoard=${catsMeBoardList}">
             <li class="page-item" th:if="${catsMeBoard.prev}">
-                <a class="page-link" th:href="|@{/catsMe(page=${catsMeBoard.page - 1},size=9)}|" th:data-num="${catsMeBoard.start - 1}">Previous</a>
+                <a class="page-link" th:href="|@{/catsMe(page=${catsMeBoard.page - 1},size=10)}|" th:data-num="${catsMeBoard.start - 1}">Previous</a>
             </li>
             <th:block th:each="i: ${#numbers.sequence(catsMeBoard.start, catsMeBoard.end)}">
-              <th:block th:if="${i != 0}">
                 <li th:class="${catsMeBoard.page == i} ? 'page-item-active' : 'page-item'" >
-                    <a class="page-link" th:href="|@{/catsMe(page=${i},size=9)}|" th:data-num="${i}" th:style="${catsMeBoard.page == i} ? 'color:red; font-weight:bold;'">[[${i}]]</a>
+                    <a class="page-link" th:href="|@{/catsMe(page=${i},size=10)}|" th:data-num="${i}" th:style="${catsMeBoard.page == i} ? 'color:red; font-weight:bold;'">[[${i}]]</a>
                 </li>
-              </th:block>
             </th:block>
             <li class="page-item" th:if="${catsMeBoard.next}">
                 <a class="page-link" th:href="${catsMeBoard.page + 1}" th:data-num="${catsMeBoard.end + 1}">Next</a>
@@ -119,7 +117,7 @@
 <script layout:fragment="script" th:inline="javascript">
   // 탈퇴한 회원일경우
   let isDel;
-  isDel   =  [[${isDel}]];
+  isDel = [[${isDel}]];
   console.log(isDel);
 
   if(isDel === true){
@@ -148,10 +146,11 @@
   const reviewBtn = document.querySelector('.catsReview'); // 입양후기 버튼
 
   const page = 1; // 예시로 1로 설정, 필요한 값으로 변경
-  const size = 9; // 예시로 10으로 설정, 필요한 값으로 변경
+  const size = 10; // 예시로 10으로 설정, 필요한 값으로 변경
 
   // 입양소 탭 클릭 시 입양게시물 목록 비동기 출력
   catsMeBtn.addEventListener('click', async function (){
+    console.log(page);
     const url = `/catsMeTab/board?page=${page}&size=${size}`;
     try{
       const response = await axios.get(url);
@@ -162,33 +161,33 @@
 
       // 게시물 목록
       const plusList = boardList.map(dtoList => `
-<div class="blog-entry d-flex blog-entry-search-item">
-    <a href="/catsMe/board/view?cmbNo=${dtoList.cmbNo}" class="img-link">
-        <img src="/upload/catsMeBoardView/${dtoList.boardDateString[0]}/${dtoList.catsMeImg[0]}" alt="Image" style="width:250px; height: 250px;" class="img-fluid">
-    </a>
-    <div>
-        <span>${dtoList.addDate[0]+"-"+dtoList.addDate[1]+"-"+dtoList.addDate[2]+" "+dtoList.addDate[3]+":"+dtoList.addDate[4]}</span></br>
-        <figure class="author-figure mb-0 me-3 float-start">
-            <img src="/upload/profileView/${dtoList.dateString}/${dtoList.profileImg}" alt="image" style="height: 30px; width: 30px; border-radius: 50%;" class="img-fluid">
-        </figure>
-        <a href="/profile/friendProfile?memberId=${dtoList.memberId}">
-            <span class="d-inline-block mt-1 boardNickName">${dtoList.nickName}</span>
-            <span class="boardMemberId">(${dtoList.memberId})</span>
-        </a>
-        <a href="/catsMe/board/view?cmbNo=${dtoList.cmbNo}"></a>
-            <h2>${dtoList.title}</h2>
-            <p>${dtoList.content}</p>
-        <div class="excerpt">
-            <div class="post-meta align-items-center text-left clearfix">
-                <p class="likeHitCnt">
-                  <span><i class="fa-solid fa-eye"></i>${dtoList.hit}</span>
-                </p>
+        <div class="blog-entry d-flex blog-entry-search-item">
+            <a href="/catsMe/board/view?cmbNo=${dtoList.cmbNo}" class="img-link">
+                <img src="/upload/catsMeBoardView/${dtoList.boardDateString[0]}/${dtoList.catsMeImg[0]}" alt="Image" style="width:250px; height: 250px;" class="img-fluid">
+            </a>
+            <div>
+                <span>${dtoList.addDate[0]+"-"+dtoList.addDate[1]+"-"+dtoList.addDate[2]+" "+dtoList.addDate[3]+":"+dtoList.addDate[4]}</span></br>
+                <figure class="author-figure mb-0 me-3 float-start">
+                    <img src="/upload/profileView/${dtoList.dateString}/${dtoList.profileImg}" alt="image" style="height: 30px; width: 30px; border-radius: 50%;" class="img-fluid">
+                </figure>
+                <a href="/profile/friendProfile?memberId=${dtoList.memberId}">
+                    <span class="d-inline-block mt-1 boardNickName">${dtoList.nickName}</span>
+                    <span class="boardMemberId">(${dtoList.memberId})</span>
+                </a>
+                <a href="/catsMe/board/view?cmbNo=${dtoList.cmbNo}"></a>
+                    <h2>${dtoList.title}</h2>
+                    <p>${dtoList.content}</p>
+                <div class="excerpt">
+                    <div class="post-meta align-items-center text-left clearfix">
+                        <p class="likeHitCnt">
+                          <span><i class="fa-solid fa-eye"></i>${dtoList.hit}</span>
+                        </p>
+                    </div>
+                    <p><a href="/catsMe/board/view?cmbNo=${dtoList.cmbNo}" class="read-more">Continue Reading</a></p>
+                </div>
             </div>
-            <p><a href="/catsMe/board/view?cmbNo=${dtoList.cmbNo}" class="read-more">Continue Reading</a></p>
         </div>
-    </div>
-</div>
-`).join('');
+        `).join('');
 
 
 
@@ -198,21 +197,20 @@
         const isActive = pageNumber === pageDTO.page;
         const pageItemClass = isActive ? 'page-item-active' : 'page-item';
         const pageLinkStyle = isActive ? 'color:red; font-weight:bold;' : '';
+        const page =
+                `<li class="${pageItemClass}">
+                    <a class="page-link" href="/catsMeTab/board?page=${pageNumber}&size=10" style="${pageLinkStyle}">${pageNumber}</a>
+                 </li>`;
 
-        if (index !== 0) {
-          return `
-      <li class="${pageItemClass}">
-        <a class="page-link" href="/catsMeTab/board?page=${pageNumber}&size=9" style="${pageLinkStyle}">${pageNumber}</a>
-      </li>`;
-        }
+        return page;
       }).join('');
 
       const paginationHTML = `
-  <ul class="pagination flex-wrap">
-    ${pageDTO.prev ? `<li class="page-item"><a class="page-link" href="/catsMeTab/board?page=${pageDTO.page - 1}&size=9">Previous</a></li>` : ''}
-    ${pagePlus}
-    ${pageDTO.next ? `<li class="page-item"><a class="page-link" href="/catsMeTab/board?page=${pageDTO.page + 1}&size=9">Next</a></li>` : ''}
-  </ul>`;
+        <ul class="pagination flex-wrap">
+          ${pageDTO.prev ? `<li class="page-item"><a class="page-link" href="/catsMeTab/board?page=${pageDTO.page - 1}&size=10">Previous</a></li>` : ''}
+          ${pagePlus}
+          ${pageDTO.next ? `<li class="page-item"><a class="page-link" href="/catsMeTab/board?page=${pageDTO.page + 1}&size=10">Next</a></li>` : ''}
+        </ul>`;
 
 
       console.log("페이징 반복" + paginationHTML);
@@ -222,7 +220,7 @@
     }catch (error){
       console.error('에러발생 ' , error);
     }
-  })
+  });
 
   // 입양후기 탭 클릭 시 입양게시물 목록 비동기 출력
   reviewBtn.addEventListener('click', async function (){
@@ -235,58 +233,59 @@
       console.log("입양 후기  pageDTO ", pageDTO);
 
       const plusList = boardList.map(dtoList => `
-<div class="blog-entry d-flex blog-entry-search-item">
-    <a href="/catsMe/review/view?crbNo=${dtoList.crbNo}" class="img-link">
-        <img src="/upload/catsReviewView/${dtoList.boardDateString[0]}/${dtoList.catsMeImg[0]}" alt="Image" style="width:250px; height: 250px;" class="img-fluid">
-    </a>
-    <div>
-        <span>${dtoList.addDate[0]+"-"+dtoList.addDate[1]+"-"+dtoList.addDate[2]+" "+dtoList.addDate[3]+":"+dtoList.addDate[4]}</span></br>
-        <figure class="author-figure mb-0 me-3 float-start">
-            <img src="/upload/profileView/${dtoList.dateString}/${dtoList.profileImg}" alt="image" style="height: 30px; width: 30px; border-radius: 50%;" class="img-fluid">
-        </figure>
-        <a href="/profile/friendProfile?memberId=${dtoList.memberId}">
-            <span class="d-inline-block mt-1 boardNickName">${dtoList.nickName}</span>
-            <span class="boardMemberId">(${dtoList.memberId})</span>
-        </a>
-        <a href="/catsMe/board/view?crbNo=${dtoList.crbNo}"></a>
-            <h2>${dtoList.title}</h2>
-            <p>${dtoList.content}</p>
-        <div class="excerpt">
-            <div class="post-meta align-items-center text-left clearfix">
-                <p class="likeHitCnt">
-                  <span><i class="fa-solid fa-heart"></i>${dtoList.like}</span>
-                  <span><i class="fa-solid fa-comment"></i>${dtoList.commentCnt}</span>
-                  <span><i class="fa-solid fa-eye"></i>${dtoList.hit}</span>
-                </p>
+        <div class="blog-entry d-flex blog-entry-search-item">
+            <a href="/catsMe/review/view?crbNo=${dtoList.crbNo}" class="img-link">
+                <img src="/upload/catsReviewView/${dtoList.boardDateString[0]}/${dtoList.catsMeImg[0]}" alt="Image" style="width:250px; height: 250px;" class="img-fluid">
+            </a>
+            <div>
+                <span>${dtoList.addDate[0]+"-"+dtoList.addDate[1]+"-"+dtoList.addDate[2]+" "+dtoList.addDate[3]+":"+dtoList.addDate[4]}</span></br>
+                <figure class="author-figure mb-0 me-3 float-start">
+                    <img src="/upload/profileView/${dtoList.dateString}/${dtoList.profileImg}" alt="image" style="height: 30px; width: 30px; border-radius: 50%;" class="img-fluid">
+                </figure>
+                <a href="/profile/friendProfile?memberId=${dtoList.memberId}">
+                    <span class="d-inline-block mt-1 boardNickName">${dtoList.nickName}</span>
+                    <span class="boardMemberId">(${dtoList.memberId})</span>
+                </a>
+                <a href="/catsMe/board/view?crbNo=${dtoList.crbNo}"></a>
+                    <h2>${dtoList.title}</h2>
+                    <p>${dtoList.content}</p>
+                <div class="excerpt">
+                    <div class="post-meta align-items-center text-left clearfix">
+                        <p class="likeHitCnt">
+                          <span><i class="fa-solid fa-heart"></i>${dtoList.like}</span>
+                          <span><i class="fa-solid fa-comment"></i>${dtoList.commentCnt}</span>
+                          <span><i class="fa-solid fa-eye"></i>${dtoList.hit}</span>
+                        </p>
+                    </div>
+                    <p><a href="/catsMe/board/view?crbNo=${dtoList.crbNo}" class="read-more">Continue Reading</a></p>
+                </div>
             </div>
-            <p><a href="/catsMe/board/view?crbNo=${dtoList.crbNo}" class="read-more">Continue Reading</a></p>
         </div>
-    </div>
-</div>
-`
+        `
 
       ).join('');
 
       // 페이징
       const pagePlus = Array.from({ length: pageDTO.end - pageDTO.start + 1 }, (_, index) => {
+        console.log('index', index);
         const pageNumber = pageDTO.start + index;
         const isActive = pageNumber === pageDTO.page;
         const pageItemClass = isActive ? 'page-item-active' : 'page-item';
         const pageLinkStyle = isActive ? 'color:red; font-weight:bold;' : '';
-        if(index !== 0){
-          return `
-        <li class="${pageItemClass}">
-            <a class="page-link" href="/catsMe/review/list?page=${pageNumber}&size=9" style="${pageLinkStyle}">${pageNumber}</a>
-        </li>`;
-        }
+        const page =
+        `<li class="${pageItemClass}">
+            <a class="page-link" href="/catsMe/review/list?page=${pageNumber}&size=10" style="${pageLinkStyle}">${pageNumber}</a>
+         </li>`;
+
+        return page;
        }).join('');
 
       const paginationHTML = `
-    <ul class="pagination flex-wrap">
-        ${pageDTO.prev ? `<li class="page-item"><a class="page-link" href="/catsMe/review/list?page=${pageDTO.page - 1}&size=9">Previous</a></li>` : ''}
-        ${pagePlus}
-        ${pageDTO.next ? `<li class="page-item"><a class="page-link" href="/catsMe/review/list?page=${pageDTO.page + 1}&size=9">Next</a></li>` : ''}
-    </ul>`;
+        <ul class="pagination flex-wrap">
+            ${pageDTO.prev ? `<li class="page-item"><a class="page-link" href="/catsMe/review/list?page=${pageDTO.page - 1}&size=10">Previous</a></li>` : ''}
+            ${pagePlus}
+            ${pageDTO.next ? `<li class="page-item"><a class="page-link" href="/catsMe/review/list?page=${pageDTO.page + 1}&size=10">Next</a></li>` : ''}
+        </ul>`;
 
       console.log("페이징 반복" + paginationHTML);
 
