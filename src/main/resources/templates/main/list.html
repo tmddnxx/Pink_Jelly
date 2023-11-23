@@ -8,20 +8,59 @@
     <link rel="stylesheet" th:href="@{/css/mainBoard.css}">
 </head>
 <style layout:fragment="style">
-    .searchBtn:hover {
-        background-color: #f48fb1;
+    *{
+        color: black;
     }
-  #mainViewModal {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-  }
+    .searchDiv{
+        gap: 10px;
+    }
+    .form-select{
+        height: 54px;
+        text-align: center;
+    }
+    .searchBtn{
+        height: 54px;
+        background-color: #ffcdd2 !important;
+        border-color: #ffcdd2;
+        color: white;
+    }
+    .searchBtn:hover {
+        background-color: #f82767 !important;
+        border-color: #f82767;
+    }
+    .writeBtn{
+        width: 100px;
+        background-color: #f48fb1 !important;
+        border-color: #f48fb1;
+    }
+    .writeBtn:hover{
+        background-color: #f82767 !important;
+        border-color: #f82767;
+    }
+    .contentWrap{
+        width: 440px;
+        height: 500px;
+    }
+    .excerpt{
+        height: 65px;
+        overflow: hidden;
+        position: relative;
+    }
+    #mainViewModal {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+    }
     .toggleOff {
         display: none;
     }
-
+    .read-more{
+        color: black !important;
+        cursor: pointer;
+        border-bottom: 2px solid #f48fb1;
+    }
 </style>
 <body>
     <div layout:fragment="content">
@@ -29,8 +68,8 @@
         <form action="/main" method="get" name="frmSearch">
             <div class="col">
                 <input type="hidden" name="size" th:value="${pageRequestDTO.size}">
-                <div class="input-group">
-                    <div class="input-group-prepend">
+                <div class="input-group searchDiv">
+                    <div>
                         <select class="form-select" id="type" th:name="type">
                             <option value="">---</option>
                             <option value="title" >제목</option>
@@ -47,40 +86,42 @@
             </div>
         </form>
 
-        <div class="row mb-4">
+        <div class="d-flex mb-4 mt-4 justify-content-between">
             <div class="col-sm-6">
                 <h2 class="posts-entry-title">Pink Jelly</h2>
             </div>
-            <div class="col-sm-6 text-sm-end"><a href="category.html" class="read-more">View All</a></div>
-            <a th:href="|@{/main/write}|" class="btn btn-primary">글쓰기</a>
+            <div>
+                <a th:href="|@{/main/write}|" class="btn btn-primary writeBtn">글쓰기</a>
+            </div>
         </div>
 
         <!-- 게시글 목록 -->
         <div class="row" id="wrap">
-            <div class="col-lg-4 mb-4" th:each="mainBoard:${mainBoardList.dtoList}">
+            <div class="col-lg-4 mb-4 contentWrap" th:each="mainBoard:${mainBoardList.dtoList}">
                 <div class="post-entry-alt">
-                    <a th:href="|@{/main/view(mbNo=${mainBoard.mbNo})}|" class="img-link">
-                        <img th:src="|/upload/mainBoardView/${mainBoard.boardDateString[0]}/${mainBoard.mainImg[0]}|" alt="Image" class="img-fluid">
+                    <a th:href="|@{/main/view(mbNo=${mainBoard.mbNo})}|" class="img-link text-center w-100">
+                        <img th:src="|/upload/mainBoardView/${mainBoard.boardDateString[0]}/${mainBoard.mainImg[0]}|" alt="Image" width="400px" height="300px">
                     </a>
                     <div class="excerpt">
-                        <h2><a th:href="|@{/main/view(mbNo=${mainBoard.mbNo})}|">[[${mainBoard.title}]]</a></h2>
-                        <p>[[${mainBoard.content}]]</p>
-                        <div class="post-meta align-items-center text-left clearfix">
-                            <figure class="author-figure mb-0 me-3 float-start"><img th:src="|/upload/profileView/${mainBoard.dateString}/${mainBoard.profileImg}|" alt="Image placeholder" class="img-fluid"></figure>
-                            <a th:href="|@{/profile/friendProfile(memberId=${mainBoard.memberId})}|">
-                                <span class="d-inline-block mt-1 boardNickName">[[${mainBoard.nickName}]]</span>
-                                <span class="boardMemberId">[[${mainBoard.memberId}]]</span>
-                            </a>
-                            <br>
-                            <span>[[${#temporals.format(mainBoard.addDate, 'yyyy-MM-dd HH:mm')}]]</span><br>
-                            <p class="likeHitCnt">
-                                <span><i class="fa-solid fa-heart"></i>[[${mainBoard.like}]]</span>
-                                <span><i class="fa-solid fa-comment"></i>[[${mainBoard.commentCnt}]]</span>
-                                <span><i class="fa-solid fa-eye"></i>[[${mainBoard.hit}]]</span>
-                            </p>
-                        </div>
-                        <p><a href="#" class="read-more">Continue Reading</a></p>
+                        <a th:href="|@{/main/view(mbNo=${mainBoard.mbNo})}|"><h2>[[${mainBoard.title}]]</h2>
+                            <p>[[${mainBoard.content}]]</p>
+                        </a>
                     </div>
+                    <div class="post-meta align-items-center text-left clearfix mt-3 mb-0">
+                        <figure class="author-figure mb-0 me-3 float-start"><img th:src="|/upload/profileView/${mainBoard.dateString}/${mainBoard.profileImg}|" alt="Image placeholder" class="img-fluid"></figure>
+                        <a th:href="|@{/profile/friendProfile(memberId=${mainBoard.memberId})}|">
+                            <span class="d-inline-block mt-1 boardNickName">[[${mainBoard.nickName}]]</span>
+                            <span class="boardMemberId">([[${mainBoard.memberId}]])</span>
+                        </a>
+                        <br>
+                        <span>[[${#temporals.format(mainBoard.addDate, 'yyyy-MM-dd HH:mm')}]]</span><br>
+                        <p class="likeHitCnt">
+                            <span><i class="fa-solid fa-heart"></i>[[${mainBoard.like}]]</span>
+                            <span><i class="fa-solid fa-comment"></i>[[${mainBoard.commentCnt}]]</span>
+                            <span><i class="fa-solid fa-eye"></i>[[${mainBoard.hit}]]</span>
+                        </p>
+                    </div>
+                    <p><a  class="read-more">상세보기</a></p>
                 </div>
             </div>
         </div>
@@ -218,29 +259,31 @@
 
                 // 게시물 목록
                 const plusList = mainBoardList.map(mainBoard => `
-                            <div class="col-lg-4 mb-4">
+                            <div class="col-lg-4 mb-4 contentWrap">
                                 <div class="post-entry-alt">
-                                    <a href="/main/view?mbNo=${mainBoard.mbNo}" class="img-link">
-                                        <img src="/upload/mainBoardView/${mainBoard.boardDateString[0]}/${mainBoard.mainImg[0]}" alt="Image" class="img-fluid">
+                                    <a href="/main/view?mbNo=${mainBoard.mbNo}" class="img-link text-center w-100">
+                                        <img src="/upload/mainBoardView/${mainBoard.boardDateString[0]}/${mainBoard.mainImg[0]}" alt="Image" width="400px" height="300px">
                                     </a>
                                     <div class="excerpt">
-                                        <h2><a href="/main/view?mbNo=${mainBoard.mbNo}">${mainBoard.title}</a></h2>
-                                        <p>${mainBoard.content}</p>
-                                        <div class="post-meta align-items-center text-left clearfix">
-                                            <figure class="author-figure mb-0 me-3 float-start"><img src="/upload/profileView/${mainBoard.dateString}/${mainBoard.profileImg}" alt="Image placeholder" class="img-fluid"></figure>
-                                            <a href="/profile/friendProfile?memberId=${mainBoard.memberId}">
-                                                <span class="d-inline-block mt-1 boardNickName">${mainBoard.nickName}</span>
-                                                <span class="boardMemberId">${mainBoard.memberId}</span>
-                                            </a>
-                                            <br>
-                                            <span>${mainBoard.addDate[0]+"-"+mainBoard.addDate[1]+"-"+mainBoard.addDate[2]+" "+mainBoard.addDate[3]+":"+mainBoard.addDate[4]}</span><br>
-                                            <p class="likeHitCnt">
-                                                <span><i class="fa-solid fa-heart"></i>${mainBoard.like}</span>
-                                                <span><i class="fa-solid fa-comment"></i>${mainBoard.commentCnt}</span>
-                                                <span><i class="fa-solid fa-eye"></i>${mainBoard.hit}</span>
-                                            </p>
-                                        </div>
-                                        <p><button onclick="modalBtn(${mainBoard.mbNo})" class="read-more">Continue Reading</a></p>
+                                        <a href="/main/view?mbNo=${mainBoard.mbNo}"><h2>${mainBoard.title}</h2>
+                                            <p>${mainBoard.content}</p>
+                                        </a>
+                                    </div>
+                                    <div class="post-meta align-items-center text-left clearfix mt-3 mb-0">
+                                        <figure class="author-figure mb-0 me-3 float-start"><img src="/upload/profileView/${mainBoard.dateString}/${mainBoard.profileImg}" alt="Image placeholder" class="img-fluid"></figure>
+                                        <a href="/profile/friendProfile?memberId=${mainBoard.memberId}">
+                                            <span class="d-inline-block mt-1 boardNickName">${mainBoard.nickName}</span>
+                                            <span class="boardMemberId">(${mainBoard.memberId})</span>
+                                        </a>
+                                        <br>
+                                        <span>${mainBoard.addDate[0]+"-"+mainBoard.addDate[1]+"-"+mainBoard.addDate[2]+" "+mainBoard.addDate[3]+":"+mainBoard.addDate[4]}</span><br>
+                                        <p class="likeHitCnt">
+                                            <span><i class="fa-solid fa-heart"></i>${mainBoard.like}</span>
+                                            <span><i class="fa-solid fa-comment"></i>${mainBoard.commentCnt}</span>
+                                            <span><i class="fa-solid fa-eye"></i>${mainBoard.hit}</span>
+                                        </p>
+                                    </div>
+                                        <p><a onclick="modalBtn(${mainBoard.mbNo})" class="read-more">상세보기</a></p>
                                     </div>
                                 </div>
                             </div>
