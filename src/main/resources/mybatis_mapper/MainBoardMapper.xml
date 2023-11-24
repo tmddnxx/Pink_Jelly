@@ -23,12 +23,33 @@
         </choose>
     </sql>
 
+    <sql id ="adminSearch">
+        <where>
+            <choose>
+                <when test="type != null and keyword != null">
+                    <if test="type.equals('title')">
+                         `title` like concat('%',#{keyword},'%')
+                    </if>
+                    <if test="type.equals('content')">
+                         `content` like concat('%',#{keyword},'%')
+                    </if>
+                    <if test="type.equals('memberId')">
+                         `memberId` like concat('%',#{keyword},'%')
+                    </if>
+                    <if test="type.equals('nickName')">
+                         `nickName` like concat('%',#{keyword},'%')
+                    </if>
+                </when>
+            </choose>
+        </where>
+    </sql>
+
     <insert id="insert">
         INSERT INTO mainBoard (memberId, nickName, profileImg, title, content, mainImg, addDate, myCat, variety, mno)
         VALUES (#{memberId}, #{nickName}, #{profileImg}, #{title}, #{content}, #{mainImg}, now(), #{myCat}, #{variety}, #{mno})
     </insert>
     <select id="selectAll" resultType="com.example.pink_jelly.domain.MainBoardVO">
-        SELECT * FROM mainBoard ORDER BY mbNo DESC
+        SELECT * FROM mainBoard <include refid="adminSearch"/> ORDER BY mbNo DESC
     </select>
     <select id="getCount" resultType="int">
         SELECT COUNT(mbNo) FROM mainBoard
