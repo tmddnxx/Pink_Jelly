@@ -40,4 +40,6 @@ public interface MainBoardMapper {
     void downCommentCnt (Long mbNo); //댓글 수 감소
 
     List<MemberVO> getAll(); //전체 불러오기
+
+    List<MainBoardVO> selectAll(PageRequestDTO pageRequestDTO); // 메인 리스트
 }
