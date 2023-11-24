@@ -3,6 +3,7 @@ package com.example.pink_jelly.domain;
 import com.example.pink_jelly.dto.upload.UploadResultDTO;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -30,6 +31,8 @@ public class MemberVO { // 회원정보
     private String introduce; // 소개글
     private boolean del; // 회원 탈퇴 여부
     private boolean social; // 소셜 로그인
+    private LocalDate addDate; //등록 날짜
+
 
     @Builder.Default
     private Set<MemberRole> roleSet=new HashSet<>();

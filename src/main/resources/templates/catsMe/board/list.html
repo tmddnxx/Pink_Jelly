@@ -152,7 +152,7 @@
     <div class="col-lg-8 w-100">
       <div class="blog-entry d-flex blog-entry-search-item w-100 aboard" th:each="catsMeBoard:${catsMeBoardList.dtoList}">
         <a th:href="|@{/catsMe/board/view(cmbNo=${catsMeBoard.cmbNo})}|" class="img-link">
-          <img th:src="|/upload/catsMeBoardView/${catsMeBoard.boardDateString[0]}/${catsMeBoard.catsMeImg[0]}|" alt="Image" style="width:250px; height: 250px; "class="img-fluid">
+          <img th:src="|/upload/catsMeBoardView/${catsMeBoard.boardDateString[0]}/${catsMeBoard.catsMeImg[0]}|" alt="Image" style="width:150px; height: 150px; margin-left: 50px;"class="img-fluid">
         </a>
         <div class="d-flex flex-column justify-content-between">
           <div class="content">
@@ -247,7 +247,7 @@
       <div class="col-lg-8 w-100">
         <div class="blog-entry d-flex blog-entry-search-item w-100 aboard">
             <a href="/catsMe/board/view?cmbNo=${dtoList.cmbNo}" class="img-link">
-                <img src="/upload/catsMeBoardView/${dtoList.boardDateString[0]}/${dtoList.catsMeImg[0]}" alt="Image" style="width:250px; height: 250px;" class="img-fluid">
+                <img src="/upload/catsMeBoardView/${dtoList.boardDateString[0]}/${dtoList.catsMeImg[0]}" alt="Image" style="width:150px; height: 150px; margin-left: 50px; class="img-fluid">
             </a>
             <div class="d-flex flex-column justify-content-between">
                 <div class="content">
@@ -319,7 +319,7 @@
         <div class="col-lg-8 w-100">
   <div class="blog-entry d-flex blog-entry-search-item w-100 aboard">
       <a href="/catsMe/review/view?crbNo=${dtoList.crbNo}" class="img-link">
-          <img src="/upload/catsReviewView/${dtoList.boardDateString[0]}/${dtoList.catsMeImg[0]}" alt="Image" style="width:250px; height: 250px;" class="img-fluid">
+          <img src="/upload/catsReviewView/${dtoList.boardDateString[0]}/${dtoList.catsMeImg[0]}" alt="Image" style="width:150px; height: 150px; margin-left: 50px; class="img-fluid">
       </a>
       <div class="d-flex flex-column justify-content-between">
           <div class="content">

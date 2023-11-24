@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{layout/basic.html}">
+<head>
+    <meta charset="UTF-8">
+    <title>메인 페이지</title>
+    <link rel="stylesheet" th:href="@{/css/mainBoard.css}">
+</head>
+
+<body>
+<div layout:fragment="content">
+    <!--        검색 창-->
+    <div class="row content">
+        <div class="col">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Search</h5>
+                    <form action="/admin/memberList" method="get">
+                        <div class="mb-3">
+                            <input type="checkbox" name="types" value="memberId" checked/>아이디
+                            <input type="checkbox" name="types" value="nickName"/>닉네임
+                            <input type="checkbox" name="types" value="email"/>이메일
+                            <input type="checkbox" name="types" value="variety"/>품종
+                            <input type="text" placeholder="검색어를 입력해주세요." readonly style="text-align: right; border: none"/>
+                            <input type="text" name="keyword" class="form-control">
+                        </div>
+                        <div class="input-group mb-3 dueDateDiv">
+                            <input type="date" name="from" class="form-control" value="${adminSearchDTO.from}">
+                            <input type="date" name="to" class="form-control" value="${adminSearchDTO.to}">
+                        </div>
+                        <div class="input-group mb-3">
+                            <div class="float-end">
+                                <button class="btn btn-primary searchBtn" type="button">Search</button>
+                                <button class="btn btn-info clearBtn" type="reset">Clear</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 검색창 끝 -->
+    <div class="row content">
+        <div class="col">
+            <div class="card">
+                <div class="card-header">
+                </div>
+                <div class="card-body">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <p style="text-align: right"><button type="button" class="btn btn-secondary btn-selected">선택삭제</button> </p>
+                        </tr>
+                        <tr>
+                            <th scope="col"><input type="checkbox" name="allCheck"></th>
+                            <th scope="col">Mno</th>
+                            <th scope="col">MemberId</th>
+                            <th scope="col">NickName</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">AddDate</th>
+                            <th scope="col"></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="/js/admin/admin.js?12"></script>
+</div>
+
+<script layout:fragment="script" th:inline="javascript">
+
+document.addEventListener('DOMContentLoaded', function(){
+    printList('', '', '', '');
+
+    const searchBtn = document.querySelector('.searchBtn');
+    const typesId = document.querySelectorAll('input[name=types]');
+
+    const keyword = document.querySelector('input[name=keyword]');
+    const from = document.querySelector('input[name=from]');
+    const to = document.querySelector('input[name=to]');
+    const searchResult = document.querySelector("tbody");
+
+    const checkAllBtn = document.querySelector('input[name=allCheck]');
+
+
+    searchBtn.addEventListener('click', function () {
+        const checkedId = [];
+
+        for (let i = 0; i < typesId.length; i++) {
+            if (typesId[i].checked === true) {
+                checkedId.push(typesId[i].value);
+            }
+        }
+        console.log(checkedId);
+        printList(checkedId, keyword.value, from.value, to.value)
+
+    });
+
+
+
+    function printList(checkId, keyword, from, to){
+        getList(checkId, keyword, from, to).then(data => {
+            let str = ''
+            data.forEach(member => {
+                str += `<tr>
+                                <td>
+                                    <input type="checkbox" name="checkMno" value="${member.mno}"/>
+                                </td>
+                                <td>${member.mno}</td>
+                                <td>${member.memberId}</td>
+                                <td>${member.nickName}</td>
+                                <td>${member.email}</td>
+                                <td>${member.addDate}</td>
+                                <td data-mno="${member.mno}"><button type="button" class="btn btn-danger removeBtn">삭제</button></td>
+                            </tr>`;
+            });
+            searchResult.innerHTML = str;
+
+            const checkAll = document.querySelectorAll('input[name=checkMno]');
+
+            checkAllBtn.addEventListener('change', function () {
+
+                const isChecked = checkAllBtn.checked;
+
+                checkAll.forEach(checkbox => {
+                    checkbox.checked = isChecked;
+                });
+            });
+
+            const removeIds = document.querySelectorAll('input[name=checkMno]');
+            const selectBtn = document.querySelector('.btn-selected');
+            selectBtn.addEventListener('click', function(){
+                const tableId = [];
+                removeIds.forEach(removeId => {
+                    if(removeId.checked === true){
+                        removeMember(removeId.value);
+                        removeTableRow(removeId.value);
+                        checkAllBtn.checked = false;
+                    }
+                });
+
+            });
+        });
+
+    }
+
+
+    function removeTableRow(mno) {
+        // 해당 행을 감싸는 부모 요소 찾기
+        const rows = document.querySelectorAll(`td[data-mno="${mno}"]`);
+        rows.forEach(rowTable =>{
+            const rowToRemove = rowTable.parentNode;
+            console.log(rowToRemove);
+
+            // 부모 요소를 제거
+            rowToRemove.remove(rowToRemove);
+        });
+    }
+
+
+});
+
+
+
+</script>
+</body>
+</html>

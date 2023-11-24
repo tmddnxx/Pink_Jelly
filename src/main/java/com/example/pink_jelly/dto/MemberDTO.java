@@ -11,6 +11,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
@@ -52,6 +53,7 @@ public class MemberDTO implements UserDetails, OAuth2User {
     private int gmingCnt; // 그루밍 수
     private int gmerCnt; // 그루머 수
     private String introduce; // 소개글
+    private LocalDate addDate; //등록 날짜
 
     private boolean del; // 회원 탈퇴 여부
     private boolean social; // 소셜 로그인
