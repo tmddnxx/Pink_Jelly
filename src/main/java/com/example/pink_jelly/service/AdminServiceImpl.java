@@ -19,6 +19,7 @@ import java.util.List;
 @Log4j2
 public class AdminServiceImpl implements AdminService{
     private final ModelMapper modelMapper;
+    private final BanMapper banMapper;
     private final FriendsMapper friendsMapper;
     private final MemberMapper memberMapper;
     private final MainBoardMapper mainBoardMapper;
@@ -42,6 +43,7 @@ public class AdminServiceImpl implements AdminService{
     public void removeMember(Long mno) {
         memberMapper.deleteMember(mno);
         friendsMapper.deleteGmingAll(mno);
+        banMapper.deleteBanAll(mno);
     }
 
     @Override
