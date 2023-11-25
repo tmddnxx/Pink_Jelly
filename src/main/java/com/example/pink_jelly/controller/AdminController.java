@@ -21,8 +21,10 @@ public class AdminController {
     private final AdminService adminService;
 
     @GetMapping("/boardList")
-    public void boardList(){
+    public void boardList() { // 게시물 목록
+
     }
+
     @GetMapping("/memberList")
     public void memberList(@Valid AdminSearchDTO adminSearchDTO, BindingResult bindingResult, Model model){
         log.info(adminSearchDTO);

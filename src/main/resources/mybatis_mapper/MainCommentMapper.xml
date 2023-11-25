@@ -3,12 +3,27 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.pink_jelly.mapper.MainCommentMapper">
+    <sql id ="adminSearch">
+            <choose>
+                <when test="type != null and keyword != null">
+                    <if test="type.equals('comment')">
+                       and `comment` like concat('%',#{keyword},'%')
+                    </if>
+                    <if test="type.equals('memberId')">
+                        and `memberId` like concat('%',#{keyword},'%')
+                    </if>
+                    <if test="type.equals('nickName')">
+                        and `nickName` like concat('%',#{keyword},'%')
+                    </if>
+                </when>
+            </choose>
+    </sql>
     <insert id="insert" parameterType="com.example.pink_jelly.domain.MainCommentVO" useGeneratedKeys="true" keyProperty="mbNo">
         INSERT INTO mainComment (mbNo, memberId, nickName, comment, parentNo, addDate, mno, profileImg)
         VALUES (#{mbNo}, #{memberId}, #{nickName}, #{comment}, #{parentNo}, now(), #{mno}, #{profileImg})
     </insert>
     <select id="selectAll" resultType="com.example.pink_jelly.domain.MainCommentVO">
-            SELECT * FROM mainComment WHERE mbNo=#{mbNo} ORDER BY comNo ASC
+            SELECT * FROM mainComment WHERE mbNo=#{mbNo} <include refid="adminSearch"/> ORDER BY parentNo ASC
     </select>
     <select id="getCount" resultType="int">
         SELECT COUNT(comNo) FROM mainComment WHERE mbNo=#{mbNo}
