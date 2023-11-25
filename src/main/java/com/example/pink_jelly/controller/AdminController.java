@@ -20,6 +20,11 @@ public class AdminController {
 
     private final AdminService adminService;
 
+
+    @GetMapping("/main")
+    public void main(){
+
+    }
     @GetMapping("/boardList")
     public void boardList() { // 게시물 목록
 
