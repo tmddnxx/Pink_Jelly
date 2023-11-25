@@ -122,12 +122,19 @@ document.addEventListener('DOMContentLoaded', function(){
             });
             searchResult.innerHTML = str;
 
+            const removeBtns = document.querySelectorAll('.removeBtn');
+            removeBtns.forEach(function (button) {
+                button.addEventListener('click', function () {
+                    // 삭제 메서드 실행
+                    const mno = button.closest('td').dataset.mno;
+                    removeMember(mno);
+                    removeTableRow(mno);
+                });
+            })
+
             const checkAll = document.querySelectorAll('input[name=checkMno]');
-
             checkAllBtn.addEventListener('change', function () {
-
                 const isChecked = checkAllBtn.checked;
-
                 checkAll.forEach(checkbox => {
                     checkbox.checked = isChecked;
                 });
@@ -136,7 +143,6 @@ document.addEventListener('DOMContentLoaded', function(){
             const removeIds = document.querySelectorAll('input[name=checkMno]');
             const selectBtn = document.querySelector('.btn-selected');
             selectBtn.addEventListener('click', function(){
-                const tableId = [];
                 removeIds.forEach(removeId => {
                     if(removeId.checked === true){
                         removeMember(removeId.value);
@@ -144,13 +150,10 @@ document.addEventListener('DOMContentLoaded', function(){
                         checkAllBtn.checked = false;
                     }
                 });
-
             });
         });
 
     }
-
-
     function removeTableRow(mno) {
         // 해당 행을 감싸는 부모 요소 찾기
         const rows = document.querySelectorAll(`td[data-mno="${mno}"]`);
@@ -162,8 +165,6 @@ document.addEventListener('DOMContentLoaded', function(){
             rowToRemove.remove(rowToRemove);
         });
     }
-
-
 });
 
 

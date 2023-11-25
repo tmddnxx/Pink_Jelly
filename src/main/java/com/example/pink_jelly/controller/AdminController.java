@@ -20,6 +20,11 @@ public class AdminController {
 
     private final AdminService adminService;
 
+    @GetMapping("")
+    public String adminLogin(){
+        return "/admin/login";
+    }
+
     @GetMapping("/boardList")
     public void boardList(){
     }
