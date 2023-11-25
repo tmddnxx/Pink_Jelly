@@ -1,5 +1,7 @@
 package com.example.pink_jelly.controller;
 
+import com.example.pink_jelly.chat.dto.ChatRoomDTO;
+import com.example.pink_jelly.chat.service.ChatService;
 import com.example.pink_jelly.dto.*;
 import com.example.pink_jelly.service.*;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +36,7 @@ public class ProfileController {
     private final BanService banService;
     private final ProfileService profileService;
     private final UserDetailsService userDetailsService;
+    private final ChatService chatService;
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/myProfile")
@@ -47,6 +50,7 @@ public class ProfileController {
         List<MainBoardDTO> mainBoardDTOList = profileService.mainBoardList(memberId); // 메인 게시판 목록
         List<CatsMeBoardDTO> catsMeBoardDTOList = profileService.catsMeBoardList(memberId); // 입양소 게시판 목록
         List<CatsReviewBoardDTO> reviewBoardDTOList = profileService.reviewBoardList(memberId); //입양후기 게시판 목록
+        List<ChatRoomDTO> chatRoomDTOList = chatService.getRooms(); // 채팅 목록
 
         sessionReset(memberDTO);
         model.addAttribute("mainBoardList", mainBoardDTOList);

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.pink_jelly.chat.mapper.ChatMessageMapper">
+
+    <insert id="insertMessage" parameterType="com.example.pink_jelly.chat.dto.ChatMessageDTO" useGeneratedKeys="true" keyProperty="cmNo">
+        insert into chatMessages (roomId, mno, writer, message, sendTime) values (#{roomId}, #{mno}, #{writer}, #{message}, now())
+    </insert>
+
+    <select id="findAllByRoomId" resultType="com.example.pink_jelly.chat.dto.ChatMessageDTO">
+        select * from chatMessages where roomId = #{roomId}
+    </select>
+</mapper>

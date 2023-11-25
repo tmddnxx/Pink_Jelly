@@ -70,11 +70,6 @@
             </a>
             <span>[[${#temporals.format(catsMeBoard.addDate, 'yyyy-MM-dd HH:mm')}]]</span>
         </div>
-        <form action="/chat/room" method="post" class="text-end">
-            <input type="hidden" name="name" value="Test">
-            <input type="hidden" name="fromMno" th:value="${catsMeBoard.mno}">
-            <button type="submit" class="btn btn-primary" id="chatBtn">1 : 1 채팅</button>
-        </form>
     </div>
     <!-- /배너 end -->
 </div>
@@ -99,6 +94,11 @@
                 <div>[[${catsMeBoard.content}]]</div>
             </div>
             <a th:href="|@{/catsMe}|" class="btn btn-primary backBtn">목록</a>
+            <form action="/chat/room" method="post" class="text-end">
+                <input type="hidden" name="name" th:value="${catsMeBoard.title}">
+                <input type="hidden" name="fromMno" th:value="${catsMeBoard.mno}">
+                <button type="submit" class="btn btn-primary" id="chatBtn">1 : 1 채팅</button>
+            </form>
             <th:block th:if="${#authentication.principal != 'anonymousUser'}">
                 <a th:if="${#authentication.principal.mno == catsMeBoard.mno}" class="btn btn-success modifyBtn">수정</a>
                 <a th:if="${#authentication.principal.mno == catsMeBoard.mno}" class="btn btn-danger deleteBtn">삭제</a>
@@ -115,7 +115,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
     <script src="/js/slick/slick.min.js"></script>
     <script src="/js/slick/slider.js"></script>
-    <script src="/js/chat/chat.js"></script>
 </div>
 <script layout:fragment="script" th:inline="javascript">
 

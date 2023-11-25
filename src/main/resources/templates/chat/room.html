@@ -45,6 +45,7 @@
         var roomName = [[${roomName}]];
         var roomId = [[${room.roomId}]];
         var auth = [[${#authentication.principal}]];
+        var mno = auth.mno;
         var username = auth.memberId;
 
         console.log(roomName + ", " + roomId + ", " + username);
@@ -92,7 +93,7 @@
             var msg = document.getElementById('msg');
 
             console.log(username + ":" + msg.value);
-            stomp.send('/pub/chat/message', {}, JSON.stringify({roomId: roomId, message: msg.value ,writer: username}));
+            stomp.send('/pub/chat/message', {}, JSON.stringify({roomId: roomId, mno: mno, message: msg.value ,writer: username}));
             msg.value = '';
         });
     });

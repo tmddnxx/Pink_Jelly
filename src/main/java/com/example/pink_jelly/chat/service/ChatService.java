@@ -2,28 +2,34 @@ package com.example.pink_jelly.chat.service;
 
 import com.example.pink_jelly.chat.dto.ChatMessageDTO;
 import com.example.pink_jelly.chat.dto.ChatRoomDTO;
+import com.example.pink_jelly.chat.mapper.ChatMessageMapper;
 import com.example.pink_jelly.chat.mapper.ChatRoomMapper;
 import com.example.pink_jelly.chat.repository.ChatMessageRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Log4j2
 public class ChatService {
     private final ChatRoomMapper chatRoomMapper;
-    private final ChatMessageRepository chatMessageRepository;
+    private final ChatMessageMapper chatMessageMapper;
 
     // 채팅 메세지
     public ChatMessageDTO sendMessage(String roomId, ChatMessageDTO messageDTO) {
-        messageDTO.setRoomId(roomId);
+        messageDTO.setRoomId(roomId); // 채팅방 번호 저장
+        chatMessageMapper.insertMessage(messageDTO); // db에 채팅 메세지 정보 저장
+        log.info("sendMessage...");
+        log.info(messageDTO.getCmNo());
 
-        return chatMessageRepository.save(messageDTO); // db에 채팅 메세지 정보 저장
+        return messageDTO;
     }
 
     public List<ChatMessageDTO> getMessages(String roomId) {
-        return chatMessageRepository.findAllByRoomId(roomId);
+        return chatMessageMapper.findAllByRoomId(roomId);
     }
 
     // 채팅방

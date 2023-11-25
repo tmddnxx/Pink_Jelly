@@ -73,4 +73,34 @@ public class MainCommentServiceImpl implements MainCommentService{
                 .total(mainCommentMapper.getCount(mbNo))
                 .build();
     }
+
+    @Override
+    public PageResponseDTO<MainCommentDTO> getMainCommentList(Long mbNo, PageRequestDTO pageRequestDTO) {
+        // 댓글 목록 최신순
+        List<MainCommentVO> mainCommentVOList = mainCommentMapper.selectListOrderByDESC(
+                mbNo, pageRequestDTO.getSkip(), pageRequestDTO.getSize());
+        List<MainCommentDTO> mainCommentDTOList = new ArrayList<>();
+
+        mainCommentVOList.forEach(mainCommentVO -> {
+            String profileImg = null;
+            String dateString = null;
+            if(mainCommentVO.getProfileImg() != null) { // 프로필 이미지가 존재하는 경우
+                String[] imgSplits = mainCommentVO.getProfileImg().split("/");
+                profileImg = imgSplits[0];
+                dateString = imgSplits[1];
+            }
+
+            MainCommentDTO mainCommentDTO = modelMapper.map(mainCommentVO, MainCommentDTO.class);
+            mainCommentDTO.setProfileImg(profileImg);
+            mainCommentDTO.setDateString(dateString);
+
+            mainCommentDTOList.add(mainCommentDTO);
+        });
+
+        return PageResponseDTO.<MainCommentDTO>withAll()
+                .pageRequestDTO(pageRequestDTO)
+                .dtoList(mainCommentDTOList)
+                .total(mainCommentMapper.getCount(mbNo))
+                .build();
+    }
 }

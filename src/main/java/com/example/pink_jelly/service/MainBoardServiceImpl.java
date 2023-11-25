@@ -101,8 +101,10 @@ public class MainBoardServiceImpl implements MainBoardService{
 
     @Override
     public MainBoardDTO getBoard(Long mbNo, String mode, Long mno) {
-        MainBoardVO mainBoardVO;
+        MainBoardVO mainBoardVO = null;
         boolean flag = false;
+        log.info("getBoard...");
+        log.info(mbNo);
 
         if(mode.equals("view")) {
             mainBoardVO = mainBoardMapper.getOne(mbNo);
@@ -111,7 +113,9 @@ public class MainBoardServiceImpl implements MainBoardService{
         }else {
             mainBoardVO = mainBoardMapper.getOne(mbNo);
         }
+
         MainBoardDTO mainBoardDTO = modelMapper.map(mainBoardVO, MainBoardDTO.class);
+        log.info(mainBoardDTO);
 
         //mainImg 를 dateString과 fileName으로 나눔
         List<String> imgs = List.of(mainBoardVO.getMainImg().split(", "));

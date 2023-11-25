@@ -16,6 +16,15 @@
     <select id="selectList" resultType="com.example.pink_jelly.domain.MainCommentVO">
         SELECT * FROM mainComment WHERE mbNo=#{mbNo} ORDER BY parentNo, comNo LIMIT #{skip}, #{size}
     </select>
+
+    <select id="selectListOrderByDESC">
+        SELECT *
+        FROM maincomment
+        WHERE mbNo = #{mbNo}
+        ORDER BY parentNo DESC
+        LIMIT #{skip}, #{size}
+    </select>
+
     <delete id="deleteOne">
         DELETE FROM mainComment WHERE comNo=#{comNo}
     </delete>

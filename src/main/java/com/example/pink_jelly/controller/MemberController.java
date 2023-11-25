@@ -96,8 +96,10 @@ public class MemberController {
 
         log.info("/signup...");
 
-
-        if (bindingResult.hasErrors() || isConfirm.equals("false")) {
+        if (bindingResult.hasErrors()) {
+            return "/member/signup";
+        }
+        if (isConfirm.equals("false")) {
             model.addAttribute("msg", "이메일 인증을 하지않았습니다.");
             return "/member/signup";
         }

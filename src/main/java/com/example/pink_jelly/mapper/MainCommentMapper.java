@@ -1,6 +1,7 @@
 package com.example.pink_jelly.mapper;
 
 import com.example.pink_jelly.domain.MainCommentVO;
+import com.example.pink_jelly.dto.MainCommentDTO;
 import com.example.pink_jelly.dto.PageRequestDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -16,6 +17,8 @@ public interface MainCommentMapper {
     int deleteOne(Long comNo);
 
     void updateParentNo(); // 부모번호 업데이트
+
+    List<MainCommentVO> selectListOrderByDESC(@Param("mbNo") Long mbNo, @Param("skip") int skip, @Param("size")int size);
 
 
 

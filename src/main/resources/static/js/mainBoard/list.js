@@ -1,6 +1,7 @@
+// 게시물 정보 가져오기
 async function getBoard(mbNo){
-    console.log(mbNo);
-    const response = await axios.get(`/mainModal/${mbNo}`);
+    const response = await axios.get(`/main/getBoard/${mbNo}`);
+    console.log("response");
     return response.data;
 }
 
@@ -11,10 +12,10 @@ async function addComment(commentObj) {
 }
 //댓글 목록 가져오기
 async function getList({mbNo, page, size, goLast}) {
-    const result = await axios.get(`/mainComment/list/${mbNo}?page=${page}`, {params: {page, size}});
+    const result = await axios.get(`/mainComment/list/${mbNo}?page=${page}&size=${size}`);
     if (goLast) {
         const total = result.data.total;
-        const lastPage = parseInt(Math.ceil(total/size));
+        const lastPage = parseInt(Math.ceil(total / size));
 
         return getList({mbNo: mbNo, page: page, size: size});
     }
@@ -27,4 +28,11 @@ async function removeComment(comNo, mbNo) {
     console.log("comNo는 ?",comNo);
     const response = await axios.delete(`/mainComment/${comNo}/${mbNo}`);
     return response.data;
+}
+
+// 댓글 목록 최신순으로 가져오기
+async function getCommentList({mbNo, page, size}) {
+    const result = await axios.get(`/mainComment/comments/${mbNo}?page=${page}&size=${size}`);
+
+    return result.data;
 }
