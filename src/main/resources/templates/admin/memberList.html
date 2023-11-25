@@ -7,7 +7,26 @@
     <title>메인 페이지</title>
     <link rel="stylesheet" th:href="@{/css/mainBoard.css}">
 </head>
-
+<style layout:fragment="style">
+    .searchBtn{
+        background-color: #ff99a3 !important;
+        border-color: #ff99a3 !important;
+    }
+    .searchBtn:hover{
+        background-color: #f82767 !important;
+        border-color: #f82767 !important;
+    }
+    .clearBtn{
+        background-color: #7e7e7e !important;
+        border-color: #7e7e7e !important;
+        color: white;
+    }
+    .clearBtn:hover{
+        background-color: #555555 !important;
+        border-color: #555555 !important;
+        color: white;
+    }
+</style>
 <body>
 <div layout:fragment="content">
     <!--        검색 창-->
@@ -50,7 +69,7 @@
                     <table class="table">
                         <thead>
                         <tr>
-                            <p style="text-align: right"><button type="button" class="btn btn-secondary btn-selected">선택삭제</button> </p>
+                            <p style="text-align: right"><button type="button" class="btn btn-danger btn-selected">선택삭제</button> </p>
                         </tr>
                         <tr>
                             <th scope="col"><input type="checkbox" name="allCheck"></th>
@@ -70,7 +89,7 @@
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script src="/js/admin/admin.js?12"></script>
+    <script src="/js/admin/admin.js"></script>
 </div>
 
 <script layout:fragment="script" th:inline="javascript">

@@ -38,9 +38,6 @@ public class UpDownController {
     @Value("${com.example.catsMeUpload.path}")
     private String catsMeUpload; // 프로필 저장 경로
 
-    @Value("${com.example.adminBanner.path}")
-    private String bannerUpload;
-
 
     //임시 저장소 temp
     @ApiOperation(value = "Temp Upload Post", notes = "POST 방식으로 임시 파일 등록")
