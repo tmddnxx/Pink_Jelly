@@ -42,13 +42,23 @@ public class MainCommentController {
     @ApiOperation(value = "Replies of Board", notes = "GET 방식으로 특정 게시물의 댓글 목록")
     @GetMapping(value = "/list/{mbNo}")
     public PageResponseDTO<MainCommentDTO> getList(@PathVariable("mbNo") Long mbNo, PageRequestDTO pageRequestDTO) {
-        // @PathVariable 경로에 있는 값 사용
-//        log.info(pageRequestDTO.getSkip());
         log.info("/list/crbNo---------------"+ mbNo + pageRequestDTO.getSkip()+ pageRequestDTO.getSize());
 
         PageResponseDTO<MainCommentDTO> mainComment = mainCommentService.getListMainComment(mbNo, pageRequestDTO);
 
         return mainComment;
+    }
+
+    @ApiOperation(value = "Replies of Board", notes = "GET 방식으로 특정 게시물의 댓글 목록 최신순")
+    @GetMapping(value = "/comments/{mbNo}")
+    public PageResponseDTO<MainCommentDTO> getCommentList(@PathVariable("mbNo") Long mbNo, PageRequestDTO pageRequestDTO) {
+        log.info("/list/crbNo---------------");
+        log.info(mbNo);
+        log.info(pageRequestDTO);
+
+        PageResponseDTO<MainCommentDTO> responseDTO = mainCommentService.getMainCommentList(mbNo, pageRequestDTO);
+
+        return responseDTO;
     }
 
     @ApiOperation(value = "Delete Reply", notes = "DELETE 방식으로 특정 댓글 삭제")

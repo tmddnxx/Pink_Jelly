@@ -12,4 +12,5 @@ public interface MainCommentService {
 
     PageResponseDTO<MainCommentDTO> getListMainComment(Long mbNo, PageRequestDTO pageRequestDTO);
 
+    PageResponseDTO<MainCommentDTO> getMainCommentList(Long mbNo, PageRequestDTO pageRequestDTO);
 }

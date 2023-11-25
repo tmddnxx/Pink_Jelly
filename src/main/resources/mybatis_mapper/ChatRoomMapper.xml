@@ -13,7 +13,7 @@
     </insert>
 
     <select id="selectAllRooms" resultType="com.example.pink_jelly.chat.dto.ChatRoomDTO">
-        select * from chatRoom
+        select roomId from chatList where toMno = #{mno} or fromMno = #{mno}
     </select>
 
     <select id="findRoomById" resultType="com.example.pink_jelly.chat.dto.ChatRoomDTO">

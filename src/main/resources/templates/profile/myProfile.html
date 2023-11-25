@@ -198,6 +198,25 @@
     </div>
     <!--    그루머 목록 끝-->
 
+    <!-- 채팅목록 -->
+    <div class="modal grooming_wrap modal-dialog-scrollable" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">채팅</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <ul class="modal-body" th:each="dto: ${gmingDTOList}">
+                    <li>[[${dto.nickName}]]([[${dto.memberId}]])</li>
+                </ul>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /채팅목록 -->
+
 <!--    내 정보-->
     <div class="info">
         <div class="info-inner">

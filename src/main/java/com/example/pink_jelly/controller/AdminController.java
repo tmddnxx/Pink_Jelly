@@ -25,9 +25,16 @@ public class AdminController {
         return "/admin/login";
     }
 
-    @GetMapping("/boardList")
-    public void boardList(){
+
+    @GetMapping("/main")
+    public void main(){
+
     }
+    @GetMapping("/boardList")
+    public void boardList() { // 게시물 목록
+
+    }
+
     @GetMapping("/memberList")
     public void memberList(@Valid AdminSearchDTO adminSearchDTO, BindingResult bindingResult, Model model){
         log.info(adminSearchDTO);

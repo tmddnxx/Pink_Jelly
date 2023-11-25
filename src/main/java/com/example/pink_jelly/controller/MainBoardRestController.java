@@ -14,10 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
@@ -53,5 +50,23 @@ public class MainBoardRestController {
         }
 
         return response;
+    }
+
+    @GetMapping("/getBoard/{mbNo}")
+    public MainBoardDTO getBoard(@PathVariable("mbNo")Long mbNo, @AuthenticationPrincipal MemberDTO memberDTO) {
+        log.info("/getBoard/{mbNo}...");
+        log.info(mbNo);
+
+        MainBoardDTO mainBoardDTO = null;
+
+        if (memberDTO == null) {
+            mainBoardDTO = mainBoardService.getBoard(mbNo, "no", 0L);
+        }
+        else {
+            mainBoardDTO = mainBoardService.getBoard(mbNo, "view", memberDTO.getMno());
+        }
+
+
+        return  mainBoardDTO;
     }
 }

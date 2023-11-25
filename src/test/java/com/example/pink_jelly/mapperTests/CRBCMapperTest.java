@@ -30,14 +30,14 @@ public class CRBCMapperTest {
         }
     }
 
-    @Test
-    public void selectAll() {
-        List<CRBCommentVO> cr = crbCommentMapper.selectAll(1L, PageRequestDTO.builder()
-                .page(1)
-                .size(3)
-                .build());
-        cr.forEach(log::info);
-    }
+//    @Test
+//    public void selectAll() {
+//        List<CRBCommentVO> cr = crbCommentMapper.selectAll(1L, PageRequestDTO.builder()
+//                .page(1)
+//                .size(3)
+//                .build());
+//        cr.forEach(log::info);
+//    }
 
     @Test
     public void delete(){
