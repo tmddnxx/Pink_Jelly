@@ -50,4 +50,35 @@
     <update id="updateIntroduce">
         update member set introduce = #{introduce} where mno = #{mno};
     </update>
+    <sql id="search">
+        <where>
+            <if test="types != null and types.length > 0">
+                <foreach collection="types" item="type" open="(" close=")" separator=" OR">
+                    <if test="type.equals('memberId')">
+                        `memberId` like concat('%', #{keyword}, '%')
+                    </if>
+                    <if test="type.equals('email')">
+                        `email` like concat('%', #{keyword}, '%')
+                    </if>
+                    <if test="type.equals('nickName')">
+                        `nickName` like concat('%', #{keyword}, '%')
+                    </if>
+                    <if test="type.equals('variety')">
+                        `variety` like concat('%', #{keyword}, '%')
+                    </if>
+                </foreach>
+            </if>
+            and del != 1
+            <if test="from != null and to != null">
+                <trim prefix="and">
+                    `addDate` between #{from} and #{to}
+                </trim>
+            </if>
+        </where>
+    </sql>
+    <select id="searchAll" resultType="com.example.pink_jelly.domain.MemberVO">
+        select * from member
+            <include refid="search"></include>
+                order by memberId desc
+    </select>
 </mapper>

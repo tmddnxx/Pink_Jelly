@@ -1,6 +1,7 @@
 package com.example.pink_jelly.mapper;
 
 import com.example.pink_jelly.domain.MainBoardVO;
+import com.example.pink_jelly.domain.MemberVO;
 import com.example.pink_jelly.dto.MainBoardDTO;
 import com.example.pink_jelly.dto.PageRequestDTO;
 import org.apache.ibatis.annotations.Mapper;
@@ -37,4 +38,8 @@ public interface MainBoardMapper {
     void upCommentCnt (Long mbNo); //댓글수 증가
 
     void downCommentCnt (Long mbNo); //댓글 수 감소
+
+    List<MemberVO> getAll(); //전체 불러오기
+
+    List<MainBoardVO> selectAll(PageRequestDTO pageRequestDTO); // 메인 리스트
 }

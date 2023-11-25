@@ -24,7 +24,7 @@ public class CatsMeBoardServiceTests {
                 .profileImg("test")
                 .title("제목 입니당~~")
                 .content("내용 블라블라블라 블라 블라")
-                .cmbImg("on")
+//                .cmbImg("on")
                 .status("입양전")
                 .build();
         catsMeService.register(catsMeBoardDTO);

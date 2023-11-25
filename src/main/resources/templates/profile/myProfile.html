@@ -36,8 +36,8 @@
         height: 60%;
     }
     .bottom-inner{
-        width: 90%;
-        height: 90%;
+        width: 100%;
+        height: 100%;
         margin: 0 auto;
     }
     .bottom-inner h4{
@@ -274,29 +274,31 @@
             </li>
         </ul>
         <!--  목록-->
-        <div class="row mainBoardList">
-            <div class="col-lg-3 mb-4"  th:each="mainBoard:${mainBoardList}">
-                <a th:href="|@{/main/view(mbNo=${mainBoard.mbNo})}|" class="img-link">
-                    <img th:src="|/upload/mainBoardView/${mainBoard.boardDateString[0]}/${mainBoard.mainImg[0]}|" alt="Image" class="img-fluid" width="200">
-                    <p>[[${mainBoard.title}]]</p>
-                </a>
+        <div class="row mainBoardList" style="margin: 0">
+            <div class="col-lg-3 mb-4" style="padding: 0" th:each="mainBoard, mainBoardStat:${mainBoardList}">
+                <div th:class="${mainBoardStat.index == 0 ? '' : 'ms-2'}">
+                    <a th:href="|@{/main/view(mbNo=${mainBoard.mbNo})}|" class="img-link">
+                        <img th:src="|/upload/mainBoardView/${mainBoard.boardDateString[0]}/${mainBoard.mainImg[0]}|" alt="Image" width="100%" height="200px">
+                        <p>[[${mainBoard.title}]]</p>
+                    </a>
+                </div>
             </div>
         </div>
-        <div class="row catsMeList">
-            <div class="col-lg-3 mb-4" th:each="catsMeBoard:${catsMeBoardList}">
-                <div>
+        <div class="row catsMeList" style="margin: 0">
+            <div class="col-lg-3 mb-4" style="padding: 0" th:each="catsMeBoard, catsMeBoardStat:${catsMeBoardList}">
+                <div th:class="${catsMeBoardStat.index == 0 ? '' : 'ms-2'}">
                     <a th:href="|@{/catsMe/board/view(cmbNo=${catsMeBoard.cmbNo})}|" class="img-link">
-                        <img th:src="|/upload/catsMeBoardView/${catsMeBoard.boardDateString[0]}/${catsMeBoard.catsMeImg[0]}|" alt="Image" class="img-fluid" width="200">
+                        <img th:src="|/upload/catsMeBoardView/${catsMeBoard.boardDateString[0]}/${catsMeBoard.catsMeImg[0]}|" alt="Image" width="100%" height="200px">
                         <p>[[${catsMeBoard.title}]]</p>
                     </a>
                 </div>
             </div>
         </div>
-        <div class="row reviewList" >
-            <div class="col-lg-3 mb-4" th:each="reviewBoard:${reviewBoardList}">
-                <div>
+        <div class="row reviewList" style="margin: 0">
+            <div class="col-lg-3 mb-4" style="padding: 0;" th:each="reviewBoard, reviewBoardStat:${reviewBoardList}">
+                <div th:class="${reviewBoardStat.index == 0 ? '' : 'ms-2'}">
                     <a th:href="|@{/catsMe/review/view(crbNo=${reviewBoard.crbNo})}|" class="img-link">
-                        <img th:src="|/upload/catsReviewView/${reviewBoard.boardDateString[0]}/${reviewBoard.catsMeImg[0]}|" alt="Image" class="img-fluid" width="200">
+                        <img th:src="|/upload/catsReviewView/${reviewBoard.boardDateString[0]}/${reviewBoard.catsMeImg[0]}|" alt="Image" width="100%" height="200px">
                         <p>[[${reviewBoard.title}]]</p>
                     </a>
                 </div>

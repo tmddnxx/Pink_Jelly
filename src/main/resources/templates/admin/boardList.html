@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{layout/adminBasic.html}">
+<head>
+    <meta charset="UTF-8">
+    <title>관리자 페이지</title>
+</head>
+<style layout:fragment="style">
+    *{
+        color: black;
+    }
+    .listWrap{
+        width: 50%;
+        height: 500px;
+        overflow: scroll;
+    }
+    .title{
+        width: 40%;
+        text-align: center;
+    }
+    .writer{
+        width: 20%;
+        text-align: center;
+    }
+    .addDate{
+        width: 20%;
+    }
+    .searchDiv{
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+    .form-select{
+        width: 100px;
+        height: 40px;
+    }
+    .keyword{
+        width: 300px;
+        height: 40px;
+        border: 1px solid #ced4da;
+    }
+    .searchBtn{
+        width: 100px;
+        height: 40px;
+        color: white;
+        background-color: #ff99a3 !important;
+        border-color: #ff99a3;
+        padding: 0;
+    }
+    .searchBtn:hover{
+        color: white;
+        background-color: #f82767 !important;
+        border-color: #f82767;
+    }
+</style>
+<body>
+    <div layout:fragment="content">
+<!--        메인 리스트-->
+        <div class="wrap d-flex">
+            <div class="listWrap">
+                <h1>Main List</h1>
+<!--                검색창-->
+                <form action="/search/main" method="get" name="frmSearch">
+                    <div class="col">
+                        <div class="input-group searchDiv">
+                            <div>
+                                <select class="form-select" id="type" th:name="type">
+                                    <option value="">---</option>
+                                    <option value="title" >제목</option>
+                                    <option value="content">내용</option>
+                                    <option value="nickName" >닉네임</option>
+                                    <option value="memberId">아이디</option>
+                                </select>
+                            </div>
+                            <input type="text" class="keyword" name="keyword">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary searchBtn" type="button">Search</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+<!--                정렬-->
+                <div class="d-flex justify-content-between">
+                    <span>번호</span>
+                    <span class="title">제목</span>
+                    <span class="writer">작성자</span>
+                    <span class="addDate">작성일</span>
+                </div>
+                <hr>
+<!--                게시물리스트-->
+                <div th:each="mainDTOList:${mainDTOList.dtoList}">
+                    <div class="d-flex justify-content-between w-100">
+                        <span>[[${mainDTOList.mbNo}]]</span>
+                        <span>[[${mainDTOList.title}]]</span>
+                        <span>[[${mainDTOList.nickName}]] ([[${mainDTOList.memberId}]])</span>
+                        <span>[[${#temporals.format(mainDTOList.addDate, 'yyyy-MM-dd HH:mm')}]]</span><br>
+                    </div>
+                    <hr>
+                </div>
+            </div>
+<!--            상세뷰-->
+            <div class="viewWrap">
+                게시물 상세 뷰
+            </div>
+        </div>
+<!--        캣츠미 -->
+        <div class="wrap d-flex">
+            <div class="listWrap">
+                <h1>CatsMe List</h1>
+                <form action="/search/catsMe" method="get" name="frmSearch">
+                    <div class="col">
+                        <div class="input-group searchDiv">
+                            <div>
+                                <select class="form-select" th:name="type">
+                                    <option value="">---</option>
+                                    <option value="title" >제목</option>
+                                    <option value="content">내용</option>
+                                    <option value="nickName" >닉네임</option>
+                                    <option value="memberId">아이디</option>
+                                </select>
+                            </div>
+                            <input type="text" class="form-control" name="keyword">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary searchBtn" type="button">Search</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <div>
+                    <span>번호</span>
+                    <span>제목</span>
+                    <span>작성자</span>
+                    <span>작성일</span>
+                </div>
+                <div th:each="catsMeList:${catsDTOList.dtoList}">
+                    <div>
+                        <span>[[${catsMeList.cmbNo}]]</span>
+                        <span>[[${catsMeList.title}]]</span>
+                        <span>[[${catsMeList.nickName}]] ([[${catsMeList.memberId}]])</span>
+                        <span>[[${#temporals.format(catsMeList.addDate, 'yyyy-MM-dd HH:mm')}]]</span><br>
+                    </div>
+                </div>
+            </div>
+            <div class="viewWrap">
+                게시물 상세 뷰
+            </div>
+        </div>
+<!--        리뷰 리스트-->
+        <div class="wrap d-flex">
+            <div class="listWrap">
+                <h1>Review List</h1>
+                <form action="/search/review" method="get" name="frmSearch">
+                    <div class="col">
+                        <div class="input-group searchDiv">
+                            <div>
+                                <select class="form-select" th:name="type">
+                                    <option value="">---</option>
+                                    <option value="title" >제목</option>
+                                    <option value="content">내용</option>
+                                    <option value="nickName" >닉네임</option>
+                                    <option value="memberId">아이디</option>
+                                </select>
+                            </div>
+                            <input type="text" class="form-control" name="keyword">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary searchBtn" type="button">Search</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <div>
+                    <span>번호</span>
+                    <span>제목</span>
+                    <span>작성자</span>
+                    <span>작성일</span>
+                </div>
+                <div th:each="reviewList:${reviewDTOList.dtoList}">
+                    <div>
+                        <span>[[${reviewList.crbNo}]]</span>
+                        <span>[[${reviewList.title}]]</span>
+                        <span>[[${reviewList.nickName}]] ([[${reviewList.memberId}]])</span>
+                        <span>[[${#temporals.format(reviewList.addDate, 'yyyy-MM-dd HH:mm')}]]</span><br>
+                    </div>
+                </div>
+            </div>
+            <div class="viewWrap">
+                게시물 상세 뷰
+            </div>
+        </div>
+    </div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script layout:fragment="script" th:inline="javascript">
+
+</script>
+</html>

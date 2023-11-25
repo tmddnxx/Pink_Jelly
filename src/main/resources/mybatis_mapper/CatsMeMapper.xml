@@ -23,12 +23,33 @@
         </choose>
     </sql>
 
+    <sql id ="adminSearch">
+        <where>
+            <choose>
+                <when test="type != null and keyword != null">
+                    <if test="type.equals('title')">
+                        `title` like concat('%',#{keyword},'%')
+                    </if>
+                    <if test="type.equals('content')">
+                        `content` like concat('%',#{keyword},'%')
+                    </if>
+                    <if test="type.equals('memberId')">
+                        `memberId` like concat('%',#{keyword},'%')
+                    </if>
+                    <if test="type.equals('nickName')">
+                        `nickName` like concat('%',#{keyword},'%')
+                    </if>
+                </when>
+            </choose>
+        </where>
+    </sql>
+
     <insert id="insert">
         INSERT INTO catsMeBoard (memberId, nickName, profileImg, title, content, addDate, status, mno, catsMeImg)
         VALUES (#{memberId}, #{nickName}, #{profileImg}, #{title}, #{content}, now(), #{status}, #{mno}, #{catsMeImg})
     </insert>
     <select id="selectAll" resultType="com.example.pink_jelly.domain.CatsMeBoardVO">
-        SELECT * FROM catsMeBoard ORDER BY cmbNo DESC
+        SELECT * FROM catsMeBoard <include refid="adminSearch"/> ORDER BY cmbNo DESC
     </select>
     <select id="getCount" resultType="int">
         SELECT COUNT(cmbNo) FROM catsMeBoard
@@ -60,7 +81,7 @@
         VALUES (#{memberId}, #{nickName}, #{profileImg}, #{title}, #{content}, now(), #{mno}, #{catsMeImg})
     </insert>
     <select id="selectReviewBoardAll" resultType="com.example.pink_jelly.domain.CatsReviewBoardVO">
-        SELECT * FROM catsReviewBoard ORDER BY crbNo DESC
+        SELECT * FROM catsReviewBoard <include refid="adminSearch"/> ORDER BY crbNo DESC
     </select>
     <select id="getReviewBoardCount" resultType="int">
         SELECT COUNT(crbNo) FROM catsReviewBoard

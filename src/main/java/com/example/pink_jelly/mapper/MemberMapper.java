@@ -1,8 +1,12 @@
 package com.example.pink_jelly.mapper;
 
 import com.example.pink_jelly.domain.MemberVO;
+import com.example.pink_jelly.dto.AdminSearchDTO;
+import com.example.pink_jelly.dto.MemberDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 @Mapper
 public interface MemberMapper {
@@ -32,4 +36,6 @@ public interface MemberMapper {
     void updateProfileImg(@Param("profileImg") String profileImg, @Param("mno") Long mno); // 회원번호와 일치하는 프로필 이미지 모두 삭제
 
     void updateIntroduce(MemberVO memberVO); // 회원소개글 수정
+
+    List<MemberVO> searchAll(AdminSearchDTO adminSearchDTO); //관리자 검색기능
 }

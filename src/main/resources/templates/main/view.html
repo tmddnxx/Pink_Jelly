@@ -305,14 +305,13 @@
         const modifyBtn = document.querySelector('.modifyBtn');
         const deleteBtn = document.querySelector('.deleteBtn');
         modifyBtn.addEventListener('click', function() {
-            if(!confirm("게시글을 수정하시겠습니까?")){
+            if(!(confirm("게시글을 수정하시겠습니까?"))){
                 return;
-
             }
             window.location.href = "/main/modify?mbNo=" + mbNo;
         });
         deleteBtn.addEventListener('click', function() {
-            if(!confirm("게시글을 삭제하시겠습니까?")) {
+            if(!(confirm("게시글을 삭제하시겠습니까?"))) {
                 return;
 
             }
