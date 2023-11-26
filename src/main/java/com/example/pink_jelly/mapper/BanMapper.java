@@ -18,5 +18,7 @@ public interface BanMapper {
     boolean isBan(@Param("mno") Long mno,@Param("memberId") String memberId); // 차단여부
 
     boolean banned(String memberId); // 차단당함
+
+    void deleteBanAll(Long mno); //전체 삭제
 }
 

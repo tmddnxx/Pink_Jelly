@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>관리자 메인 페이지</title>
+</head>
+<style>
+    .wrap{
+        width: 100%;
+        height: 100vh;
+    }
+    h1{
+        text-align: center;
+        height: 10vh;
+    }
+    .wrap_inner{
+        width: 60%;
+        height: 90vh;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    .btnWrap{
+        width: 100%;
+        display: flex;
+        justify-content: space-evenly;
+
+    }
+    .btn {
+        background-color: #ff99a3 !important;
+        border-color: #ff99a3 !important;
+        width: 200px;
+        height: 70px;
+        cursor: pointer;
+        border-radius: 5px;
+    }
+    .btn:hover{
+        background-color: #ff919b !important;
+        border-color: #ff919b !important;
+    }
+</style>
+<body>
+    <div class="wrap">
+        <h1>관리자 메인 페이지</h1>
+        <div class="wrap_inner">
+            <div class="btnWrap">
+                <a href="/admin/boardList"><button type="button" class="btn btn-secondary">게시물 관리</button></a>
+                <a href="/admin/memberList"><button type="button" class="btn btn-secondary">회원 관리</button></a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

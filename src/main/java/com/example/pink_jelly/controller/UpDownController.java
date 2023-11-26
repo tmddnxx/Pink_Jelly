@@ -39,7 +39,6 @@ public class UpDownController {
     private String catsMeUpload; // 프로필 저장 경로
 
 
-
     //임시 저장소 temp
     @ApiOperation(value = "Temp Upload Post", notes = "POST 방식으로 임시 파일 등록")
     @PostMapping(value = "/tempUpload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -227,5 +226,7 @@ public class UpDownController {
         // 메인보드 이미지 파일 삭제
         return removeFile(boardDateString ,file, catsMeUpload);
     }
+
+
 
 }

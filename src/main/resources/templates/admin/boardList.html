@@ -10,21 +10,83 @@
     *{
         color: black;
     }
+    .contentWrap{
+        cursor: pointer;
+    }
+    .wrap{
+        padding-left: 20px;
+        margin-bottom: 30px;
+        border: 1px solid #ff99a3; ;
+    }
     .listWrap{
         width: 50%;
-        height: 500px;
-        overflow: scroll;
+        height: 600px;
+        overflow-y: scroll;
+        margin-top: 10px;
+        padding-right: 10px;
     }
-    .title{
-        width: 40%;
-        text-align: center;
+    .viewWrap{
+        margin-top: 10px;
+        width: 50%;
+        height: 600px;
+        overflow-y: scroll;
     }
-    .writer{
-        width: 20%;
-        text-align: center;
+    .contentWrap:hover{
+        background-color: #bdbdbd;
     }
-    .addDate{
-        width: 20%;
+    .contentList input{
+        width: 2%;
+    }
+    .contentList span:nth-of-type(1){
+        width: 15%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .contentList span:nth-of-type(2){
+        width: 25%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .contentList span:nth-of-type(3){
+        width: 25%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .contentList span:nth-of-type(4){
+        width: 25%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .catsContentList input{
+        width: 2%;
+    }
+    .catsContentList span:nth-of-type(1){
+        width: 15%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .catsContentList span:nth-of-type(2){
+        width: 25%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .catsContentList span:nth-of-type(3){
+        width: 25%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .catsContentList span:nth-of-type(4){
+        width: 25%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
     .searchDiv{
         gap: 10px;
@@ -52,6 +114,42 @@
         background-color: #f82767 !important;
         border-color: #f82767;
     }
+    .mainAllCheck{
+        width: 80px;
+        height: 30px;
+        padding: 0;
+    }
+    .mainCheckRemove{
+        width: 80px;
+        height: 30px;
+        padding: 0;
+    }
+    .comment_content {
+        width: 70%;
+    }
+    .comment_content img{
+        width: 50px;
+    }
+    .removeCommentBtn{
+        padding: 0;
+        width: 50px;
+        height: 35px;
+    }
+    .reviewRemoveCommentBtn{
+        padding: 0;
+        width: 50px;
+        height: 35px;
+    }
+    #reviewComAllCheck{
+        width: 80px;
+        height: 30px;
+        padding: 0;
+    }
+    #reviewComCheckRemove{
+        width: 80px;
+        height: 30px;
+        padding: 0;
+    }
 </style>
 <body>
     <div layout:fragment="content">
@@ -60,26 +158,32 @@
             <div class="listWrap">
                 <h1>Main List</h1>
 <!--                검색창-->
-                <form action="/search/main" method="get" name="frmSearch">
-                    <div class="col">
-                        <div class="input-group searchDiv">
-                            <div>
-                                <select class="form-select" id="type" th:name="type">
-                                    <option value="">---</option>
-                                    <option value="title" >제목</option>
-                                    <option value="content">내용</option>
-                                    <option value="nickName" >닉네임</option>
-                                    <option value="memberId">아이디</option>
-                                </select>
-                            </div>
-                            <input type="text" class="keyword" name="keyword">
-                            <div class="input-group-append">
-                                <button class="btn btn-outline-secondary searchBtn" type="button">Search</button>
+                <div>
+                    <form name="frmSearch">
+                        <div class="col">
+                            <div class="input-group searchDiv">
+                                <div>
+                                    <select class="form-select" id="mainType" th:name="type">
+                                        <option value="">---</option>
+                                        <option value="title" >제목</option>
+                                        <option value="content">내용</option>
+                                        <option value="nickName" >닉네임</option>
+                                        <option value="memberId">아이디</option>
+                                    </select>
+                                </div>
+                                <input type="text" id="mainKey" class="keyword" name="keyword">
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-secondary searchBtn" id="mainSearch" type="button">Search</button>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </form>
+                    </form>
+                </div>
 <!--                정렬-->
+                <div class="d-flex gap-2 mb-2">
+                    <button type="button" class="btn btn-secondary mainAllCheck" id="mainAllCheck" name="allCheck">전체 선택</button>
+                    <button type="button" class="btn btn-danger mainCheckRemove" id="mainCheckRemove" name="checkRemove">선택 삭제</button>
+                </div>
                 <div class="d-flex justify-content-between">
                     <span>번호</span>
                     <span class="title">제목</span>
@@ -88,109 +192,907 @@
                 </div>
                 <hr>
 <!--                게시물리스트-->
-                <div th:each="mainDTOList:${mainDTOList.dtoList}">
-                    <div class="d-flex justify-content-between w-100">
-                        <span>[[${mainDTOList.mbNo}]]</span>
-                        <span>[[${mainDTOList.title}]]</span>
-                        <span>[[${mainDTOList.nickName}]] ([[${mainDTOList.memberId}]])</span>
-                        <span>[[${#temporals.format(mainDTOList.addDate, 'yyyy-MM-dd HH:mm')}]]</span><br>
-                    </div>
-                    <hr>
+                <div id="mainWrap">
+
                 </div>
             </div>
-<!--            상세뷰-->
-            <div class="viewWrap">
-                게시물 상세 뷰
+            <!--  상세뷰-->
+            <div class="viewWrap" id="mainView">
+
             </div>
         </div>
 <!--        캣츠미 -->
         <div class="wrap d-flex">
             <div class="listWrap">
                 <h1>CatsMe List</h1>
-                <form action="/search/catsMe" method="get" name="frmSearch">
-                    <div class="col">
-                        <div class="input-group searchDiv">
-                            <div>
-                                <select class="form-select" th:name="type">
-                                    <option value="">---</option>
-                                    <option value="title" >제목</option>
-                                    <option value="content">내용</option>
-                                    <option value="nickName" >닉네임</option>
-                                    <option value="memberId">아이디</option>
-                                </select>
-                            </div>
-                            <input type="text" class="form-control" name="keyword">
-                            <div class="input-group-append">
-                                <button class="btn btn-outline-secondary searchBtn" type="button">Search</button>
+                <!--                검색창-->
+                <div>
+                    <form name="frmSearch">
+                        <div class="col">
+                            <div class="input-group searchDiv">
+                                <div>
+                                    <select class="form-select" id="catsType" th:name="type">
+                                        <option value="">---</option>
+                                        <option value="title" >제목</option>
+                                        <option value="content">내용</option>
+                                        <option value="nickName" >닉네임</option>
+                                        <option value="memberId">아이디</option>
+                                    </select>
+                                </div>
+                                <input type="text" id="catsKey" class="keyword" name="keyword">
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-secondary searchBtn" id="catsSearch" type="button">Search</button>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </form>
-                <div>
-                    <span>번호</span>
-                    <span>제목</span>
-                    <span>작성자</span>
-                    <span>작성일</span>
+                    </form>
                 </div>
-                <div th:each="catsMeList:${catsDTOList.dtoList}">
-                    <div>
-                        <span>[[${catsMeList.cmbNo}]]</span>
-                        <span>[[${catsMeList.title}]]</span>
-                        <span>[[${catsMeList.nickName}]] ([[${catsMeList.memberId}]])</span>
-                        <span>[[${#temporals.format(catsMeList.addDate, 'yyyy-MM-dd HH:mm')}]]</span><br>
-                    </div>
+                <!--                정렬-->
+                <div class="d-flex gap-2 mb-2">
+                    <button type="button" class="btn btn-secondary mainAllCheck" id="catsAllCheck" name="allCheck">전체 선택</button>
+                    <button type="button" class="btn btn-danger mainCheckRemove" id="catsCheckRemove" name="checkRemove">선택 삭제</button>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <span>번호</span>
+                    <span class="title">제목</span>
+                    <span class="writer">작성자</span>
+                    <span class="addDate">작성일</span>
+                </div>
+                <hr>
+                <!--                게시물리스트-->
+                <div id="catsWrap">
+
                 </div>
             </div>
-            <div class="viewWrap">
-                게시물 상세 뷰
+            <!--  상세뷰-->
+            <div class="viewWrap" id="catsView">
+
             </div>
         </div>
 <!--        리뷰 리스트-->
         <div class="wrap d-flex">
             <div class="listWrap">
                 <h1>Review List</h1>
-                <form action="/search/review" method="get" name="frmSearch">
-                    <div class="col">
-                        <div class="input-group searchDiv">
-                            <div>
-                                <select class="form-select" th:name="type">
-                                    <option value="">---</option>
-                                    <option value="title" >제목</option>
-                                    <option value="content">내용</option>
-                                    <option value="nickName" >닉네임</option>
-                                    <option value="memberId">아이디</option>
-                                </select>
-                            </div>
-                            <input type="text" class="form-control" name="keyword">
-                            <div class="input-group-append">
-                                <button class="btn btn-outline-secondary searchBtn" type="button">Search</button>
+                <!--                검색창-->
+                <div>
+                    <form name="frmSearch">
+                        <div class="col">
+                            <div class="input-group searchDiv">
+                                <div>
+                                    <select class="form-select" id="reviewType" th:name="type">
+                                        <option value="">---</option>
+                                        <option value="title" >제목</option>
+                                        <option value="content">내용</option>
+                                        <option value="nickName" >닉네임</option>
+                                        <option value="memberId">아이디</option>
+                                    </select>
+                                </div>
+                                <input type="text" id="reviewKey" class="keyword" name="keyword">
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-secondary searchBtn" id="reviewSearch" type="button">Search</button>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </form>
-                <div>
-                    <span>번호</span>
-                    <span>제목</span>
-                    <span>작성자</span>
-                    <span>작성일</span>
+                    </form>
                 </div>
-                <div th:each="reviewList:${reviewDTOList.dtoList}">
-                    <div>
-                        <span>[[${reviewList.crbNo}]]</span>
-                        <span>[[${reviewList.title}]]</span>
-                        <span>[[${reviewList.nickName}]] ([[${reviewList.memberId}]])</span>
-                        <span>[[${#temporals.format(reviewList.addDate, 'yyyy-MM-dd HH:mm')}]]</span><br>
-                    </div>
+                <!--                정렬-->
+                <div class="d-flex gap-2 mb-2">
+                    <button type="button" class="btn btn-secondary mainAllCheck" id="reviewAllCheck" name="allCheck">전체 선택</button>
+                    <button type="button" class="btn btn-danger mainCheckRemove" id="reviewCheckRemove" name="checkRemove">선택 삭제</button>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <span>번호</span>
+                    <span class="title">제목</span>
+                    <span class="writer">작성자</span>
+                    <span class="addDate">작성일</span>
+                </div>
+                <hr>
+                <!--                게시물리스트-->
+                <div id="reviewWrap">
+
                 </div>
             </div>
-            <div class="viewWrap">
-                게시물 상세 뷰
+            <!--  상세뷰-->
+            <div class="viewWrap" id="reviewView">
+
             </div>
         </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     </div>
 </body>
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script layout:fragment="script" th:inline="javascript">
+    document.addEventListener('DOMContentLoaded', function (){
 
+        // 메인 게시물 목록
+        const type = document.getElementById('mainType');
+        const keyword = document.getElementById('mainKey');
+        mainList(type.value,keyword.value); // 메인 목록 호출
+
+        // 캣츠미 게시물 목록
+        const catsType = document.getElementById('catsType');
+        const catsKeyword = document.getElementById('catsKey');
+        catsList(catsType.value,catsKeyword.value); // 캣츠미 목록 호출
+
+        // 리뷰 게시물 목록
+        const reviewType = document.getElementById('reviewType');
+        const reviewKeyword = document.getElementById('reviewKey');
+        reviewList(reviewType.value, reviewKeyword.value); // 캣츠미 목록 호출
+
+        async function mainList(type, keyword){
+            const url = `/rest/mainList?type=${type}&keyword=${keyword}`;
+            try{
+                const response = await axios.get(url);
+                const mainList = response.data.dtoList;
+
+                const plusList = mainList.map(mainBoard => `
+                <div class="contentWrap">
+                    <div class="d-flex justify-content-between w-100 contentList" data-mbNo="${mainBoard.mbNo}">
+                        <input type="checkbox" name="checkbox" class="mainCheckBox">
+                        <span>${mainBoard.mbNo}</span>
+                        <span>${mainBoard.title}</span>
+                        <span>${mainBoard.nickName} (${mainBoard.memberId})</span>
+                        <span>${mainBoard.addDate[0]+"-"+mainBoard.addDate[1]+"-"+mainBoard.addDate[2]+" "+mainBoard.addDate[3]+":"+mainBoard.addDate[4]}</span>
+                    </div>
+                    <hr>
+                </div>
+            `).join('');
+
+                document.getElementById('mainWrap').innerHTML = plusList;
+            } catch (error) {
+                console.error('에러발생', error)
+            }
+            // 메인 리스트 출력 끝 //
+
+            // 메인 전체 선택
+            const allCheckBtn = document.getElementById('mainAllCheck');
+            const checkBoxes = document.querySelectorAll('.mainCheckBox');
+
+            allCheckBtn.addEventListener('click', function (){
+                const isAnyChecked = Array.from(checkBoxes).some(function (checkBox){
+                    return checkBox.checked;
+                });
+                console.log("전체선택 버튼");
+                checkBoxes.forEach(function(checkBox) {
+                    checkBox.checked = !isAnyChecked;
+                });
+                allCheckBtn.textContent = isAnyChecked ? '전체 선택' : '전체 해제';
+            })
+            // 메인 선택삭제
+            const checkRemoveBtn = document.getElementById('mainCheckRemove');
+
+            checkRemoveBtn.addEventListener('click', async function () {
+
+                    for (let index = 0; index < checkBoxes.length; index++) {
+                        const checkBox = checkBoxes[index];
+                        if (checkBox.checked) {
+                            const contentList = contentLists[index];
+                            const mbNo = contentList.getAttribute('data-mbNo');
+                            await mainDelete(mbNo);
+                            await mainList(type, keyword);
+                        }
+                    }
+
+            });
+
+
+            // 메인 뷰
+            const contentLists = document.querySelectorAll('.contentList');
+
+            contentLists.forEach(contentList =>{
+                contentList.addEventListener('click', function (){
+                    console.log("클릭");
+                    const mbNo = contentList.getAttribute('data-mbNo');
+                    console.log(mbNo);
+                    mainView(mbNo);
+                })
+            })
+
+            async function mainView(mbNo){
+                console.log(mbNo);
+                const url = `/rest/mainList/${mbNo}`
+                try{
+                    const response = await axios.get(url);
+                    console.log(response.data);
+                    const mainBoardDTO = response.data;
+
+                    const plusView = `
+                <div class="p-3">
+                    <div>
+                        <div class="d-flex justify-content-between mt-3">
+                            <span>${mainBoardDTO.mbNo}</span>
+                            <span>${mainBoardDTO.title}</span>
+                            <span>${mainBoardDTO.nickName} (${mainBoardDTO.memberId})</span>
+                        </div>
+                        <hr>
+                        <div class="text-end mt-1">${mainBoardDTO.addDate[0]+"-"+mainBoardDTO.addDate[1]+"-"+mainBoardDTO.addDate[2]+" "+mainBoardDTO.addDate[3]+":"+mainBoardDTO.addDate[4]}</div>
+                    </div>
+                    <div class="mt-3">
+                        ${imgs()}
+                        ${mainBoardDTO.content}
+                    </div>
+                    <div class="text-end mt-2">
+                        <button type="button" class="btn btn-danger removeBtn">삭제</button>
+                    </div>
+                </div>
+                <hr>
+                <div class="commentWrap">
+                    <div class="d-flex justify-content-center">
+                        <form name="frmSearch">
+                            <div class="col">
+                                <div class="input-group searchDiv">
+                                    <div>
+                                        <select class="form-select" id="mainComType" th:name="type">
+                                            <option value="">---</option>
+                                            <option value="comment">내용</option>
+                                            <option value="nickName" >닉네임</option>
+                                            <option value="memberId">아이디</option>
+                                        </select>
+                                    </div>
+                                    <input type="text" id="mainComKey" class="keyword" name="keyword">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary searchBtn" id="mainComSearch" type="button">Search</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="d-flex gap-2 mb-2 justify-content-center">
+                        <button type="button" class="btn btn-secondary mainAllCheck" id="mainComAllCheck" name="allCheck">전체 선택</button>
+                        <button type="button" class="btn btn-danger mainCheckRemove" id="mainComCheckRemove" name="checkRemove">선택 삭제</button>
+                    </div>
+                    <div class="comment-body m-3">
+
+                    </div>
+                </div>`
+
+                    function imgs() {
+                        let str = '';
+                        const mainImg = mainBoardDTO.mainImg;
+                        for(let i = 0; i< mainImg.length; i++){
+                            str += `<div className="col-md-12 mb-4 d-flex">
+                    <img className="img-fluid round" style="width: 30%; margin: 0 auto;"
+                         src="/upload/mainBoardView/${mainBoardDTO.boardDateString[i]}/${mainBoardDTO.mainImg[i]}"
+                         alt="Image placeholder" height="250">
+                </div>`
+                        }
+                        return str;
+                    }
+
+                    document.getElementById('mainView').innerHTML = plusView;
+
+                    // 메인게시물 삭제
+                    const removeBtns = document.querySelectorAll('.removeBtn');
+                    removeBtns.forEach(removeBtn => {
+                        removeBtn.addEventListener('click', function (){
+                            if(confirm('삭제하시겠습니까?')){
+                                mainDelete(mbNo).then(result=>{
+                                    mainList(type,keyword);
+                                    deleteView();
+                                });
+                            }
+                        })
+                    })
+                    mainCommentList(mbNo,type,keyword); // 댓글 목록 출력
+
+                    // 메인 댓글 검색
+                    const mainComSearch = document.getElementById('mainComSearch');
+                    mainComSearch.addEventListener('click', function (){
+                        console.log("댓글 검색 버튼 클릭");
+                        mainCommentList(mbNo,type,keyword);
+                    })
+
+                }catch (error){
+                    console.error('에러발생', error)
+                }
+            }
+        };
+        // 메인 뷰 출력 끝 //
+
+        // 메인 검색
+        const searchBtn = document.getElementById('mainSearch');
+        searchBtn.addEventListener('click', function (){
+            console.log("검색 버튼 클릭");
+            mainList(type.value,keyword.value);
+        })
+
+        // 메인 삭제
+        async function mainDelete(mbNo){
+            const url = `/rest/mainList/${mbNo}`;
+            try{
+                const response = await axios.delete(url);
+                return response;
+            }catch (error){
+                console.log("에러발생 : ", error);
+            }
+        }
+        // 삭제 후 뷰
+        function deleteView(){
+            const plusView = `
+                <div class="p-3">
+                    <h1>삭제된 게시물입니다</h1>
+                    <hr>
+                </div>`
+            document.getElementById('mainView').innerHTML = plusView;
+        }
+
+        // 메인 댓글 목록
+        async function mainCommentList(mbNo,type,keyword){
+            try {
+                const type = document.getElementById('mainComType');
+                const keyword = document.getElementById('mainComKey');
+
+                const response = await axios.get(`/rest/mainComment/${mbNo}`, {params: {type : type.value, keyword: keyword.value}});
+                const mainCommentList = response.data.dtoList;
+                console.log("메인댓글 ", mainCommentList);
+
+                let plusCommentList = '';
+                for(mainComment of mainCommentList){
+                    if(mainComment.comNo === mainComment.parentNo){
+                        plusCommentList += `
+                        <div class="comment-view d-flex justify-content-between">
+                            <input type="checkbox" class="mainComCheckBox">
+                            <div class="comment_content d-flex gap-2">
+                                <img id="profileImg" src="/upload/profileView/${mainComment.dateString}/${mainComment.profileImg}" alt="Image placeholder">
+                                <div>
+                                    <span class="boardNickName">${mainComment.nickName}</span>
+                                    <span class="boardMemberId">${mainComment.memberId}</span>
+                                    <p data-comNo="${mainComment.comNo}">${mainComment.comment}</p>
+                                </div>
+                            </div>
+                            <div class="comment_btn">
+                                <div class="meta">
+                                    ${mainComment.addDate[0]}-${mainComment.addDate[1]}-${mainComment.addDate[2]} ${mainComment.addDate[3]}:${mainComment.addDate[4]}
+                                </div>
+                                <div class="d-flex">
+                                    <button type="button" class="btn btn-danger removeCommentBtn">삭제</button>
+                                </div>
+                            </div>
+                        </div>`
+                    } else{
+                        plusCommentList += `
+                        <ul class="comment-view d-flex justify-content-between">
+                            <input type="checkbox" class="mainComCheckBox">
+                            <div class="comment_content d-flex gap-2">
+                                <img id="profileImg" class="img-fluid profileImg" src="/upload/profileView/${mainComment.dateString}/${mainComment.profileImg}" alt="Image placeholder"  class="img-fluid" readonly>
+                                <div>
+                                    <span class="boardNickName">${mainComment.nickName}</span>
+                                    <span class="boardMemberId">(${mainComment.memberId})</span>
+                                    <p data-comNo="${mainComment.comNo}">${mainComment.comment}</p>
+                                </div>
+                            </div>
+                            <div class="comment_btn">
+                                <div class="meta">
+                                    ${mainComment.addDate[0]}-${mainComment.addDate[1]}-${mainComment.addDate[2]} ${mainComment.addDate[3]}:${mainComment.addDate[4]}
+                                </div>
+                                <div class="d-flex">
+                                    <button type="button" class="btn btn-danger removeCommentBtn">삭제</button>
+                                </div>
+                            </div>
+                        </ul>`
+                    }
+                }
+                document.querySelector('.comment-body').innerHTML = plusCommentList;
+                // 메인 댓글 삭제버튼
+                const mainComDelBtns = document.querySelectorAll('.removeCommentBtn');
+                mainComDelBtns.forEach(mainComDelBtn =>{
+                    mainComDelBtn.addEventListener('click', function (e){
+                        if(confirm('정말 삭제하시겠습니까 ? ')){
+                            const comNo = e.target.closest('.comment-view').querySelector('.comment_content p').getAttribute('data-comNo');
+                            console.log("댓글 삭제버튼");
+                            console.log("mbNo : " ,mbNo);
+                            console.log("comNo : ",comNo);
+                            mainComDel(mbNo, comNo);
+                        }
+                    })
+                })
+                // 메인 댓글 전체 선택
+                const mainComAllCheckBtn = document.getElementById('mainComAllCheck');
+                const mainComCheckBoxes = document.querySelectorAll('.mainComCheckBox');
+
+                mainComAllCheckBtn.addEventListener('click', function (){
+                    const isAnyChecked = Array.from(mainComCheckBoxes).some(function (checkBox){
+                        return checkBox.checked;
+                    });
+                    mainComCheckBoxes.forEach(function(checkBox) {
+                        checkBox.checked = !isAnyChecked;
+                    });
+                    mainComAllCheckBtn.textContent = isAnyChecked ? '전체 선택' : '전체 해제';
+                });
+                // 메인 댓글 선택 삭제
+                const mainComCheckRemoveBtn = document.getElementById('mainComCheckRemove');
+                const commentView = document.querySelectorAll('.comment-view');
+                mainComCheckRemoveBtn.addEventListener('click',async function () {
+                    console.log("선택삭제 버튼");
+                    console.log("commentView", commentView);
+                    for (const checkBox of mainComCheckBoxes) {
+                        if (checkBox.checked) {
+                            const index = Array.from(mainComCheckBoxes).indexOf(checkBox);
+                            const commentViewElement = commentView[index];
+                            const comNo = commentViewElement.querySelector('.comment_content p').getAttribute('data-comNo');
+                            await mainComDel(mbNo, comNo);
+                        }
+                    }
+                })
+            }catch (error){
+                console.log("에러 발생", error)
+            }
+        }
+
+        //메인 댓글 삭제
+        async function mainComDel(mbNo, comNo){
+            await axios.delete(`/rest/mainComment/${mbNo}/${comNo}`);
+            mainCommentList(mbNo,type,keyword);
+        }
+
+
+
+        //캣츠 미 목록 출력
+        async function catsList(catsType, catsKeyword){
+            const url = `/rest/catsMeList?type=${catsType}&keyword=${catsKeyword}`;
+            try{
+                const response = await axios.get(url);
+                const catsList = response.data.dtoList;
+
+                const plusList = catsList.map(catsBoard => `
+                <div class="contentWrap">
+                    <div class="d-flex justify-content-between w-100 catsContentList" data-cmbNo="${catsBoard.cmbNo}">
+                        <input type="checkbox" name="checkbox" class="catsCheckBox">
+                        <span>${catsBoard.cmbNo}</span>
+                        <span>${catsBoard.title}</span>
+                        <span>${catsBoard.nickName} (${catsBoard.memberId})</span>
+                        <span>${catsBoard.addDate[0]+"-"+catsBoard.addDate[1]+"-"+catsBoard.addDate[2]+" "+catsBoard.addDate[3]+":"+catsBoard.addDate[4]}</span>
+                    </div>
+                    <hr>
+                </div>
+            `).join('');
+
+                document.getElementById('catsWrap').innerHTML = plusList;
+            } catch (error) {
+                console.error('에러발생', error)
+            }
+            // 캣츠미 리스트 출력 끝 //
+
+            // 캣츠미 전체 선택
+            const catsAllCheckBtn = document.getElementById('catsAllCheck');
+            const catsCheckBoxes = document.querySelectorAll('.catsCheckBox');
+
+            catsAllCheckBtn.addEventListener('click', function (){
+                const isAnyChecked = Array.from(catsCheckBoxes).some(function (checkBox){
+                    return checkBox.checked;
+                });
+                console.log("전체선택 버튼");
+                catsCheckBoxes.forEach(function(checkBox) {
+                    checkBox.checked = !isAnyChecked;
+                });
+                catsAllCheckBtn.textContent = isAnyChecked ? '전체 선택' : '전체 해제';
+            })
+            // 캣츠미 선택삭제
+            const catsCheckRemoveBtn = document.getElementById('catsCheckRemove');
+
+            catsCheckRemoveBtn.addEventListener('click', async function () {
+
+                for (let index = 0; index < catsCheckBoxes.length; index++) {
+                    const checkBox = catsCheckBoxes[index];
+                    if (checkBox.checked) {
+                        const catsContentList = catsContentLists[index];
+                        const cmbNo = catsContentList.getAttribute('data-cmbNo');
+                        await catsDelete(cmbNo);
+                        await catsList(catsType, catsKeyword);
+                    }
+                }
+
+            });
+
+            // 캣츠 미 뷰
+            const catsContentLists = document.querySelectorAll('.catsContentList');
+
+            catsContentLists.forEach(catsContentList =>{
+                catsContentList.addEventListener('click', function (){
+                    console.log("클릭");
+                    const cmbNo = catsContentList.getAttribute('data-cmbNo');
+                    console.log(cmbNo);
+                    catsView(cmbNo);
+                })
+            })
+
+            async function catsView(cmbNo){
+                console.log(cmbNo);
+                const url = `/rest/catsMeList/${cmbNo}`
+                try{
+                    const response = await axios.get(url);
+                    console.log(response.data);
+                    const catsBoardDTO = response.data;
+
+                    const plusView = `
+                <div class="p-3">
+                    <div>
+                        <div class="d-flex justify-content-between mt-3">
+                            <span>${catsBoardDTO.cmbNo}</span>
+                            <span>${catsBoardDTO.title}</span>
+                            <span>${catsBoardDTO.nickName} (${catsBoardDTO.memberId})</span>
+                        </div>
+                        <hr>
+                        <div class="text-end mt-1">${catsBoardDTO.addDate[0]+"-"+catsBoardDTO.addDate[1]+"-"+catsBoardDTO.addDate[2]+" "+catsBoardDTO.addDate[3]+":"+catsBoardDTO.addDate[4]}</div>
+                    </div>
+                    <div class="mt-3">
+                        ${catsImgs()}
+                        ${catsBoardDTO.content}
+                    </div>
+                    <div class="text-end mt-2">
+                        <button type="button" class="btn btn-danger catsRemoveBtn">삭제</button>
+                    </div>
+                </div>
+                </div>`
+
+                    function catsImgs() {
+                        let str = '';
+                        const catsImg = catsBoardDTO.catsMeImg;
+                        for(let i = 0; i< catsImg.length; i++){
+                            str += `<div className="col-md-12 mb-4 d-flex">
+                    <img className="img-fluid round" style="width: 30%; margin: 0 auto;"
+                         src="/upload/catsMeBoardView/${catsBoardDTO.boardDateString[i]}/${catsBoardDTO.catsMeImg[i]}"
+                         alt="Image placeholder" height="250">
+                </div>`
+                        }
+                        return str;
+                    }
+
+                    document.getElementById('catsView').innerHTML = plusView;
+
+                    // 캣츠 미 게시물 삭제
+                    const catsRemoveBtns = document.querySelectorAll('.catsRemoveBtn');
+                    catsRemoveBtns.forEach(catsRemoveBtn => {
+                        catsRemoveBtn.addEventListener('click', function (){
+                            if(confirm('삭제하시겠습니까?')){
+                                catsDelete(cmbNo).then(result=>{
+                                    catsList(catsType,catsKeyword);
+                                    catsDeleteView();
+                                });
+                            }
+                        })
+                    })
+                }catch (error){
+                    console.error('에러발생', error)
+                }
+            }
+        };
+        // 캣츠 미 뷰 출력 끝 //
+
+        // 캣츠 미  검색
+        const catsSearchBtn = document.getElementById('catsSearch');
+        catsSearchBtn.addEventListener('click', function (){
+            console.log("검색 버튼 클릭");
+            catsList(catsType.value,catsKeyword.value);
+        })
+
+        // 캣츠 미 삭제
+        async function catsDelete(cmbNo){
+            const url = `/rest/catsMeList/${cmbNo}`;
+            try{
+                const response = await axios.delete(url);
+                return response;
+            }catch (error){
+                console.log("에러발생 : ", error);
+            }
+        }
+        // 삭제 후 뷰
+        function catsDeleteView(){
+            const plusView = `
+                <div class="p-3">
+                    <h1>삭제된 게시물입니다</h1>
+                    <hr>
+                </div>`
+            document.getElementById('catsView').innerHTML = plusView;
+        }
+
+
+        // 리뷰 리스트 출력
+        async function reviewList(reviewType, reviewKeyword){
+            const url = `/rest/reviewList?type=${reviewType}&keyword=${reviewKeyword}`;
+            try{
+                const response = await axios.get(url);
+                const reviewList = response.data.dtoList;
+
+                const plusList = reviewList.map(reviewBoard => `
+                <div class="contentWrap">
+                    <div class="d-flex justify-content-between w-100 reviewContentList" data-crbNo="${reviewBoard.crbNo}">
+                        <input type="checkbox" name="checkbox" class="reviewCheckBox">
+                        <span>${reviewBoard.crbNo}</span>
+                        <span>${reviewBoard.title}</span>
+                        <span>${reviewBoard.nickName} (${reviewBoard.memberId})</span>
+                        <span>${reviewBoard.addDate[0]+"-"+reviewBoard.addDate[1]+"-"+reviewBoard.addDate[2]+" "+reviewBoard.addDate[3]+":"+reviewBoard.addDate[4]}</span>
+                    </div>
+                    <hr>
+                </div>
+            `).join('');
+
+                document.getElementById('reviewWrap').innerHTML = plusList;
+            } catch (error) {
+                console.error('에러발생', error)
+            }
+            // 리뷰 리스트 출력 끝 //
+
+            // 리뷰 전체 선택
+            const reviewAllCheckBtn = document.getElementById('reviewAllCheck');
+            const reviewCheckBoxes = document.querySelectorAll('.reviewCheckBox');
+
+            reviewAllCheckBtn.addEventListener('click', function (){
+                const isAnyChecked = Array.from(reviewCheckBoxes).some(function (checkBox){
+                    return checkBox.checked;
+                });
+                console.log("전체선택 버튼");
+                reviewCheckBoxes.forEach(function(checkBox) {
+                    checkBox.checked = !isAnyChecked;
+                });
+                reviewAllCheckBtn.textContent = isAnyChecked ? '전체 선택' : '전체 해제';
+            })
+            // 리뷰 선택삭제
+            const reviewCheckRemoveBtn = document.getElementById('reviewCheckRemove');
+
+            reviewCheckRemoveBtn.addEventListener('click', async function () {
+
+                for (let index = 0; index < reviewCheckBoxes.length; index++) {
+                    const checkBox = reviewCheckBoxes[index];
+                    if (checkBox.checked) {
+                        const reviewContentList = reviewContentLists[index];
+                        const crbNo = reviewContentList.getAttribute('data-crbNo');
+                        await reviewDelete(crbNo);
+                        await reviewList(reviewType, reviewKeyword);
+                    }
+                }
+
+            });
+
+
+            // 리뷰 뷰
+            const reviewContentLists = document.querySelectorAll('.reviewContentList');
+
+            reviewContentLists.forEach(reviewContentList =>{
+                reviewContentList.addEventListener('click', function (){
+                    console.log("클릭");
+                    const crbNo = reviewContentList.getAttribute('data-crbNo');
+                    console.log(crbNo);
+                    reviewView(crbNo);
+                })
+            })
+
+            async function reviewView(crbNo){
+                console.log(crbNo);
+                const url = `/rest/reviewList/${crbNo}`
+                try{
+                    const response = await axios.get(url);
+                    console.log(response.data);
+                    const reviewBoardDTO = response.data;
+
+                    const plusView = `
+                <div class="p-3">
+                    <div>
+                        <div class="d-flex justify-content-between mt-3">
+                            <span>${reviewBoardDTO.crbNo}</span>
+                            <span>${reviewBoardDTO.title}</span>
+                            <span>${reviewBoardDTO.nickName} (${reviewBoardDTO.memberId})</span>
+                        </div>
+                        <hr>
+                        <div class="text-end mt-1">${reviewBoardDTO.addDate[0]+"-"+reviewBoardDTO.addDate[1]+"-"+reviewBoardDTO.addDate[2]+" "+reviewBoardDTO.addDate[3]+":"+reviewBoardDTO.addDate[4]}</div>
+                    </div>
+                    <div class="mt-3">
+                        ${reviewImgs()}
+                        ${reviewBoardDTO.content}
+                    </div>
+                    <div class="text-end mt-2">
+                        <button type="button" class="btn btn-danger reviewRemoveBtn">삭제</button>
+                    </div>
+                </div>
+                <hr>
+                <div class="commentWrap">
+                    <div class="d-flex justify-content-center">
+                        <form name="frmSearch">
+                            <div class="col">
+                                <div class="input-group searchDiv">
+                                    <div>
+                                        <select class="form-select" id="reviewComType" th:name="type">
+                                            <option value="">---</option>
+                                            <option value="comment">내용</option>
+                                            <option value="nickName" >닉네임</option>
+                                            <option value="memberId">아이디</option>
+                                        </select>
+                                    </div>
+                                    <input type="text" id="reviewComKey" class="keyword" name="keyword">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary searchBtn" id="reviewComSearch" type="button">Search</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="d-flex gap-2 mb-2 justify-content-center">
+                        <button type="button" class="btn btn-secondary reviewAllCheck" id="reviewComAllCheck" name="allCheck">전체 선택</button>
+                        <button type="button" class="btn btn-danger reviewCheckRemove" id="reviewComCheckRemove" name="checkRemove">선택 삭제</button>
+                    </div>
+                    <div class="reviewComment-body m-3">
+
+                    </div>
+                </div>`
+
+                    function reviewImgs() {
+                        let str = '';
+                        const reviewImg = reviewBoardDTO.catsMeImg;
+                        for(let i = 0; i< reviewImg.length; i++){
+                            str += `<div className="col-md-12 mb-4 d-flex">
+                    <img className="img-fluid round" style="width: 30%; margin: 0 auto;"
+                         src="/upload/catsReviewView/${reviewBoardDTO.boardDateString[i]}/${reviewBoardDTO.catsMeImg[i]}"
+                         alt="Image placeholder" height="250">
+                </div>`
+                        }
+                        return str;
+                    }
+
+                    document.getElementById('reviewView').innerHTML = plusView;
+
+                    // 리뷰 게시물 삭제
+                    const reviewRemoveBtns = document.querySelectorAll('.reviewRemoveBtn');
+                    reviewRemoveBtns.forEach(reviewRemoveBtn => {
+                        reviewRemoveBtn.addEventListener('click', function (){
+                            if(confirm('삭제하시겠습니까?')){
+                                reviewDelete(crbNo).then(result=>{
+                                    reviewList(reviewType,reviewKeyword);
+                                    reviewDeleteView();
+                                });
+                            }
+                        })
+                    })
+                    reviewCommentList(crbNo,reviewType,reviewKeyword); // 댓글 목록 출력
+
+                    // 리뷰 댓글 검색
+                    const reviewComSearch = document.getElementById('reviewComSearch');
+                    reviewComSearch.addEventListener('click', function (){
+                        console.log("댓글 검색 버튼 클릭");
+                        reviewCommentList(crbNo,reviewType,reviewKeyword);
+                    })
+
+                }catch (error){
+                    console.error('에러발생', error)
+                }
+            }
+        };
+        // 리뷰 뷰 출력 끝 //
+
+        // 리뷰 검색
+        const reviewSearchBtn = document.getElementById('reviewSearch');
+        reviewSearchBtn.addEventListener('click', function (){
+            console.log("검색 버튼 클릭");
+            reviewList(reviewType.value, reviewKeyword.value);
+        })
+
+        // 리뷰 삭제
+        async function reviewDelete(crbNo){
+            const url = `/rest/reviewList/${crbNo}`;
+            try{
+                const response = await axios.delete(url);
+                return response;
+            }catch (error){
+                console.log("에러발생 : ", error);
+            }
+        }
+        // 삭제 후 뷰
+        function reviewDeleteView(){
+            const plusView = `
+                <div class="p-3">
+                    <h1>삭제된 게시물입니다</h1>
+                    <hr>
+                </div>`
+            document.getElementById('reviewView').innerHTML = plusView;
+        }
+
+        // 리뷰 댓글 목록
+        async function reviewCommentList(crbNo, reviewComType, reviewComKeyword){
+            try {
+                const reviewComType = document.getElementById('reviewComType');
+                const reviewComKeyword = document.getElementById('reviewComKey');
+
+                const response = await axios.get(`/rest/reviewComment/${crbNo}`, {params: {type : reviewComType.value, keyword: reviewComKeyword.value}});
+                const reviewCommentList = response.data.dtoList;
+
+                let plusCommentList = '';
+                for(reviewComment of reviewCommentList){
+                    if(reviewComment.comNo === reviewComment.parentNo){
+                        plusCommentList += `
+                        <div class="reviewComment-view d-flex justify-content-between">
+                            <input type="checkbox" class="reviewComCheckBox">
+                            <div class="comment_content d-flex gap-2">
+                                <img id="profileImg" src="/upload/profileView/${reviewComment.dateString}/${reviewComment.profileImg}" alt="Image placeholder">
+                                <div>
+                                    <span class="boardNickName">${reviewComment.nickName}</span>
+                                    <span class="boardMemberId">${reviewComment.memberId}</span>
+                                    <p data-comNo="${reviewComment.comNo}">${reviewComment.comment}</p>
+                                </div>
+                            </div>
+                            <div class="comment_btn">
+                                <div class="meta">
+                                    ${reviewComment.addDate[0]}-${reviewComment.addDate[1]}-${reviewComment.addDate[2]} ${reviewComment.addDate[3]}:${reviewComment.addDate[4]}
+                                </div>
+                                <div class="d-flex">
+                                    <button type="button" class="btn btn-danger reviewRemoveCommentBtn">삭제</button>
+                                </div>
+                            </div>
+                        </div>`
+                    } else{
+                        plusCommentList += `
+                        <ul class="reviewComment-view d-flex justify-content-between">
+                            <input type="checkbox" class="reviewComCheckBox">
+                            <div class="comment_content d-flex gap-2">
+                                <img id="profileImg" class="img-fluid profileImg" src="/upload/profileView/${reviewComment.dateString}/${reviewComment.profileImg}" alt="Image placeholder"  class="img-fluid" readonly>
+                                <div>
+                                    <span class="boardNickName">${reviewComment.nickName}</span>
+                                    <span class="boardMemberId">(${reviewComment.memberId})</span>
+                                    <p data-comNo="${reviewComment.comNo}">${reviewComment.comment}</p>
+                                </div>
+                            </div>
+                            <div class="comment_btn">
+                                <div class="meta">
+                                    ${reviewComment.addDate[0]}-${reviewComment.addDate[1]}-${reviewComment.addDate[2]} ${reviewComment.addDate[3]}:${reviewComment.addDate[4]}
+                                </div>
+                                <div class="d-flex">
+                                    <button type="button" class="btn btn-danger reviewRemoveCommentBtn">삭제</button>
+                                </div>
+                            </div>
+                        </ul>`
+                    }
+                }
+                document.querySelector('.reviewComment-body').innerHTML = plusCommentList;
+                // 리뷰 댓글 삭제버튼
+                const reviewComDelBtns = document.querySelectorAll('.reviewRemoveCommentBtn');
+                reviewComDelBtns.forEach(reviewComDelBtn =>{
+                    reviewComDelBtn.addEventListener('click', function (e){
+                        if(confirm('정말 삭제하시겠습니까 ? ')){
+                            const comNo = e.target.closest('.reviewComment-view').querySelector('.comment_content p').getAttribute('data-comNo');
+                            console.log("댓글 삭제버튼");
+                            console.log("comNo : ",comNo);
+                            reviewComDel(crbNo, comNo);
+                        }
+                    })
+                })
+                // 리뷰 댓글 전체 선택
+                const reviewComAllCheckBtn = document.getElementById('reviewComAllCheck');
+                const reviewComCheckBoxes = document.querySelectorAll('.reviewComCheckBox');
+
+                reviewComAllCheckBtn.addEventListener('click', function (){
+                    const isAnyChecked = Array.from(reviewComCheckBoxes).some(function (checkBox){
+                        return checkBox.checked;
+                    });
+                    reviewComCheckBoxes.forEach(function(checkBox) {
+                        checkBox.checked = !isAnyChecked;
+                    });
+                    reviewComAllCheckBtn.textContent = isAnyChecked ? '전체 선택' : '전체 해제';
+                });
+                // 리뷰 댓글 선택 삭제
+                const reviewComCheckRemoveBtn = document.getElementById('reviewComCheckRemove');
+                const reviewCommentView = document.querySelectorAll('.reviewComment-view');
+                reviewComCheckRemoveBtn.addEventListener('click',async function () {
+                    console.log("선택삭제 버튼");
+                    for (const checkBox of reviewComCheckBoxes) {
+                        if (checkBox.checked) {
+                            const index = Array.from(reviewComCheckBoxes).indexOf(checkBox);
+                            const commentViewElement = reviewCommentView[index];
+                            const comNo = commentViewElement.querySelector('.comment_content p').getAttribute('data-comNo');
+                            await reviewComDel(crbNo, comNo);
+                        }
+                    }
+                })
+            }catch (error){
+                console.log("에러 발생", error)
+            }
+        }
+
+        //리뷰 댓글 삭제
+        async function reviewComDel(crbNo, comNo){
+            await axios.delete(`/rest/reviewComment/${crbNo}/${comNo}`);
+            reviewCommentList(crbNo, reviewType, reviewKeyword);
+            console.log("삭제후 목록 부르기")
+        }
+
+
+    });
 </script>
 </html>

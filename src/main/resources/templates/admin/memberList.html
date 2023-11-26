@@ -1,13 +1,32 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:th="http://www.thymeleaf.org"
-      layout:decorate="~{layout/basic.html}">
+      layout:decorate="~{layout/adminBasic.html}">
 <head>
     <meta charset="UTF-8">
     <title>메인 페이지</title>
     <link rel="stylesheet" th:href="@{/css/mainBoard.css}">
 </head>
-
+<style layout:fragment="style">
+    .searchBtn{
+        background-color: #ff99a3 !important;
+        border-color: #ff99a3 !important;
+    }
+    .searchBtn:hover{
+        background-color: #f82767 !important;
+        border-color: #f82767 !important;
+    }
+    .clearBtn{
+        background-color: #7e7e7e !important;
+        border-color: #7e7e7e !important;
+        color: white;
+    }
+    .clearBtn:hover{
+        background-color: #555555 !important;
+        border-color: #555555 !important;
+        color: white;
+    }
+</style>
 <body>
 <div layout:fragment="content">
     <!--        검색 창-->
@@ -50,7 +69,7 @@
                     <table class="table">
                         <thead>
                         <tr>
-                            <p style="text-align: right"><button type="button" class="btn btn-secondary btn-selected">선택삭제</button> </p>
+                            <p style="text-align: right"><button type="button" class="btn btn-danger btn-selected">선택삭제</button> </p>
                         </tr>
                         <tr>
                             <th scope="col"><input type="checkbox" name="allCheck"></th>
@@ -70,7 +89,7 @@
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script src="/js/admin/admin.js?12"></script>
+    <script src="/js/admin/admin.js"></script>
 </div>
 
 <script layout:fragment="script" th:inline="javascript">
@@ -122,12 +141,22 @@ document.addEventListener('DOMContentLoaded', function(){
             });
             searchResult.innerHTML = str;
 
+            const removeBtns = document.querySelectorAll('.removeBtn');
+            removeBtns.forEach(function (button) {
+                button.addEventListener('click', function () {
+                    // 삭제 메서드 실행
+                    const mno = button.closest('td').dataset.mno;
+                    if(!(confirm("회원번호: " + mno + "번을 삭제하시겠습니까?"))){
+                        return;
+                    }
+                    removeMember(mno);
+                    removeTableRow(mno);
+                });
+            })
+
             const checkAll = document.querySelectorAll('input[name=checkMno]');
-
             checkAllBtn.addEventListener('change', function () {
-
                 const isChecked = checkAllBtn.checked;
-
                 checkAll.forEach(checkbox => {
                     checkbox.checked = isChecked;
                 });
@@ -136,7 +165,9 @@ document.addEventListener('DOMContentLoaded', function(){
             const removeIds = document.querySelectorAll('input[name=checkMno]');
             const selectBtn = document.querySelector('.btn-selected');
             selectBtn.addEventListener('click', function(){
-                const tableId = [];
+                if(!(confirm("선택된 회원을 삭제하시겠습니까?"))){
+                    return;
+                }
                 removeIds.forEach(removeId => {
                     if(removeId.checked === true){
                         removeMember(removeId.value);
@@ -144,13 +175,10 @@ document.addEventListener('DOMContentLoaded', function(){
                         checkAllBtn.checked = false;
                     }
                 });
-
             });
         });
 
     }
-
-
     function removeTableRow(mno) {
         // 해당 행을 감싸는 부모 요소 찾기
         const rows = document.querySelectorAll(`td[data-mno="${mno}"]`);
@@ -162,8 +190,6 @@ document.addEventListener('DOMContentLoaded', function(){
             rowToRemove.remove(rowToRemove);
         });
     }
-
-
 });
 
 

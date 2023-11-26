@@ -34,4 +34,7 @@
         UPDATE member SET gmerCnt = (SELECT COUNT(*) FROM member JOIN friends ON member.mno = friends.mno
                                      WHERE friends.memberId = #{memberId}) WHERE memberId = #{memberId};
     </update>
+    <delete id="deleteGmingAll">
+        delete from friends where mno=#{mno}
+    </delete>
 </mapper>

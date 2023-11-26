@@ -22,6 +22,6 @@ public interface FriendsMapper {
 
     void gmerCntUpdate(String memberId); // 그루머 수 업데이트 (상대가 나를 추가한 사람수)
 
-
+    void deleteGmingAll (Long mno);
 
 }

@@ -18,4 +18,7 @@
     <select id="banned" resultType="boolean">
         SELECT count(memberId) FROM MEMBER WHERE mno = (SELECT mno FROM ban WHERE memberId = #{memberId});
     </select>
+    <delete id="deleteBanAll">
+        delete from ban where mno=#{mno}
+    </delete>
 </mapper>

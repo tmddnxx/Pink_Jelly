@@ -344,7 +344,6 @@ function printCommentCnt(total){
 
 function printList(dtoList) { // 댓글 목록 출력
     let str = '';
-    let reStr = '';
     if (dtoList && dtoList.length > 0) {
         for (const dto of dtoList) {
             if(dto.comNo == dto.parentNo){

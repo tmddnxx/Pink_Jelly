@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<style>
+    *{
+        margin: 0px;
+        padding: 0px;
+    }
+    .login-group {
+        display: flex;
+        margin: 0px;
+        padding: 0px;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        height: 100vh;
+        background: linear-gradient(to bottom right, #ffd6e5, #ffc2d1); /* 연한 핑크로 변경 */
+    }
+
+    .login-content{
+        height: 380px;
+        width: 370px;
+        background-color: #f0f0f0;
+        border-radius: 10px; /* 모서리 둥글게 만들기 */
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* 그림자 추가 */;
+        border: 2px solid #ffffff; /* 흰색 테두리 추가 */
+        overflow: hidden; /* 내용이 테두리를 넘어가지 않도록 함 */
+    }
+    h1{
+        padding-top: 20px;
+    }
+    .login-box{
+        display: flex;
+        flex-direction: column;
+        text-align: right;
+        align-items: flex-end; /* 입력란을 아래쪽으로 정렬 */
+        padding: 50px ; /* 간격을 조절할 수 있습니다. */
+    }
+    input{
+        padding: 8px;
+        border: 1px solid #aaa;
+        border-radius: 5px; /* 입력란 모서리 둥글게 만들기 */
+    }
+    img{
+        width: 85%;
+    }
+    .login-button {
+        background-color: #ff80ab; /* 귀여운 핑크 버튼 배경색 */
+        color: #ffffff; /* 버튼 텍스트 색상 */
+        padding: 10px 20px; /* 내부 간격 조절 */
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        margin-top: 20px; /* 버튼과 입력란 사이 간격 조절 */
+    }
+</style>
+<body>
+  <div class="login-group">
+    <div class="login-content">
+        <img src="/images/basic/PinkJelly_로고.png">
+        <h1>PINK JELLY</h1>
+        <h3>Management System</h3>
+        <form action="#" id="adminLogin" class="login-box" >
+            <div class="id-box">
+                <label class="adminId">Id</label>
+                <input type="text" name="adminId">
+            </div>
+            <div class="pw-box">
+                <label class="adminPw">Password</label>
+                <input type="password" name="adminPw">
+                <button class="login-button">Login</button>
+            </div>
+        </form>
+    </div>
+  </div>
+</body>
+</html>
