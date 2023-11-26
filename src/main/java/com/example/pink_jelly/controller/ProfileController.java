@@ -50,12 +50,13 @@ public class ProfileController {
         List<MainBoardDTO> mainBoardDTOList = profileService.mainBoardList(memberId); // 메인 게시판 목록
         List<CatsMeBoardDTO> catsMeBoardDTOList = profileService.catsMeBoardList(memberId); // 입양소 게시판 목록
         List<CatsReviewBoardDTO> reviewBoardDTOList = profileService.reviewBoardList(memberId); //입양후기 게시판 목록
-        List<ChatRoomDTO> chatRoomDTOList = chatService.getRooms(); // 채팅 목록
+        List<ChatRoomDTO> chatRoomDTOList = chatService.getRooms(mno); // 채팅 목록
 
         sessionReset(memberDTO);
         model.addAttribute("mainBoardList", mainBoardDTOList);
         model.addAttribute("catsMeBoardList", catsMeBoardDTOList);
         model.addAttribute("reviewBoardList", reviewBoardDTOList);
+        model.addAttribute("chatRoomDTOList", chatRoomDTOList);
         model.addAttribute("banDTOList", banDTOList);
         model.addAttribute("gmerDTOList", gmerDTOlist);
         model.addAttribute("gmingDTOList", gmingDTOList);

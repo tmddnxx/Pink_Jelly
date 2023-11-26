@@ -10,7 +10,7 @@ import java.util.List;
 @Mapper
 public interface ChatRoomMapper {
     public void insertChatRoom(ChatRoomDTO chatRoom);
-    public List<ChatRoomDTO> selectAllRooms();
+    public List<ChatRoomDTO> selectAllRooms(Long mno);
 
     public ChatRoomDTO findRoomById(String roomId);
 

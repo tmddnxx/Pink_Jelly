@@ -6,32 +6,119 @@
 <head>
     <meta charset="UTF-8">
     <title>채팅방 목록</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box;}
+        ul, li { list-style: none; }
+        img { display: inline; border: none;}
+
+        .chatWrap {
+            width: 400px;
+            background-color: pink;
+            margin: 0 auto;
+            border: 1px solid #999;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+        .chatTitle {
+            height: 40px;
+            padding: 10px;
+            color: #000000;
+        }
+
+        #msgArea {
+            width: 100%;
+            height: 500px;
+            background-color: pink;
+            padding: 10px;
+            overflow-y: scroll;
+
+            -ms-overflow-style: none;
+        }
+        #msgArea::-webkit-scrollbar {
+            display: none;
+        }
+
+        .content {
+            display: flex;
+            align-items: end;
+        }
+
+        .content .me {
+            background-color: #fff3cd;
+        }
+
+        .profileImg {
+            width: 35px;
+            border-radius: 35%;
+            background-color: #fffdef;
+        }
+
+        .info {
+            display: flex;
+            align-items: center;
+        }
+
+        .info h6 {
+            margin-left: 10px;
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .message {
+            max-width: 70%;
+            background-color: #fff;
+            border-radius: 10px;
+            font-size: 14px;
+            padding: 8px;
+            word-break: break-all;
+        }
+
+        .time {
+            margin-left: 5px;
+            font-size: 11px;
+        }
+
+        textarea {
+            width: 100%;
+            max-height: 200px;
+            padding: 15px;
+            border: none;
+            outline: none;
+            display: block;
+            resize: none;
+            overflow-y: hidden;
+        }
+    </style>
 </head>
 <body>
 <div layout:fragment="content">
-    <div class="container">
-        <div class="col-6">
-            <h1>[[${room.name}]]</h1>
+    <main class="chatWrap">
+        <h5 class="chatTitle">[[${room.name}]]</h5>
+        <div id="msgArea">
+            <div class="mb-2" th:each="messageDTO : ${messages}" th:switch="${messageDTO.writer}">
+                <div class="content justify-content-end" th:case="${#authentication.principal.memberId}">
+                    <span class="time me-sm-1">오후 3시</span>
+                    <span class="message me">
+                        [[${messageDTO.message}]]
+                    </span>
+                </div>
+                <div th:case="*">
+                    <div class="info">
+                        <img th:src="|/upload/profileView/${messageDTO.dateString}/s_${messageDTO.profileImg}|" class="profileImg">
+                        <h6>[[${messageDTO.writer}]]</h6>
+                    </div>
+                    <p class="content">
+                        <span class="message ms-5">
+                            [[${messageDTO.message}]]
+                        </span>
+                        <span class="time ms-1">오후 3시</span>
+                    </p>
+                </div>
+            </div>
         </div>
         <div>
-            <div id="msgArea" class="col">
-                <div class="col-6" th:each="messageDTO : ${messages}">
-                    <div class="alert alert-secondary">
-                        <b>[[${messageDTO.writer}]] : [[${messageDTO.message}]]</b>
-                    </div>
-                </div>
-            </div>
-            <div class="col-6">
-                <div class="input-group mb-3">
-                    <input type="text" id="msg" class="form-control">
-                    <div class="input-group-append">
-                        <button class="btn btn-outline-secondary" type="button" id="button-send">전송</button>
-                    </div>
-                </div>
-            </div>
+            <textarea id="msg" cols="20" rows="1"></textarea>
         </div>
-        <div class="col-6"></div>
-    </div>
+    </main>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.1/sockjs.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
@@ -42,10 +129,11 @@
     document.addEventListener('DOMContentLoaded', function () {
         var messages = [[${messages}]];
         console.log(messages);
-        var roomName = [[${roomName}]];
+        var roomName = [[${room.name}]];
         var roomId = [[${room.roomId}]];
         var auth = [[${#authentication.principal}]];
         var mno = auth.mno;
+        var profileImg = auth.profileImg + "/" + auth.dateString;
         var username = auth.memberId;
 
         console.log(roomName + ", " + roomId + ", " + username);
@@ -65,21 +153,32 @@
 
                 var writer = content.writer;
                 var message = content.message;
+                var profileImg = content.profileImg;
+                var dateString = content.dateString;
                 var str = '';
 
                 if (writer === username) {
                     var divWrap = document.createElement('div');
-                    divWrap.setAttribute('class', 'col-6');
-                    divWrap.innerHTML = `<div class="alert alert-secondary">
-                                            <b>${writer} : ${message}</b>
+                    divWrap.setAttribute('class', 'mb-2');
+                    divWrap.innerHTML = `<div class="content justify-content-end">
+                                            <span class="time me-sm-1">오후 3시</span>
+                                            <span class="message med">${message}</span>
                                          </div>`;
                     msgArea.appendChild(divWrap);
                 }
                 else {
                     var divWrap = document.createElement('div');
-                    divWrap.setAttribute('class', 'col-6');
-                    divWrap.innerHTML = `<div class="alert alert-warning">
-                                            <b>${writer} : ${message}</b>
+                    divWrap.setAttribute('class', 'mb-2');
+                    divWrap.innerHTML = `<div>
+                                            <div class="info">
+                                                <img src="/upload/profileView/${dateString}/s_${profileImg}"
+                                                     class="profileImg">
+                                                <h6>${writer}</h6>
+                                            </div>
+                                            <p class="content">
+                                                <span class="message ms-5">${message}</span>
+                                                <span class="time ms-1">오후 3시</span>
+                                            </p>
                                          </div>`;
                     msgArea.appendChild(divWrap);
                 }
@@ -89,12 +188,17 @@
             stomp.send('/pub/chat/enter', {}, JSON.stringify({roomId: roomId, writer: username}));
         });
 
-        document.getElementById('button-send').addEventListener('click', function (e) {
-            var msg = document.getElementById('msg');
 
-            console.log(username + ":" + msg.value);
-            stomp.send('/pub/chat/message', {}, JSON.stringify({roomId: roomId, mno: mno, message: msg.value ,writer: username}));
-            msg.value = '';
+        document.getElementById('msg').addEventListener('keyup', function (e) {
+            console.log(e.key);
+            if (e.key === 'Enter') {
+                var msg = e.target;
+
+                console.log('엔터키 누름');
+                console.log(username + ":" + msg.value);
+                stomp.send('/pub/chat/message', {}, JSON.stringify({roomId: roomId, mno: mno, profileImg: profileImg, message: msg.value.trim() ,writer: username}));
+                msg.value = '';
+            }
         });
     });
 </script>

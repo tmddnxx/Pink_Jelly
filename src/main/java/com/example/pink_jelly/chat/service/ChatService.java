@@ -4,7 +4,6 @@ import com.example.pink_jelly.chat.dto.ChatMessageDTO;
 import com.example.pink_jelly.chat.dto.ChatRoomDTO;
 import com.example.pink_jelly.chat.mapper.ChatMessageMapper;
 import com.example.pink_jelly.chat.mapper.ChatRoomMapper;
-import com.example.pink_jelly.chat.repository.ChatMessageRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
@@ -19,8 +18,7 @@ public class ChatService {
     private final ChatMessageMapper chatMessageMapper;
 
     // 채팅 메세지
-    public ChatMessageDTO sendMessage(String roomId, ChatMessageDTO messageDTO) {
-        messageDTO.setRoomId(roomId); // 채팅방 번호 저장
+    public ChatMessageDTO sendMessage(ChatMessageDTO messageDTO) {
         chatMessageMapper.insertMessage(messageDTO); // db에 채팅 메세지 정보 저장
         log.info("sendMessage...");
         log.info(messageDTO.getCmNo());
@@ -29,6 +27,7 @@ public class ChatService {
     }
 
     public List<ChatMessageDTO> getMessages(String roomId) {
+
         return chatMessageMapper.findAllByRoomId(roomId);
     }
 
@@ -41,8 +40,8 @@ public class ChatService {
         return chatRoomDTO;
     }
 
-    public List<ChatRoomDTO> getRooms() {
-        return chatRoomMapper.selectAllRooms();
+    public List<ChatRoomDTO> getRooms(Long mno) {
+        return chatRoomMapper.selectAllRooms(mno);
     }
 
 

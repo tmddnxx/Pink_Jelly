@@ -99,18 +99,7 @@
         height: 200px;
     }
     .menu {
-        width: 100px;
-    }
-    .menu-tap {
-        display: none;
-    }
-    .menu-tap ul{
-        padding-left: 0;
-    }
-    .menu-tap span:hover{
-        border-bottom: 2px solid #ffcdd2;
-        cursor: pointer;
-        gap: 5px;
+        width: 150px;
     }
     .listBtn{
         cursor: pointer;
@@ -128,6 +117,32 @@
     .row{
         margin-left: 2rem;
         margin-right: 2rem;
+    }
+
+    /* 메뉴 탭 스타일 */
+    .menu-tap {
+        display: none;
+        border: 1px solid #999;
+        padding: 0;
+    }
+    .menu {
+        text-align: end;
+    }
+    .menu-tap ul{
+        padding-left: 0;
+    }
+    .menu-tap li {
+        padding: 10px;
+        max-width: 150px;
+        text-align: center;
+        cursor: pointer;
+        border-bottom: 1px solid #999;
+    }
+    .menu-tap li:last-child {
+        border-bottom: none;
+    }
+    .menu-tap li:hover {
+        background-color: pink;
     }
 </style>
 
@@ -198,19 +213,33 @@
     </div>
     <!--    그루머 목록 끝-->
 
+    <style>
+        .chat-list {
+            padding: 0;
+        }
+        .chat-list li {
+            padding: 10px;
+            cursor: pointer;
+        }
+        .chat-list li:hover {
+            background-color: pink;
+        }
+    </style>
+
     <!-- 채팅목록 -->
-    <div class="modal grooming_wrap modal-dialog-scrollable" tabindex="-1">
+    <div class="modal chat_wrap modal-dialog-scrollable" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">채팅</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <ul class="modal-body" th:each="dto: ${gmingDTOList}">
-                    <li>[[${dto.nickName}]]([[${dto.memberId}]])</li>
-                </ul>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <div class="modal-body">
+                    <ul class="chat-list">
+                        <li th:each="chat: ${chatRoomDTOList}">
+                            <a th:href="|@{/chat/room(roomId=${chat.roomId})}|">[[${chat.name}]]</a>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
@@ -234,19 +263,18 @@
                         </th:block>
                     </div>
                 </div>
+
                 <!-- 메뉴 버튼-->
-                <span class="menu">
+                <div class="menu">
                     <i class="fa-solid fa-bars menuBtn"></i>
-                    <span class="menu-tap">
-                        <ul>
-                            <li><span class="groomingBtn">그루밍</span></li>
-                            <li><span class="groomergBtn">그루머</span></li>
-                            <li><span>채팅목록</span></li>
-                            <li><span class="banBtn">차단목록</span></li>
-                            <li><span><a th:href="@{/member/checkPW}">회원정보 수정</a></span></li>
-                        </ul>
-                    </span>
-                </span>
+                    <ul class="menu-tap">
+                        <li><span class="groomingBtn">그루밍</span></li>
+                        <li><span class="groomergBtn">그루머</span></li>
+                        <li><span class="chatBtn">채팅목록</span></li>
+                        <li><span class="banBtn">차단목록</span></li>
+                        <li><span><a th:href="@{/member/checkPW}">회원정보 수정</a></span></li>
+                    </ul>
+                </div>
 <!--                메뉴버튼 끝-->
             </div>
         </div>
@@ -342,6 +370,15 @@
         groomerBtn.addEventListener('click', function (){
             groomerModal.show();
         })
+
+        // 채팅목록
+        const chatBtn = document.querySelector('.chatBtn'); // 채팅목록 버튼
+        const chatWrap = document.querySelector('.chat_wrap');
+        const chatModal = new bootstrap.Modal(chatWrap);
+
+        chatBtn.addEventListener('click', function () {
+            chatModal.show();
+        });
 
         // 차단기능
         const banBtn = document.querySelector('.banBtn'); // 차단목록 버튼

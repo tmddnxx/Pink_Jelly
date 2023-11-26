@@ -5,10 +5,20 @@
 <mapper namespace="com.example.pink_jelly.chat.mapper.ChatMessageMapper">
 
     <insert id="insertMessage" parameterType="com.example.pink_jelly.chat.dto.ChatMessageDTO" useGeneratedKeys="true" keyProperty="cmNo">
-        insert into chatMessages (roomId, mno, writer, message, sendTime) values (#{roomId}, #{mno}, #{writer}, #{message}, now())
+        insert into chatMessages (roomId, mno, writer, message, sendTime) values (#{roomId}, #{mno}, #{writer}, #{message}, #{sendTime})
     </insert>
 
+    <select id="selectMessage" resultType="com.example.pink_jelly.chat.dto.ChatMessageDTO">
+        SELECT c.*, m.profileImg
+        FROM chatMessages AS c
+                 JOIN member AS m ON c.mno = m.mno
+        WHERE c.cmNo = #{cmNo}
+    </select>
+
     <select id="findAllByRoomId" resultType="com.example.pink_jelly.chat.dto.ChatMessageDTO">
-        select * from chatMessages where roomId = #{roomId}
+        SELECT c.*, m.profileImg
+        FROM chatMessages AS c
+        JOIN member AS m ON c.mno = m.mno
+        WHERE roomId = #{roomId}
     </select>
 </mapper>

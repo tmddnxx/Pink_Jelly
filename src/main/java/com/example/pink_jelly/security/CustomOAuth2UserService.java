@@ -54,7 +54,6 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         /* 변경되는 부분 */
         String email = null;
-        String memberName = null;
         switch (clientName) {
             case "kakao":
                 email = getKakaoEmail(paramMap);

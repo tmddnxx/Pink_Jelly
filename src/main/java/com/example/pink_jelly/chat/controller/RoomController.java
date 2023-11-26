@@ -21,11 +21,11 @@ public class RoomController {
 
     // 채팅방 목록 조회
     @GetMapping("/rooms")
-    public ModelAndView rooms() {
+    public ModelAndView rooms(@AuthenticationPrincipal MemberDTO memberDTO) {
         log.info("# All Chat Rooms");
         ModelAndView modelAndView = new ModelAndView("chat/rooms");
 
-        modelAndView.addObject("list", chatService.getRooms());
+        modelAndView.addObject("list", chatService.getRooms(memberDTO.getMno()));
         log.info("/rooms(GET)....");
 
         return modelAndView;
