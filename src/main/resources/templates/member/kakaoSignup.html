@@ -88,6 +88,7 @@
                                         </div>
                                         <div class="col-6 mb-3">
                                             <input id="password-retype" type="password" class="form-control" placeholder="비밀번호 확인" required>
+                                            <input type="hidden" name="isPassMatch" value="false">
                                             <span class="mismatch-message hide fail"></span>
                                         </div>
 
@@ -224,6 +225,17 @@
     </div>
 
     <script layout:fragment="script" th:inline="javascript">
+        const preventGoBack = () => {
+            // change start
+            history.pushState(null, '', location.href);
+            // change end
+            alert('회원가입을 해야 이용할 수 있습니다.');
+        };
+
+        history.pushState(null, '', location.href);
+        window.addEventListener('popstate', preventGoBack);
+
+
         const errors = [[${errors}]];
         console.log(errors);
 
@@ -244,7 +256,9 @@
 
         document.querySelector('.exitBtn').addEventListener('click', function () {
             // 취소버튼 클릭시 로그아웃
-            self.location = '/logout';
+            if (confirm('회원가입을 취소 하시겠습니까?')) {
+                self.location = '/logout';
+            }
         });
 
         const inputPasswd = document.getElementById('passwd');
@@ -268,9 +282,12 @@
         });
 
         // 비밀번호 확인
+        const isPassMatch = document.querySelector('input[name=isPassMatch]'); // 비밀번호 일치여부를 담을 input
         inputPasswdRetype.addEventListener('keyup', function () {
             const passwdRetype = inputPasswdRetype.value;
             const misMatchMsg = document.querySelector('.mismatch-message');
+
+            isPassMatch.value = 'false';
 
             if (passwdRetype.length !== 0) {
                 misMatchMsg.classList.remove('hide');
@@ -283,6 +300,7 @@
                 else { // 비밀번호가 일치할 경우
                     misMatchMsg.textContent = '비밀번호가 일치합니다';
                     misMatchMsg.classList.add('success');
+                    isPassMatch.value = 'true';
                 }
             }
             else {
@@ -401,6 +419,11 @@
         document.querySelector('.submitBtn').addEventListener('click', function (e) {
             e.preventDefault();
             e.stopPropagation();
+
+            if (isPassMatch.value === 'false') { // 비밀번호가 일치하지 않을 경우
+                alert('비밀번호가 일치하지 않습니다.')
+                return;
+            }
 
             // 1. 썸네일 영역에서 img 태그의 data-src 속성을 들고 옴.
             const uploadFile = uploadResult.querySelector('img');

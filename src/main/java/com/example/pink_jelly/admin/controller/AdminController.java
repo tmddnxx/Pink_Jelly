@@ -1,7 +1,7 @@
-package com.example.pink_jelly.controller;
+package com.example.pink_jelly.admin.controller;
 
 import com.example.pink_jelly.dto.AdminSearchDTO;
-import com.example.pink_jelly.service.AdminService;
+import com.example.pink_jelly.admin.service.AdminService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Controller;
@@ -20,9 +20,9 @@ public class AdminController {
 
     private final AdminService adminService;
 
-    @GetMapping("")
-    public String adminLogin(){
-        return "/admin/login";
+    @GetMapping("/login")
+    public void login(){
+        // 관리자 로그인 페이지
     }
 
 

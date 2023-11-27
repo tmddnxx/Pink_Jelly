@@ -16,6 +16,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.OAuth2AuthorizationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -96,7 +97,7 @@ public class MemberController {
 
         log.info("/signup...");
 
-        if (bindingResult.hasErrors()) {
+        if (bindingResult.hasErrors()) { // 유효성 검사에 걸릴경우
             return "/member/signup";
         }
         if (isConfirm.equals("false")) {
@@ -175,8 +176,6 @@ public class MemberController {
     @GetMapping("/welcome")
     public void welcome(){
         // 회원가입 완료 뷰
-
-        SecurityContextHolder.clearContext();
     }
 
     @GetMapping("/checkPW")
@@ -269,11 +268,14 @@ public class MemberController {
     public String modifyMyCatPost(@AuthenticationPrincipal MemberDTO memberDTO, MemberDTO updateMemberDTO){
         // 고양이 정보수정
         log.info(updateMemberDTO);
+        log.info(updateMemberDTO.getProfileImg());
 
         memberService.modifyMyCat(updateMemberDTO);
 
         /* 데이터가 저장된 후에 이미지 파일 이동 */
-        if (updateMemberDTO.getProfileImg() != null) {
+        if (updateMemberDTO.getProfileImg() != null
+                && !(memberDTO.getProfileImg() + "/" + memberDTO.getDateString()).equals(updateMemberDTO.getProfileImg())) {
+            // 프로필 이미지가 null이 아니고 프로필을 변경한 경우
             String splits[] = updateMemberDTO.getProfileImg().split("/");
 
             moveFile(splits[0]);

@@ -1,4 +1,4 @@
-package com.example.pink_jelly.service;
+package com.example.pink_jelly.admin.service;
 
 import com.example.pink_jelly.domain.MemberVO;
 import com.example.pink_jelly.dto.AdminSearchDTO;

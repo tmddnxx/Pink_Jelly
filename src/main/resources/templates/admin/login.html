@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -64,14 +64,14 @@
         <img src="/images/basic/PinkJelly_로고.png">
         <h1>PINK JELLY</h1>
         <h3>Management System</h3>
-        <form action="#" id="adminLogin" class="login-box" >
+        <form action="/admin/loginProc" id="adminLogin" method="post" class="login-box" >
             <div class="id-box">
                 <label class="adminId">Id</label>
                 <input type="text" name="adminId">
             </div>
             <div class="pw-box">
                 <label class="adminPw">Password</label>
-                <input type="password" name="adminPw">
+                <input type="password" name="password">
                 <button class="login-button">Login</button>
             </div>
         </form>

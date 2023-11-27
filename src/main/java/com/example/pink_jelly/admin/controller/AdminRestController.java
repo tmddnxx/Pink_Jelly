@@ -1,7 +1,7 @@
-package com.example.pink_jelly.controller;
+package com.example.pink_jelly.admin.controller;
 
 import com.example.pink_jelly.dto.*;
-import com.example.pink_jelly.service.AdminService;
+import com.example.pink_jelly.admin.service.AdminService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.web.bind.annotation.*;

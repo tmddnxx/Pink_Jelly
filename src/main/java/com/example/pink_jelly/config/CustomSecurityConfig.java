@@ -8,6 +8,8 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -20,6 +22,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 
@@ -97,12 +100,12 @@ public class CustomSecurityConfig {
                 .invalidateHttpSession(true)
                 .deleteCookies("JSESSIONID", "remember-me");
 
-        http.authorizeRequests()
-                .anyRequest().permitAll();
-//                .antMatchers("/", "/member/signup", "/member/welcome", "/member/sendConfirmMail",
-//                        "/member/matchConfirmKey", "/member/removeConfirmKey", "/member/checkMemberId").permitAll()
-//                .antMatchers("/member/**", "/profile/myProfile").authenticated()
-
+//        http.authorizeRequests()
+//                .anyRequest().permitAll();
+////                .antMatchers("/", "/member/signup", "/member/welcome", "/member/sendConfirmMail",
+////                        "/member/matchConfirmKey", "/member/removeConfirmKey", "/member/checkMemberId").permitAll()
+////                .antMatchers("/member/**", "/profile/myProfile").authenticated()
+//
 
         http.exceptionHandling().accessDeniedHandler(accessDeniedHandler()); // 403
 

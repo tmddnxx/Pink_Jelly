@@ -83,6 +83,7 @@
                                 </div>
                                 <div class="col-6 mb-3 inputWrap">
                                     <input id="password-retype" type="password" class="form-control" minlength="8" placeholder="비밀번호 확인" required>
+                                    <input type="hidden" name="isPassMatch">
                                     <span class="mismatch-message hide fail"></span>
                                 </div>
                             </div>
@@ -124,9 +125,12 @@
         });
 
         // 비밀번호 확인
+        const isPassMatch = document.querySelector('input[name=isPassMatch]'); // 비밀번호 일치여부를 담을 input
         inputPasswdRetype.addEventListener('keyup', function () {
             const passwdRetype = inputPasswdRetype.value;
             const misMatchMsg = document.querySelector('.mismatch-message');
+
+            isPassMatch.value = 'false';
 
             if (passwdRetype.length !== 0) {
                 misMatchMsg.classList.remove('hide');
@@ -139,6 +143,7 @@
                 else { // 비밀번호가 일치할 경우
                     misMatchMsg.textContent = '비밀번호가 일치합니다';
                     misMatchMsg.classList.add('success');
+                    isPassMatch.value = 'true';
                 }
             }
             else {
@@ -146,7 +151,15 @@
             }
         });
 
+        document.querySelector('.modifyBtn').addEventListener('click', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
 
+            if (isPassMatch.value === 'false') { // 비밀번호가 일치하지 않을 경우
+                alert('비밀번호가 일치하지 않습니다.')
+                return;
+            }
+        });
     </script>
 </body>
 </html>

@@ -5,6 +5,9 @@
 <head>
     <meta charset="UTF-8">
     <title>관리자 페이지</title>
+    <link rel="stylesheet" th:href="@{/css/slick/slick.css}">
+    <link rel="stylesheet" th:href="@{/css/slick/slick-theme.css}">
+    <link rel="stylesheet" th:href="@{/css/slick/slider.css}">
 </head>
 <style layout:fragment="style">
     *{
@@ -299,6 +302,9 @@
         </div>
 
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+        <script src="/js/slick/slick.min.js"></script>
+        <script src="/js/slick/slider.js"></script>
     </div>
 </body>
 <script layout:fragment="script" th:inline="javascript">
@@ -407,9 +413,13 @@
                         <hr>
                         <div class="text-end mt-1">${mainBoardDTO.addDate[0]+"-"+mainBoardDTO.addDate[1]+"-"+mainBoardDTO.addDate[2]+" "+mainBoardDTO.addDate[3]+":"+mainBoardDTO.addDate[4]}</div>
                     </div>
-                    <div class="mt-3">
-                        ${imgs()}
-                        ${mainBoardDTO.content}
+                    <div class="post-content-body">
+                        <div class="mt-3 slick1">
+                            ${imgs()}
+                            ${mainBoardDTO.content}
+                        </div>
+                        <button class="prev p1" id="prev-btn">이전</button>
+                        <button class="next n1" id="next-btn">다음</button>
                     </div>
                     <div class="text-end mt-2">
                         <button type="button" class="btn btn-danger removeBtn">삭제</button>
@@ -450,16 +460,24 @@
                         let str = '';
                         const mainImg = mainBoardDTO.mainImg;
                         for(let i = 0; i< mainImg.length; i++){
-                            str += `<div className="col-md-12 mb-4 d-flex">
-                    <img className="img-fluid round" style="width: 30%; margin: 0 auto;"
-                         src="/upload/mainBoardView/${mainBoardDTO.boardDateString[i]}/${mainBoardDTO.mainImg[i]}"
-                         alt="Image placeholder" height="250">
-                </div>`
+                            str += `<div class="col-md-12 mb-4">
+                                        <img class="img-fluid round" style="width: 30%; margin: 0 auto;"
+                                            src="/upload/mainBoardView/${mainBoardDTO.boardDateString[i]}/${mainBoardDTO.mainImg[i]}"
+                                            alt="Image placeholder" height="250">
+                                    </div>`
                         }
                         return str;
                     }
 
                     document.getElementById('mainView').innerHTML = plusView;
+                    $('.slick1').slick({
+                        dots: false,
+                        infinite: true,
+                        speed: 300,
+                        allows: true,
+                        prevArrow: $(".p1"),
+                        nextArrow: $(".n1")
+                    });
 
                     // 메인게시물 삭제
                     const removeBtns = document.querySelectorAll('.removeBtn');
@@ -715,9 +733,13 @@
                         <hr>
                         <div class="text-end mt-1">${catsBoardDTO.addDate[0]+"-"+catsBoardDTO.addDate[1]+"-"+catsBoardDTO.addDate[2]+" "+catsBoardDTO.addDate[3]+":"+catsBoardDTO.addDate[4]}</div>
                     </div>
-                    <div class="mt-3">
-                        ${catsImgs()}
-                        ${catsBoardDTO.content}
+                    <div class="post-content-body">
+                        <div class="mt-3 slick2">
+                            ${catsImgs()}
+                            ${catsBoardDTO.content}
+                        </div>
+                        <button class="prev p2" id="prev-btn">이전</button>
+                        <button class="next n2" id="next-btn">다음</button>
                     </div>
                     <div class="text-end mt-2">
                         <button type="button" class="btn btn-danger catsRemoveBtn">삭제</button>
@@ -739,6 +761,14 @@
                     }
 
                     document.getElementById('catsView').innerHTML = plusView;
+                    $('.slick2').slick({
+                        dots: false,
+                        infinite: true,
+                        speed: 300,
+                        allows: true,
+                        prevArrow: $(".p2"),
+                        nextArrow: $(".n2")
+                    });
 
                     // 캣츠 미 게시물 삭제
                     const catsRemoveBtns = document.querySelectorAll('.catsRemoveBtn');
@@ -876,9 +906,13 @@
                         <hr>
                         <div class="text-end mt-1">${reviewBoardDTO.addDate[0]+"-"+reviewBoardDTO.addDate[1]+"-"+reviewBoardDTO.addDate[2]+" "+reviewBoardDTO.addDate[3]+":"+reviewBoardDTO.addDate[4]}</div>
                     </div>
-                    <div class="mt-3">
-                        ${reviewImgs()}
-                        ${reviewBoardDTO.content}
+                    <div class="post-content-body">
+                        <div class="mt-3 slick3">
+                            ${reviewImgs()}
+                            ${reviewBoardDTO.content}
+                        </div>
+                        <button class="prev p3" id="prev-btn">이전</button>
+                        <button class="next n3" id="next-btn">다음</button>
                     </div>
                     <div class="text-end mt-2">
                         <button type="button" class="btn btn-danger reviewRemoveBtn">삭제</button>
@@ -929,6 +963,14 @@
                     }
 
                     document.getElementById('reviewView').innerHTML = plusView;
+                    $('.slick3').slick({
+                        dots: false,
+                        infinite: true,
+                        speed: 300,
+                        allows: true,
+                        prevArrow: $(".p3"),
+                        nextArrow: $(".n3")
+                    });
 
                     // 리뷰 게시물 삭제
                     const reviewRemoveBtns = document.querySelectorAll('.reviewRemoveBtn');

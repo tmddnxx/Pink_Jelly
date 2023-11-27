@@ -94,7 +94,17 @@
                                 <label class="form-check-label" for="hasCat">고양이를 키우고 계신가요?</label>
                             </div>
 
-                            <div th:class="|row catInfo ${member.hasCat == 'true' ? '' : 'hide'}|">
+                            <div th:class="|row catInfo ${member.hasCat ? '' : 'hide'}|">
+
+                                <div class="col-6 mb-3">
+                                    <h4>프로필 이미지</h4>
+                                    <img th:src="|/upload/profileView/${member.dateString}/${member.profileImg}|" width="100">
+                                </div>
+
+                                <div class="col-6 mb-3">
+                                    <h4>고양이 성별</h4>
+                                    <p>[[${member.catSex}]]</p>
+                                </div>
 
                                 <div class="col-6 mb-3">
                                     <h4>고양이 나이</h4>
@@ -106,15 +116,6 @@
                                     <p>[[${member.variety}]]</p>
                                 </div>
 
-                                <div class="col-6 mb-3">
-                                    <h4>고양이 성별</h4>
-                                    <p>[[${member.catSex}]]</p>
-                                </div>
-
-                                <div class="col-6 mb-3">
-                                    <h4>프로필 이미지</h4>
-                                    <img th:src="|/upload/profileView/${member.dateString}/${member.profileImg}|">
-                                </div>
                             </div>
                         </div>
 
