@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -69,6 +70,15 @@ public class CustomSecurityConfig {
         return new CustomSocialLoginSuccessHandler(passwordEncoder());
     }
 
+    @Bean
+    public DaoAuthenticationProvider adminAuthenticationProvider() {
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setUserDetailsService(customUserDetailService);
+        provider.setPasswordEncoder(passwordEncoder());
+
+        return provider;
+    }
+
     // 인증 or 인가에 대한 설정
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -77,6 +87,8 @@ public class CustomSecurityConfig {
         http.csrf().disable();
 
         http.headers().frameOptions().sameOrigin();
+
+        http.authenticationProvider(adminAuthenticationProvider());
 
         //  커스텀 로그인 페이지
         http.formLogin()
