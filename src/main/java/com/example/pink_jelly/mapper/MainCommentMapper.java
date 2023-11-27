@@ -23,6 +23,6 @@ public interface MainCommentMapper {
 
     int checkParents (Long comNo); // 댓글인지 확인
 
-
+    void updateCnt(Long mbNo); // 댓글 수 업데이트
 
 }

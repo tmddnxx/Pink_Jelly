@@ -19,6 +19,9 @@
     <update id="updateParentNo">
         update `eternalcomment` set `parentNo` = `comNo` where `parentNo` is null;
     </update>
+    <update id="updateCnt">
+        update `eternalRestBoard` set `commentCnt` = (select count(comNo) from eternalComment where erbNo = #{erbNo});
+    </update>
     <select id="checkParents" resultType="int">
         select count(*) from `eternalcomment` where parentNo = #{comNo}
     </select>

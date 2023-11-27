@@ -46,6 +46,9 @@
     <update id="updateParentNo">
         update `maincomment` set `parentNo` = `comNo` where `parentNo` is null;
     </update>
+    <update id="updateCnt">
+        update `mainBoard` set `commentCnt` = (select count(comNo) from mainComment where mbNo = #{mbNo});
+    </update>
     <select id="checkParents" resultType="int">
         select count(*) from `maincomment` where parentNo = #{comNo}
     </select>

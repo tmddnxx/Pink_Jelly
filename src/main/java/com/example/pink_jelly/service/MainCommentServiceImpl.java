@@ -33,7 +33,7 @@ public class MainCommentServiceImpl implements MainCommentService{
         mainCommentMapper.updateParentNo();
 
         if(success == 1) {
-            mainBoardMapper.upCommentCnt(mainCommentDTO.getMbNo());
+            mainCommentMapper.updateCnt(mainCommentDTO.getMbNo());
         }
         return mainCommentVO.getComNo();
     }
@@ -54,7 +54,7 @@ public class MainCommentServiceImpl implements MainCommentService{
         }
         log.info("comNo : " + comNo + "mbNo : " + mbNo);
         if( success == 1) {
-            mainBoardMapper.downCommentCnt(mbNo);
+            mainCommentMapper.updateCnt(mbNo);
         }
 
     }
@@ -63,7 +63,7 @@ public class MainCommentServiceImpl implements MainCommentService{
     public PageResponseDTO<MainCommentDTO> getListMainComment(Long mbNo, PageRequestDTO pageRequestDTO) {
         List<MainCommentVO> mainCommentVOList = mainCommentMapper.selectList(mbNo, pageRequestDTO.getSkip(), pageRequestDTO.getSize());
         List<MainCommentDTO> mainCommentDTOList = new ArrayList<>();
-
+        mainCommentMapper.updateCnt(mbNo);
         mainCommentVOList.forEach(mainCommentVO -> {
             mainCommentDTOList.add(modelMapper.map(mainCommentVO, MainCommentDTO.class));
         });

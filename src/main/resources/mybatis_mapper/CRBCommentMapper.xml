@@ -39,6 +39,9 @@
     <update id="updateParentNo">
         update `catsComment` set `parentNo` = `comNo` where `parentNo` is null;
     </update>
+    <update id="updateCnt">
+        update `catsReviewBoard` set `commentCnt` = (select count(comNo) from catsComment where crbNo = #{crbNo});
+    </update>
     <delete id="deleteAll">
         DELETE FROM catsComment WHERE parentNo=#{comNo}
     </delete>

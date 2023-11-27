@@ -16,6 +16,7 @@ public interface CRBCommentMapper {
     int deleteOne(Long comNo); // 댓글삭제
 
     void updateParentNo(); // 부모번호 업데이트
+    void updateCnt(Long crbNo); // 댓글 수 업데이트
 
     int deleteAll(Long comNo); //댓글 전체 삭제
 
