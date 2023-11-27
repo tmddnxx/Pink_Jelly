@@ -29,7 +29,7 @@ public class ErbCommentServiceImpl implements ErbCommentService{
         int success = eternalRestCommentMapper.insert(eternalRestCommentVO);
         eternalRestCommentMapper.updateParentNo();
         if(success == 1) {
-            eternalRestBoardMapper.upCommentCnt(eternalRestCommentDTO.getErbNo());
+            eternalRestCommentMapper.updateCnt(eternalRestCommentDTO.getErbNo());
         }
         return eternalRestCommentVO.getErbNo();
     }
@@ -39,7 +39,7 @@ public class ErbCommentServiceImpl implements ErbCommentService{
         int success = eternalRestCommentMapper.deleteOne(comNo);
         log.info("success :" + success);
         if( success == 1) {
-            eternalRestBoardMapper.downCommentCnt(erbNo);
+            eternalRestCommentMapper.updateCnt(erbNo);
         }
     }
 
@@ -47,7 +47,7 @@ public class ErbCommentServiceImpl implements ErbCommentService{
     public PageResponseDTO<EternalRestCommentDTO> getListERBComment(Long erbNo, PageRequestDTO pageRequestDTO) {
         List<EternalRestCommentVO> erbCommentVOList = eternalRestCommentMapper.selectList(erbNo, pageRequestDTO.getSkip(), pageRequestDTO.getSize());
         List<EternalRestCommentDTO> erbCommentDTOList = new ArrayList<>();
-
+        eternalRestCommentMapper.updateCnt(erbNo);
         erbCommentVOList.forEach(eternalRestCommentVO -> erbCommentDTOList.add(modelMapper.map(eternalRestCommentVO, EternalRestCommentDTO.class)));
         erbCommentDTOList.forEach(eternalRestCommentDTO -> {
             String[] splits = eternalRestCommentDTO.getProfileImg().split("/");

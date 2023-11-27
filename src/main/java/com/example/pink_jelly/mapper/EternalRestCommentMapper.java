@@ -18,4 +18,6 @@ public interface EternalRestCommentMapper {
     int deleteOne(Long comNo); //댓글 삭제
 
     void updateParentNo(); // 부모번호 업데이트
+
+    void updateCnt(Long erbNo); // 댓글 수 업데이트
 }

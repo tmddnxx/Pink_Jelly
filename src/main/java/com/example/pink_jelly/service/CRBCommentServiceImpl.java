@@ -31,7 +31,7 @@ public class CRBCommentServiceImpl implements CRBCommentService{
         crbCommentMapper.updateParentNo();
 
         if(success == 1) {
-            catsMeMapper.upCommentCnt(crbCommentDTO.getCrbNo());
+            crbCommentMapper.updateCnt(crbCommentDTO.getCrbNo());
         }
         return crbCommentVO.getComNo();
     }
@@ -41,7 +41,7 @@ public class CRBCommentServiceImpl implements CRBCommentService{
         int success = crbCommentMapper.deleteOne(comNo);
         log.info("comNo : " + comNo + "crbNo : " + crbNo);
         if( success == 1) {
-            catsMeMapper.downCommentCnt(crbNo);
+            crbCommentMapper.updateCnt(crbNo);
         }
     }
 
@@ -49,7 +49,7 @@ public class CRBCommentServiceImpl implements CRBCommentService{
     public PageResponseDTO<CRBCommentDTO> getListCRBComment(Long crbNo, PageRequestDTO pageRequestDTO) {
         List<CRBCommentVO> crbCommentVOList = crbCommentMapper.selectList(crbNo, pageRequestDTO.getSkip(), pageRequestDTO.getSize());
         List<CRBCommentDTO> crbCommentDTOList = new ArrayList<>();
-
+        crbCommentMapper.updateCnt(crbNo);
         crbCommentVOList.forEach(crbCommentVO -> crbCommentDTOList.add(modelMapper.map(crbCommentVO, CRBCommentDTO.class)));
         crbCommentDTOList.forEach(crbCommentDTO -> {
             String[] splits = crbCommentDTO.getProfileImg().split("/");

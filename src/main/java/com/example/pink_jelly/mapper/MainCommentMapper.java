@@ -21,6 +21,6 @@ public interface MainCommentMapper {
     List<MainCommentVO> selectListOrderByDESC(@Param("mbNo") Long mbNo, @Param("skip") int skip, @Param("size")int size);
 
 
-
+    void updateCnt(Long mbNo); // 댓글 수 업데이트
 
 }
