@@ -44,6 +44,10 @@ public class MemberServiceImpl implements MemberService {
         log.info("modifyMemberInfo,,,");
         log.info(memberVO.isHasCat());
 
+        if (memberVO.isHasCat()) { // 고양이를 보유 하지 않는경우
+            memberMapper.catInfoDel(); // 고양이 정보 삭제
+        }
+
         memberMapper.updateMember(memberVO);
     }
 

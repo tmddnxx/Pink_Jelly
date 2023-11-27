@@ -272,9 +272,8 @@
 
         document.querySelector('.exitBtn').addEventListener('click', function () {
             // 취소버튼 클릭시 로그아웃
-            if (confirm('회원가입을 취소 하시겠습니까?')) {
-                self.location = '/logout';
-            }
+            alert('회원가입이 취소되었습니다.');
+            self.location = '/logout';
         });
 
         const inputPasswd = document.getElementById('passwd');

@@ -75,7 +75,7 @@
 
                 <div class="info">
                     <div class="col-lg-8 info_inner" data-aos="fade-up" data-aos-delay="200">
-                        <form id="frmSignUp" th:action="@{/member/modifyPasswd}" method="post">
+                        <form id="frmMod" th:action="@{/member/modifyPasswd}" method="post">
                             <div>
                                 <div class="col-6 mb-3 inputWrap">
                                     <input id="passwd" type="password" class="form-control" name="newPasswd" minlength="8" placeholder="비밀번호" required>
@@ -159,6 +159,8 @@
                 alert('비밀번호가 일치하지 않습니다.')
                 return;
             }
+
+            document.getElementById('frmMod').submit();
         });
     </script>
 </body>

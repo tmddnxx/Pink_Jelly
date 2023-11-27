@@ -331,7 +331,7 @@
             const dateStrings = data.boardDateString; // 날짜
             let imgTag = '';
             for (let i = 0; i < mainImgs.length; i++) {
-                imgTag += `<div class="boardImg" style="height: 350px;">
+                imgTag += `<div class="boardImg" style="width: 100%; height: 350px;">
                                <img class="img-fluid round" src="/upload/mainBoardView/${dateStrings[i]}/${mainImgs[i]}" width="100%" height="350px">
                            </div>`;
             }
@@ -373,7 +373,7 @@
                                         <div style="display: flex; align-items: center;">
                                             <img id="profileImg" src="/upload/profileView/${dto.dateString}/${dto.profileImg}" alt="Image placeholder">
                                             <span>${dto.nickName}</span>
-                                            (<span class="ellipsis" style="width: 100px;">${dto.memberId}</span>)
+                                            (<span class="ellipsis" style="width: ${dto.memberId.length >= 10 ? '100px' : ''};">${dto.memberId}</span>)
                                         </div>
                                         <div class="meta">
                                                 ${dto.addDate[0]}-${dto.addDate[1]}-${dto.addDate[2]} ${dto.addDate[3]}:${dto.addDate[4]}
@@ -382,7 +382,7 @@
                                     <div class="comment-content">
                                         <p>
                                             ${dto.comment}
-                                            ${auth !== 'anonymousUser' ?
+                                            ${(auth !== 'anonymousUser') && (auth.mno === dto.mno) ?
                                                 `<span id="removeBtn_${dto.comNo}" class="removeBtn" style="cursor: pointer">삭제</span>` : ''}
                                         </p>
                                         <span id="recomment_${dto.comNo}" class="recommentBtn"
@@ -395,7 +395,7 @@
                                             <div style="display: flex; align-items: center;">
                                                 <img id="profileImg" src="/upload/profileView/${dto.dateString}/${dto.profileImg}" alt="Image placeholder">
                                                 <span id="recomment_${dto.comNo}" data-id="${dto.memberId}">${dto.nickName}</span>
-                                                (<span class="ellipsis" style="width: 100px;">${dto.memberId}</span>)
+                                                (<span class="ellipsis" style="width: ${dto.memberId.length >= 10 ? '100px' : ''};">${dto.memberId}</span>)
                                             </div>
                                             <div class="meta">
                                                 ${dto.addDate[0]}-${dto.addDate[1]}-${dto.addDate[2]} ${dto.addDate[3]}:${dto.addDate[4]}
@@ -404,7 +404,7 @@
                                         <div class="recomment-content">
                                             <p>
                                                 ${dto.comment}
-                                                ${auth !== 'anonymousUser' ?
+                                                ${(auth !== 'anonymousUser') && (auth.mno === dto.mno) ?
                                                     `<span id="removeBtn_${dto.comNo}" class="removeBtn" style="cursor: pointer">삭제</span>` : ''}
                                             </p>
                                         </div>

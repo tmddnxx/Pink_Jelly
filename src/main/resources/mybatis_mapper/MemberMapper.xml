@@ -19,6 +19,9 @@
     <update id="updateMyCat">
         update member set `catAge` = #{catAge}, `catSex` = #{catSex}, `variety` = #{variety}, `profileImg` = #{profileImg} where mno = #{mno};
     </update>
+    <update id="catInfoDel">
+        update member set `catAge` = null, `catSex` = null, `variety` = null where mno = #{mno};
+    </update>
     <select id="getMember" resultType="com.example.pink_jelly.domain.MemberVO">
         select * from member where mno = #{mno};
     </select>
