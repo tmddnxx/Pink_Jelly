@@ -34,7 +34,7 @@
         SELECT * FROM catsComment WHERE crbNo=#{crbNo} ORDER BY parentNo, comNo LIMIT #{skip}, #{size}
     </select>
     <delete id="deleteOne">
-        DELETE FROM catsComment WHERE comNo=#{comNo}
+        DELETE FROM catsComment WHERE parentNo=#{comNo}
     </delete>
     <update id="updateParentNo">
         update `catsComment` set `parentNo` = `comNo` where `parentNo` is null;

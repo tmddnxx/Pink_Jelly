@@ -14,7 +14,7 @@
         SELECT * FROM eternalcomment WHERE erbNo=#{erbNo} ORDER BY parentNo, comNo LIMIT #{skip}, #{size}
     </select>
     <delete id="deleteOne">
-        DELETE FROM eternalcomment WHERE comNo=#{comNo}
+        DELETE FROM eternalcomment WHERE parentNo=#{comNo}
     </delete>
     <update id="updateParentNo">
         update `eternalcomment` set `parentNo` = `comNo` where `parentNo` is null;

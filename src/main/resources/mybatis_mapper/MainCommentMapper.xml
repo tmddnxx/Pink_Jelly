@@ -41,7 +41,7 @@
     </select>
 
     <delete id="deleteOne">
-        DELETE FROM mainComment WHERE comNo=#{comNo}
+        DELETE FROM mainComment WHERE parentNo=#{comNo}
     </delete>
     <update id="updateParentNo">
         update `maincomment` set `parentNo` = `comNo` where `parentNo` is null;
