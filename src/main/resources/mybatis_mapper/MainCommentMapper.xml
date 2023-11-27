@@ -40,11 +40,17 @@
         LIMIT #{skip}, #{size}
     </select>
 
-    <delete id="deleteOne">
+    <delete id="deleteAll">
         DELETE FROM mainComment WHERE parentNo=#{comNo}
     </delete>
     <update id="updateParentNo">
         update `maincomment` set `parentNo` = `comNo` where `parentNo` is null;
     </update>
+    <select id="checkParents" resultType="int">
+        select count(*) from `maincomment` where parentNo = #{comNo}
+    </select>
+    <delete id="deleteOne">
+        delete from mainComment where comNo=#{comNo}
+    </delete>
 
 </mapper>

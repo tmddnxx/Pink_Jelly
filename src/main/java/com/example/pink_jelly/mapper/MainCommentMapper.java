@@ -14,12 +14,14 @@ public interface MainCommentMapper {
     List<MainCommentVO> selectAll(@Param("mbNo") Long mbNo, @Param("type")String type, @Param("keyword")String keyword); //전체 댓글
     int getCount(Long mbNo); //총 댓글 수 = total
     List<MainCommentVO> selectList(@Param("mbNo") Long mbNo, @Param("skip") int skip, @Param("size")int size); //리스트로 출력
-    int deleteOne(Long comNo);
+    int deleteAll(Long comNo); //댓글 삭제시 대댓글 전체 삭제
+    int deleteOne(Long comNo); //대댓글 삭제시 대댓글만 삭제
 
     void updateParentNo(); // 부모번호 업데이트
 
     List<MainCommentVO> selectListOrderByDESC(@Param("mbNo") Long mbNo, @Param("skip") int skip, @Param("size")int size);
 
+    int checkParents (Long comNo); // 댓글인지 확인
 
 
 

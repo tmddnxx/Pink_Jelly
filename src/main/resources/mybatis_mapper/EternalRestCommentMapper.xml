@@ -13,10 +13,16 @@
     <select id="selectList" resultType="com.example.pink_jelly.domain.EternalRestCommentVO">
         SELECT * FROM eternalcomment WHERE erbNo=#{erbNo} ORDER BY parentNo, comNo LIMIT #{skip}, #{size}
     </select>
-    <delete id="deleteOne">
+    <delete id="deleteAll">
         DELETE FROM eternalcomment WHERE parentNo=#{comNo}
     </delete>
     <update id="updateParentNo">
         update `eternalcomment` set `parentNo` = `comNo` where `parentNo` is null;
     </update>
+    <select id="checkParents" resultType="int">
+        select count(*) from `eternalcomment` where parentNo = #{comNo}
+    </select>
+    <delete id="deleteOne">
+        delete from eternalcomment where comNo=#{comNo}
+    </delete>
 </mapper>

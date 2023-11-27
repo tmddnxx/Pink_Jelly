@@ -484,13 +484,16 @@ function printList(dtoList) { // 댓글 목록 출력
                 parentNo: parentNo,
                 profileImg: profileImg
             };
-
+        if(commentObj.comment != '') {
             addComment(commentObj).then(result => {
                 comment.value = '';
                 printComments(1, 10, true); // 댓글 목록 갱신
             }).catch(e => {
                 alert("댓글 등록에 실패했습니다. 다시 시도해주세요");
             });
+        }else{
+            alert("댓글을 입력해주세요.");
+        }
     }
 
     function printPages(data) { // 페이지 목록 출력

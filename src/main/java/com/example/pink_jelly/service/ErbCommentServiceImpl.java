@@ -36,8 +36,13 @@ public class ErbCommentServiceImpl implements ErbCommentService{
 
     @Override
     public void remove(Long comNo, Long erbNo) {
-        int success = eternalRestCommentMapper.deleteOne(comNo);
-        log.info("success :" + success);
+        int success;
+        if(eternalRestCommentMapper.checkParents(comNo)>0){
+            success = eternalRestCommentMapper.deleteAll(comNo);
+        }
+        else{
+            success = eternalRestCommentMapper.deleteOne(comNo);
+        }
         if( success == 1) {
             eternalRestBoardMapper.downCommentCnt(erbNo);
         }

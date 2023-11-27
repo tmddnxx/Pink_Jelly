@@ -299,14 +299,16 @@
     }
 
     const auth = [[${#authentication.principal}]];
-
-    if (auth !== 'anonymousUser') {
+    const erbNo = [[${eternalRestBoard.erbNo}]]
+    if(auth.mno === erbNo){
         const deleteBtn = document.querySelector('.removeBtn');
         deleteBtn.addEventListener('click', function() {
             if(confirm("게시글을 삭제하시겠습니까?")){
                 window.location.href = "/eternalRest/remove?erbNo=" + erbNo;
             }
         });
+    }
+    if (auth.mno !== 'anonymousUser') {
 
         <!-- 슬퍼요 버튼 -->
         const xhr = new XMLHttpRequest(); // ajax 작업을 위한 객체 생성
@@ -360,7 +362,6 @@
 
     //댓글
     //출력 메서드
-    const erbNo = [[${eternalRestBoard.erbNo}]]
     function printComments(page, size, goLast) {
         getList({erbNo, page, size, goLast})
             .then(data => {
@@ -510,14 +511,16 @@
             parentNo: parentNo,
             profileImg: profileImg
         };
-
-        addComment(commentObj).then(result => {
-            comment.value = '';
-            printComments(1, 10, true); // 댓글 목록 갱신
-        }).catch(e => {
-            alert("댓글 등록에 실패했습니다. 다시 시도해주세요");
-        });
-
+        if(commentObj.comment != '') {
+            addComment(commentObj).then(result => {
+                comment.value = '';
+                printComments(1, 10, true); // 댓글 목록 갱신
+            }).catch(e => {
+                alert("댓글 등록에 실패했습니다. 다시 시도해주세요");
+            });
+        }else {
+            alert("댓글을 입력해주세요.");
+        }
     }
 
     function printPages(data) { // 페이지 목록 출력

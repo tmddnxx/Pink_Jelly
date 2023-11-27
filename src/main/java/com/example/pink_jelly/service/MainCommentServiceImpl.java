@@ -40,7 +40,18 @@ public class MainCommentServiceImpl implements MainCommentService{
 
     @Override
     public void remove(Long comNo, Long mbNo) {
-        int success = mainCommentMapper.deleteOne(comNo);
+        int success;
+
+        log.info("--------------");
+        log.info(mainCommentMapper.checkParents(comNo));
+        log.info("--------------------");
+        if(mainCommentMapper.checkParents(comNo)> 0){
+            success = mainCommentMapper.deleteAll(comNo);
+            log.info(mainCommentMapper.deleteAll(comNo));
+        }
+        else{
+            success = mainCommentMapper.deleteOne(comNo);
+        }
         log.info("comNo : " + comNo + "mbNo : " + mbNo);
         if( success == 1) {
             mainBoardMapper.downCommentCnt(mbNo);

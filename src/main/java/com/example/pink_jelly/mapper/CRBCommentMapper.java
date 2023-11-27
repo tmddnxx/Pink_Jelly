@@ -17,4 +17,8 @@ public interface CRBCommentMapper {
 
     void updateParentNo(); // 부모번호 업데이트
 
+    int deleteAll(Long comNo); //댓글 전체 삭제
+
+    int checkParents(Long comNo); //댓글인지 확인
+
 }

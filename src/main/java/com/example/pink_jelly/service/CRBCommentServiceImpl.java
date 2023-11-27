@@ -38,7 +38,13 @@ public class CRBCommentServiceImpl implements CRBCommentService{
 
     @Override
     public void remove(Long comNo, Long crbNo) {
-        int success = crbCommentMapper.deleteOne(comNo);
+        int success;
+        if(crbCommentMapper.checkParents(comNo) > 0){
+            success= crbCommentMapper.deleteAll(comNo);
+        }
+         else {
+         success = crbCommentMapper.deleteOne(comNo);
+        }
         log.info("comNo : " + comNo + "crbNo : " + crbNo);
         if( success == 1) {
             catsMeMapper.downCommentCnt(crbNo);

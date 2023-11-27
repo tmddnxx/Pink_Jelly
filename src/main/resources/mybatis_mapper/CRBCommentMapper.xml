@@ -34,9 +34,15 @@
         SELECT * FROM catsComment WHERE crbNo=#{crbNo} ORDER BY parentNo, comNo LIMIT #{skip}, #{size}
     </select>
     <delete id="deleteOne">
-        DELETE FROM catsComment WHERE parentNo=#{comNo}
+        DELETE FROM catsComment WHERE comNo=#{comNo}
     </delete>
     <update id="updateParentNo">
         update `catsComment` set `parentNo` = `comNo` where `parentNo` is null;
     </update>
+    <delete id="deleteAll">
+        DELETE FROM catsComment WHERE parentNo=#{comNo}
+    </delete>
+    <select id="checkParents" resultType="int">
+        select count(*) from `catsComment` where parentNo = #{comNo}
+    </select>
 </mapper>

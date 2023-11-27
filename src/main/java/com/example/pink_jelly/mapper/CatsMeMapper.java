@@ -41,4 +41,6 @@ public interface CatsMeMapper {
     void likeCntUpdate(@Param("crbNo")Long crbNo,@Param("flag") boolean flag); // 좋아요 수 업데이트
     void upCommentCnt(Long crbNo); //댓글 수 증가
     void downCommentCnt(Long mbNo); //댓글 수 감소
+
+
 }

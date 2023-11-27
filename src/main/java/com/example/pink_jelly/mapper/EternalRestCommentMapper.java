@@ -15,7 +15,11 @@ public interface EternalRestCommentMapper {
 
     List<EternalRestCommentVO> selectList(@Param("erbNo") Long erbNo, @Param("skip") int skip , @Param("size") int size);//리스트 출려
 
-    int deleteOne(Long comNo); //댓글 삭제
+    int deleteOne(Long comNo); //대댓글 삭제
+
+    int checkParents(Long comNo); //댓글인지 확인
 
     void updateParentNo(); // 부모번호 업데이트
+
+    int deleteAll(Long comNo); //댓글 삭제시 전체 삭제
 }
