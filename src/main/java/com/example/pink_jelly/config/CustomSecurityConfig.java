@@ -112,12 +112,13 @@ public class CustomSecurityConfig {
                 .invalidateHttpSession(true)
                 .deleteCookies("JSESSIONID", "remember-me");
 
-//        http.authorizeRequests()
-//                .anyRequest().permitAll();
-////                .antMatchers("/", "/member/signup", "/member/welcome", "/member/sendConfirmMail",
-////                        "/member/matchConfirmKey", "/member/removeConfirmKey", "/member/checkMemberId").permitAll()
-////                .antMatchers("/member/**", "/profile/myProfile").authenticated()
-//
+        http.authorizeRequests()
+                .antMatchers("/", "/member/signup", "/member/welcome", "/member/sendConfirmMail",
+                        "/member/matchConfirmKey", "/member/removeConfirmKey", "/member/checkMemberId").permitAll()
+                .antMatchers("/member/**", "/profile/myProfile", "/main/write", "/main/modify", "/catsMe/board/write", "/catsMe/board/modify",
+                        "/catsMe/review/write", "/catsMe/review/modify", "/chat/**").authenticated()
+                .anyRequest().permitAll();
+
 
         http.exceptionHandling().accessDeniedHandler(accessDeniedHandler()); // 403
 

@@ -8,7 +8,7 @@
         values (#{memberId}, #{passwd}, #{email}, #{memberName}, #{phone}, #{nickName}, #{hasCat}, #{catAge}, #{catSex}, #{variety}, #{profileImg}, #{social}, now());
     </insert>
     <update id="deleteMember">
-        update member set passwd = '', memberName = '', phone = '', nickName = '', hasCat = 0, catAge = '', catSex = '', variety = '', profileImg = 'default.png/2002-08-08',introduce = '',gmingCnt=0, gmerCnt=0, del = 1, social = 0 where mno = #{mno};
+        update member set passwd = '', memberName = '',email='', phone = '', nickName = '', hasCat = 0, catAge = '', catSex = '', variety = '', profileImg = 'default.png/2002-08-08',introduce = '',gmingCnt=0, gmerCnt=0, del = 1, social = 0 where mno = #{mno};
     </update>
     <update id="updateMember">
         update member set `email` = #{email}, `memberName` = #{memberName}, `phone` = #{phone}, `nickName` = #{nickName}, `introduce` = #{introduce}, `hasCat` = #{hasCat} where mno = #{mno};
