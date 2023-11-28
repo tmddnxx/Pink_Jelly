@@ -71,7 +71,7 @@ public class CustomSecurityConfig {
     }
 
     @Bean
-    public DaoAuthenticationProvider adminAuthenticationProvider() {
+    public DaoAuthenticationProvider daoAuthenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setUserDetailsService(customUserDetailService);
         provider.setPasswordEncoder(passwordEncoder());
@@ -88,7 +88,7 @@ public class CustomSecurityConfig {
 
         http.headers().frameOptions().sameOrigin();
 
-        http.authenticationProvider(adminAuthenticationProvider());
+        http.authenticationProvider(daoAuthenticationProvider());
 
         //  커스텀 로그인 페이지
         http.formLogin()
