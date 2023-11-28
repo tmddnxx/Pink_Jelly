@@ -27,7 +27,7 @@
 <body>
 <div layout:fragment="content">
     <div class="container">
-        <form name="catsMeBoardAdd" action="/catsMe/board/write" method="post" class="form">
+        <form name="catsMeBoardAdd" action="/catsMe/board/write" method="post" class="form" onsubmit="return false;">
             <input type="hidden" name="mno" th:value="${#authentication.principal.mno}">
             <input type="hidden" name="profileImg" class="form-control" th:value="${#authentication.principal.profileImg} + '/' + ${#authentication.principal.dateString}" readonly>
             <div class="form-group pb-3 d-flex justify-content-between">

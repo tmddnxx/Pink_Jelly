@@ -29,7 +29,7 @@
 <body>
 <div layout:fragment="content" th:if="${#authentication.principal != 'anonymousUser'}">
     <div class="container">
-        <form name="mainAdd" action="/main/write" method="post" class="form">
+        <form name="mainAdd" action="/main/write" method="post" class="form" onsubmit="return false;">
             <input type="hidden" name="mno" th:value="${#authentication.principal.mno}" readonly>
             <input type="hidden" name="profileImg" class="form-control" th:value="${#authentication.principal.profileImg}+'/'+${#authentication.principal.dateString}" readonly>
             <div class="form-group pb-3 d-flex justify-content-between">
