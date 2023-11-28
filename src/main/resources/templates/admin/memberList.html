@@ -26,6 +26,9 @@
         border-color: #555555 !important;
         color: white;
     }
+    .memberList{
+        overflow-y: auto;
+    }
 </style>
 <body>
 <div layout:fragment="content">
@@ -45,8 +48,8 @@
                             <input type="text" name="keyword" class="form-control">
                         </div>
                         <div class="input-group mb-3 dueDateDiv">
-                            <input type="date" name="from" class="form-control" value="${adminSearchDTO.from}">
-                            <input type="date" name="to" class="form-control" value="${adminSearchDTO.to}">
+                            <input type="date" name="from" class="form-control">
+                            <input type="date" name="to" class="form-control">
                         </div>
                         <div class="input-group mb-3">
                             <div class="float-end">
@@ -82,7 +85,7 @@
                             <th scope="col"></th>
                         </tr>
                         </thead>
-                        <tbody>
+                        <tbody class="memberList">
                         </tbody>
                     </table>
                 </div>
@@ -137,7 +140,7 @@ document.addEventListener('DOMContentLoaded', function(){
                                 <td>${member.nickName}</td>
                                 <td>${member.email}</td>
                                 <td>${member.variety}</td>
-                                <td>${member.addDate}</td>
+                                <td>${member.addDate[0]}-${member.addDate[1]}-${member.addDate[2]}</td>
                                 <td data-mno="${member.mno}"><button type="button" class="btn btn-danger removeBtn">삭제</button></td>
                             </tr>`;
             });

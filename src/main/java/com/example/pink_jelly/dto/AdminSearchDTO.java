@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -15,7 +16,11 @@ import java.util.Arrays;
 public class AdminSearchDTO {
     private String keyword; //검색내용
     private String[] types; //검색어
+
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate from; //시작 날짜
+
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate to; //끝 날짜
 
     public boolean checkType(String type) {

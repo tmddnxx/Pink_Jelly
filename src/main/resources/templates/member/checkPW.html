@@ -15,7 +15,7 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 50px;
+        gap: 30px;
     }
     input{
         width: 300px;
@@ -32,14 +32,28 @@
     button:hover{
         background-color: #ffb4be;
     }
+    .pwCheck-box {
+        text-align: center;
+        width: 700px;
+        height: 200px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 25px solid #ffd3e5;
+
+    }
 </style>
 <body>
 <div layout:fragment="content">
     <div class="wrap">
-        <h1> 비밀번호를 입력해 주세요 </h1>
+        <img src="/images/basic/passwordCat.jpg" style="width: 150px">
+        <h2> 비밀번호를 다시 한 번 입력해 주세요 </h2>
         <form th:action="@{/member/checkPW}" method="post">
-            <input type="password" name="passwd">
-            <button type="submit"> 확인 </button>
+            <div class="pwCheck-box">
+                <label class="passwdCheck">비밀번호</label>
+                <input type="password" name="passwd">
+                <button type="submit"> 확인 </button>
+            </div>
         </form>
     </div>
 </div>
