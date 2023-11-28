@@ -48,6 +48,7 @@
 
         .profileImg {
             width: 35px;
+            height: 35px;
             border-radius: 35%;
             background-color: #fffdef;
         }
@@ -96,7 +97,7 @@
         <div id="msgArea">
             <div class="mb-2" th:each="messageDTO : ${messages}" th:switch="${messageDTO.writer}">
                 <div class="content justify-content-end" th:case="${#authentication.principal.memberId}">
-                    <span class="time me-sm-1">오후 3시</span>
+                    <span class="time me-sm-1">[[${#temporals.format(messageDTO.sendTime,'a hh:mm')}]]</span>
                     <span class="message me">
                         [[${messageDTO.message}]]
                     </span>
@@ -110,7 +111,7 @@
                         <span class="message ms-5">
                             [[${messageDTO.message}]]
                         </span>
-                        <span class="time ms-1">오후 3시</span>
+                        <span class="time ms-1">[[${#temporals.format(messageDTO.sendTime,'a hh:mm')}]]</span>
                     </p>
                 </div>
             </div>
@@ -155,13 +156,15 @@
                 var message = content.message;
                 var profileImg = content.profileImg;
                 var dateString = content.dateString;
+                var sendTime = new Date(content.sendTime);
+                var options = { hour: "numeric", minute: "numeric" };
                 var str = '';
 
                 if (writer === username) {
                     var divWrap = document.createElement('div');
                     divWrap.setAttribute('class', 'mb-2');
                     divWrap.innerHTML = `<div class="content justify-content-end">
-                                            <span class="time me-sm-1">오후 3시</span>
+                                            <span class="time me-sm-1">${sendTime.toLocaleTimeString('ko-KR', options)}</span>
                                             <span class="message me">${message}</span>
                                          </div>`;
                     msgArea.appendChild(divWrap);
@@ -177,7 +180,7 @@
                                             </div>
                                             <p class="content">
                                                 <span class="message ms-5">${message}</span>
-                                                <span class="time ms-1">오후 3시</span>
+                                                <span class="time ms-1">${sendTime.toLocaleTimeString('ko-KR', options)}</span>
                                             </p>
                                          </div>`;
                     msgArea.appendChild(divWrap);

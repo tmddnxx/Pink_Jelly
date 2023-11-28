@@ -182,12 +182,12 @@
     <div class="float-end page_wrap">
         <ul class="pagination flex-wrap" th:with="catsMeBoard=${catsMeBoardList}">
             <li class="page-item" th:if="${catsMeBoard.prev}">
-                <a class="page-link" th:href="|@{/catsMe(page=${catsMeBoard.start - 1},size=10)}|" th:data-num="${catsMeBoard.start - 1}">Previous</a>
+                <a class="page-link" th:href="|@{/catsMe(page=${catsMeBoard.start - 1},size=10)}|" th:data-num="${catsMeBoard.start - 1}">Prev</a>
             </li>
             <th:block th:each="i: ${#numbers.sequence(catsMeBoard.start, catsMeBoard.end)}">
-                <li th:class="${catsMeBoard.page == i} ? 'page-item-active' : 'page-item'" >
-                    <a class="page-link" th:href="|@{/catsMe(page=${i},size=10)}|" th:data-num="${i}" th:style="${catsMeBoard.page == i} ? 'color:red; font-weight:bold;' : 'color:white;'">[[${i}]]</a>
-                </li>
+              <li th:if="${i != 0}" th:class="${catsMeBoard.page == i} ? 'page-item-active' : 'page-item'">
+                <a class="page-link" th:href="|@{/catsMe(page=${i},size=10)}|" th:data-num="${i}" th:style="${catsMeBoard.page == i} ? 'color:red; font-weight:bold;' : 'color:white;'">[[${i}]]</a>
+              </li>
             </th:block>
             <li class="page-item" th:if="${catsMeBoard.next}">
                 <a class="page-link" th:href="|@{/catsMe(page=${catsMeBoard.end + 1},size=10)}|" th:data-num="${catsMeBoard.end + 1}">Next</a>
@@ -290,7 +290,7 @@
 
       const paginationHTML = `
         <ul class="pagination flex-wrap">
-          ${pageDTO.prev ? `<li class="page-item"><a class="page-link" href="/catsMeTab/board?page=${pageDTO.start - 1}&size=10">Previous</a></li>` : ''}
+          ${pageDTO.prev ? `<li class="page-item"><a class="page-link" href="/catsMeTab/board?page=${pageDTO.start - 1}&size=10">Prev</a></li>` : ''}
           ${pagePlus}
           ${pageDTO.next ? `<li class="page-item"><a class="page-link" href="/catsMeTab/board?page=${pageDTO.end + 1}&size=10">Next</a></li>` : ''}
         </ul>`;
@@ -367,7 +367,7 @@
 
       const paginationHTML = `
         <ul class="pagination flex-wrap">
-            ${pageDTO.prev ? `<li class="page-item"><a class="page-link" href="/catsMe/review/list?page=${pageDTO.start - 1}&size=10">Previous</a></li>` : ''}
+            ${pageDTO.prev ? `<li class="page-item"><a class="page-link" href="/catsMe/review/list?page=${pageDTO.start - 1}&size=10">Prev</a></li>` : ''}
             ${pagePlus}
             ${pageDTO.next ? `<li class="page-item"><a class="page-link" href="/catsMe/review/list?page=${pageDTO.end + 1}&size=10">Next</a></li>` : ''}
         </ul>`;

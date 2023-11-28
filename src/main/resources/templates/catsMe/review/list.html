@@ -190,7 +190,7 @@
         <a class="page-link" th:href="|@{/catsMe/review/list(page=${catsMeReviewBoard.start - 1},size=10)}|" th:data-num="${catsMeReviewBoard.start - 1}">Previous</a>
       </li>
       <th:block th:each="i: ${#numbers.sequence(catsMeReviewBoard.start, catsMeReviewBoard.end)}">
-          <li th:class="${catsMeReviewBoard.page == i} ? 'page-item-active' : 'page-item'" >
+          <li th:if="${i != 0}" th:class="${catsMeReviewBoard.page == i} ? 'page-item-active' : 'page-item'" >
             <a class="page-link" th:href="|@{/catsMe/review/list(page=${i},size=10)}|" th:data-num="${i}" th:style="${catsMeReviewBoard.page == i} ? 'color:red; font-weight:bold;' : 'color:white'">[[${i}]]</a>
           </li>
       </th:block>

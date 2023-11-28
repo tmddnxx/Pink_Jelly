@@ -155,6 +155,9 @@
     .chat-list li:hover {
         background-color: pink;
     }
+    .chat-item {
+        display: block;
+    }
 </style>
 
 <body>
@@ -235,7 +238,7 @@
                 <div class="modal-body">
                     <ul class="chat-list">
                         <li th:each="chat: ${chatRoomDTOList}">
-                            <a th:href="|@{/chat/room(roomId=${chat.roomId})}|">[[${chat.name}]]</a>
+                            <a th:href="|@{/chat/room(roomId=${chat.roomId})}|" class="chat-item">[[${chat.name}]]</a>
                         </li>
                     </ul>
                 </div>

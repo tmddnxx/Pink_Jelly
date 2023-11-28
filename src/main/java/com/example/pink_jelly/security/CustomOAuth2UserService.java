@@ -54,20 +54,27 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         /* 변경되는 부분 */
         String email = null;
+        String socialId = null;
         switch (clientName) {
             case "kakao":
+                socialId = oAuth2User.getName();
                 email = getKakaoEmail(paramMap);
+                break;
+            case "google":
+                socialId = oAuth2User.getName();
+                email = getGoogleEmail(paramMap);
                 break;
         }
 
         log.info("===============");
         log.info(email);
         log.info("===============");
+        log.info(socialId);
 
-        return generateDTO(email, paramMap);
+        return generateDTO(email, clientName, socialId, paramMap);
     }
 
-    private MemberDTO generateDTO(String email, Map<String, Object> params) {
+    private MemberDTO generateDTO(String email, String clientName, String socialId, Map<String, Object> params) {
         MemberVO memberVO = memberMapper.findByEmail(email);
 
         // 데이터 베이스에 해당 이메일의 사용자가 없다면
@@ -78,10 +85,19 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             String[] emailSplits = email.split("@");
             String[] uuidSplits = uuid.split("-");
 
-            // 회원 아이디 - kakao + 이메일 앞자리 + uuid 마지막 자리
-            String memberId = "kakao" + emailSplits[0] + uuidSplits[uuidSplits.length - 1];
+            String memberId = null;
+            switch (clientName) {
+                case "kakao":
+                    // 회원 아이디 - kakao + 이메일 앞자리 + uuid 마지막 자리
+                    memberId = "kakao" + emailSplits[0] + uuidSplits[uuidSplits.length - 1];
+                    break;
+                case "google":
+                    // 회원 아이디 - google + 이메일 앞자리 + uuid 마지막 자리
+                    memberId = "google" + emailSplits[0] + uuidSplits[uuidSplits.length - 1];
+                    break;
+            }
 
-            // 회원 추가 -- memberId는 이메일 주소 / 패스워드는 1111
+            // 회원 추가 -- 회원아이디는 랜덤 생성 / 패스워드는 1111
             MemberVO newMember = MemberVO.builder()
                     .memberId(memberId)
                     .passwd(passwordEncoder.encode("1111"))
@@ -121,6 +137,15 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         LinkedHashMap accountMap = (LinkedHashMap) value;
         String email = (String) accountMap.get("email");
+
+        log.info("email..." + email);
+        return email;
+    }
+
+    private String getGoogleEmail(Map<String, Object> paramMap) {
+        log.info("GOOGLE-----------");
+
+        String email = (String) paramMap.get("email");
 
         log.info("email..." + email);
         return email;
