@@ -41,7 +41,7 @@
                             <input type="checkbox" name="types" value="nickName"/>닉네임
                             <input type="checkbox" name="types" value="email"/>이메일
                             <input type="checkbox" name="types" value="variety"/>품종
-                            <input type="text" placeholder="검색어를 입력해주세요." readonly style="text-align: right; border: none"/>
+                            <input type="text" placeholder="검색어를 입력해주세요." readonly style="text-align: right; border: none; outline: none"/>
                             <input type="text" name="keyword" class="form-control">
                         </div>
                         <div class="input-group mb-3 dueDateDiv">
@@ -77,6 +77,7 @@
                             <th scope="col">MemberId</th>
                             <th scope="col">NickName</th>
                             <th scope="col">Email</th>
+                            <th scope="col">Variety</th>
                             <th scope="col">AddDate</th>
                             <th scope="col"></th>
                         </tr>
@@ -135,6 +136,7 @@ document.addEventListener('DOMContentLoaded', function(){
                                 <td>${member.memberId}</td>
                                 <td>${member.nickName}</td>
                                 <td>${member.email}</td>
+                                <td>${member.variety}</td>
                                 <td>${member.addDate}</td>
                                 <td data-mno="${member.mno}"><button type="button" class="btn btn-danger removeBtn">삭제</button></td>
                             </tr>`;

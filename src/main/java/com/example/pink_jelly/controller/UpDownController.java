@@ -175,14 +175,6 @@ public class UpDownController {
         return getViewFile(dateString ,fileName, profilePath);
     }
 
-    @ApiOperation(value = "Profile Remove DELETE", notes = "DELETE 방식으로 파일 삭제")
-    @DeleteMapping("/profileRemove/{dateString}/{fileName}")
-    private Map<String, Boolean> removeProfileFile(@PathVariable String dateString, @PathVariable String fileName) {
-        // 프로필 사진 삭제
-        return removeFile(dateString, fileName, profilePath);
-    }
-
-
 
     //catsMeBoard
     @ApiOperation(value = "view 파일", notes = "GET방식으로 첨부파일 조회")

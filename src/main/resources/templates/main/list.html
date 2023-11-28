@@ -123,7 +123,7 @@
                         </a>
                     </div>
                     <div class="post-meta align-items-center text-left clearfix mt-3 mb-0">
-                        <figure class="author-figure mb-0 me-3 float-start"><img th:src="|/upload/profileView/${mainBoard.dateString}/${mainBoard.profileImg}|" alt="Image placeholder" class="img-fluid"></figure>
+                        <figure class="author-figure mb-0 me-3 float-start"><img th:src="|/upload/profileView/${mainBoard.dateString}/${mainBoard.profileImg}|" alt="Image placeholder" style="width: 30px; height: 30px;" class="img-fluid"></figure>
                         <a th:href="|@{/profile/friendProfile(memberId=${mainBoard.memberId})}|">
                             <span class="d-inline-block mt-1 boardNickName">[[${mainBoard.nickName}]]</span>
                             <span class="boardMemberId">([[${mainBoard.memberId}]])</span>

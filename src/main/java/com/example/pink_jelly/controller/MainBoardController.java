@@ -51,12 +51,10 @@ public class MainBoardController {
             Long loginMno = memberDTO.getMno();
             PageResponseDTO<MainBoardDTO> mainBoardList = mainBoardService.getList(pageRequestDTO, loginMno, loginId);
             model.addAttribute("mainBoardList", mainBoardList);
-            mainBoardList.getDtoList().forEach(log::info);
         } else {
             log.info("메인 멤버디티오 : " + memberDTO);
             PageResponseDTO<MainBoardDTO> mainBoardList = mainBoardService.getList(pageRequestDTO, mno, memberId);
             model.addAttribute("mainBoardList", mainBoardList);
-            mainBoardList.getDtoList().forEach(log::info);
         }
 
         return "/main/list";
