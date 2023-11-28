@@ -1035,7 +1035,7 @@
 
                 const response = await axios.get(`/rest/reviewComment/${crbNo}`, {params: {type : reviewComType.value, keyword: reviewComKeyword.value}});
                 const reviewCommentList = response.data.dtoList;
-
+                console.log(reviewCommentList)
                 let plusCommentList = '';
                 for(reviewComment of reviewCommentList){
                     if(reviewComment.comNo === reviewComment.parentNo){

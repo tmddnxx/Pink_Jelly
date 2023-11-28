@@ -254,7 +254,7 @@ public class AdminServiceImpl implements AdminService{
         return PageResponseDTO.<CRBCommentDTO>withAll()
                 .pageRequestDTO(pageRequestDTO)
                 .dtoList(dtoList)
-                .total(mainCommentMapper.getCount(crbNo))
+                .total(crbCommentMapper.getCount(crbNo))
                 .build();
     }
 
