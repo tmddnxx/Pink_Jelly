@@ -82,8 +82,8 @@ public class CatsMeController {
             catsMeBoardDTO = catsMeService.getBoard(cmbNo, "modify");
         }
         model.addAttribute("catsMeBoard", catsMeBoardDTO);
-
     }
+
     @PostMapping("/board/modify")
     public String modify(CatsMeBoardDTO catsMeBoardDTO, Model model, String removeImg){
         log.info("Post modify");
