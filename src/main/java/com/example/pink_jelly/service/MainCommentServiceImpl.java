@@ -77,7 +77,7 @@ public class MainCommentServiceImpl implements MainCommentService{
         });
 
 
-        mainCommentDTOList.forEach(log::info);
+
         return PageResponseDTO.<MainCommentDTO>withAll()
                 .pageRequestDTO(pageRequestDTO)
                 .dtoList(mainCommentDTOList)

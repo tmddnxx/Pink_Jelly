@@ -326,12 +326,13 @@
         reviewList(reviewType.value, reviewKeyword.value); // 캣츠미 목록 호출
 
         async function mainList(type, keyword){
-            const url = `/rest/mainList?type=${type}&keyword=${keyword}`;
+            const url = `/admin/mainList?type=${type}&keyword=${keyword}`;
             try{
                 const response = await axios.get(url);
                 const mainList = response.data.dtoList;
-
-                const plusList = mainList.map(mainBoard => `
+                let plusList = '';
+                if(mainList !== null) {
+                    plusList = mainList.map(mainBoard => `
                 <div class="contentWrap">
                     <div class="d-flex justify-content-between w-100 contentList" data-mbNo="${mainBoard.mbNo}">
                         <input type="checkbox" name="checkbox" class="mainCheckBox">
@@ -343,6 +344,9 @@
                     <hr>
                 </div>
             `).join('');
+                } else{
+                    plusList = ``;
+                }
 
                 document.getElementById('mainWrap').innerHTML = plusList;
             } catch (error) {
@@ -396,7 +400,7 @@
 
             async function mainView(mbNo){
                 console.log(mbNo);
-                const url = `/rest/mainList/${mbNo}`
+                const url = `/admin/mainList/${mbNo}`
                 try{
                     const response = await axios.get(url);
                     console.log(response.data);
@@ -516,7 +520,7 @@
 
         // 메인 삭제
         async function mainDelete(mbNo){
-            const url = `/rest/mainList/${mbNo}`;
+            const url = `/admin/mainList/${mbNo}`;
             try{
                 const response = await axios.delete(url);
                 return response;
@@ -540,7 +544,7 @@
                 const type = document.getElementById('mainComType');
                 const keyword = document.getElementById('mainComKey');
 
-                const response = await axios.get(`/rest/mainComment/${mbNo}`, {params: {type : type.value, keyword: keyword.value}});
+                const response = await axios.get(`/admin/mainComment/${mbNo}`, {params: {type : type.value, keyword: keyword.value}});
                 const mainCommentList = response.data.dtoList;
                 console.log("메인댓글 ", mainCommentList);
 
@@ -639,7 +643,7 @@
 
         //메인 댓글 삭제
         async function mainComDel(mbNo, comNo){
-            await axios.delete(`/rest/mainComment/${mbNo}/${comNo}`);
+            await axios.delete(`/admin/mainComment/${mbNo}/${comNo}`);
             mainCommentList(mbNo,type,keyword);
         }
 
@@ -647,23 +651,27 @@
 
         //캣츠 미 목록 출력
         async function catsList(catsType, catsKeyword){
-            const url = `/rest/catsMeList?type=${catsType}&keyword=${catsKeyword}`;
+            const url = `/admin/catsMeList?type=${catsType}&keyword=${catsKeyword}`;
             try{
                 const response = await axios.get(url);
                 const catsList = response.data.dtoList;
-
-                const plusList = catsList.map(catsBoard => `
+                let plusList = '';
+                if(catsList !== null) {
+                    plusList = catsList.map(catsBoard => `
                 <div class="contentWrap">
                     <div class="d-flex justify-content-between w-100 catsContentList" data-cmbNo="${catsBoard.cmbNo}">
                         <input type="checkbox" name="checkbox" class="catsCheckBox">
                         <span>${catsBoard.cmbNo}</span>
                         <span>${catsBoard.title}</span>
                         <span>${catsBoard.nickName} (${catsBoard.memberId})</span>
-                        <span>${catsBoard.addDate[0]+"-"+catsBoard.addDate[1]+"-"+catsBoard.addDate[2]+" "+catsBoard.addDate[3]+":"+catsBoard.addDate[4]}</span>
+                        <span>${catsBoard.addDate[0] + "-" + catsBoard.addDate[1] + "-" + catsBoard.addDate[2] + " " + catsBoard.addDate[3] + ":" + catsBoard.addDate[4]}</span>
                     </div>
                     <hr>
                 </div>
             `).join('');
+                }else{
+                    plusList = '';
+                }
 
                 document.getElementById('catsWrap').innerHTML = plusList;
             } catch (error) {
@@ -716,7 +724,7 @@
 
             async function catsView(cmbNo){
                 console.log(cmbNo);
-                const url = `/rest/catsMeList/${cmbNo}`
+                const url = `/admin/catsMeList/${cmbNo}`
                 try{
                     const response = await axios.get(url);
                     console.log(response.data);
@@ -798,7 +806,7 @@
 
         // 캣츠 미 삭제
         async function catsDelete(cmbNo){
-            const url = `/rest/catsMeList/${cmbNo}`;
+            const url = `/admin/catsMeList/${cmbNo}`;
             try{
                 const response = await axios.delete(url);
                 return response;
@@ -819,23 +827,27 @@
 
         // 리뷰 리스트 출력
         async function reviewList(reviewType, reviewKeyword){
-            const url = `/rest/reviewList?type=${reviewType}&keyword=${reviewKeyword}`;
+            const url = `/admin/reviewList?type=${reviewType}&keyword=${reviewKeyword}`;
             try{
                 const response = await axios.get(url);
                 const reviewList = response.data.dtoList;
-
-                const plusList = reviewList.map(reviewBoard => `
+                let plusList = '';
+                if(reviewList !== null) {
+                    plusList = reviewList.map(reviewBoard => `
                 <div class="contentWrap">
                     <div class="d-flex justify-content-between w-100 reviewContentList" data-crbNo="${reviewBoard.crbNo}">
                         <input type="checkbox" name="checkbox" class="reviewCheckBox">
                         <span>${reviewBoard.crbNo}</span>
                         <span>${reviewBoard.title}</span>
                         <span>${reviewBoard.nickName} (${reviewBoard.memberId})</span>
-                        <span>${reviewBoard.addDate[0]+"-"+reviewBoard.addDate[1]+"-"+reviewBoard.addDate[2]+" "+reviewBoard.addDate[3]+":"+reviewBoard.addDate[4]}</span>
+                        <span>${reviewBoard.addDate[0] + "-" + reviewBoard.addDate[1] + "-" + reviewBoard.addDate[2] + " " + reviewBoard.addDate[3] + ":" + reviewBoard.addDate[4]}</span>
                     </div>
                     <hr>
                 </div>
             `).join('');
+                }else{
+                    plusList = '';
+                }
 
                 document.getElementById('reviewWrap').innerHTML = plusList;
             } catch (error) {
@@ -889,7 +901,7 @@
 
             async function reviewView(crbNo){
                 console.log(crbNo);
-                const url = `/rest/reviewList/${crbNo}`
+                const url = `/admin/reviewList/${crbNo}`
                 try{
                     const response = await axios.get(url);
                     console.log(response.data);
@@ -1009,7 +1021,7 @@
 
         // 리뷰 삭제
         async function reviewDelete(crbNo){
-            const url = `/rest/reviewList/${crbNo}`;
+            const url = `/admin/reviewList/${crbNo}`;
             try{
                 const response = await axios.delete(url);
                 return response;
@@ -1033,7 +1045,7 @@
                 const reviewComType = document.getElementById('reviewComType');
                 const reviewComKeyword = document.getElementById('reviewComKey');
 
-                const response = await axios.get(`/rest/reviewComment/${crbNo}`, {params: {type : reviewComType.value, keyword: reviewComKeyword.value}});
+                const response = await axios.get(`/admin/reviewComment/${crbNo}`, {params: {type : reviewComType.value, keyword: reviewComKeyword.value}});
                 const reviewCommentList = response.data.dtoList;
                 console.log(reviewCommentList)
                 let plusCommentList = '';
@@ -1129,7 +1141,7 @@
 
         //리뷰 댓글 삭제
         async function reviewComDel(crbNo, comNo){
-            await axios.delete(`/rest/reviewComment/${crbNo}/${comNo}`);
+            await axios.delete(`/admin/reviewComment/${crbNo}/${comNo}`);
             reviewCommentList(crbNo, reviewType, reviewKeyword);
             console.log("삭제후 목록 부르기")
         }

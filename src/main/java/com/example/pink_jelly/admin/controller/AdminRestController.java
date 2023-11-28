@@ -18,17 +18,17 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/rest")
+@RequestMapping("/admin")
 @RequiredArgsConstructor
 @Log4j2
 public class AdminRestController {
-    @Value("${com.example.tempUpload.path}")
-    private String tempPath;
     @Value("${com.example.mainBoardUpload.path}")
     private String mainBoardPath;
 
     @Value("${com.example.catsMeUpload.path}")
     private String catsMePath;
+    @Value("${com.example.profileUpload.path}")
+    private String profilePath;
     private final AdminService adminService;
 
     //리스트 불러오기
@@ -74,7 +74,7 @@ public class AdminRestController {
 
         if(mainImg != null && mainImg.size()>0){
             for(int i=0; i< mainImg.size(); i++){
-                removeFiles(boardDateString.get(i), mainImg.get(i));
+                removeFiles(mainBoardPath, boardDateString.get(i), mainImg.get(i));
             }
         }
         adminService.mainDelete(mbNo);
@@ -121,7 +121,7 @@ public class AdminRestController {
 
         if(catsImg != null && catsImg.size()>0){
             for(int i=0; i< catsImg.size(); i++){
-                removeFiles(boardDateString.get(i), catsImg.get(i));
+                removeFiles(catsMePath, boardDateString.get(i), catsImg.get(i));
             }
         }
         adminService.catsDelete(cmbNo);
@@ -152,7 +152,7 @@ public class AdminRestController {
 
         if(catsImg != null && catsImg.size()>0){
             for(int i=0; i< catsImg.size(); i++){
-                removeFiles(boardDateString.get(i), catsImg.get(i));
+                removeFiles(catsMePath, boardDateString.get(i), catsImg.get(i));
             }
         }
         adminService.reviewDelete(crbNo);
@@ -175,8 +175,8 @@ public class AdminRestController {
         return resultMap;
     }
 
-    private void removeFiles(String boardDateString, String mainImg) { // 사진파일 삭제
-        Resource resource = new FileSystemResource(mainBoardPath + File.separator + boardDateString + File.separator + mainImg);
+    private void removeFiles(String path, String boardDateString, String mainImg) { // 사진파일 삭제
+        Resource resource = new FileSystemResource(path + File.separator + boardDateString + File.separator + mainImg);
         log.info(resource);
         try{
             String contentType = Files.probeContentType(resource.getFile().toPath());

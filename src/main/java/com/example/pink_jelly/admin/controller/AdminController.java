@@ -30,12 +30,12 @@ public class AdminController {
     public void main(){
 
     }
-    @GetMapping("/boardList")
+    @GetMapping("/boards")
     public void boardList() { // 게시물 목록
 
     }
 
-    @GetMapping("/memberList")
+    @GetMapping("/members")
     public void memberList(@Valid AdminSearchDTO adminSearchDTO, BindingResult bindingResult, Model model){
         log.info(adminSearchDTO);
         if(bindingResult.hasErrors()){
