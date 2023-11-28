@@ -161,7 +161,7 @@ public class AdminRestController {
     @GetMapping("/reviewComment/{crbNo}") // 리뷰 댓글 목록
     public PageResponseDTO<CRBCommentDTO> reviewCommentList(@PathVariable("crbNo") Long crbNo, PageRequestDTO pageRequestDTO){
         PageResponseDTO<CRBCommentDTO> reviewComment = adminService.reviewCommentList(crbNo, pageRequestDTO);
-
+        log.info("리뷰 댓글 목록"+reviewComment);
         return reviewComment;
     }
 

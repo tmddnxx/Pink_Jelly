@@ -59,7 +59,7 @@ public class AdminSecurityConfig {
         http.authenticationProvider(adminAuthenticationProvider())
                 .antMatcher("/admin/**")
                 .authorizeRequests()
-                .anyRequest().authenticated();
+                .anyRequest().hasRole("ADMIN");
 
         http.formLogin()
                 .loginPage("/admin/login")

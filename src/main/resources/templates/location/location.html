@@ -20,7 +20,7 @@
         #placesList li {list-style: none;}
         #placesList .item {position:relative;border-bottom:1px solid #888;overflow: hidden;cursor: pointer;min-height: 65px;}
         #placesList .item span {display: block;margin-top:4px;}
-        #placesList .item h5, #placesList .item .info {text-overflow: ellipsis;overflow: hidden;white-space: nowrap;}
+        #placesList .item h5, #placesList .item .info {text-overflow: ellipsis;overflow: hidden;white-space: nowrap; color: black}
         #placesList .item .info{padding:10px 0 10px 55px;}
         #placesList .info .gray {color:#8a8a8a;}
         #placesList .info .jibun {padding-left:26px;}
@@ -43,7 +43,7 @@
         #placesList .item .marker_15 {background-position: 0 0;}
         #pagination {margin:10px auto;text-align: center;}
         #pagination a {display:inline-block;margin-right:10px;}
-        #pagination .on {font-weight: bold; cursor: default;color:#777;}
+        #pagination .on {font-weight: bold; cursor: pointer;color:red;}
 
         /* kakao map 사이즈 수정 */
         html, body {
@@ -336,7 +336,7 @@
 
                 for (i=1; i<=pagination.last; i++) {
                     var el = document.createElement('a');
-                    el.href = "#";
+
                     el.innerHTML = i;
 
                     if (i===pagination.current) {

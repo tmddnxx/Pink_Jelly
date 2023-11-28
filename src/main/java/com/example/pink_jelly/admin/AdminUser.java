@@ -31,7 +31,7 @@ public class AdminUser implements UserDetails {
 
         for (String role : role.split(",")) {
             System.out.println("role: " + role);
-            authorities.add(new SimpleGrantedAuthority(role));
+            authorities.add(new SimpleGrantedAuthority("ROLE_" + role));
         }
 
         return authorities;

@@ -55,6 +55,7 @@ public class MainBoardController {
             log.info("메인 멤버디티오 : " + memberDTO);
             PageResponseDTO<MainBoardDTO> mainBoardList = mainBoardService.getList(pageRequestDTO, mno, memberId);
             model.addAttribute("mainBoardList", mainBoardList);
+
         }
 
         return "/main/list";
