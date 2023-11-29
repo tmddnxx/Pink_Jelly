@@ -1,8 +1,8 @@
 package com.example.pink_jelly.mapperTests;
 
-import com.example.pink_jelly.domain.EternalRestBoardVO;
+import com.example.pink_jelly.eternalRest.vo.EternalRestBoardVO;
 import com.example.pink_jelly.dto.PageRequestDTO;
-import com.example.pink_jelly.mapper.EternalRestBoardMapper;
+import com.example.pink_jelly.eternalRest.mapper.EternalRestBoardMapper;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

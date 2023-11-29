@@ -2,15 +2,15 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.example.pink_jelly.mapper.ProfileMapper">
+<mapper namespace="com.example.pink_jelly.profile.mapper.ProfileMapper">
 
-    <select id="mainBoardList" resultType="com.example.pink_jelly.domain.MainBoardVO">
+    <select id="mainBoardList" resultType="com.example.pink_jelly.mainBoard.vo.MainBoardVO">
         SELECT * FROM mainBoard where memberId = #{memberId} ORDER BY mbNo DESC limit 0, 8
     </select>
-    <select id="catsMeBoardList" resultType="com.example.pink_jelly.domain.CatsMeBoardVO">
+    <select id="catsMeBoardList" resultType="com.example.pink_jelly.catsMe.vo.CatsMeBoardVO">
         SELECT * FROM catsmeboard where memberId = #{memberId} ORDER BY cmbNo DESC limit 0, 8
     </select>
-    <select id="reviewBoardList" resultType="com.example.pink_jelly.domain.CatsReviewBoardVO">
+    <select id="reviewBoardList" resultType="com.example.pink_jelly.catsMe.vo.CatsReviewBoardVO">
         SELECT * FROM catsReviewBoard where memberId = #{memberId} ORDER BY crbNo DESC limit 0, 8
     </select>
 

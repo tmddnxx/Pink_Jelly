@@ -1,8 +1,7 @@
 package com.example.pink_jelly.serviceTests;
 
-import com.example.pink_jelly.domain.MemberVO;
-import com.example.pink_jelly.dto.MemberDTO;
-import com.example.pink_jelly.service.MemberService;
+import com.example.pink_jelly.member.dto.MemberDTO;
+import com.example.pink_jelly.member.service.MemberService;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

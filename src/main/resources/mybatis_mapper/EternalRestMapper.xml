@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.example.pink_jelly.mapper.EternalRestBoardMapper">
+<mapper namespace="com.example.pink_jelly.eternalRest.mapper.EternalRestBoardMapper">
 
     <insert id="insert">
         INSERT INTO eternalRestBoard (memberId, nickName, profileImg, title, content, addDate, mno)
@@ -11,10 +11,10 @@
     <select id="getCount" resultType="int">
         SELECT COUNT(erbNo) FROM eternalRestBoard
     </select>
-    <select id="selectList" resultType="com.example.pink_jelly.domain.EternalRestBoardVO">
+    <select id="selectList" resultType="com.example.pink_jelly.eternalRest.vo.EternalRestBoardVO">
         SELECT * FROM eternalRestBoard ORDER BY erbNo DESC LIMIT #{skip}, #{size};
     </select>
-    <select id="getOne" resultType="com.example.pink_jelly.domain.EternalRestBoardVO">
+    <select id="getOne" resultType="com.example.pink_jelly.eternalRest.vo.EternalRestBoardVO">
         SELECT * FROM eternalRestBoard WHERE erbNo = #{erbNo}
     </select>
     <delete id="delete">

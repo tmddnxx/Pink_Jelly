@@ -1,7 +1,7 @@
 package com.example.pink_jelly.mapperTests;
 
-import com.example.pink_jelly.domain.MemberVO;
-import com.example.pink_jelly.mapper.MemberMapper;
+import com.example.pink_jelly.member.vo.MemberVO;
+import com.example.pink_jelly.member.mapper.MemberMapper;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,15 +1,12 @@
 package com.example.pink_jelly.mapperTests;
 
-import com.example.pink_jelly.domain.CatsMeBoardVO;
-import com.example.pink_jelly.domain.MainBoardVO;
+import com.example.pink_jelly.catsMe.vo.CatsMeBoardVO;
 import com.example.pink_jelly.dto.PageRequestDTO;
-import com.example.pink_jelly.mapper.CatsMeMapper;
+import com.example.pink_jelly.catsMe.mapper.CatsMeMapper;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import java.util.List;
 
 @Log4j2
 @SpringBootTest

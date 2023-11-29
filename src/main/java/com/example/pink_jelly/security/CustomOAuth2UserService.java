@@ -1,9 +1,9 @@
 package com.example.pink_jelly.security;
 
-import com.example.pink_jelly.domain.MemberRole;
-import com.example.pink_jelly.domain.MemberVO;
-import com.example.pink_jelly.dto.MemberDTO;
-import com.example.pink_jelly.mapper.MemberMapper;
+import com.example.pink_jelly.member.dto.MemberRole;
+import com.example.pink_jelly.member.vo.MemberVO;
+import com.example.pink_jelly.member.dto.MemberDTO;
+import com.example.pink_jelly.member.mapper.MemberMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;

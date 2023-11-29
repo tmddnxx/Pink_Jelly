@@ -1,11 +1,9 @@
 package com.example.pink_jelly.serviceTests;
 
-import com.example.pink_jelly.dto.CRBCommentDTO;
-import com.example.pink_jelly.dto.MainCommentDTO;
+import com.example.pink_jelly.crbComment.dto.CRBCommentDTO;
 import com.example.pink_jelly.dto.PageRequestDTO;
 import com.example.pink_jelly.dto.PageResponseDTO;
-import com.example.pink_jelly.service.CRBCommentService;
-import com.example.pink_jelly.service.MainCommentService;
+import com.example.pink_jelly.crbComment.service.CRBCommentService;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

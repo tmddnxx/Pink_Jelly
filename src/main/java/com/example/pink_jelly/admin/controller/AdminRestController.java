@@ -1,7 +1,14 @@
 package com.example.pink_jelly.admin.controller;
 
+import com.example.pink_jelly.admin.AdminSearchDTO;
+import com.example.pink_jelly.catsMe.dto.CatsMeBoardDTO;
+import com.example.pink_jelly.catsMe.dto.CatsReviewBoardDTO;
+import com.example.pink_jelly.crbComment.dto.CRBCommentDTO;
 import com.example.pink_jelly.dto.*;
 import com.example.pink_jelly.admin.service.AdminService;
+import com.example.pink_jelly.mainBoard.dto.MainBoardDTO;
+import com.example.pink_jelly.mainComment.dto.MainCommentDTO;
+import com.example.pink_jelly.member.dto.MemberDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.web.bind.annotation.*;

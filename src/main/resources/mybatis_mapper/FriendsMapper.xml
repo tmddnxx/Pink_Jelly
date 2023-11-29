@@ -2,8 +2,8 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.example.pink_jelly.mapper.FriendsMapper">
-    <select id="gmingList" resultType="com.example.pink_jelly.domain.FriendsVO">
+<mapper namespace="com.example.pink_jelly.friends.mapper.FriendsMapper">
+    <select id="gmingList" resultType="com.example.pink_jelly.friends.vo.FriendsVO">
         select * from friends where mno = #{mno};
     </select>
     <insert id="insertGming">
@@ -27,7 +27,7 @@
     </update>
 
 
-    <select id="gmerList" resultType="com.example.pink_jelly.domain.MemberVO">
+    <select id="gmerList" resultType="com.example.pink_jelly.member.vo.MemberVO">
         SELECT member.* FROM member JOIN friends ON member.mno = friends.mno WHERE friends.memberId = #{memberId};
     </select>
     <update id="gmerCntUpdate">

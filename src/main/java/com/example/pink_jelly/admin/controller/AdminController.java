@@ -1,6 +1,6 @@
 package com.example.pink_jelly.admin.controller;
 
-import com.example.pink_jelly.dto.AdminSearchDTO;
+import com.example.pink_jelly.admin.AdminSearchDTO;
 import com.example.pink_jelly.admin.service.AdminService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;

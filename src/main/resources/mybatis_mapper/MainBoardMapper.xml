@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.example.pink_jelly.mapper.MainBoardMapper">
+<mapper namespace="com.example.pink_jelly.mainBoard.mapper.MainBoardMapper">
 
     <sql id ="search">
         <choose>
@@ -48,13 +48,13 @@
         INSERT INTO mainBoard (memberId, nickName, profileImg, title, content, mainImg, addDate, myCat, variety, mno)
         VALUES (#{memberId}, #{nickName}, #{profileImg}, #{title}, #{content}, #{mainImg}, now(), #{myCat}, #{variety}, #{mno})
     </insert>
-    <select id="selectAll" resultType="com.example.pink_jelly.domain.MainBoardVO">
+    <select id="selectAll" resultType="com.example.pink_jelly.mainBoard.vo.MainBoardVO">
         SELECT * FROM mainBoard <include refid="adminSearch"/> ORDER BY mbNo DESC
     </select>
     <select id="getCount" resultType="int">
         SELECT COUNT(mbNo) FROM mainBoard
     </select>
-    <select id="selectList" resultType="com.example.pink_jelly.domain.MainBoardVO">
+    <select id="selectList" resultType="com.example.pink_jelly.mainBoard.vo.MainBoardVO">
         SELECT * FROM mainBoard AS c WHERE c.memberId
             NOT IN (
             SELECT memberId FROM ban AS b WHERE b.mno = #{mno}
@@ -65,7 +65,7 @@
             <include refid="search"/>
             ORDER BY mbNo DESC LIMIT #{skip}, #{size};
     </select>
-    <select id="getOne" resultType="com.example.pink_jelly.domain.MainBoardVO">
+    <select id="getOne" resultType="com.example.pink_jelly.mainBoard.vo.MainBoardVO">
         SELECT * FROM mainBoard WHERE mbNo=#{mbNo}
     </select>
     <update id="updateHit">

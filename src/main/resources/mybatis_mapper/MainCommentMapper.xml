@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.example.pink_jelly.mapper.MainCommentMapper">
+<mapper namespace="com.example.pink_jelly.mainComment.mapper.MainCommentMapper">
     <sql id ="adminSearch">
             <choose>
                 <when test="type != null and keyword != null">
@@ -18,17 +18,17 @@
                 </when>
             </choose>
     </sql>
-    <insert id="insert" parameterType="com.example.pink_jelly.domain.MainCommentVO" useGeneratedKeys="true" keyProperty="mbNo">
+    <insert id="insert" parameterType="com.example.pink_jelly.mainComment.vo.MainCommentVO" useGeneratedKeys="true" keyProperty="mbNo">
         INSERT INTO mainComment (mbNo, memberId, nickName, comment, parentNo, addDate, mno, profileImg)
         VALUES (#{mbNo}, #{memberId}, #{nickName}, #{comment}, #{parentNo}, now(), #{mno}, #{profileImg})
     </insert>
-    <select id="selectAll" resultType="com.example.pink_jelly.domain.MainCommentVO">
+    <select id="selectAll" resultType="com.example.pink_jelly.mainComment.vo.MainCommentVO">
             SELECT * FROM mainComment WHERE mbNo=#{mbNo} <include refid="adminSearch"/> ORDER BY parentNo ASC
     </select>
     <select id="getCount" resultType="int">
         SELECT COUNT(comNo) FROM mainComment WHERE mbNo=#{mbNo}
     </select>
-    <select id="selectList" resultType="com.example.pink_jelly.domain.MainCommentVO">
+    <select id="selectList" resultType="com.example.pink_jelly.mainComment.vo.MainCommentVO">
         SELECT * FROM mainComment WHERE mbNo=#{mbNo} ORDER BY parentNo, comNo LIMIT #{skip}, #{size}
     </select>
 

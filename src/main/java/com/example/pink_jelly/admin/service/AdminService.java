@@ -1,7 +1,12 @@
 package com.example.pink_jelly.admin.service;
 
-import com.example.pink_jelly.dto.AdminSearchDTO;
-import com.example.pink_jelly.dto.MemberDTO;
+import com.example.pink_jelly.catsMe.dto.CatsMeBoardDTO;
+import com.example.pink_jelly.catsMe.dto.CatsReviewBoardDTO;
+import com.example.pink_jelly.crbComment.dto.CRBCommentDTO;
+import com.example.pink_jelly.admin.AdminSearchDTO;
+import com.example.pink_jelly.mainBoard.dto.MainBoardDTO;
+import com.example.pink_jelly.mainComment.dto.MainCommentDTO;
+import com.example.pink_jelly.member.dto.MemberDTO;
 import com.example.pink_jelly.dto.*;
 
 import java.util.List;

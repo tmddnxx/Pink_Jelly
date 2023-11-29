@@ -1,7 +1,7 @@
 package com.example.pink_jelly.mapperTests;
 
-import com.example.pink_jelly.domain.BanVO;
-import com.example.pink_jelly.mapper.BanMapper;
+import com.example.pink_jelly.ban.vo.BanVO;
+import com.example.pink_jelly.ban.mapper.BanMapper;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

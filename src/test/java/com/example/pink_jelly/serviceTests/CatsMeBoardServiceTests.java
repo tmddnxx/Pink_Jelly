@@ -1,10 +1,8 @@
 package com.example.pink_jelly.serviceTests;
 
-import com.example.pink_jelly.dto.CatsMeBoardDTO;
-import com.example.pink_jelly.dto.MainBoardDTO;
+import com.example.pink_jelly.catsMe.dto.CatsMeBoardDTO;
 import com.example.pink_jelly.dto.PageRequestDTO;
-import com.example.pink_jelly.dto.PageResponseDTO;
-import com.example.pink_jelly.service.CatsMeService;
+import com.example.pink_jelly.catsMe.service.CatsMeService;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

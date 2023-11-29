@@ -412,13 +412,18 @@
                         }
                     }
                 }
+                else{
+                    str = '';
+                }
 
                 if (reset) { // 댓글 목록 초기화 하는 경우
                     commentBody.innerHTML = str;
+                    str = '';
                 }
                 else {
                     console.log('댓글 추가할꺼임');
                     commentBody.innerHTML += str;
+                    str = '';
                 }
 
 

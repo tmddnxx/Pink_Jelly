@@ -2,7 +2,7 @@ package com.example.pink_jelly.chat.controller;
 
 import com.example.pink_jelly.chat.dto.ChatRoomDTO;
 import com.example.pink_jelly.chat.service.ChatService;
-import com.example.pink_jelly.dto.MemberDTO;
+import com.example.pink_jelly.member.dto.MemberDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

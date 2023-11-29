@@ -1,22 +1,17 @@
 package com.example.pink_jelly.security;
 
-import com.example.pink_jelly.domain.MemberRole;
-import com.example.pink_jelly.domain.MemberVO;
-import com.example.pink_jelly.dto.MemberDTO;
-import com.example.pink_jelly.mapper.MemberMapper;
+import com.example.pink_jelly.member.dto.MemberRole;
+import com.example.pink_jelly.member.vo.MemberVO;
+import com.example.pink_jelly.member.dto.MemberDTO;
+import com.example.pink_jelly.member.mapper.MemberMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
-import javax.sql.DataSource;
-import java.util.stream.Collectors;
 
 @Log4j2
 @Service

@@ -1,14 +1,13 @@
 package com.example.pink_jelly.mapperTests;
 
-import com.example.pink_jelly.domain.MainBoardVO;
+import com.example.pink_jelly.mainBoard.vo.MainBoardVO;
 import com.example.pink_jelly.dto.PageRequestDTO;
-import com.example.pink_jelly.mapper.MainBoardMapper;
+import com.example.pink_jelly.mainBoard.mapper.MainBoardMapper;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.Arrays;
 import java.util.List;
 
 @Log4j2

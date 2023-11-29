@@ -1,16 +1,14 @@
 package com.example.pink_jelly.serviceTests;
 
-import com.example.pink_jelly.dto.MainBoardDTO;
+import com.example.pink_jelly.mainBoard.dto.MainBoardDTO;
 import com.example.pink_jelly.dto.PageRequestDTO;
-import com.example.pink_jelly.dto.PageResponseDTO;
-import com.example.pink_jelly.service.MainBoardService;
+import com.example.pink_jelly.mainBoard.service.MainBoardService;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Log4j2
