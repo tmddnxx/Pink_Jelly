@@ -33,6 +33,6 @@ async function removeComment(comNo, mbNo) {
 // 댓글 목록 최신순으로 가져오기
 async function getCommentList({mbNo, page, size}) {
     const result = await axios.get(`/mainComment/comments/${mbNo}?page=${page}&size=${size}`);
-
+    console.log("result ",result);
     return result.data;
 }

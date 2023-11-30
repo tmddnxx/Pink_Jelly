@@ -162,7 +162,7 @@
                 <h1>Main List</h1>
 <!--                검색창-->
                 <div>
-                    <form name="frmSearch">
+                    <div>
                         <div class="col">
                             <div class="input-group searchDiv">
                                 <div>
@@ -180,7 +180,7 @@
                                 </div>
                             </div>
                         </div>
-                    </form>
+                    </div>
                 </div>
 <!--                정렬-->
                 <div class="d-flex gap-2 mb-2">
@@ -210,7 +210,7 @@
                 <h1>CatsMe List</h1>
                 <!--                검색창-->
                 <div>
-                    <form name="frmSearch">
+                    <div>
                         <div class="col">
                             <div class="input-group searchDiv">
                                 <div>
@@ -228,7 +228,7 @@
                                 </div>
                             </div>
                         </div>
-                    </form>
+                    </div>
                 </div>
                 <!--                정렬-->
                 <div class="d-flex gap-2 mb-2">
@@ -258,7 +258,7 @@
                 <h1>Review List</h1>
                 <!--                검색창-->
                 <div>
-                    <form name="frmSearch">
+                    <div>
                         <div class="col">
                             <div class="input-group searchDiv">
                                 <div>
@@ -276,7 +276,7 @@
                                 </div>
                             </div>
                         </div>
-                    </form>
+                    </div>
                 </div>
                 <!--                정렬-->
                 <div class="d-flex gap-2 mb-2">
@@ -432,7 +432,7 @@
                 <hr>
                 <div class="commentWrap">
                     <div class="d-flex justify-content-center">
-                        <form name="frmSearch">
+                        <div>
                             <div class="col">
                                 <div class="input-group searchDiv">
                                     <div>
@@ -449,7 +449,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </form>
+                        </div>
                     </div>
                     <div class="d-flex gap-2 mb-2 justify-content-center">
                         <button type="button" class="btn btn-secondary mainAllCheck" id="mainComAllCheck" name="allCheck">전체 선택</button>
@@ -513,6 +513,7 @@
 
         // 메인 검색
         const searchBtn = document.getElementById('mainSearch');
+
         searchBtn.addEventListener('click', function (){
             console.log("검색 버튼 클릭");
             mainList(type.value,keyword.value);
@@ -933,7 +934,7 @@
                 <hr>
                 <div class="commentWrap">
                     <div class="d-flex justify-content-center">
-                        <form name="frmSearch">
+                        <div>
                             <div class="col">
                                 <div class="input-group searchDiv">
                                     <div>
@@ -950,7 +951,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </form>
+                        </div>
                     </div>
                     <div class="d-flex gap-2 mb-2 justify-content-center">
                         <button type="button" class="btn btn-secondary reviewAllCheck" id="reviewComAllCheck" name="allCheck">전체 선택</button>
