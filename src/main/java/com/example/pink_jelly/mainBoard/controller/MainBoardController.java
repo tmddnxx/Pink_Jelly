@@ -1,6 +1,7 @@
 package com.example.pink_jelly.mainBoard.controller;
 
 import com.example.pink_jelly.dto.*;
+import com.example.pink_jelly.friends.service.FriendsService;
 import com.example.pink_jelly.mainBoard.dto.MainBoardDTO;
 import com.example.pink_jelly.mainBoard.service.MainBoardService;
 import com.example.pink_jelly.member.dto.MemberDTO;
@@ -33,6 +34,7 @@ public class MainBoardController {
     @Value("${com.example.mainBoardUpload.path}")
     private String mainBoardPath;
     private final MainBoardService mainBoardService;
+    private final FriendsService friendsService;
 
     @GetMapping("")
     public String main(Model model, PageRequestDTO pageRequestDTO, Long mno, String memberId, @AuthenticationPrincipal MemberDTO memberDTO) {
@@ -45,10 +47,17 @@ public class MainBoardController {
         int size = 21;
         pageRequestDTO.setSize(size);
 
+
         if(memberDTO != null){
             String loginId = memberDTO.getMemberId();
             Long loginMno = memberDTO.getMno();
+            List<Boolean> isFriends = new ArrayList<>();
             PageResponseDTO<MainBoardDTO> mainBoardList = mainBoardService.getList(pageRequestDTO, loginMno, loginId);
+            List<MainBoardDTO> dtoList = mainBoardList.getDtoList();
+            for(MainBoardDTO mainBoardDTO : dtoList){
+                isFriends.add(friendsService.isGming(memberDTO.getMno(), mainBoardDTO.getMemberId()));
+            }
+            model.addAttribute("isFriends", isFriends);
             model.addAttribute("mainBoardList", mainBoardList);
         } else {
             log.info("메인 멤버디티오 : " + memberDTO);

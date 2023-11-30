@@ -45,7 +45,7 @@
     </sql>
 
     <insert id="insert">
-        INSERT INTO mainBoard (memberId, nickName, profileImg, title, content, mainImg, addDate, myCat, variety, mno)
+        INSERT INTO `mainBoard` (memberId, nickName, profileImg, title, content, mainImg, addDate, myCat, variety, mno)
         VALUES (#{memberId}, #{nickName}, #{profileImg}, #{title}, #{content}, #{mainImg}, now(), #{myCat}, #{variety}, #{mno})
     </insert>
     <select id="selectAll" resultType="com.example.pink_jelly.mainBoard.vo.MainBoardVO">

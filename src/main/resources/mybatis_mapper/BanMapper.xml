@@ -16,7 +16,7 @@
         select count(*) from ban where mno = #{mno} and memberId = #{memberId};
     </select>
     <select id="banned" resultType="boolean">
-        SELECT count(memberId) FROM MEMBER WHERE mno = (SELECT mno FROM ban WHERE memberId = #{memberId});
+        SELECT count(memberId) FROM member WHERE mno = (SELECT mno FROM ban WHERE memberId = #{memberId});
     </select>
     <delete id="deleteBanAll">
         delete from ban where mno=#{mno}
