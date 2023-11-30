@@ -8,7 +8,7 @@
         SELECT * FROM mainBoard where memberId = #{memberId} ORDER BY mbNo DESC limit 0, 8
     </select>
     <select id="catsMeBoardList" resultType="com.example.pink_jelly.catsMe.vo.CatsMeBoardVO">
-        SELECT * FROM catsmeboard where memberId = #{memberId} ORDER BY cmbNo DESC limit 0, 8
+        SELECT * FROM catsMeBoard where memberId = #{memberId} ORDER BY cmbNo DESC limit 0, 8
     </select>
     <select id="reviewBoardList" resultType="com.example.pink_jelly.catsMe.vo.CatsReviewBoardVO">
         SELECT * FROM catsReviewBoard where memberId = #{memberId} ORDER BY crbNo DESC limit 0, 8

@@ -4,28 +4,28 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.pink_jelly.erbComment.mapper.EternalRestCommentMapper">
     <insert id="insert" parameterType="com.example.pink_jelly.erbComment.vo.EternalRestCommentVO" useGeneratedKeys="true" keyProperty="erbNo">
-        INSERT INTO eternalcomment (erbNo, memberId, nickName, comment, parentNo, addDate, mno, profileImg)
+        INSERT INTO eternalComment (erbNo, memberId, nickName, comment, parentNo, addDate, mno, profileImg)
         VALUES (#{erbNo}, #{memberId}, #{nickName}, #{comment}, #{parentNo}, now(), #{mno}, #{profileImg})
     </insert>
     <select id="getCount" resultType="int">
-        SELECT COUNT(comNo) FROM eternalcomment WHERE erbNo=#{erbNo}
+        SELECT COUNT(comNo) FROM eternalComment WHERE erbNo=#{erbNo}
     </select>
     <select id="selectList" resultType="com.example.pink_jelly.erbComment.vo.EternalRestCommentVO">
-        SELECT * FROM eternalcomment WHERE erbNo=#{erbNo} ORDER BY parentNo, comNo LIMIT #{skip}, #{size}
+        SELECT * FROM eternalComment WHERE erbNo=#{erbNo} ORDER BY parentNo, comNo LIMIT #{skip}, #{size}
     </select>
     <delete id="deleteAll">
-        DELETE FROM eternalcomment WHERE parentNo=#{comNo}
+        DELETE FROM eternalComment WHERE parentNo=#{comNo}
     </delete>
     <update id="updateParentNo">
-        update `eternalcomment` set `parentNo` = `comNo` where `parentNo` is null;
+        update `eternalComment` set `parentNo` = `comNo` where `parentNo` is null;
     </update>
     <update id="updateCnt">
         update `eternalRestBoard` set `commentCnt` = (select count(comNo) from eternalComment where erbNo = #{erbNo});
     </update>
     <select id="checkParents" resultType="int">
-        select count(*) from `eternalcomment` where parentNo = #{comNo}
+        select count(*) from `eternalComment` where parentNo = #{comNo}
     </select>
     <delete id="deleteOne">
-        delete from eternalcomment where comNo=#{comNo}
+        delete from eternalComment where comNo=#{comNo}
     </delete>
 </mapper>

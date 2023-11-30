@@ -245,8 +245,10 @@
       console.log("입양소 게시판 dto : ", boardList);
       console.log("입양소 게시판 page : ", pageDTO);
 
+      let plusList = '';
+      if(boardList !== null) {
       // 게시물 목록
-      const plusList = boardList.map(dtoList => `
+       plusList = boardList.map(dtoList => `
       <div class="col-lg-8 w-100">
         <div class="blog-entry d-flex blog-entry-search-item w-100 aboard">
             <a href="/catsMe/board/view?cmbNo=${dtoList.cmbNo}" class="img-link">
@@ -255,7 +257,7 @@
             <div class="d-flex flex-column justify-content-between">
                 <div class="content">
                   <a href="/catsMe/board/view?cmbNo=${dtoList.cmbNo}">
-                      <h2 class="mb-3">${dtoList.title}</h2>
+                      <h2 class="mb-3">${dtoList.title}<span class="catsMeStatus">${dtoList.status}</span> </h2>
                       <p>${dtoList.content}</p>
                   </a>
                 </div>
@@ -277,6 +279,9 @@
       </div>
 
 `).join('');
+      } else{
+        plusList = '';
+      }
 
       // 페이징
         const pagePlus = Array.from({ length: pageDTO.end - pageDTO.start + 1 }, (_, index) => {
@@ -317,8 +322,9 @@
       const pageDTO = response.data;
       console.log("입양 후기 dtoList",boardList);
       console.log("입양 후기  pageDTO ", pageDTO);
-
-      const plusList = boardList.map(dtoList => `
+      let plusList = '';
+      if(boardList !== null){
+       plusList = boardList.map(dtoList => `
 <div class="col-lg-8 w-100">
   <div class="blog-entry d-flex blog-entry-search-item w-100 aboard">
       <a href="/catsMe/review/view?crbNo=${dtoList.crbNo}" class="img-link">
@@ -349,7 +355,10 @@
       </div>
   </div>
 </div>
-`).join('');
+`).join('');}
+      else {
+        plusList = '';
+      }
 
       // 페이징
       const pagePlus = Array.from({ length: pageDTO.end - pageDTO.start + 1 }, (_, index) => {

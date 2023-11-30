@@ -21,7 +21,7 @@
     </sql>
 
     <insert id="insert" parameterType="com.example.pink_jelly.crbComment.vo.CRBCommentVO" useGeneratedKeys="true" keyProperty="crbNo">
-        INSERT INTO catscomment (crbNo, memberId, nickName, comment, parentNo, addDate, mno, profileImg)
+        INSERT INTO catsComment (crbNo, memberId, nickName, comment, parentNo, addDate, mno, profileImg)
         VALUES (#{crbNo}, #{memberId}, #{nickName}, #{comment}, #{parentNo}, now(), #{mno}, #{profileImg})
     </insert>
     <select id="selectAll" resultType="com.example.pink_jelly.crbComment.vo.CRBCommentVO">

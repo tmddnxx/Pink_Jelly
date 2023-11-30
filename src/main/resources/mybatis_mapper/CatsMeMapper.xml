@@ -55,7 +55,7 @@
         SELECT COUNT(cmbNo) FROM catsMeBoard
     </select>
     <select id="selectList" resultType="com.example.pink_jelly.catsMe.vo.CatsMeBoardVO">
-        SELECT * FROM catsmeboard AS c WHERE c.memberId NOT IN (
+        SELECT * FROM catsMeBoard AS c WHERE c.memberId NOT IN (
             SELECT memberId FROM ban AS b WHERE b.mno = #{mno}
             UNION
             SELECT memberId FROM member AS m WHERE m.mno
