@@ -19,15 +19,18 @@
     }
     input{
         width: 300px;
-        height: 35px;
+        height: 40px;
         border-radius: 5px;
         outline: none;
+        padding: 10px;
     }
     button{
-        height: 35px;
+        height: 40px;
         background-color: #ffcdd2;
         border-color: #ffcdd2;
         border-radius: 5px;
+        padding: 10px;
+        margin-left: 1px;
     }
     button:hover{
         background-color: #ffb4be;
@@ -50,14 +53,13 @@
         <h2> 비밀번호를 다시 한 번 입력해 주세요 </h2>
         <form th:action="@{/member/checkPW}" method="post">
             <div class="pwCheck-box">
-                <label class="passwdCheck">비밀번호</label>
-                <input type="password" name="passwd">
+                <input type="password" name="passwd" placeholder="비밀번호 입력">
                 <button type="submit"> 확인 </button>
             </div>
         </form>
     </div>
 </div>
-<script th:inline="javascript">
+<script layout:fragment="script" th:inline="javascript">
     const failMsg = [[${fail}]];
 
     if (failMsg !== null) {

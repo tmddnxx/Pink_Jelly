@@ -114,7 +114,7 @@ public class CustomSecurityConfig {
 
         http.authorizeRequests()
                 .antMatchers("/", "/member/signup", "/member/welcome", "/member/sendConfirmMail",
-                        "/member/matchConfirmKey", "/member/removeConfirmKey", "/member/checkMemberId").permitAll()
+                        "/member/matchConfirmKey", "/member/removeConfirmKey", "/member/checkMemberId", "/member/exit").permitAll()
                 .antMatchers("/member/**", "/profile/myProfile", "/main/write", "/main/modify", "/catsMe/board/write", "/catsMe/board/modify",
                         "/catsMe/review/write", "/catsMe/review/modify", "/chat/**").authenticated()
                 .anyRequest().permitAll();

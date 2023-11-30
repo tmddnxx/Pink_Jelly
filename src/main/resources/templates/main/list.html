@@ -150,7 +150,7 @@
                             <span><i class="fa-solid fa-eye"></i>[[${mainBoard.hit}]]</span>
                         </p>
                     </div>
-                    <p><a class="read-more" th:onclick="modalBtn([[${mainBoard.mbNo}]])">상세보기</a></p>
+                    <p><a class="read-more" th:onclick="|modalBtn(${mainBoard.mbNo})|">상세보기</a></p>
                 </div>
             </div>
         </div>
@@ -322,7 +322,7 @@
     });
 
 
-    //모달창 데이터 입력
+    ///모달창 데이터 입력
     const auth = [[${#authentication.principal}]]; // 사용자 정보
     const modal = new bootstrap.Modal(document.getElementById('mainViewModal'));
     const modalProfile = document.querySelector('.profile');
@@ -378,9 +378,48 @@
             }
             printComments(1, 20, true); // 무조건 호출
 
+            // 댓글 등록 버튼
+            $("#submitBtn").off().on("click", function () { // 클릭이벤트 중복방지
+
+                if (auth === 'anonymousUser') { // 로그인을 하지 않은 경우
+                    alert('댓글을 작성하시려면 로그인을 하세요.');
+
+                    return;
+                }
+                console.log('몇번실행돼?');
+                page = 1;
+
+                let commentObj = { // 댓글 등록시 전달할 데이터
+                    mbNo: mbNo,
+                    memberId: auth.memberId,
+                    nickName: auth.nickName,
+                    comment: comment.value,
+                    mno: auth.mno,
+                    profileImg: auth.profileImg + "/" + auth.dateString
+                };
+
+                if (comment.value.includes('@')) { // 내용에 @가 존재하면 대댓글
+                    let recomment = comment.value.split('@')[1]; // 대댓글 내용
+                    commentObj.comment = recomment.trim();
+                    commentObj.parentNo = document.querySelector('input[name=parentNo]').value;
+                }
+
+                if(commentObj.comment !== '') { // 댓글에 아무것도 입력하지 않은 경우
+                    addComment(commentObj).then(result => {
+                        comment.value = '';
+                        printComments(page, 20, true); // 댓글 목록 갱신
+                    }).catch(e => {
+                        alert("댓글 등록에 실패했습니다. 다시 시도해주세요");
+                    });
+                } else {
+                    alert("댓글을 입력해주세요.");
+                }
+            });
+
             function printList(dtoList, reset) { // 댓글 목록 출력
                 let str = '';
-                if (dtoList.length > 0) {
+                console.log(dtoList);
+                if (dtoList != null) {
                     for (const dto of dtoList) {
                         if(dto.comNo == dto.parentNo){
                             str += `<div style="margin-top: 10px;">
@@ -398,7 +437,7 @@
                                         <p>
                                             ${dto.comment}
                                             ${(auth !== 'anonymousUser') && (auth.mno === dto.mno) ?
-                                                `<span id="removeBtn_${dto.comNo}" class="removeBtn" style="cursor: pointer">삭제</span>` : ''}
+                                `<span id="removeBtn_${dto.comNo}" class="removeBtn" style="cursor: pointer">삭제</span>` : ''}
                                         </p>
                                         <span id="recomment_${dto.comNo}" class="recommentBtn"
                                             data-id="${dto.memberId}" style="cursor: pointer">답글달기</span>
@@ -427,18 +466,14 @@
                         }
                     }
                 }
-                else{
-                    str = '';
-                }
 
                 if (reset) { // 댓글 목록 초기화 하는 경우
                     commentBody.innerHTML = str;
-                    str = '';
+
                 }
                 else {
                     console.log('댓글 추가할꺼임');
                     commentBody.innerHTML += str;
-                    str = '';
                 }
 
 
@@ -456,45 +491,6 @@
                         comment.value = memeberId + '@ ';
                         comment.focus();
                     });
-                });
-
-                // 댓글 등록 버튼
-                $("#submitBtn").off().on("click", function handleCommentSubmit(e) { // 클릭이벤트 중복방지
-                    e.preventDefault();
-                    e.stopPropagation();
-                    if (auth === 'anonymousUser') { // 로그인을 하지 않은 경우
-                        alert('댓글을 작성하시려면 로그인을 하세요.');
-
-                        return;
-                    }
-                    console.log('몇번실행돼?');
-                    page = 1;
-
-                    let commentObj = { // 댓글 등록시 전달할 데이터
-                        mbNo: mbNo,
-                        memberId: auth.memberId,
-                        nickName: auth.nickName,
-                        comment: comment.value,
-                        mno: auth.mno,
-                        profileImg: auth.profileImg + "/" + auth.dateString
-                    };
-
-                    if (comment.value.includes('@')) { // 내용에 @가 존재하면 대댓글
-                        let recomment = comment.value.split('@')[1]; // 대댓글 내용
-                        commentObj.comment = recomment.trim();
-                        commentObj.parentNo = document.querySelector('input[name=parentNo]').value;
-                    }
-
-                    if(commentObj.comment !== '') { // 댓글에 아무것도 입력하지 않은 경우
-                        addComment(commentObj).then(result => {
-                            comment.value = '';
-                            printComments(page, 20, true); // 댓글 목록 갱신
-                        }).catch(e => {
-                            alert("댓글 등록에 실패했습니다. 다시 시도해주세요");
-                        });
-                    } else {
-                        alert("댓글을 입력해주세요.");
-                    }
                 });
 
                 //댓글 목록 출력 후 삭제 버튼
@@ -539,6 +535,7 @@
 
         modal.show();
     }
+
 </script>
 </body>
 </html>
