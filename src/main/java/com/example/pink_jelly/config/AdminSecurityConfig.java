@@ -36,7 +36,7 @@ public class AdminSecurityConfig {
     private final AdminUserDetailsService adminUserDetailsService;
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
+    public PasswordEncoder passwordEncoder2() {
         // 비밀번호 암호화
         return new BCryptPasswordEncoder();
     }
@@ -45,7 +45,7 @@ public class AdminSecurityConfig {
     public DaoAuthenticationProvider adminAuthenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setUserDetailsService(adminUserDetailsService);
-        provider.setPasswordEncoder(passwordEncoder());
+        provider.setPasswordEncoder(passwordEncoder2());
 
         return provider;
     }
