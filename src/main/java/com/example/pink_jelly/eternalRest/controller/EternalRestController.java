@@ -37,7 +37,7 @@ public class EternalRestController {
         PageResponseDTO<EternalRestBoardDTO> restBoardList = eternalRestBoardService.getList(pageRequestDTO);
         model.addAttribute("restBoardList", restBoardList);
 
-        return "/eternalRest/list";
+        return "eternalRest/list";
     }
 
     @PostMapping("/write") // 게시판 자동등록

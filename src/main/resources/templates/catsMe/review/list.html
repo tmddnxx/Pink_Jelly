@@ -285,16 +285,21 @@
 
       // 페이징
         const pagePlus = Array.from({ length: pageDTO.end - pageDTO.start + 1 }, (_, index) => {
-        const pageNumber = pageDTO.start + index;
-        const isActive = pageNumber === pageDTO.page;
-        const pageItemClass = isActive ? 'page-item-active' : 'page-item';
-        const pageLinkStyle = isActive ? 'color:red; font-weight:bold;' : 'color:white;';
-        const page =
-                `<li class="${pageItemClass}">
-                    <a class="page-link" href="/catsMe?page=${pageNumber}&size=10" style="${pageLinkStyle}">${pageNumber}</a>
-                 </li>`;
+          const pageNumber = pageDTO.start + index;
 
-        return page;
+          if (pageNumber === 0) {
+            return;
+          }
+
+          const isActive = pageNumber === pageDTO.page;
+          const pageItemClass = isActive ? 'page-item-active' : 'page-item';
+          const pageLinkStyle = isActive ? 'color:red; font-weight:bold;' : 'color:white;';
+          const page =
+                  `<li class="${pageItemClass}">
+                      <a class="page-link" href="/catsMe?page=${pageNumber}&size=10" style="${pageLinkStyle}">${pageNumber}</a>
+                   </li>`;
+
+          return page;
       }).join('');
 
 
@@ -363,6 +368,11 @@
       // 페이징
       const pagePlus = Array.from({ length: pageDTO.end - pageDTO.start + 1 }, (_, index) => {
         const pageNumber = pageDTO.start + index;
+
+        if (pageNumber === 0) {
+          return;
+        }
+
         const isActive = pageNumber === pageDTO.page;
         const pageItemClass = isActive ? 'page-item-active' : 'page-item';
         const pageLinkStyle = isActive ? 'color:red; font-weight:bold;' : 'color:white;';

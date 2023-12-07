@@ -18,7 +18,7 @@ public class LoginController {
             log.info("user logout...");
         }
 
-        return "/login/login";
+        return "login/login";
     }
 
 }

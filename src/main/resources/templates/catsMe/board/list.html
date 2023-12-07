@@ -290,6 +290,11 @@
       // 페이징
       const pagePlus = Array.from({ length: pageDTO.end - pageDTO.start + 1 }, (_, index) => {
         const pageNumber = pageDTO.start + index;
+
+        if (pageNumber === 0) {
+          return;
+        }
+
         const isActive = pageNumber === pageDTO.page;
         const pageItemClass = isActive ? 'page-item-active' : 'page-item';
         const pageLinkStyle = isActive ? 'color:red; font-weight:bold;' : 'color:white;';
@@ -371,6 +376,11 @@
       const pagePlus = Array.from({ length: pageDTO.end - pageDTO.start + 1 }, (_, index) => {
         console.log('index', index);
         const pageNumber = pageDTO.start + index;
+
+        if (pageNumber === 0) {
+          return;
+        }
+
         const isActive = pageNumber === pageDTO.page;
         const pageItemClass = isActive ? 'page-item-active' : 'page-item';
         const pageLinkStyle = isActive ? 'color:red; font-weight:bold;' : 'color:white;';

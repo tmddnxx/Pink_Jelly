@@ -130,7 +130,7 @@ public class ProfileController {
                     model.addAttribute("reviewBoardList", reviewBoardDTOList);
                     model.addAttribute("memberDTO", friends);
 
-                    return "/profile/friendProfile";
+                    return "profile/friendProfile";
                 }
             }
         }else{

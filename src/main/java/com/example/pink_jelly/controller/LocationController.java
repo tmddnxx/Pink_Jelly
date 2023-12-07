@@ -15,6 +15,6 @@ public class LocationController {
     @GetMapping("")
     public String location(){
 
-        return "/location/location";
+        return "location/location";
     }
 }

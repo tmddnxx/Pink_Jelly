@@ -66,7 +66,7 @@ public class MainBoardController {
 
         }
 
-        return "/main/list";
+        return "main/list";
     }
 
     //글쓰기 페이지 이동

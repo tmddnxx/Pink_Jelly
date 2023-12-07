@@ -50,7 +50,7 @@ public class CatsMeController {
             model.addAttribute("catsMeBoardList", catsMeBoardList);
         }
 
-        return "/catsMe/board/list";
+        return "catsMe/board/list";
 
     }
 

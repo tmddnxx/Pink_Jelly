@@ -257,7 +257,7 @@ public class MemberController {
     public String modifyMyCat(@AuthenticationPrincipal MemberDTO memberDTO){
         // 고양이 정보수정 페이지 이동
         if (memberDTO.isHasCat()) { // 고양이 정보가 존재할때
-            return "/member/modifyMyCat";
+            return "member/modifyMyCat";
         }
 
         return "redirect:/member/memberInfo";
