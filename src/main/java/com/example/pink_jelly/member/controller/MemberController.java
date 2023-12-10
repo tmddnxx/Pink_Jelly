@@ -141,6 +141,7 @@ public class MemberController {
     @GetMapping("/sendConfirmMail")
     @ResponseBody
     public String sendConfirmMail(String mailTo, HttpSession session) throws Exception {
+        log.info("sendConfirmMail(GET)...");
         // 이메일 인증코드 전송
         if (mailSenderService.sendMailByAddMember(mailTo)) {
             session.setAttribute("confirmKey", mailSenderService.getConfirmKey());

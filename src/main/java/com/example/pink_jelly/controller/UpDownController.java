@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -36,7 +37,37 @@ public class UpDownController {
     @Value("${com.example.profileUpload.path}")
     private String profilePath; // 프로필 저장 경로
     @Value("${com.example.catsMeUpload.path}")
-    private String catsMeUpload; // 프로필 저장 경로
+    private String catsMePath; // 프로필 저장 경로
+
+    @PostConstruct
+    public void init() {
+        File tempFolder = new File(tempPath);
+        File mainBoardFolder = new File(mainBoardPath);
+        File profileFolder = new File(profilePath);
+        File catsMeFolder = new File(catsMePath);
+
+        if (!tempFolder.exists()) {
+            tempFolder.mkdirs();
+        }
+        if (!mainBoardFolder.exists()) {
+            mainBoardFolder.mkdirs();
+        }
+        if (!profileFolder.exists()) {
+            profileFolder.mkdirs();
+        }
+        if (!catsMeFolder.exists()) {
+            catsMeFolder.mkdirs();
+        }
+        tempPath = tempFolder.getAbsolutePath();
+        mainBoardPath = mainBoardFolder.getAbsolutePath();
+        profilePath = profileFolder.getAbsolutePath();
+        catsMePath = catsMeFolder.getAbsolutePath();
+
+        log.info("--------------");
+        log.info(mainBoardPath);
+        log.info(profilePath);
+        log.info(catsMePath);
+    }
 
 
     //임시 저장소 temp
@@ -181,7 +212,7 @@ public class UpDownController {
     @GetMapping("/catsMeBoardView/{boardDateString}/{fileName}")
     public ResponseEntity<Resource> GetCatsMeBoardViewFile(@PathVariable String boardDateString,  @PathVariable String fileName){
         // 메인보드 이미지 파일 조회
-        return getViewFile(boardDateString, fileName, catsMeUpload);
+        return getViewFile(boardDateString, fileName, catsMePath);
     }
 
     @ApiOperation(value = "remove 파일", notes = "DELETE 방식으로 파일 삭제")
@@ -194,7 +225,7 @@ public class UpDownController {
 
         log.info("path: " + boardDateString +"/" + file);
         // 메인보드 이미지 파일 삭제
-        return removeFile(boardDateString ,file, catsMeUpload);
+        return removeFile(boardDateString ,file, catsMePath);
     }
 
 
@@ -203,7 +234,7 @@ public class UpDownController {
     @GetMapping("/catsReviewView/{boardDateString}/{fileName}")
     public ResponseEntity<Resource> GetCatsReviewViewFile(@PathVariable String boardDateString,  @PathVariable String fileName){
         // 메인보드 이미지 파일 조회
-        return getViewFile(boardDateString, fileName, catsMeUpload);
+        return getViewFile(boardDateString, fileName, catsMePath);
     }
 
     @ApiOperation(value = "remove 파일", notes = "DELETE 방식으로 파일 삭제")
@@ -216,7 +247,7 @@ public class UpDownController {
 
         log.info("path: " + boardDateString +"/" + file);
         // 메인보드 이미지 파일 삭제
-        return removeFile(boardDateString ,file, catsMeUpload);
+        return removeFile(boardDateString ,file, catsMePath);
     }
 
 
