@@ -32,11 +32,11 @@
             <input type="hidden" name="profileImg" class="form-control" th:value="${#authentication.principal.profileImg}+'/'+${#authentication.principal.dateString}" readonly>
             <div class="form-group pb-3 d-flex justify-content-between">
                 <h2>귀여운 아기 자랑 하세요 !</h2>
-                <div class="text-end">
+                <div class="text-end" th:with="member=${#authentication.principal}">
                     <img id="profileImg" th:src="|/upload/profileView/${#authentication.principal.dateString}/s_${#authentication.principal.profileImg}|" style="width: 50px; height: 50px; border-radius: 50%;" alt="Image placeholder"  class="img-fluid" readonly>
                     [[${#authentication.principal.nickName}]]
                     <input type="hidden" class="form-control" name="nickName" th:value="${#authentication.principal.nickName}" readonly>
-                    [[${#authentication.principal.memberId}]]
+                    [[|${#strings.substring(member.memberId, 0, #strings.length(member.memberId) / 2)}******|]]
                     <input type="hidden" class="form-control" name="memberId" th:value="${#authentication.principal.memberId}" readonly>
                 </div>
             </div>

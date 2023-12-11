@@ -66,7 +66,7 @@
             </figure>
             <a th:href="|@{/profile/friendProfile(memberId=${catsMeBoard.memberId})}|">
                 <span class="d-inline-block mt-1 boardNickName">[[${catsMeBoard.nickName}]]</span>
-                <span class="boardMemberId">([[${catsMeBoard.memberId}]])</span>
+                <span class="boardMemberId">([[|${#strings.substring(catsMeBoard.memberId, 0, #strings.length(catsMeBoard.memberId) / 2)}******|]])</span>
             </a>
             <span>[[${#temporals.format(catsMeBoard.addDate, 'yyyy-MM-dd HH:mm')}]]</span>
         </div>

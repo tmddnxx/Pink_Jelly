@@ -338,7 +338,7 @@
                         <input type="checkbox" name="checkbox" class="mainCheckBox">
                         <span>${mainBoard.mbNo}</span>
                         <span>${mainBoard.title}</span>
-                        <span>${mainBoard.nickName} (${mainBoard.memberId})</span>
+                        <span>${mainBoard.nickName} (${mainBoard.memberId.substr(0, mainBoard.memberId.length / 2)}******)</span>
                         <span>${mainBoard.addDate[0]+"-"+mainBoard.addDate[1]+"-"+mainBoard.addDate[2]+" "+mainBoard.addDate[3]+":"+mainBoard.addDate[4]}</span>
                     </div>
                     <hr>
@@ -412,7 +412,7 @@
                         <div class="d-flex justify-content-between mt-3">
                             <span>${mainBoardDTO.mbNo}</span>
                             <span>${mainBoardDTO.title}</span>
-                            <span>${mainBoardDTO.nickName} (${mainBoardDTO.memberId})</span>
+                            <span>${mainBoardDTO.nickName} (${mainBoardDTO.memberId.substr(0, mainBoardDTO.memberId.length / 2)}******)</span>
                         </div>
                         <hr>
                         <div class="text-end mt-1">${mainBoardDTO.addDate[0]+"-"+mainBoardDTO.addDate[1]+"-"+mainBoardDTO.addDate[2]+" "+mainBoardDTO.addDate[3]+":"+mainBoardDTO.addDate[4]}</div>
@@ -559,7 +559,7 @@
                                 <img id="profileImg" src="/upload/profileView/${mainComment.dateString}/${mainComment.profileImg}" alt="Image placeholder">
                                 <div>
                                     <span class="boardNickName">${mainComment.nickName}</span>
-                                    <span class="boardMemberId">${mainComment.memberId}</span>
+                                    <span class="boardMemberId">${mainComment.memberId.substr(0, mainComment.memberId.length / 2)}******</span>
                                     <p data-comNo="${mainComment.comNo}">${mainComment.comment}</p>
                                 </div>
                             </div>
@@ -580,7 +580,7 @@
                                 <img id="profileImg" class="img-fluid profileImg" src="/upload/profileView/${mainComment.dateString}/${mainComment.profileImg}" alt="Image placeholder"  class="img-fluid" readonly>
                                 <div>
                                     <span class="boardNickName">${mainComment.nickName}</span>
-                                    <span class="boardMemberId">(${mainComment.memberId})</span>
+                                    <span class="boardMemberId">(${mainComment.memberId.substr(0, mainComment.memberId.length / 2)}******)</span>
                                     <p data-comNo="${mainComment.comNo}">${mainComment.comment}</p>
                                 </div>
                             </div>
@@ -664,7 +664,7 @@
                         <input type="checkbox" name="checkbox" class="catsCheckBox">
                         <span>${catsBoard.cmbNo}</span>
                         <span>${catsBoard.title}</span>
-                        <span>${catsBoard.nickName} (${catsBoard.memberId})</span>
+                        <span>${catsBoard.nickName} (${catsBoard.memberId.substr(0, catsBoard.memberId.length / 2)}******)</span>
                         <span>${catsBoard.addDate[0] + "-" + catsBoard.addDate[1] + "-" + catsBoard.addDate[2] + " " + catsBoard.addDate[3] + ":" + catsBoard.addDate[4]}</span>
                     </div>
                     <hr>
@@ -737,7 +737,7 @@
                         <div class="d-flex justify-content-between mt-3">
                             <span>${catsBoardDTO.cmbNo}</span>
                             <span>${catsBoardDTO.title}</span>
-                            <span>${catsBoardDTO.nickName} (${catsBoardDTO.memberId})</span>
+                            <span>${catsBoardDTO.nickName} (${catsBoardDTO.memberId.substr(0, catsBoardDTO.memberId.length / 2)}******)</span>
                         </div>
                         <hr>
                         <div class="text-end mt-1">${catsBoardDTO.addDate[0]+"-"+catsBoardDTO.addDate[1]+"-"+catsBoardDTO.addDate[2]+" "+catsBoardDTO.addDate[3]+":"+catsBoardDTO.addDate[4]}</div>
@@ -840,7 +840,7 @@
                         <input type="checkbox" name="checkbox" class="reviewCheckBox">
                         <span>${reviewBoard.crbNo}</span>
                         <span>${reviewBoard.title}</span>
-                        <span>${reviewBoard.nickName} (${reviewBoard.memberId})</span>
+                        <span>${reviewBoard.nickName} (${reviewBoard.memberId.substr(0, reviewBoard.memberId.length / 2)}******)</span>
                         <span>${reviewBoard.addDate[0] + "-" + reviewBoard.addDate[1] + "-" + reviewBoard.addDate[2] + " " + reviewBoard.addDate[3] + ":" + reviewBoard.addDate[4]}</span>
                     </div>
                     <hr>
@@ -914,7 +914,7 @@
                         <div class="d-flex justify-content-between mt-3">
                             <span>${reviewBoardDTO.crbNo}</span>
                             <span>${reviewBoardDTO.title}</span>
-                            <span>${reviewBoardDTO.nickName} (${reviewBoardDTO.memberId})</span>
+                            <span>${reviewBoardDTO.nickName} (${reviewBoardDTO.memberId.substr(0, reviewBoardDTO.memberId.length / 2)}******)</span>
                         </div>
                         <hr>
                         <div class="text-end mt-1">${reviewBoardDTO.addDate[0]+"-"+reviewBoardDTO.addDate[1]+"-"+reviewBoardDTO.addDate[2]+" "+reviewBoardDTO.addDate[3]+":"+reviewBoardDTO.addDate[4]}</div>
@@ -1059,7 +1059,7 @@
                                 <img id="profileImg" src="/upload/profileView/${reviewComment.dateString}/${reviewComment.profileImg}" alt="Image placeholder">
                                 <div>
                                     <span class="boardNickName">${reviewComment.nickName}</span>
-                                    <span class="boardMemberId">${reviewComment.memberId}</span>
+                                    <span class="boardMemberId">${reviewComment.memberId.substr(0, reviewComment.memberId.length / 2)}******</span>
                                     <p data-comNo="${reviewComment.comNo}">${reviewComment.comment}</p>
                                 </div>
                             </div>
@@ -1080,7 +1080,7 @@
                                 <img id="profileImg" class="img-fluid profileImg" src="/upload/profileView/${reviewComment.dateString}/${reviewComment.profileImg}" alt="Image placeholder"  class="img-fluid" readonly>
                                 <div>
                                     <span class="boardNickName">${reviewComment.nickName}</span>
-                                    <span class="boardMemberId">(${reviewComment.memberId})</span>
+                                    <span class="boardMemberId">(${reviewComment.memberId.substr(0, reviewComment.memberId.length / 2)}******)</span>
                                     <p data-comNo="${reviewComment.comNo}">${reviewComment.comment}</p>
                                 </div>
                             </div>

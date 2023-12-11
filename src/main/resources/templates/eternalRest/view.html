@@ -217,7 +217,7 @@
         <div class="post-content-body name">
             <span class="boardNickName">[[${eternalRestBoard.nickName}]]</span>
             <a th:href="@{/profile/friendProfile(memberId=${eternalRestBoard.memberId})}">
-                <span class="boardMemberId">([[${eternalRestBoard.memberId}]])</span>
+                <span class="boardMemberId">([[|${#strings.substring(eternalRestBoard.memberId, 0, #strings.length(eternalRestBoard.memberId) / 2)}******|]])</span>
             </a>
         </div>
         <div class="innerContent">
@@ -267,11 +267,11 @@
                     <input type="hidden" name="erbNo" th:value="${eternalRestBoard.erbNo}">
                     <input type="hidden" name="mno" id="mno" th:value="${#authentication.principal.mno}" readonly>
                     <input type="hidden" name="profileImg" class="form-control" th:value="${#authentication.principal.profileImg}+'/'+${#authentication.principal.dateString}">
-                    <span class="form-group">
+                    <span class="form-group" th:with="member=${#authentication.principal}">
                         <img id="profileImg" th:src="|/upload/profileView/${#authentication.principal.dateString}/s_${#authentication.principal.profileImg}|" alt="Image placeholder"  class="img-fluid" readonly>
-                        <span class="boardNickName">[[${#authentication.principal.nickName}]]</span>
+                        <span class="boardNickName">[[${member.nickName}]]</span>
                         <input type="hidden" class="form-control" id="nickName" th:value="${#authentication.principal.nickName}" readonly>
-                        <span class="boardMemberId">([[${#authentication.principal.memberId}]])</span>
+                        <span class="boardMemberId">([[|${#strings.substring(member.memberId, 0, #strings.length(member.memberId) / 2)}******|]])</span>
                         <input type="hidden" class="form-control" id="memberId" th:value="${#authentication.principal.memberId}" readonly>
                     </span>
                     <div class="form-group">
@@ -392,7 +392,7 @@
                     <div class="comment-view">
                         <div class="comment_content">
                             <span class="boardNickName">${dto.nickName}</span>
-                            <span class="boardMemberId">${dto.memberId}</span>
+                            <span class="boardMemberId">${dto.memberId.substr(0, dto.memberId.length / 2)}******</span>
                             <p class="data-comNo" data-comNo="${dto.comNo}">${dto.comment}</p>
                         </div>
                         <div class="comment_btn">
@@ -416,7 +416,7 @@
                                 <div class="writerInfo">
                                     <img id="profileImg" class="img-fluid profileImg" src="/upload/profileView/${auth.dateString}/${auth.profileImg}" alt="Image placeholder" readonly>
                                     <div class="boardNickName">${auth.nickName}</div>
-                                    <div class="boardMemberId">(${auth.memberId})</div>
+                                    <div class="boardMemberId">(${auth.memberId.substr(0, auth.memberId.length / 2)}******)</div>
                                 </div>
                                 <textarea type="text" name="comment" class="form-control"></textarea>
                                 <button type="button" class="btn btn-secondary recommentAddBtn" onclick="submitCommentRe(this)">등록</button>
@@ -429,7 +429,7 @@
                                 <div class="comment_content">
                                     <img id="profileImg" class="img-fluid profileImg" src="/upload/profileView/${dto.dateString}/${dto.profileImg}" alt="Image placeholder"  class="img-fluid" readonly>
                                     <span class="boardNickName">${dto.nickName}</span>
-                                    <span class="boardMemberId">(${dto.memberId})</span>
+                                    <span class="boardMemberId">(${dto.memberId.substr(0, dto.memberId.length / 2)}******)</span>
                                     <p data-comNo="${dto.comNo}">${dto.comment}</p>
                                 </div>
                             <div class="comment_btn">

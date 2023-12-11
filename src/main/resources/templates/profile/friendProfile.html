@@ -185,7 +185,7 @@
                         <div class="inner-top-info">
                             <input type="hidden" name="mno" th:value="${memberDTO.mno}">
                             <p> 닉네임 : <span th:text="${memberDTO.nickName}"></span></p>
-                            <p> 아이디 : <span th:text="${memberDTO.memberId}"></span></p>
+                            <p> 아이디 : <span th:text="|${#strings.substring(memberDTO.memberId, 0, #strings.length(memberDTO.memberId) / 2)}******|"></span></p>
                             <th:block th:if="${memberDTO.hasCat == true}">
                                 <p> 고양이 품종 : <span th:text="${memberDTO.variety}"></span></p>
                                 <p> 고양이 나이 : <span th:text="${memberDTO.catAge}"></span></p>

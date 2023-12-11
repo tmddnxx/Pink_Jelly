@@ -38,15 +38,10 @@ async function checkMemberId(memberId) {
 }
 
 async function sendConfirmMail(mailTo) {
-    try {
-        console.log("sendConfirmMail");
-        const request = await axios.get(`/member/sendConfirmMail?mailTo=${mailTo}`);
-        return request.data;
-    } catch (error) {
-        console.error("Error sending confirmation mail:", error);
-        // 오류 처리를 추가할 수 있음
-        throw error; // 오류를 상위로 다시 던져서 다른 곳에서도 처리할 수 있도록 함
-    }
+    console.log("sendConfirmMail");
+    console.log("mailTo: ", mailTo);
+    const request = await axios.get(`/member/sendConfirmMail?mailTo=${mailTo}`);
+    return request.data;
 }
 
 // async function sendConfirmMail(mailTo) {

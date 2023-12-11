@@ -140,7 +140,7 @@
                         <figure class="author-figure mb-0 me-3 float-start"><img th:src="|/upload/profileView/${mainBoard.dateString}/${mainBoard.profileImg}|" alt="Image placeholder" style="width: 30px; height: 30px;" class="img-fluid"></figure>
                         <a th:href="|@{/profile/friendProfile(memberId=${mainBoard.memberId})}|">
                             <span class="d-inline-block mt-1 boardNickName">[[${mainBoard.nickName}]]</span>
-                            <span class="boardMemberId">([[${mainBoard.memberId}]])</span>
+                            <span class="boardMemberId">([[|${#strings.substring(mainBoard.memberId, 0, #strings.length(mainBoard.memberId) / 2)}******|]])</span>
                         </a>
                         <br>
                         <span>[[${#temporals.format(mainBoard.addDate, 'yyyy-MM-dd HH:mm')}]]</span><br>
@@ -297,7 +297,7 @@
                                         <figure class="author-figure mb-0 me-3 float-start"><img src="/upload/profileView/${mainBoard.dateString}/${mainBoard.profileImg}" alt="Image placeholder" class="img-fluid"></figure>
                                         <a href="/profile/friendProfile?memberId=${mainBoard.memberId}">
                                             <span class="d-inline-block mt-1 boardNickName">${mainBoard.nickName}</span>
-                                            <span class="boardMemberId">(${mainBoard.memberId})</span>
+                                            <span class="boardMemberId">(${mainBoard.memberId.substr(0, mainBoard.memberId.length / 2)})</span>
                                         </a>
                                         <br>
                                         <span>${mainBoard.addDate[0]+"-"+mainBoard.addDate[1]+"-"+mainBoard.addDate[2]+" "+mainBoard.addDate[3]+":"+mainBoard.addDate[4]}</span><br>
@@ -336,7 +336,7 @@
             // 모달 프로필
             modalProfile.innerHTML =
                 `<img src="/upload/profileView/${data.dateString}/${data.profileImg}" style="width: 35px; height: 35px; border-radius: 50%;">
-                 <span>${data.nickName}(${data.memberId})</span>`;
+                 <span>${data.nickName}(${data.memberId.substr(0, data.memberId.length / 2)})</span>`;
 
             // slick 삭제
             $('.slick').slick('slickRemove', null, null, true);
@@ -449,7 +449,8 @@
                                             <div style="display: flex; align-items: center;">
                                                 <img id="profileImg" src="/upload/profileView/${dto.dateString}/${dto.profileImg}" alt="Image placeholder">
                                                 <span id="recomment_${dto.comNo}" data-id="${dto.memberId}">${dto.nickName}</span>
-                                                (<span class="ellipsis" style="width: ${dto.memberId.length >= 10 ? '100px' : ''};">${dto.memberId}</span>)
+                                                (<span class="ellipsis" style="width: ${dto.memberId.length >= 10 ? '100px' : ''};">
+                                                    ${data.memberId.substr(0, data.memberId.length / 2)}</span>)
                                             </div>
                                             <div class="meta">
                                                 ${dto.addDate[0]}-${dto.addDate[1]}-${dto.addDate[2]} ${dto.addDate[3]}:${dto.addDate[4]}

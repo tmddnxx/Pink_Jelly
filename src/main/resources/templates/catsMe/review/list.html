@@ -169,7 +169,7 @@
                 <img th:src="|/upload/profileView/${catsMeReviewBoard.dateString}/${catsMeReviewBoard.profileImg}|" alt="Image" style="height: 30px; width: 30px; border-radius: 50%;" class="img-fluid">
               </figure>
               <span class="d-inline-block mt-1 boardNickName">[[${catsMeReviewBoard.nickName}]]</span>
-              <span class="boardMemberId">([[${catsMeReviewBoard.memberId}]])</span>
+              <span class="boardMemberId">([[|${#strings.substring(catsMeReviewBoard.memberId, 0, #strings.length(catsMeReviewBoard.memberId) / 2)}******|]])</span>
             </a>
             <span class="likeHitCnt">
               <i class="fa-solid fa-heart"></i>[[${catsMeReviewBoard.like}]]
@@ -267,7 +267,7 @@
                           <img src="/upload/profileView/${dtoList.dateString}/${dtoList.profileImg}" alt="image" style="height: 30px; width: 30px; border-radius: 50%;" class="img-fluid">
                       </figure>
                       <span class="d-inline-block mt-1 boardNickName">${dtoList.nickName}</span>
-                      <span class="boardMemberId">(${dtoList.memberId})</span>
+                      <span class="boardMemberId">(${dtoList.memberId.substr(0, dtoList.memberId.length / 2)}******)</span>
                     </a>
                     <span class="likeHitCnt">
                           <i class="fa-solid fa-eye"></i>${dtoList.hit}
@@ -348,7 +348,7 @@
                   <img src="/upload/profileView/${dtoList.dateString}/${dtoList.profileImg}" alt="image" style="height: 30px; width: 30px; border-radius: 50%;" class="img-fluid">
               </figure>
               <span class="d-inline-block mt-1 boardNickName">${dtoList.nickName}</span>
-              <span class="boardMemberId">(${dtoList.memberId})</span>
+              <span class="boardMemberId">(${dtoList.memberId.substr(0, dtoList.memberId.length / 2)}******)</span>
             </a>
             <span class="likeHitCnt">
                 <i class="fa-solid fa-heart"></i>${dtoList.like}

@@ -176,7 +176,7 @@
                 <img th:src="|/upload/profileView/${catsMeBoard.dateString}/${catsMeBoard.profileImg}|" alt="Image" style="height: 30px; width: 30px; border-radius: 50%;" class="img-fluid">
               </figure>
               <span class="d-inline-block mt-1 boardNickName">[[${catsMeBoard.nickName}]]</span>
-              <span class="boardMemberId">([[${catsMeBoard.memberId}]])</span>
+              <span class="boardMemberId">([[|${#strings.substring(catsMeBoard.memberId, 0, #strings.length(catsMeBoard.memberId) / 2)}******|]])</span>
             </a>
             <span class="likeHitCnt">
               <i class="fa-solid fa-eye"></i>[[${catsMeBoard.hit}]]
@@ -272,7 +272,7 @@
                           <img src="/upload/profileView/${dtoList.dateString}/${dtoList.profileImg}" alt="image" style="height: 30px; width: 30px; border-radius: 50%;" class="img-fluid">
                       </figure>
                       <span class="d-inline-block mt-1 boardNickName">${dtoList.nickName}</span>
-                      <span class="boardMemberId">(${dtoList.memberId})</span>
+                      <span class="boardMemberId">(${dtoList.memberId.substr(0, dtoList.memberId.length / 2)}******)</span>
                     </a>
                     <span class="likeHitCnt">
                           <i class="fa-solid fa-eye"></i>${dtoList.hit}
@@ -354,7 +354,7 @@
                   <img src="/upload/profileView/${dtoList.dateString}/${dtoList.profileImg}" alt="image" style="height: 30px; width: 30px; border-radius: 50%;" class="img-fluid">
               </figure>
               <span class="d-inline-block mt-1 boardNickName">${dtoList.nickName}</span>
-              <span class="boardMemberId">(${dtoList.memberId})</span>
+              <span class="boardMemberId">(${dtoList.memberId.substr(0, dtoList.memberId.length / 2)}******)</span>
             </a>
             <span class="likeHitCnt">
                 <i class="fa-solid fa-heart"></i>${dtoList.like}

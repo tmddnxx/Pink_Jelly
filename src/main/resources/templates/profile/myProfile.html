@@ -171,7 +171,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <ul class="modal-body" th:each="dto: ${gmingDTOList}">
-                    <li>[[${dto.nickName}]]([[${dto.memberId}]])</li>
+                    <li>[[${dto.nickName}]]([[|${#strings.substring(dto.memberId, 0, #strings.length(dto.memberId) / 2)}******|]])</li>
                 </ul>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -190,7 +190,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <ul class="modal-body" th:each="dto: ${gmerDTOList}">
-                    <li>[[${dto.nickName}]]([[${dto.memberId}]])</li>
+                    <li>[[${dto.nickName}]]([[|${#strings.substring(dto.memberId, 0, #strings.length(dto.memberId) / 2)}******|]])</li>
                 </ul>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -209,7 +209,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <ul class="modal-body d-flex align-items-center justify-content-between banList" th:each="dto: ${banDTOList}">
-                    <li>[[${dto.nickName}]]([[${dto.memberId}]])</li>
+                    <li>[[${dto.nickName}]]([[|${#strings.substring(dto.memberId, 0, #strings.length(dto.memberId) / 2)}******|]])</li>
                     <form name="frmBan" method="post" th:if="${#lists.size(dto) > 0}">
                         <input type="hidden" name="memberId" th:value="${dto.memberId}">
                         <input type="hidden" name="nickName" th:value="${dto.nickName}">
@@ -256,7 +256,8 @@
                     <div class="inner-top-info">
                         <input type="hidden" name="mno" th:value="${member.mno}">
                         <p> 닉네임 : <span th:text="${member.nickName}"></span></p>
-                        <p> 아이디 : <span th:text="${member.memberId}"></span></p>
+                        <p> 아이디 : <span th:text="|${#strings.substring(member.memberId, 0, #strings.length(member.memberId) / 2)}******|"></span>
+                        </p>
                         <th:block th:if="${#authentication.principal.hasCat == true}">
                             <p> 고양이 품종 : <span sec:authentication = "principal.variety"></span> </p>
                             <p> 고양이 나이 : <span sec:authentication = "principal.catAge"></span> </p>

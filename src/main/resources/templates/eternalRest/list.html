@@ -90,7 +90,7 @@
             <span>
                 <a th:href="|@{/profile/friendProfile(memberId=${restBoardList.memberId})}|">
                     <span class="d-inline-block mt-1 boardNickName">[[${restBoardList.nickName}]]</span>
-                    <span class="boardMemberId">([[${restBoardList.memberId}]])</span>
+                    <span class="boardMemberId">([[|${#strings.substring(restBoardList.memberId, 0, #strings.length(restBoardList.memberId) / 2)}******|]])</span>
                 </a>
             </span>
             <div>
