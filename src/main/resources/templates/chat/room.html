@@ -30,6 +30,7 @@
             background-color: pink;
             padding: 10px;
             overflow-y: scroll;
+            overscroll-behavior-y: contain;
 
             -ms-overflow-style: none;
         }
@@ -146,6 +147,7 @@
         // 2. connection이 맺어지면 실행
         stomp.connect({}, function () {
             console.log("STOMP Connection");
+            scrollBottom();
 
             // 4. subscribe(path, callback)으로 메세지를 받을 수 있음
             stomp.subscribe("/sub/chat/room/" + roomId, function (chat) {
@@ -185,6 +187,8 @@
                                          </div>`;
                     msgArea.appendChild(divWrap);
                 }
+
+                scrollBottom();
             });
 
             //3. send(path, header, message)로 메세지를 보낼 수 있음
@@ -194,6 +198,7 @@
 
         document.getElementById('msg').addEventListener('keyup', function (e) {
             console.log(e.key);
+            if (e.isComposing || e.target.value.trim() === '') return;
             if (e.key === 'Enter') {
                 var msg = e.target;
 
@@ -203,6 +208,12 @@
                 msg.value = '';
             }
         });
+
+        // 스크롤을 젤 밑으로 내리는 함수
+        function scrollBottom() {
+            var msgArea = document.getElementById('msgArea');
+            msgArea.scrollTop = msgArea.scrollHeight;
+        }
     });
 </script>
 </body>

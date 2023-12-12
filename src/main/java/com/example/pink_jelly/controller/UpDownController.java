@@ -5,6 +5,7 @@ import com.example.pink_jelly.dto.upload.UploadResultDTO;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.log4j.Log4j2;
 import net.coobird.thumbnailator.Thumbnailator;
+import net.coobird.thumbnailator.Thumbnails;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
@@ -15,8 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -107,7 +107,10 @@ public class UpDownController {
                         log.info(Files.probeContentType(savePath));
                         isImage = true;
                         File thumbFile = new File(path, "s_" + fileName); // 썸네일 파일 경로
+                        log.info("thumbFile path");
+
                         Thumbnailator.createThumbnail(savePath.toFile(), thumbFile, 100, 100);
+                        log.info("thumbFile create");
                     }
                 } catch (IOException e) {
                     e.printStackTrace();

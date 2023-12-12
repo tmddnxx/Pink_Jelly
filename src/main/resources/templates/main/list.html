@@ -404,7 +404,7 @@
                     commentObj.parentNo = document.querySelector('input[name=parentNo]').value;
                 }
 
-                if(commentObj.comment !== '') { // 댓글에 아무것도 입력하지 않은 경우
+                if(commentObj.comment !== '') { // 댓글에 입력값이 존재하는 경우
                     addComment(commentObj).then(result => {
                         comment.value = '';
                         printComments(page, 20, true); // 댓글 목록 갱신
